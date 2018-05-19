@@ -1,0 +1,62 @@
+.post {
+  width: 33.3%;
+}
+
+.post-top {
+  display: flex;
+  border-radius: 5px 5px 0px 0px;
+  padding: 1em 1em 0em 1em;
+  align-items: top;
+  justify-content: space-between;
+  /* font-family: Montserrat,HelveticaNeueLight,HelveticaNeue-Light,"Helvetica Neue Light",HelveticaNeue,"Helvetica Neue",Helvetica,Tahoma,Geneva,Arial,sans-serif; */
+  font-weight: 500;
+}
+
+.tag-status {
+  height: 50%;
+  color: white;
+  border-radius: 1.5em;
+  padding: 0em 0.5em 0em 0.5em;
+  text-transform: uppercase;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 600;
+}
+
+.open {
+  background: #30d7a9;
+}
+
+.closed {
+  background: #ff4954;
+}
+
+.cancelled {
+  background: #d1d1d1;
+}
+
+.post-top .honeypot {
+  grid-area: honeypot;
+  text-align: right;
+}
+
+.post-title {
+  padding: 0em 1em 0em .5em;
+  margin: 0;
+}
+
+.post-owner {
+  padding-left: 1em;
+  margin: 0;
+}
+
+.card hr {
+  margin-top: .5em;
+  margin-bottom: .5em;
+}
+
+.canYaCoin {
+  width: 33px;
+  height: 33px;
+  object-fit: contain;
+}

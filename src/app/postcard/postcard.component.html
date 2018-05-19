@@ -1,0 +1,45 @@
+<!-- <div class="card" [ngClass]="{postClosed: status === 'Closed', postCancelled: status === 'Cancelled'}">
+  <section class="post-top">
+    <div class="left">{{status}}</div>
+    <div class="right">win&ensp;{{honeypot}}&thinsp;CAN</div>
+  </section>
+  <div class="card-body">
+    <h3 class="card-title">{{title}}</h3>
+    <h6 class="lead">@ {{ownerName}}</h6>
+    <p class="card-text">{{details}}</p>
+    <span>
+      <a href="" class="btn btn-primary btn-canya-gradient">
+        Recommend
+        <div>cost: {{cost}}CAN</div>
+      </a>
+    </span>
+  </div>
+</div> -->
+
+<div class="card" [ngClass]="{postClosed: status === 'Closed', postCancelled: status === 'Cancelled'}">
+  <div class="post-top">
+    <div class="tag-status" [ngClass]="{open: status === 'Open', closed: status === 'Closed', cancelled: status === 'Cancelled'}">
+      {{status}}
+    </div>
+    <div>
+      <div class="honeypot">{{honeypot}}&thinsp;CAN</div>
+      <div>Contributed</div>
+    </div>
+  </div>
+  <h3 class="post-title">{{title}}</h3>
+  <h6 class="post-owner">@ {{ownerName}}</h6>
+  <hr>
+  <div class="card-body">
+    <p class="card-text">{{details}}</p>
+    <div class="canYaCoin">
+      <img src="assets/img/Canya-coin.svg" alt="">
+      <div class="cost">{{cost}}</div>
+    </div>
+    <!-- <span>
+      <a href="" class="btn btn-primary btn-canya-gradient">
+        Recommend
+        <div>cost: {{cost}}CAN</div>
+      </a>
+    </span> -->
+  </div>
+</div>
