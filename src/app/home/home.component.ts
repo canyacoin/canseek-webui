@@ -37,14 +37,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    // await this.cs.buyCAN('10');
-    // await this.cs.addPost(1000, 1);
-    const canBalance = await this.cs.getCANBalance();
-    console.log(canBalance);
-    const postId = await this.cs.addPost(1000, 10);
-    console.log(postId);
-    const newCanBalance = await this.cs.getCANBalance();
-    console.log(newCanBalance);
     setTimeout( () => {
       this.loading = false;
     }, 2000 );
@@ -55,4 +47,47 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // PARAM? = params['query'] ? params['query'] : '';
     });
   }
+
+  async getCANBalance() {
+    const canBalance = await this.cs.getCANBalance();
+    console.log('CAN Balance is ', canBalance);
+  }
+
+  async buyCan() {
+    await this.cs.buyCAN('10');
+    const canBalance = await this.cs.getCANBalance();
+    console.log('CAN Balance is ', canBalance);
+  }
+
+  async addPost(bounty: string, cost: string) {
+    const canBalance = await this.cs.getCANBalance();
+    console.log('Initial CanBalance: ', canBalance);
+    if (Number(canBalance) < Number(bounty)) {
+      alert('Insufficient CAN balance. Please buy more CAN.');
+      return;
+    }
+    const postId = await this.cs.addPost(bounty, cost);
+    console.log(postId);
+  }
+
+  async getNumPosts() {
+    const numPosts = await this.cs.getNumPosts();
+    console.log('Total Number of Posts: ', numPosts);
+  }
+
+  async getPostOwner() {
+    const owner = await this.cs.getPostOwner();
+    console.log(owner);
+  }
+
+  async getPostStatus(postId = 0) {
+    const postStatus = await this.cs.getPostStatus(postId);
+    console.log(postStatus);
+  }
+
+  async cancelPost() {
+    const postStatus = await this.cs.cancelPost('0');
+    console.log('post Status: ', postStatus);
+  }
+
 }
