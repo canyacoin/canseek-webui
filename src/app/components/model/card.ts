@@ -7,6 +7,7 @@ export class Card {
     ownerAddr: string; 
     company: string;
     logo: string;
+    email: string;
     bounty: number;
     cost: number;
     desc: string;
