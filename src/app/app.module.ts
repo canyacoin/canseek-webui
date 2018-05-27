@@ -28,6 +28,9 @@ import { AddPostComponent } from './add-post/add-post.component';
 
 import {ContractsService} from './services/contracts/contracts.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CardsComponent } from './components/cards/cards.component';
+import { CandidatesComponent } from './components/candidates/candidates.component';
+import { CardService } from './service/card.service';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     PostcardComponent,
     RecommendComponent,
     AddPostComponent,
+    CardsComponent,
+    CandidatesComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +59,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
     NgbModule.forRoot()
   ],
-  providers: [AuthGuard, DatePipe, ContractsService],
+  providers: [AuthGuard, DatePipe, ContractsService, CardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
