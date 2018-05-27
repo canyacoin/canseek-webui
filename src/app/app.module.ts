@@ -27,6 +27,7 @@ import { RecommendComponent } from './recommend/recommend.component';
 import { AddPostComponent } from './add-post/add-post.component';
 
 import {ContractsService} from './services/contracts/contracts.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import {ContractsService} from './services/contracts/contracts.service';
     PageNotFoundComponent,
     PostcardComponent,
     RecommendComponent,
-    AddPostComponent
+    AddPostComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,6 +52,7 @@ import {ContractsService} from './services/contracts/contracts.service';
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
     // AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
+    NgbModule.forRoot()
   ],
   providers: [AuthGuard, DatePipe, ContractsService],
   bootstrap: [AppComponent]
