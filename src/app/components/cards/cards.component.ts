@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Card } from '../model/card';
-import { CardService } from '../service/card.service';
+import { Cards } from '../mock/mock-cards';
+// import { CardService } from '../service/card.service';
 
 @Component({
   selector: 'app-cards',
@@ -8,15 +9,16 @@ import { CardService } from '../service/card.service';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  cards: Card[];
+  // cards: Card[];
+  cards = Cards;
 
-  constructor(private cardService: CardService) { }
+  // constructor(private cardService: CardService) { }
+  constructor() { }
 
   ngOnInit() {
-    this.getCards();
+    // this.getCards();
   }
-  getCards(): void {
-    this.cards = this.cardService.getCards();
-    console.log(this.cards);
-  }
+  // getCards(): void {
+  //   this.cards = this.cardService.getCards();
+  // }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../model/card';
-import { Cards } from '../mock/cards';
+import { Cards } from '../mock/mock-cards';
 
 @Injectable()
 export class CardService {
