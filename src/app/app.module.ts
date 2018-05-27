@@ -30,7 +30,7 @@ import {ContractsService} from './services/contracts/contracts.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CardsComponent } from './components/cards/cards.component';
 import { CandidatesComponent } from './components/candidates/candidates.component';
-import { CardService } from './service/card.service';
+import { CardService } from './services/card.service';
 
 @NgModule({
   declarations: [
