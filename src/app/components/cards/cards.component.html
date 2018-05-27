@@ -1,5 +1,23 @@
 <ul class="cards">
-  <li *ngFor="let card of cards" class="card">
-    <div class="head">{{card.id}}</div>
+  <li *ngFor="let card of cards" class="card {{ card.status }}">
+    <div class="total">
+      {{ card.bounty + card.candidates.length * card.cost }} 
+      <br>
+      with <a href="javascript:;">{{ card.candidates.length }} candidates</a> 
+    </div>
+    <div class="head">
+      <div class="d-flex h-100 flex-column justify-content-center">
+        <img src="{{ card.logo }}" alt="{{ card.company }}">
+      </div>
+      <div class="info d-flex justify-content-between">
+        <em>{{ card.title }}@{{ card.company }}</em>
+        <a href="javascript:;">apply</a>
+      </div>
+    </div>
+    <div class="desc">
+      <p class="clamp4">
+        {{ card.desc }}
+      </p>
+    </div>
   </li>
 </ul>
