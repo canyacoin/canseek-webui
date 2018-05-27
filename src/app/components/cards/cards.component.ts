@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+// import { FormBuilder, FormGroup } from '@angular/forms';
 import { Card } from '../model/card';
 import { CardService } from '../service/card.service';
 
@@ -8,7 +9,11 @@ import { CardService } from '../service/card.service';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
+  // public radioGroupForm: FormGroup;
   cards: Card[];
+  code = 0;
+  statusArr = ['open', 'closed', 'canceled'];
+
 
   constructor(private cardService: CardService) { }
 

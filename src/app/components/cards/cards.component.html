@@ -1,23 +1,41 @@
-<ul class="cards">
-  <li *ngFor="let card of cards" class="card {{ card.status }}">
-    <div class="total">
-      {{ card.bounty + card.candidates.length * card.cost }} 
-      <br>
-      with <a href="javascript:;">{{ card.candidates.length }} candidates</a> 
-    </div>
-    <div class="head">
-      <div class="d-flex h-100 flex-column justify-content-center">
-        <img src="{{ card.logo }}" alt="{{ card.company }}">
+<div class="filter d-flex justify-content-between">
+  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="code">
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="0"> open
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" value="1"> closed
+    </label>
+    <label ngbButtonLabel class="btn-primary">
+      <input ngbButton type="radio" [value]="2"> cenceled
+    </label>
+  </div>
+
+  <app-card-modal></app-card-modal>
+</div>
+
+<section class="card-columns">
+  <ul class="cards">
+    <li *ngFor="let card of cards" class="card {{ card.status }}">
+      <div class="total">
+        {{ card.bounty + card.candidates.length * card.cost }} 
+        <br>
+        with <a href="javascript:;">{{ card.candidates.length }} candidates</a> 
       </div>
-      <div class="info d-flex justify-content-between">
-        <em>{{ card.title }}@{{ card.company }}</em>
-        <a href="javascript:;">apply</a>
+      <div class="head">
+        <div class="d-flex h-100 flex-column justify-content-center">
+          <img src="{{ card.logo }}" alt="{{ card.company }}">
+        </div>
+        <div class="info d-flex justify-content-between">
+          <em>{{ card.title }}@{{ card.company }}</em>
+          <a href="javascript:;">apply</a>
+        </div>
       </div>
-    </div>
-    <div class="desc">
-      <p class="clamp4">
-        {{ card.desc }}
-      </p>
-    </div>
-  </li>
+      <div class="desc">
+        <p class="clamp4">
+          {{ card.desc }}
+        </p>
+      </div>
+    </li>
 </ul>
+</section>
