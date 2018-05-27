@@ -23,8 +23,8 @@
     content: 'closed';
     background-color: var(--red);
 }
-.canceled::before {
-    content: 'canceled';
+.cancelled::before {
+    content: 'cancelled';
     background-color: var(--gray);
 }
 .total {

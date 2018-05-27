@@ -1,13 +1,13 @@
 <div class="filter d-flex justify-content-between">
-  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="code">
+  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="code" (change)="searchStatus()">
     <label ngbButtonLabel class="btn-primary">
       <input ngbButton type="radio" [value]="0"> open
     </label>
     <label ngbButtonLabel class="btn-primary">
-      <input ngbButton type="radio" value="1"> closed
+      <input ngbButton type="radio" [value]="1"> closed
     </label>
     <label ngbButtonLabel class="btn-primary">
-      <input ngbButton type="radio" [value]="2"> cenceled
+      <input ngbButton type="radio" [value]="2"> cancelled
     </label>
   </div>
 
@@ -16,7 +16,7 @@
 
 <section class="card-columns">
   <ul class="cards">
-    <li *ngFor="let card of cards" class="card {{ card.status }}">
+    <li *ngFor="let card of results" class="card {{ card.status }}">
       <div class="total">
         {{ card.bounty + card.candidates.length * card.cost }} 
         <br>

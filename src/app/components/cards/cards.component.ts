@@ -11,8 +11,9 @@ import { CardService } from '../service/card.service';
 export class CardsComponent implements OnInit {
   // public radioGroupForm: FormGroup;
   cards: Card[];
+  results: Card[];
   code = 0;
-  statusArr = ['open', 'closed', 'canceled'];
+  statusArr = ['open', 'closed', 'cancelled'];
 
 
   constructor(private cardService: CardService) { }
@@ -21,6 +22,11 @@ export class CardsComponent implements OnInit {
     this.getCards();
   }
   getCards(): void {
-    this.cards = this.cardService.getCards();
+    this.results = this.cards = this.cardService.getCards();
+  }
+  searchStatus() {
+    const { cards, code, statusArr } = this;
+    const next = cards.filter(item => item.status === statusArr[code]);
+    this.results = next;
   }
 }
