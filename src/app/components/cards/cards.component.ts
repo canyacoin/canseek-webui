@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Card } from '../model/card';
-import { CardService } from '../../services/card.service';
+import { CardService } from '../service/card.service';
 
 @Component({
   selector: 'app-cards',
@@ -17,6 +17,6 @@ export class CardsComponent implements OnInit {
   }
   getCards(): void {
     this.cards = this.cardService.getCards();
+    console.log(this.cards);
   }
-
 }
