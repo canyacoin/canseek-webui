@@ -31,7 +31,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CardsComponent } from './components/cards/cards.component';
 import { CandidatesComponent } from './components/candidates/candidates.component';
 import { CardService } from './components/service/card.service';
-import { CardModalComponent } from './components/card-modal/card-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +45,6 @@ import { CardModalComponent } from './components/card-modal/card-modal.component
     AddPostComponent,
     CardsComponent,
     CandidatesComponent,
-    CardModalComponent,
   ],
   imports: [
     BrowserModule,
