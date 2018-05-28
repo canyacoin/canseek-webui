@@ -19,7 +19,7 @@
       <div class="total">
         {{ card.bounty + card.candidates.length * card.cost }} 
         <br>
-        with <a href="javascript:;">{{ card.candidates.length }} candidates</a> 
+        with <a href="javascript:;" (click)="open(candidatesmodal)">{{ card.candidates.length }} candidates</a> 
       </div>
       <div class="head">
         <div class="d-flex h-100 flex-column justify-content-center">
@@ -27,7 +27,7 @@
         </div>
         <div class="info d-flex justify-content-between">
           <em>{{ card.title }}@{{ card.company }}</em>
-          <a href="javascript:;">apply</a>
+          <a href="javascript:;" (click)="open(candidatemodal)">apply</a>
         </div>
       </div>
       <div class="desc">
@@ -40,47 +40,140 @@
 </section>
 
 <ng-template #cardmodal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-      <h4 class="modal-title">new card</h4>
-      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form>
-        <div class="form-group">
-          <label for="title">Job Title</label>
-          <input type="text" class="form-control" id="title" placeholder="fullstack developer">
-        </div>
-        <div class="form-group">
-          <label for="company">Company</label>
-          <input type="" class="form-control" id="company" placeholder="google">
-        </div>
-        <div class="form-group">
-          <label for="logo">Logo</label>
-          <input type="" class="form-control" id="logo" placeholder="logo company">
-        </div>
-        <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" class="form-control" id="email" placeholder="name@example.com">
-        </div>
-        <div class="form-group">
-          <label for="bounty">Bounty</label>
-          <input type="" class="form-control" id="bounty" placeholder="bounty">
-        </div>
-        <div class="form-group">
-          <label for="cost">Cost</label>
-          <input type="email" class="form-control" id="cost" placeholder="cost">
-        </div>
-        <div class="form-group">
-          <label for="desc">Description</label>
-          <textarea class="form-control" id="desc" rows="3" placeholder="description for your job"></textarea>
-        </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
-      <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
-    </div>
-  </ng-template>
+  <div class="modal-header">
+    <h4 class="modal-title">new card</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="title">Job Title</label>
+        <input type="text" class="form-control" id="title" placeholder="fullstack developer">
+      </div>
+      <div class="form-group">
+        <label for="company">Company</label>
+        <input type="" class="form-control" id="company" placeholder="google">
+      </div>
+      <div class="form-group">
+        <label for="logo">Logo</label>
+        <input type="" class="form-control" id="logo" placeholder="logo company">
+      </div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+        <label for="bounty">Bounty</label>
+        <input type="" class="form-control" id="bounty" placeholder="bounty">
+      </div>
+      <div class="form-group">
+        <label for="cost">Cost</label>
+        <input type="email" class="form-control" id="cost" placeholder="cost">
+      </div>
+      <div class="form-group">
+        <label for="desc">Description</label>
+        <textarea class="form-control" id="desc" rows="3" placeholder="description for your job"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
+    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+  </div>
+</ng-template>
+
+<ng-template #candidatemodal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">new candidate</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="name">Candidate's Name</label>
+        <input type="text" class="form-control" id="name" placeholder="name">
+      </div>
+      <div class="form-group">
+        <label for="contact">Contact</label>
+        <input type="" class="form-control" id="contact" placeholder="email or phone">
+      </div>
+      <div class="form-group">
+        <label for="reason">Reason</label>
+        <textarea class="form-control" id="reason" rows="3" placeholder="reason here"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
+    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+  </div>
+</ng-template>
+
+<ng-template #candidatesmodal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">candidates</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ngb-accordion [closeOthers]="true" activeIds="candidate1">
+      <ngb-panel id="candidate1" title="candidate1">
+        <ng-template ngbPanelContent>
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+          aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+          sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+          craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+          occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+          labore sustainable VHS.
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel id="candidate2">
+        <ng-template ngbPanelTitle>
+          <span>candidate2</span>
+        </ng-template>
+        <ng-template ngbPanelContent>
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+          aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+          sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+          craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+          occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+          labore sustainable VHS.
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel id="candidate3" title="candidate3">
+        <ng-template ngbPanelContent>
+          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
+          aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
+          sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
+          craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
+          occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
+          labore sustainable VHS.
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
+    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+  </div>
+</ng-template>
   
+<ng-template #email let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Company's Email</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    example@example.com
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
+  </div>
+</ng-template>
