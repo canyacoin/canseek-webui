@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 // import { FormBuilder, FormGroup } from '@angular/forms';
 import { Card } from '../model/card';
 import { CardService } from '../service/card.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CardModalComponent } from '../card-modal/card-modal.component';
 
 @Component({
   selector: 'app-cards',
@@ -16,7 +18,7 @@ export class CardsComponent implements OnInit {
   statusArr = ['open', 'closed', 'cancelled'];
 
 
-  constructor(private cardService: CardService) { }
+  constructor(private cardService: CardService, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.getCards();
@@ -28,5 +30,9 @@ export class CardsComponent implements OnInit {
     const { cards, code, statusArr } = this;
     const next = cards.filter(item => item.status === statusArr[code]);
     this.results = next;
+  }
+  open() {
+    const modalRef = this.modalService.open(CardModalComponent);
+    modalRef.componentInstance.name = 'World';
   }
 }

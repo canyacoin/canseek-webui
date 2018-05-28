@@ -10,9 +10,10 @@
       <input ngbButton type="radio" [value]="2"> cancelled
     </label>
   </div>
-
-  <app-card-modal></app-card-modal>
+  <button class="btn-primary" (click)="open()">new card</button>
 </div>
+
+<app-card-modal></app-card-modal>
 
 <section class="card-columns">
   <ul class="cards">
