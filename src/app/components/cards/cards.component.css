@@ -1,6 +1,5 @@
 .filter {
     margin: 30px 0;
-    padding-left: 30px;
 }
 
 .card {
@@ -29,7 +28,12 @@
     content: 'cancelled';
     background-color: var(--gray);
 }
-.total {
+.card-img-top {
+    height: 120px;
+    padding: 20px;
+    padding-bottom: 0;
+}
+/* .total {
     position: absolute;
     top: 0px;
     right: 12px;
@@ -62,18 +66,13 @@ em {
 }
 .info {
     margin: 14px 0;
-}
-.clamp3 {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    word-break: break-all;
-    -webkit-line-clamp: 3;
-}
+} */
+
 .clamp4 {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     word-break: break-all;
     -webkit-line-clamp: 4;
+    height: 120px;
 }

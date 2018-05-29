@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-// import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Card } from '../model/card';
 import { CardService } from '../service/card.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -11,7 +11,7 @@ import { Candidate } from '../model/candidate';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  // public radioGroupForm: FormGroup;
+  public checkboxGroupForm: FormGroup;
   cards: Card[];
   results: Card[];
   code = 0;
@@ -28,10 +28,11 @@ export class CardsComponent implements OnInit {
   // cur user address
   curUser = '0x0';
 
-  constructor(private cardService: CardService, private modalService: NgbModal) { }
+  constructor(private cardService: CardService, private modalService: NgbModal, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.getCards();
+    this.searchStatus();
   }
   getCards(): void {
     this.results = this.cards = this.cardService.getCards();
@@ -41,9 +42,16 @@ export class CardsComponent implements OnInit {
     const next = cards.filter(item => item.status === statusArr[code]);
     this.results = next;
   }
-  open(content, card) {
+  open(content, card, type) {
     this.Card = card;
-    this.type = 'edit';
+    this.type = type;
+
+    // test form in modal
+    this.checkboxGroupForm = this.formBuilder.group({
+      left: true,
+      middle: false,
+      right: false
+    });
     
     this.modalService.open(content).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;

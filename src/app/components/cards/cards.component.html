@@ -1,12 +1,12 @@
 <div class="filter d-flex justify-content-between">
   <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="code" (change)="searchStatus()">
-    <label ngbButtonLabel class="btn-primary">
+    <label ngbButtonLabel class="btn-outline-primary btn-sm btn">
       <input ngbButton type="radio" [value]="0"> open
     </label>
-    <label ngbButtonLabel class="btn-primary">
+    <label ngbButtonLabel class="btn-outline-primary btn-sm btn">
       <input ngbButton type="radio" [value]="1"> closed
     </label>
-    <label ngbButtonLabel class="btn-primary">
+    <label ngbButtonLabel class="btn-outline-primary btn-sm btn">
       <input ngbButton type="radio" [value]="2"> cancelled
     </label>
   </div>
@@ -14,33 +14,22 @@
 </div>
 
 <section class="card-columns">
-  <ul class="cards">
-    <li *ngFor="let card of results" class="card {{ card.status }}">
-      <div class="total">
-        {{ card.bounty + card.candidates.length * card.cost }} 
-        <br>
-        with <a href="javascript:;" (click)="open(candidatesmodal)">{{ card.candidates.length }} candidates</a> 
-      </div>
-      <div class="head">
-        <div class="d-flex h-100 flex-column justify-content-center">
-          <img src="{{ card.logo }}" alt="{{ card.company }}">
-        </div>
-        <div class="info d-flex justify-content-between">
-          <em>{{ card.title }}@{{ card.company }}</em>
-          <a href="javascript:;" (click)="open(candidatemodal)">apply</a>
-        </div>
-      </div>
-      <div class="desc">
-        <p class="clamp{{ curUser === card.ownerAddr ? 3 : 4 }}">
+  <div *ngFor="let card of results" class="card {{ card.status }}">
+    <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
+    <div class="card-body">
+      <h5 class="card-title">{{ card.title }}@{{ card.company }} (pool: C$ {{ card.bounty + card.candidates.length * card.cost }})</h5>
+      <p class="card-text clamp4" (click)="open(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'detail')">
           {{ card.desc }}
-        </p>
+      </p>
+      <div class="d-flex justify-content-between">
+        <a href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">apply</a>
+        <a href="javascript:;" class="card-link" (click)="open(candidatesmodal)">{{ card.candidates.length }} candidates</a>
+        <!-- <a href="#" class="btn btn-primary" (click)="open(cardmodal, card)">Edit</a> -->
+        <!-- <a href="#" class="card-link" (click)="open(cancelcardmodal)">Cancel</a> -->
       </div>
-      <div class="btns" *ngIf="curUser === card.ownerAddr">
-        <a href="javascript:;" class="edit" (click)="open(cardmodal, card)">edit</a>
-        <a href="javascript:;" class="cancel" (click)="open(cancelcardmodal)" >cancel</a>
-      </div>
-    </li>
-</ul>
+    </div>
+  </div>
+  
 </section>
 
 <ng-template #cardmodal let-c="close" let-d="dismiss">
@@ -51,6 +40,23 @@
     </button>
   </div>
   <div class="modal-body">
+    <!-- test form -->
+    <form [formGroup]="checkboxGroupForm">
+      <div class="btn-group btn-group-toggle">
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" formControlName="left" ngbButton> Left (pre-checked)
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" formControlName="middle" ngbButton> Middle
+        </label>
+        <label class="btn-primary" ngbButtonLabel>
+          <input type="checkbox" formControlName="right" ngbButton> Right
+        </label>
+      </div>
+    </form>
+    <hr>
+    <pre>{{checkboxGroupForm.value | json}}</pre>
+  
     <form>
       <div class="form-group">
         <label for="title">Job Title</label>
