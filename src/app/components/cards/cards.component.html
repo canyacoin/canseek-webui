@@ -37,7 +37,7 @@
       </div>
       <div class="btns" *ngIf="curUser === card.ownerAddr">
         <a href="javascript:;" class="edit" (click)="open(cardmodal, card)">edit</a>
-        <a href="javascript:;" class="cancel" (click)="open(cancelcard)" >cancel</a>
+        <a href="javascript:;" class="cancel" (click)="open(cancelcardmodal)" >cancel</a>
       </div>
     </li>
 </ul>
@@ -182,7 +182,7 @@
   </div>
 </ng-template>
 
-<ng-template #cancelcard let-c="close" let-d="dismiss">
+<ng-template #cancelcardmodal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">cancel card</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
