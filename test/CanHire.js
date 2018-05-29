@@ -134,10 +134,9 @@ contract("CanHire", accounts => {
     const recruiter1Balance = await token.balanceOf(recruiter1);
     const newEscrowBalance = await token.balanceOf(escrow.address);
     const newPost = await canHire.posts(0);
-    const hasCandidate1 = await canHire.checkPostHasCandidate(0, 0);
-    const hasCandidate2 = await canHire.checkPostHasCandidate(0, 1);
-    const recommender1 = await canHire.getCandidateRecommender(0, 0);
-    const recommender2 = await canHire.getCandidateRecommender(0, 1);
+    console.log(typeof(newPost[8].toString()));
+    const recommender1 = newPost[8].toString();
+    const recommender2 = newPost[8].toString();
 
     assert.equal(recruiter1Balance.toNumber(), 1328, "wrong recruiter balance");
     assert.equal(newEscrowBalance.toNumber(), 1100, "wrong escrow balance");

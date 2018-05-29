@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {ContractsService} from '../services/contracts/contracts.service';
+import { ContractsService } from '../services/contracts/contracts.service';
 
 @Component({
   selector: 'app-home',
@@ -11,83 +11,115 @@ import {ContractsService} from '../services/contracts/contracts.service';
 export class HomeComponent implements OnInit, AfterViewInit {
 
   // Current user?
-  currentUser: any = JSON.parse( localStorage.getItem('credentials') );
+  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
 
   // Posts
   posts = [
-    { postId: 0, status: 'Open', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 1, status: 'Open', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 2, status: 'Open', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 3, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 4, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 5, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 6, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 7, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 8, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 9, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'},
-    { postId: 10, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.'}
+    { postId: 0, status: 'Open', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 1, status: 'Open', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 2, status: 'Open', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 3, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 4, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 5, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 6, status: 'Closed', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 7, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 8, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 9, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' },
+    { postId: 10, status: 'Cancelled', title: 'Developer', ownerAddress: '0x0', ownerName: 'CanYa', bounty: 1000, cost: 50, honeypot: 1000, details: 'Full-stack solidity developer needed. Familiar with Angular, Firebase, Solidity, Truffle.' }
   ];
 
   // Flags
   loading = true;
 
   constructor(private router: Router,
-    private activatedRoute:  ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private cs: ContractsService) {
   }
 
   async ngOnInit() {
-    setTimeout( () => {
+    setTimeout(() => {
       this.loading = false;
-    }, 2000 );
+    }, 2000);
   }
 
   ngAfterViewInit() {
-    this.activatedRoute.params.subscribe( (params) => {
+    this.activatedRoute.params.subscribe((params) => {
       // PARAM? = params['query'] ? params['query'] : '';
     });
   }
 
+  // example fo getting CAN balance
   async getCANBalance() {
+    console.log('getting CAN balance');
     const canBalance = await this.cs.getCANBalance();
     console.log('CAN Balance is ', canBalance);
   }
 
-  async buyCan() {
-    await this.cs.buyCAN('10');
+  // example of buying can
+  async buyCan(amountInEther = '1') {
+    console.log('buying CAN');
+    await this.cs.buyCAN(amountInEther);
     const canBalance = await this.cs.getCANBalance();
     console.log('CAN Balance is ', canBalance);
   }
 
-  async addPost(bounty: string, cost: string) {
-    const canBalance = await this.cs.getCANBalance();
-    console.log('Initial CanBalance: ', canBalance);
-    if (Number(canBalance) < Number(bounty)) {
-      alert('Insufficient CAN balance. Please buy more CAN.');
-      return;
-    }
-    const postId = await this.cs.addPost(bounty, cost);
-    console.log(postId);
+  // example of adding a post
+  async addPost(bounty = 1000, cost = 10) {
+    console.log('adding post: bounty = %o, cost = %o', bounty, cost);
+    const postId = await this.cs.addPost(bounty.toString(), cost.toString());
+    console.log('post added: postId %o', postId);
   }
 
+  // Example of getting the total number of posts
   async getNumPosts() {
+    console.log('getting total number of posts.');
     const numPosts = await this.cs.getNumPosts();
     console.log('Total Number of Posts: ', numPosts);
   }
 
-  async getPostOwner() {
-    const owner = await this.cs.getPostOwner();
-    console.log(owner);
+  // Example of getting the owner of a post
+  async getPostOwner(postId = 0) {
+    console.log('getting post %o owner', postId);
+    const owner = await this.cs.getPostOwner(postId);
+    console.log('Post %o owner: ', postId, owner);
   }
 
+  // Example of getting the status of a post
   async getPostStatus(postId = 0) {
+    console.log('getting post %o status', postId);
     const postStatus = await this.cs.getPostStatus(postId);
-    console.log(postStatus);
+    console.log('Post %o Status: %o (type: %o)', postId, postStatus, typeof postStatus);
   }
 
-  async cancelPost() {
-    const postStatus = await this.cs.cancelPost('0');
-    console.log('post Status: ', postStatus);
+  // Example of cancelling a post
+  async cancelPost(postId = 1) {
+    console.log('cancelling post ', postId);
+    const postStatus = await this.cs.cancelPost(postId);
+    console.log('post Status: ', typeof postStatus, postStatus);
   }
 
+  // Example of closing a post
+  async closePost(postId = 0, candidateId = 0) {
+    console.log('closing post ', postId);
+    const postStatus = await this.cs.closePost(postId, candidateId);
+    console.log('post %o status: %o', postId, postStatus);
+  }
+
+  // Example of getting a post
+  async getPost(postId = 0) {
+    const post = await this.cs.getPost(postId);
+    console.log(post);
+  }
+
+  async getAllPosts() {
+    const posts = await this.cs.getAllPosts();
+    console.log(posts);
+  }
+
+  // example of recommend/apply for a post
+  async recommend(postId = 0) {
+    console.log('recommending to post ', postId);
+    const candidateId = await this.cs.recommend(postId);
+    console.log('candidate id: ', candidateId);
+  }
 }

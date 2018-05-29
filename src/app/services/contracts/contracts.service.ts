@@ -19,9 +19,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xcAD7e8468E98ED42672182C00691E933534BD6b0';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x28dA8B592708ACa18a7a0CBB7D70Cb24056abA24';
-const EscrowAddr = '0x0efC3065a808470b67BDbA3ee356c3A8b7e73b11';
-const CanHireAddr = '0xcAD7e8468E98ED42672182C00691E933534BD6b0';
+const CanYaCoinAddr = '0x553326168b04fc1f491d149fb827c1432c3c0c8a';
+const EscrowAddr = '0x419224915105c1c54c8749dc8dd84d4677daf1bf';
+const CanHireAddr = '0x403f51ed64f7fb3dfd182540fbee9cea19f054aa';
 
 
 @Injectable()
@@ -32,7 +32,6 @@ export class ContractsService {
   CanYaCoin = contract(CanYaCoinArtifacts);
   Escrow = contract(EscrowArtifacts);
   CanHire = contract(CanHireArtifacts);
-  private _canYaCoin: any;
 
   constructor() {
     if (typeof window.web3 !== 'undefined') {
@@ -148,7 +147,7 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.posts(postId).then(result => {
         let postStatus;
-        switch (result[2].toString()) {
+        switch (result.toString()) {
           case '1': {
             postStatus = 'Open';
             break;
@@ -174,6 +173,18 @@ export class ContractsService {
     }) as Promise<string>;
   }
 
+  public async getPostCost(postId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.posts(postId).then(result => {
+        resolve(result[4].toNumber());
+      })
+      .catch(err => {
+        reject(err);
+      });
+    }) as Promise<number>;
+  }
+
   public async addPost(bounty, cost) {
     const account = await this.getAccount();
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
@@ -183,7 +194,7 @@ export class ContractsService {
 
     return new Promise((resolve, reject) => {
       canHire.addPost(bounty, cost, { from: account, ...gas }).then(result => {
-        resolve(result.toString());
+        resolve(result.logs[0].args.postId.toNumber());
       })
         .catch(err => {
           reject(err);
@@ -206,99 +217,90 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  //   public async cancelPost(postId) {
-  //     const account = await this.getAccount();
-  //     const canYaCoin = await this.CanYaCoin.deployed();
-  //     const escrow = await this.Escrow.deployed();
-  //     const canHire = await this.CanHire.deployed();
-  //     const postStatus = await canHire.cancelPost(postId, {from: account});
-  //     return postStatus[1];
-  //   }
+  public async closePost(postId, candidateId) {
+    const account = await this.getAccount();
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.closePost(postId, candidateId, { from: account, ...gas }).then(result => {
+        resolve(result.toString());
+      })
+        .catch(err => {
+          reject(err);
+        });
+    }) as Promise<number>;
+  }
 
-  //   public async closePost(postId, candidateId) {
-  //     const account = await this.getAccount();
-  //     const canYaCoin = await this.CanYaCoin.deployed();
-  //     const escrow = await this.Escrow.deployed();
-  //     const canHire = await this.CanHire.deployed();
-  //     const postStatus = await canHire.closePost(postId, candidateId, {from: account});
-  //     return postStatus[1];
-  //   }
+  public async recommend(postId) {
+    const account = await this.getAccount();
+    const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
+    const escrow = await this.Escrow.at(EscrowAddr);
+    const canHire = await this.CanHire.at(CanHireAddr);
+    const cost = await this.getPostCost(postId);
+    await canYaCoin.approve(escrow.address, cost, {from: account, ...gas});
+    return new Promise((resolve, reject) => {
+      canHire.recommend(postId, {from: account, ...gas}).then(result => {
+        const { candidateId } = result.logs[0].args;
+        resolve(candidateId.toString());
+      }).catch( err => {
+        reject(err);
+      });
+    }) as Promise<number>;
+  }
 
-  //   public async recommend(postId) {
-  //     const account = await this.getAccount();
-  //     const canYaCoin = await this.CanYaCoin.deployed();
-  //     const escrow = await this.Escrow.deployed();
-  //     const canHire = await this.CanHire.deployed();
-  //     const candidateId = await this.CanHire.recommend(postId, {from: account});
-  //     return candidateId;
-  //   }
+  public async getRecommenders(postId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.getRecommenders(postId).then( recommenders => {
+        resolve(recommenders);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    }) as Promise<object>;
+  }
 
-  // public async postProject(userName, projectName, projectPitch) {
-  //   const account = await this.getAccount();
-  //   const canYaCoin = await this.CanYaCoin.deployed();
-  //   const canYa25 = await this.CanYa25.deployed();
-  //   const postProjectPrice = (await canYa25.postProjectPrice()).toNumber();
-  //   await canYaCoin.approve(canYa25.address, postProjectPrice, {from: account, ...gas});
-  //   const tx = await canYa25.postProject(userName, projectName, projectPitch, {from: account, ...gas});
-  //   console.log(tx);
-  // }
+  public async getPost(postId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    const recommenders = await canHire.getRecommenders(postId);
+    return new Promise((resolve, reject) => {
+      canHire.posts(postId).then(async post => {
+        const status = await this.getPostStatus(postId);
+        console.log(post[8]);
+        const postInfo = {'id': post[0].toNumber(),
+                        'owner': post[1].toString(),
+                        'status': status,
+                        'bounty': post[3].toNumber(),
+                        'cost': post[4].toNumber(),
+                        'honeyPot': post[5].toNumber(),
+                        'numCandidates': post[6].toNumber(),
+                        'candidateSelected': post[7].toNumber(),
+                        'recommenders': recommenders
+                      };
+        resolve(postInfo);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    }) as Promise<object>;
+  }
 
-  // public async getProjectCount() {
-  //   const canYa25 = await this.CanYa25.deployed();
-  //   return canYa25.getProjectCount();
-  // }
+  public async getAllPosts() {
+    const numPosts = await this.getNumPosts();
+    const posts = [];
+    for (let i = 0; i < numPosts; i++) {
+      posts.push(await this.getPost(i));
+    }
+    return posts;
+  }
 
-  // public async hasVoted() {
-  //   const account = await this.getAccount();
-  //   const canYa25 = await this.CanYa25.deployed();
-  //   const hasVoted = await canYa25.hasVoted({from: account});
-  //   return hasVoted;
-  // }
+  public async getAllCandidates(postId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    const post = await canHire.posts(postId);
+    const numCandidates = post[6].toNumber();
+    const recommenders = [];
+    for (let i = 0; i < numCandidates; i++) {
+      recommenders.push(await canHire.posts[postId]);
+    }
+  }
 
-  // public async vote(projectName) {
-  //   const account = await this.getAccount();
-  //   const canYaCoin = await this.CanYaCoin.deployed();
-  //   const canYa25 = await this.CanYa25.deployed();
-  //   const voteProjectPrice = (await canYa25.voteProjectPrice()).toNumber();
-  //   await canYaCoin.approve(canYa25.address, voteProjectPrice, {from: account, ...gas});
-  //   const tx = await canYa25.vote(projectName, {from: account, ...gas});
-  //   console.log(tx);
-  // }
-
-  // public async withdraw() {
-  //   const account = await this.getAccount();
-  //   const canYa25 = await this.CanYa25.deployed();
-  //   const tx = await canYa25.withdraw({from: account, ...gas});
-  //   console.log(tx);
-  // }
-
-  // private getIdenticon(accountAddr) {
-  //   //return Jazzicon(46, parseInt(accountAddr.slice(2, 10), 16));
-  //   const options = {
-  //     background: [255, 255, 255, 255],
-  //     margin: 0,
-  //     size: 30,
-  //   };
-  //   const data = new Identicon(accountAddr, options).toString();
-  //   return `data:image/png;base64,${data}`;
-  // }
-
-  // public async getProjects() {
-  //   const canYa25 = await this.CanYa25.deployed();
-  //   const projectNames = await canYa25.getProjectNames();
-  //   const projects = await Promise.all(projectNames.map(async projectName => {
-  //     const project = await canYa25.projects(projectName);
-  //     return {
-  //       userAddress: project[0],
-  //       identicon: this.getIdenticon(project[0]),
-  //       userName: this._web3.utils.hexToAscii(project[1]).replace(/\u0000/g, ''),
-  //       title: this._web3.utils.hexToAscii(project[2]).replace(/\u0000/g, ''),
-  //       description: project[3],
-  //       votes: project[4].toNumber(),
-  //       funded: project[5],
-  //       image: 'https://canyacoin.files.wordpress.com/2018/01/canya_featured-images-out-and-about.jpg',
-  //     };
-  //   }));
-  //   return Promise.resolve(projects);
-  // }
 }

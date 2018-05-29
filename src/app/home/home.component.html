@@ -31,7 +31,13 @@
       <button type="button" (click)="addPost()">add post</button>
       <button type="button" (click)="getNumPosts()">get total posts</button>
       <button type="button" (click)="getPostStatus()">get postStatus</button>
-      <button type="button" (click)="cancelPost()">cancel Post</button>
+      <button type="button" (click)="getPostOwner()">get postOwner</button>
+      <button type="button" (click)="cancelPost()">cancel post</button>
+      <button type="button" (click)="closePost()">close post</button>
+      <button type="button" (click)="getPost()">get post info</button>
+      <button type="button" (click)="recommend()">recommend</button>
+      <button type="button" (click)="getAllPosts()">get all posts</button>
+
 
       <section class="card-columns">
         <app-postcard *ngFor="let post of posts" [post]="post"></app-postcard>

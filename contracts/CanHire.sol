@@ -22,24 +22,21 @@ contract CanHire is Ownable {
         uint honeyPot;
         uint numCandidates;
         uint candidateSelected;
-        mapping(uint => bool) hasCandidate;
-        mapping(uint => address) recommenderOf;
+        address[] recommenders;
     }
 
-    /* mapping(address => bool) tokenOf; */
     StandardToken public canYaCoin;
     Escrow public escrow;
-
     Post[] public posts;
     uint public numPosts;
     bool public active;
-    uint public cancellationFee = 1;
+    uint public cancelFee = 1;
+    uint public closeFee = 2;
 
     event PostCreated(uint postId);
-    event CandidateRecommended(uint postId, uint candidateId);
+    event CandidateRecommended(uint candidateId);
     event EscrowUpdated(address escrowAddress);
-    event TokenStatusUpdate(address tokenAddress, bool status);
-    event PostStatusUpdate(uint postId, Status status);
+    event PostStatusUpdate(Status status);
 
     modifier is_active(){
         require(active);
@@ -52,7 +49,7 @@ contract CanHire is Ownable {
     }
 
     modifier has_candidate(uint postId, uint candidateId) {
-        require(posts[postId].hasCandidate[candidateId]);
+        require(candidateId < posts[postId].numCandidates);
         _;
     }
 
@@ -72,20 +69,20 @@ contract CanHire is Ownable {
         setActive(true);
     }
 
-    function checkPostHasCandidate(uint postId, uint candidateId) public view returns (bool hasCandidate) {
-        hasCandidate = posts[postId].hasCandidate[candidateId];
-    }
-
-    function getCandidateRecommender(uint postId, uint candidateId) public view returns (address recommender) {
-        recommender = posts[postId].recommenderOf[candidateId];
+    function getRecommenders(uint postId) public view returns (address[] recommenderList) {
+        recommenderList = posts[postId].recommenders;
     }
 
     function setActive(bool isActive) public onlyOwner {
         active = isActive;
     }
 
-    function setCancellationFee(uint _cancellationFee) public onlyOwner {
-        cancellationFee = _cancellationFee;
+    function setCancellationFee(uint _cancelFee) public onlyOwner {
+        cancelFee = _cancelFee;
+    }
+
+    function setCloseFee(uint _closeFee) public onlyOwner {
+        closeFee = _closeFee;
     }
 
     function setEscrow(address newEscrow) public onlyOwner {
@@ -115,39 +112,39 @@ contract CanHire is Ownable {
         post_is_open(postId)
     {
         Post storage post = posts[postId];
-        for(uint i = 0; i < post.numCandidates; i++) {
-            require(escrow.transferFromEscrow(post.recommenderOf[i], post.cost));
+        for(uint i = 0; i < post.numCandidates; i.add(1)) {
+            require(escrow.transferFromEscrow(post.recommenders[i], post.cost));
         }
-        uint fee = post.bounty.mul(cancellationFee).div(100);
+        uint fee = post.bounty.mul(cancelFee).div(100);
         require(escrow.transferFromEscrow(address(this), fee));
         require(escrow.transferFromEscrow(msg.sender, post.bounty.sub(fee)));
         posts[postId].status = Status.Cancelled;
-        emit PostStatusUpdate(postId, Status.Cancelled);
+        emit PostStatusUpdate(Status.Cancelled);
     }
 
     function closePost(uint postId, uint candidateId)
         public
         is_post_owner(postId, msg.sender)
         post_is_open(postId)
+        has_candidate(postId, candidateId)
     {
         Post storage post = posts[postId];
-        require(post.hasCandidate[candidateId]);
-        require(post.recommenderOf[candidateId] != msg.sender);
-        require(escrow.transferFromEscrow(post.recommenderOf[candidateId], post.honeyPot));
+        require(post.recommenders[candidateId] != msg.sender);
+        uint fee = post.bounty.mul(closeFee).div(100);
+        require(escrow.transferFromEscrow(post.recommenders[candidateId], post.honeyPot.sub(fee)));
         post.candidateSelected = candidateId;
         post.status = Status.Closed;
-        emit PostStatusUpdate(postId, Status.Closed);
+        emit PostStatusUpdate(Status.Closed);
     }
 
     function recommend(uint postId) public {
         require(canYaCoin.approve(address(escrow), posts[postId].cost));
         require(escrow.transferToEscrow(msg.sender, posts[postId].cost));
         uint candidateId = posts[postId].numCandidates;
-        posts[postId].numCandidates++;
-        posts[postId].recommenderOf[candidateId] = msg.sender;
-        posts[postId].hasCandidate[candidateId] = true;
+        posts[postId].numCandidates.add(1);
+        posts[postId].recommenders.push(msg.sender);
         posts[postId].honeyPot = posts[postId].honeyPot.add(posts[postId].cost);
-        emit CandidateRecommended(postId, candidateId);
+        emit CandidateRecommended(candidateId);
     }
 
 }
