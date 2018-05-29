@@ -1,0 +1,45 @@
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">new card {{ name }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="title">Job Title</label>
+        <input type="text" class="form-control" id="title" placeholder="fullstack developer">
+      </div>
+      <div class="form-group">
+        <label for="company">Company</label>
+        <input type="" class="form-control" id="company" placeholder="google">
+      </div>
+      <div class="form-group">
+        <label for="logo">Logo</label>
+        <input type="" class="form-control" id="logo" placeholder="logo company">
+      </div>
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+        <label for="bounty">Bounty</label>
+        <input type="" class="form-control" id="bounty" placeholder="bounty">
+      </div>
+      <div class="form-group">
+        <label for="cost">Cost</label>
+        <input type="email" class="form-control" id="cost" placeholder="cost">
+      </div>
+      <div class="form-group">
+        <label for="desc">Description</label>
+        <textarea class="form-control" id="desc" rows="3" placeholder="description for your job"></textarea>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
+    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+  </div>
+</ng-template>
+

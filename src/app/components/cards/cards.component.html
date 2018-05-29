@@ -35,13 +35,17 @@
           {{ card.desc }}
         </p>
       </div>
+      <div class="btns" *ngIf="curUser === card.ownerAddr">
+        <a href="javascript:;" class="edit" (click)="open(cardmodal, card)">edit</a>
+        <a href="javascript:;" class="cancel">cancel</a>
+      </div>
     </li>
 </ul>
 </section>
 
 <ng-template #cardmodal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">new card</h4>
+    <h4 class="modal-title">{{ type }} card</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>

@@ -4,8 +4,13 @@
 }
 
 .card {
-    height: 380px;
+    height: 400px;
     overflow: hidden;
+    cursor: pointer;
+}
+.card:hover .btns {
+    position: relative;
+    top: -28px;
 }
 .card::before {
     display: inline-block;

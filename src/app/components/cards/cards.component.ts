@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Card } from '../model/card';
 import { CardService } from '../service/card.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Candidate } from '../model/candidate';
 
 @Component({
   selector: 'app-cards',
@@ -16,6 +17,16 @@ export class CardsComponent implements OnInit {
   code = 0;
   statusArr = ['open', 'closed', 'cancelled'];
 
+  // new or edit a card
+  Card: Card;
+  type: string = 'new';
+
+  // new or list candidate
+  Candidate: Candidate;
+  email: string;
+
+  // cur user address
+  curUser = '0x0';
 
   constructor(private cardService: CardService, private modalService: NgbModal) { }
 
@@ -30,7 +41,10 @@ export class CardsComponent implements OnInit {
     const next = cards.filter(item => item.status === statusArr[code]);
     this.results = next;
   }
-  open(content) {
+  open(content, card) {
+    this.Card = card;
+    this.type = 'edit';
+    
     this.modalService.open(content).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
