@@ -15,17 +15,21 @@
 
 <section class="card-columns">
   <div *ngFor="let card of results" class="card {{ card.status }}">
+    <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal)">Cancel</a>
     <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
-      <h5 class="card-title">{{ card.title }}@{{ card.company }} (pool: C$ {{ card.bounty + card.candidates.length * card.cost }})</h5>
-      <p class="card-text clamp4" (click)="open(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'detail')">
+      <h5 class="card-title">{{ card.title }}@{{ card.company }} 
+        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ card.candidates.length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave">
+          (pool: C$ {{ card.bounty + card.candidates.length * card.cost }}) 
+        </a>
+      </h5>
+      <p class="card-text clamp4" (click)="open(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
-        <a href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">apply</a>
-        <a href="javascript:;" class="card-link" (click)="open(candidatesmodal)">{{ card.candidates.length }} candidates</a>
-        <!-- <a href="#" class="btn btn-primary" (click)="open(cardmodal, card)">Edit</a> -->
-        <!-- <a href="#" class="card-link" (click)="open(cancelcardmodal)">Cancel</a> -->
+        <a *ngIf="curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
+        <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(cardmodal, card, 'edit')">Edit</a>
+        <a href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ card.candidates.length }}+ candidates </a>
       </div>
     </div>
   </div>
@@ -125,45 +129,19 @@
 
 <ng-template #candidatesmodal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">candidates</h4>
+    <h4 class="modal-title">{{ type }} candidates</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <ngb-accordion [closeOthers]="true" activeIds="candidate1">
-      <ngb-panel id="candidate1" title="candidate1">
+    <ngb-accordion [closeOthers]="true" activeIds="candidate{{ candidates[0].id }}">
+      <ngb-panel *ngFor="let candidate of candidates" id="candidate{{ candidate.id }}" title="{{ candidate.name }}">
         <ng-template ngbPanelContent>
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-          aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-          sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-          craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-          occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-          labore sustainable VHS.
-        </ng-template>
-      </ngb-panel>
-      <ngb-panel id="candidate2">
-        <ng-template ngbPanelTitle>
-          <span>candidate2</span>
-        </ng-template>
-        <ng-template ngbPanelContent>
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-          aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-          sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-          craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-          occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-          labore sustainable VHS.
-        </ng-template>
-      </ngb-panel>
-      <ngb-panel id="candidate3" title="candidate3">
-        <ng-template ngbPanelContent>
-          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia
-          aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor,
-          sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica,
-          craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings
-          occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus
-          labore sustainable VHS.
-        </ng-template>
+            <p>name: {{ candidate.name }}</p>
+            <p>contact: {{ candidate.contact }}</p>
+            <p>reason: {{ candidate.reason }}</p>
+          </ng-template>
       </ngb-panel>
     </ngb-accordion>
   </div>

@@ -12,6 +12,7 @@ import { Candidate } from '../model/candidate';
 })
 export class CardsComponent implements OnInit {
   public checkboxGroupForm: FormGroup;
+  public candidatesForm: FormGroup;
   cards: Card[];
   results: Card[];
   code = 0;
@@ -27,6 +28,9 @@ export class CardsComponent implements OnInit {
 
   // cur user address
   curUser = '0x0';
+
+  // list candidates or chose a candidate
+  candidates: Candidate[];
 
   constructor(private cardService: CardService, private modalService: NgbModal, private formBuilder: FormBuilder) { }
 
@@ -53,6 +57,19 @@ export class CardsComponent implements OnInit {
       right: false
     });
     
+    this.modalService.open(content).result.then((result) => {
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  openCandidates(content, candidates, type) {
+    this.candidates = candidates;
+    this.type = type;
+    console.log(candidates);
+    // this.candidatesForm = this.formBuilder.group({
+    //   candidates: candidates,
+    // });
     this.modalService.open(content).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

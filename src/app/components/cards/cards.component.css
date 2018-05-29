@@ -33,41 +33,12 @@
     padding: 20px;
     padding-bottom: 0;
 }
-/* .total {
+.fa-trash {
     position: absolute;
-    top: 0px;
-    right: 12px;
-    text-align: right;
+    z-index: 0;
+    right: 0;
+    padding: 12px;
 }
-.total::before {
-    display: inline-block;
-    content: "";
-    width: 24px;
-    height: 30px;
-    background: url('/assets/img/Canya-coin.svg') 50% 20% / cover no-repeat;
-    vertical-align: -2px;
-}
-.head {
-    margin: 40px 20px 0;
-    text-align: center;
-}
-.head img {
-    max-height: 100px;
-}
-.desc {
-    padding: 20px;
-    border-top: 1px solid #d1d1d1;
-}
-em {
-    font-size: 120%;
-    font-weight: 400;
-    font-style: normal;
-    color: black;
-}
-.info {
-    margin: 14px 0;
-} */
-
 .clamp4 {
     display: -webkit-box;
     -webkit-box-orient: vertical;
