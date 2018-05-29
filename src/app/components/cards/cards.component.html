@@ -31,13 +31,13 @@
         </div>
       </div>
       <div class="desc">
-        <p class="clamp4">
+        <p class="clamp{{ curUser === card.ownerAddr ? 3 : 4 }}">
           {{ card.desc }}
         </p>
       </div>
       <div class="btns" *ngIf="curUser === card.ownerAddr">
         <a href="javascript:;" class="edit" (click)="open(cardmodal, card)">edit</a>
-        <a href="javascript:;" class="cancel">cancel</a>
+        <a href="javascript:;" class="cancel" (click)="open(cancelcard)" >cancel</a>
       </div>
     </li>
 </ul>
@@ -180,4 +180,20 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
   </div>
+</ng-template>
+
+<ng-template #cancelcard let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">cancel card</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Do you really want to cancel this card?</p>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">No</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Yes</button>
+    </div>
 </ng-template>

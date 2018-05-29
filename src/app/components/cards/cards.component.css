@@ -8,10 +8,7 @@
     overflow: hidden;
     cursor: pointer;
 }
-.card:hover .btns {
-    position: relative;
-    top: -28px;
-}
+
 .card::before {
     display: inline-block;
     position: relative;
@@ -65,6 +62,13 @@ em {
 }
 .info {
     margin: 14px 0;
+}
+.clamp3 {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-all;
+    -webkit-line-clamp: 3;
 }
 .clamp4 {
     display: -webkit-box;
