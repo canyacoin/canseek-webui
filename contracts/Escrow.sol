@@ -39,8 +39,8 @@ contract Escrow is Ownable {
         require(_to != 0x0);
         require(_value > 0);
         require(_value <= appBalance[msg.sender]);
-        require(canYaCoin.approve(this, _value));
-        require(canYaCoin.transferFrom(this, _to, _value));
+        require(canYaCoin.approve(address(this), _value));
+        require(canYaCoin.transferFrom(address(this), _to, _value));
         appBalance[msg.sender] = appBalance[msg.sender].sub(_value);
         return true;
     }

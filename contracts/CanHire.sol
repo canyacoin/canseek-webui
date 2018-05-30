@@ -37,6 +37,7 @@ contract CanHire is Ownable {
     event CandidateRecommended(uint candidateId);
     event EscrowUpdated(address escrowAddress);
     event PostStatusUpdate(Status status);
+    event ProfitsExtracted(uint profit);
 
     modifier is_active(){
         require(active);
@@ -131,6 +132,7 @@ contract CanHire is Ownable {
         Post storage post = posts[postId];
         require(post.recommenders[candidateId] != msg.sender);
         uint fee = post.bounty.mul(closeFee).div(100);
+        require(escrow.transferFromEscrow(address(this), fee));
         require(escrow.transferFromEscrow(post.recommenders[candidateId], post.honeyPot.sub(fee)));
         post.candidateSelected = candidateId;
         post.status = Status.Closed;
@@ -145,6 +147,13 @@ contract CanHire is Ownable {
         posts[postId].recommenders.push(msg.sender);
         posts[postId].honeyPot = posts[postId].honeyPot.add(posts[postId].cost);
         emit CandidateRecommended(candidateId);
+    }
+
+    function extractProfits(address _to, uint _amount) public onlyOwner {
+        require(_amount > 0);
+        require(canYaCoin.approve(address(this), _amount));
+        require(canYaCoin.transferFrom(address(this), _to, _amount));
+        emit ProfitsExtracted(_amount);
     }
 
 }
