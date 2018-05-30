@@ -10,7 +10,7 @@
       <input ngbButton type="radio" [value]="2"> cancelled
     </label>
   </div>
-  <button class="btn-primary" (click)="open(cardmodal)">new card</button>
+  <button class="btn-primary" (click)="openCard(cardmodal, {}, 'new')">new card</button>
 </div>
 
 <section class="card-columns">
@@ -19,17 +19,17 @@
     <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ card.candidates.length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave">
-          (pool: C$ {{ card.bounty + card.candidates.length * card.cost }}) 
+        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave">
+          (pool: C$ {{ card.bounty + (card.candidates || []).length * card.cost }}) 
         </a>
       </h5>
-      <p class="card-text clamp4" (click)="open(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
+      <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
         <a *ngIf="curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
-        <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(cardmodal, card, 'edit')">Edit</a>
-        <a href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ card.candidates.length }}+ candidates </a>
+        <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
+        <a href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
       </div>
     </div>
   </div>
@@ -44,57 +44,47 @@
     </button>
   </div>
   <div class="modal-body">
-    <!-- test form -->
-    <form [formGroup]="checkboxGroupForm">
-      <div class="btn-group btn-group-toggle">
-        <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" formControlName="left" ngbButton> Left (pre-checked)
-        </label>
-        <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" formControlName="middle" ngbButton> Middle
-        </label>
-        <label class="btn-primary" ngbButtonLabel>
-          <input type="checkbox" formControlName="right" ngbButton> Right
-        </label>
-      </div>
-    </form>
-    <hr>
-    <pre>{{checkboxGroupForm.value | json}}</pre>
-  
-    <form>
+    <form [formGroup]="cardForm">
       <div class="form-group">
         <label for="title">Job Title</label>
-        <input type="text" class="form-control" id="title" placeholder="fullstack developer">
+        <input *ngIf="type !== 'new'" [attr.disabled] type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
+        <input *ngIf="type === 'new'" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
       </div>
       <div class="form-group">
         <label for="company">Company</label>
-        <input type="" class="form-control" id="company" placeholder="google">
+        <input *ngIf="type !== 'new'" [attr.disabled] type="" class="form-control" formControlName="company" placeholder="google">
+        <input *ngIf="type === 'new'" type="" class="form-control" formControlName="company" placeholder="google">
       </div>
       <div class="form-group">
         <label for="logo">Logo</label>
-        <input type="" class="form-control" id="logo" placeholder="logo company">
+        <input *ngIf="type !== 'new'" [attr.disabled] type="" class="form-control" formControlName="logo" placeholder="logo company">
+        <input *ngIf="type === 'new'" type="" class="form-control" formControlName="logo" placeholder="logo company">
       </div>
       <div class="form-group">
         <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+        <input *ngIf="type !== 'new'" [attr.disabled] type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+        <input *ngIf="type === 'new'" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input type="" class="form-control" id="bounty" placeholder="bounty">
+        <input *ngIf="type !== 'new'" [attr.disabled] type="" class="form-control" formControlName="bounty" placeholder="bounty">
+        <input *ngIf="type === 'new'" type="" class="form-control" formControlName="bounty" placeholder="bounty">
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>
-        <input type="email" class="form-control" id="cost" placeholder="cost">
+        <input *ngIf="type !== 'new'" [attr.disabled] type="email" class="form-control" formControlName="cost" placeholder="cost">
+        <input [attr.disabled] type="email" class="form-control" formControlName="cost" placeholder="cost">
       </div>
       <div class="form-group">
         <label for="desc">Description</label>
-        <textarea class="form-control" id="desc" rows="3" placeholder="description for your job"></textarea>
+        <textarea *ngIf="type === 'edit'" class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
+        <textarea *ngIf="type !== 'edit'" [attr.disabled] class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
       </div>
     </form>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
-    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+    <button *ngIf="type === 'edit' || type === 'new'" type="button" class="btn-primary" (click)="c('onOk')">ok</button>
   </div>
 </ng-template>
 

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup/*, FormControl, Validators */ } from '@angular/forms';
 import { Card } from '../model/card';
 import { CardService } from '../service/card.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-cards',
@@ -11,15 +12,24 @@ import { Candidate } from '../model/candidate';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  public checkboxGroupForm: FormGroup;
-  public candidatesForm: FormGroup;
+  checkboxGroupForm: FormGroup;
+  candidatesForm: FormGroup;
+  cardForm: FormGroup;
   cards: Card[];
   results: Card[];
   code = 0;
   statusArr = ['open', 'closed', 'cancelled'];
 
   // new or edit a card
-  Card: Card;
+  card = {
+    "email": '',
+    "bounty": 0,
+    "cost": 0,
+    "title": '',
+    "logo": '',
+    "company": '',
+    "desc": ''
+  };
   type: string = 'new';
 
   // new or list candidate
@@ -47,7 +57,7 @@ export class CardsComponent implements OnInit {
     this.results = next;
   }
   open(content, card, type) {
-    this.Card = card;
+    this.card = card || this.card;
     this.type = type;
 
     // test form in modal
@@ -62,6 +72,46 @@ export class CardsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+  openCard(content, card, type) {
+    this.card = card;
+    this.type = type;
+
+    if(type === 'new') {
+      card = {
+        title: '',
+        email: '',
+        bounty: null,
+        cost: null,
+        desc: '',
+        company: '',
+        logo: '',
+      }
+    }
+    
+    this.cardForm = this.formBuilder.group(card);
+
+    this.modalService.open(content).result.then((result) => {
+      if(result === 'onOk') {
+        const curCard = { status: 'open', ...this.cardForm.value};
+        
+        if (type === 'edit') {
+          const nextCards = this.cards.map(card => {
+            if(card.id === curCard.id) {
+              return { ...card, ...curCard };
+            }
+            return card;
+          });
+          this.cards = nextCards;
+        } else if (type === 'new') {
+          this.cards = this.cards.concat(curCard);
+        }
+        
+        this.searchStatus();
+      }
+    }, (reason) => {
+
+    })
   }
   openCandidates(content, candidates, type) {
     this.candidates = candidates;
