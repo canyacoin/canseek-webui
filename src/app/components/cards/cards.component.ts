@@ -14,12 +14,12 @@ import { Candidate } from '../model/candidate';
 export class CardsComponent implements OnInit {
   loading: boolean = true;
   checkboxGroupForm: FormGroup;
-  candidatesForm: FormGroup;
+  candidateForm: FormGroup;
   cardForm: FormGroup;
   cards: Card[];
   results: Card[];
   statusArr = statusArr;
-  statusIndex = 0;
+  statusIndex = 1;
 
   // new or edit a card
   card = {
@@ -35,7 +35,12 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   // new or list candidate
-  Candidate: Candidate;
+  candidate = {
+    "id": 0,
+    "name": '',
+    "contact": '',
+    "desc": ''
+  };
   email: string;
 
   // cur user address
@@ -74,11 +79,22 @@ export class CardsComponent implements OnInit {
     this.results = next;
   }
   open(content, card) {
-    // this.card = card;
     console.log('open card: ', card);
     this.modalService.open(content).result.then((result) => {
       if(result === 'cancelPost') {
         this.cardService.cancelPost(card.postId);
+      }
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+  openCandidate(content, card) {
+    this.candidateForm = this.formBuilder.group(this.candidate);
+    this.modalService.open(content).result.then((result) => {
+      if(result === 'onOk') {
+        const value = { id: (card.candidates || []).length, ...this.candidateForm.value};
+        this.cardService.addCandidate(card, value);
       }
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

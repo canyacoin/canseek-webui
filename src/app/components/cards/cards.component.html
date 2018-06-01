@@ -46,7 +46,7 @@
           <i class="fa fa-question-o" ngbPopover="todo" triggers="mouseenter:mouseleave"></i>
         </a>
         <!-- todo -->
-        <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
+        <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCandidate(candidatemodal, card)">Apply</a>
         <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
         <!-- todo -->
         <a *ngIf="card.status !== 'pending'" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
@@ -116,24 +116,24 @@
     </button>
   </div>
   <div class="modal-body">
-    <form>
+    <form [formGroup]="candidateForm">
       <div class="form-group">
         <label for="name">Candidate's Name</label>
-        <input type="text" class="form-control" id="name" placeholder="name">
+        <input type="text" class="form-control" formControlName="name" placeholder="name">
       </div>
       <div class="form-group">
         <label for="contact">Contact</label>
-        <input type="" class="form-control" id="contact" placeholder="email or phone">
+        <input type="" class="form-control" formControlName="contact" placeholder="email or phone">
       </div>
       <div class="form-group">
         <label for="desc">Description</label>
-        <textarea class="form-control" id="desc" rows="3" placeholder="description here"></textarea>
+        <textarea class="form-control" formControlName="desc" rows="3" placeholder="description here"></textarea>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
-    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Cancel</button>
+    <button type="button" class="btn-primary" (click)="c('onOk')">Ok</button>
   </div>
 </ng-template>
 

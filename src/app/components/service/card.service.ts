@@ -53,8 +53,15 @@ export class CardService {
       args => console.log('cancelPost succ: ', args)
     )
   }
-  addCandidate(candidate: Candidate) {
-
+  addCandidate(card: Card, candidate: Candidate) {
+    this.cs.recommend(card.postId).then(
+      args => console.log(args)
+    )
+    // const { candidates = [] } = card;
+    // const nextCandidates = candidates.concat(candidate);
+    // this.dbRef.doc(card.id).update({
+    //   candidates: nextCandidates
+    // });
   }
   updateStatus(id: string) {
     // todo firestore
