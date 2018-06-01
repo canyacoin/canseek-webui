@@ -15,4 +15,4 @@ export class Card {
     postId: number;
 }
 
-export const statusArr = ['pending', 'failed', 'open', 'closed', 'cancelled'];
+export const statusArr = ['pending', 'open', 'closed', 'cancelled'];

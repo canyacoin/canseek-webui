@@ -19,7 +19,7 @@ export class CardsComponent implements OnInit {
   cards: Card[];
   results: Card[];
   statusArr = statusArr;
-  statusIndex = 2;
+  statusIndex = 0;
 
   // new or edit a card
   card = {
@@ -108,6 +108,11 @@ export class CardsComponent implements OnInit {
     })
   }
 
+  updateStatus(id: string) {
+    console.log('will update id: ', id);
+    
+    this.cardService.updateStatus(id);
+  }
 
   openCandidates(content, candidates, type) {
     this.candidates = candidates;

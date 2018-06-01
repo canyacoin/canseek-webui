@@ -56,4 +56,9 @@ export class CardService {
   addCandidate(candidate: Candidate) {
 
   }
+  updateStatus(id: string) {
+    // todo firestore
+    this.cs.getPostId(id)
+      .then(args => console.log('query result: ', args))
+  }
 }

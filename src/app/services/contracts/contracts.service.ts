@@ -19,9 +19,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x3490a25797d5285d6c408b6cb48ada6224068a48';
-const EscrowAddr = '0x935aedb6f1a2409798dda60cce5e9a9df381ecee';
-const CanHireAddr = '0xde175215d3af27a6f701bf3674aa34219210b2f6';
+const CanYaCoinAddr = '0x925328f9a876fcbe03aeae2c13133c574e758b14';
+const EscrowAddr = '0x28cbf26b9ebfb6d0f89dd8cca9002dae0e663057';
+const CanHireAddr = '0x5bff60fca5bd59e8eb74358d9f160e59b35aeeb8';
 
 
 @Injectable()
@@ -304,9 +304,10 @@ export class ContractsService {
   }
 
   public async getPostId(uniqueId) {
+    const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.getId(uniqueId).then(postId => {
+      canHire.getId(uniqueId, {account}).then(postId => {
         resolve(postId.toNumber());
       }).catch( err => {
         reject(err);

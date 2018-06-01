@@ -39,15 +39,17 @@
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
-        <!-- todo -->
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.id)">Update</a>
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.id)">Update Status</a>
         <!-- todo addpost -->
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="card-link" (click)="repost(card)">Repost</a>
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="card-link" (click)="repost(card)" style="align-self: center;">
+          Repost 
+          <i class="fa fa-question-o" ngbPopover="todo" triggers="mouseenter:mouseleave"></i>
+        </a>
         <!-- todo -->
         <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
         <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
         <!-- todo -->
-        <a href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
+        <a *ngIf="card.status !== 'pending'" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
       </div>
     </div>
   </div>
