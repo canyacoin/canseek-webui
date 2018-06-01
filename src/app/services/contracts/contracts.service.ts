@@ -14,9 +14,9 @@ const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
 const gas = { gasPrice: '5000000000', gas: '500000' };
 
 // Ropsten contract address
-// const CanYaCoinAddr = '0x28dA8B592708ACa18a7a0CBB7D70Cb24056abA24';
-// const EscrowAddr = '0x0efC3065a808470b67BDbA3ee356c3A8b7e73b11';
-// const CanHireAddr = '0xcAD7e8468E98ED42672182C00691E933534BD6b0';
+// const CanYaCoinAddr = '0xbd304683142b93567f398c952dbaba41e9f3a214';
+// const EscrowAddr = '0x4a8ad51bf02f9c538a8e9388a5a2fec477006070';
+// const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
 const CanYaCoinAddr = '0x74956f89b5c9445a7bf702ffacdb2249b6e67f41';
@@ -301,6 +301,17 @@ export class ContractsService {
     for (let i = 0; i < numCandidates; i++) {
       recommenders.push(await canHire.posts[postId]);
     }
+  }
+
+  public async getPostId(uniqueId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.getId(uniqueId).then(postId => {
+        resolve(postId.toNumber());
+      }).catch( err => {
+        reject(err);
+      });
+    }) as Promise<number>;
   }
 
 }
