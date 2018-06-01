@@ -108,7 +108,7 @@ export class CardsComponent implements OnInit {
         if (type === 'edit') {
           this.editCard(curCard);
         } else if (type === 'new') {
-          this.newCard(curCard);
+          // this.newCard(curCard);
         }
         
         this.searchStatus();
@@ -117,32 +117,32 @@ export class CardsComponent implements OnInit {
 
     })
   }
-  newCard(curCard) {
-    // todo add card todo hash todo status
-    const addPost = this.service.addPost;
-    const cardsRef = this.db.collection('cards');
+  // newCard(curCard) {
+  //   // todo add card todo hash todo status
+  //   const addPost = this.service.addPost;
+  //   const cardsRef = this.db.collection('cards');
 
-    cardsRef.add(curCard)
-      .then(docRef => {
-        console.log("add card success ref: ", docRef);
-        const { bounty, cost } = curCard;
+  //   cardsRef.add(curCard)
+  //     .then(docRef => {
+  //       console.log("add card success ref: ", docRef);
+  //       const { bounty, cost } = curCard;
 
-        addPost(bounty, cost);
-        return docRef.id;
-      })
-      .then(
-        (id) => {
-          cardsRef.doc(id).update({ status: 'open' })},
-        (id) => {
-          cardsRef.doc(id).update({ status: 'failed' })
-        }
-      )
-      .catch(function(error) {
-        console.error("error: ", error);
-      });
+  //       addPost(bounty, cost);
+  //       return docRef.id;
+  //     })
+  //     .then(
+  //       (id) => {
+  //         cardsRef.doc(id).update({ status: 'open' })},
+  //       (id) => {
+  //         cardsRef.doc(id).update({ status: 'failed' })
+  //       }
+  //     )
+  //     .catch(function(error) {
+  //       console.error("error: ", error);
+  //     });
 
-    this.cards = this.cards.concat(curCard);
-  }
+  //   this.cards = this.cards.concat(curCard);
+  // }
   editCard(curCard) {
     // todo update card
     const nextCards = this.cards.map(card => {
