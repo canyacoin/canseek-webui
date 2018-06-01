@@ -12,6 +12,7 @@ import { Candidate } from '../model/candidate';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
+  loading: boolean = true;
   checkboxGroupForm: FormGroup;
   candidatesForm: FormGroup;
   cardForm: FormGroup;
@@ -22,27 +23,28 @@ export class CardsComponent implements OnInit {
 
   // new or edit a card
   card = {
-    "email": '',
-    "bounty": 0,
-    "cost": 0,
     "title": '',
-    "logo": '',
+    "email": '',
+    "bounty": null,
+    "cost": null,
+    "desc": '',
     "company": '',
-    "desc": ''
+    "logo": '',
+    "status": 'pending',
   };
-  type: string = 'new';
+  type: string = 'new';// new edit read
 
   // new or list candidate
   Candidate: Candidate;
   email: string;
 
   // cur user address
-  curUser = '0x0';
+  curUser: string;
 
   // list candidates or chose a candidate
   candidates: Candidate[];
   constructor(private cardService: CardService,
-              private service: ContractsService,
+              private cs: ContractsService,
               private modalService: NgbModal, 
               private formBuilder: FormBuilder,
             ) { }
@@ -53,13 +55,15 @@ export class CardsComponent implements OnInit {
   }
 
   async whoAmI() {
-    this.curUser = await this.service.getAccount();
+    this.curUser = await this.cs.getAccount();
+    console.log('who am i: ', this.curUser);
   }
   
   getCards(): void {
     this.cardService.getCards()
       .subscribe(cards => {
         this.cards = cards
+        this.loading = false;
         this.searchStatus();
       });
   }
@@ -69,90 +73,42 @@ export class CardsComponent implements OnInit {
     const next = cards.filter(item => item.status === statusArr[statusIndex]);
     this.results = next;
   }
-  open(content, card, type) {
-    this.card = card || this.card;
-    this.type = type;
-    
+  open(content, card) {
+    // this.card = card;
+    console.log('open card: ', card);
     this.modalService.open(content).result.then((result) => {
+      if(result === 'cancelPost') {
+        this.cardService.cancelPost(card.postId);
+      }
       // this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  initCardModal(card, type) {
-    this.card = card;
-    this.type = type;
-
-    if(type === 'new') {
-      card = {
-        title: '',
-        email: '',
-        bounty: null,
-        cost: null,
-        desc: '',
-        company: '',
-        logo: '',
-        status: 'pending'
-      }
-    }
-    
-    this.cardForm = this.formBuilder.group(card);
-  }
+  
   openCard(content, card, type) {
-    this.initCardModal(card, type);
+    this.type = type;
+    const initCard = type === 'new' ? this.card : card;
+    this.cardForm = this.formBuilder.group(initCard);
 
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
-        const curCard = { status: 'open', ...this.cardForm.value};
+        const curCard = {  ownerAddr: this.curUser, ...initCard, ...this.cardForm.value};
         
+        console.log('curCard: ', curCard);
         if (type === 'edit') {
-          this.editCard(curCard);
+          this.cardService.updateCard(curCard);
         } else if (type === 'new') {
-          // this.newCard(curCard);
+          this.cardService.addCard(curCard);
         }
-        
         this.searchStatus();
       }
     }, (reason) => {
 
     })
   }
-  // newCard(curCard) {
-  //   // todo add card todo hash todo status
-  //   const addPost = this.service.addPost;
-  //   const cardsRef = this.db.collection('cards');
 
-  //   cardsRef.add(curCard)
-  //     .then(docRef => {
-  //       console.log("add card success ref: ", docRef);
-  //       const { bounty, cost } = curCard;
 
-  //       addPost(bounty, cost);
-  //       return docRef.id;
-  //     })
-  //     .then(
-  //       (id) => {
-  //         cardsRef.doc(id).update({ status: 'open' })},
-  //       (id) => {
-  //         cardsRef.doc(id).update({ status: 'failed' })
-  //       }
-  //     )
-  //     .catch(function(error) {
-  //       console.error("error: ", error);
-  //     });
-
-  //   this.cards = this.cards.concat(curCard);
-  // }
-  editCard(curCard) {
-    // todo update card
-    const nextCards = this.cards.map(card => {
-      if(card.id === curCard.id) {
-        return { ...card, ...curCard };
-      }
-      return card;
-    });
-    this.cards = nextCards;
-  }
   openCandidates(content, candidates, type) {
     this.candidates = candidates;
     this.type = type;

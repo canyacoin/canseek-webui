@@ -1,3 +1,4 @@
+<!-- filter & new -->
 <div class="filter d-flex justify-content-between">
   <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="statusIndex" (change)="searchStatus()">
     <label *ngFor="let statusTxt of statusArr; let i=index" ngbButtonLabel class="btn-outline-primary btn-sm btn">
@@ -7,13 +8,30 @@
   <button class="btn-primary" (click)="openCard(cardmodal, {}, 'new')">new card</button>
 </div>
 
-<section class="card-columns">
+<!-- loading -->
+<div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>
+
+<!-- empty -->
+<div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center">
+  <div class="row">
+    <div class="col-12 d-flex flex-column">
+      <br>
+      <h4 class="fw-400">Uh, oh!</h4>
+      <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+    </div>
+  </div>
+</div>
+
+<!-- list -->
+<section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
-    <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal)">Cancel</a>
-    <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
+    <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal, card)">&nbsp;Cancel</a>
+    <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave">
+        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which each cost {{ card.cost }}" triggers="mouseenter:mouseleave" style="color: #33ccff">
           (pool: C$ {{ card.bounty + (card.candidates || []).length * card.cost }}) 
         </a>
       </h5>
@@ -21,15 +39,21 @@
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
-        <a *ngIf="curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
-        <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
+        <!-- todo -->
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.id)">Update</a>
+        <!-- todo addpost -->
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="card-link" (click)="repost(card)">Repost</a>
+        <!-- todo -->
+        <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
+        <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
+        <!-- todo -->
         <a href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
       </div>
     </div>
   </div>
-  
 </section>
 
+<!-- card modal -->
 <ng-template #cardmodal let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">{{ type }} card</h4>
@@ -124,7 +148,7 @@
         <ng-template ngbPanelContent>
             <p>name: {{ candidate.name }}</p>
             <p>contact: {{ candidate.contact }}</p>
-            <p>reason: {{ candidate.reason }}</p>
+            <p>description: {{ candidate.description }}</p>
           </ng-template>
       </ngb-panel>
     </ngb-accordion>
@@ -162,6 +186,6 @@
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">No</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Yes</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('cancelPost')">Yes</button>
     </div>
 </ng-template>
