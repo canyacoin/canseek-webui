@@ -159,10 +159,8 @@ contract CanHire is Ownable {
         emit ProfitsExtracted(_amount);
     }
 
-    function getId(string uniqueId) public {
-        uint postId = getPostId[uniqueId];
-        require(posts[postId].bounty > 0);
-        emit GetPostId(postId);
+    function getId(string uniqueId) public view returns (uint postId) {
+        postId = getPostId[uniqueId];
     }
 
 }
