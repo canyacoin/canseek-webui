@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup/*, FormControl, Validators */ } from '@angular/forms';
-import { Card } from '../model/card';
+import { Card, statusArr } from '../model/card';
 import { CardService } from '../service/card.service';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-cards',
@@ -15,14 +12,13 @@ import { Observable } from 'rxjs';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
-  items: Observable<any[]>;
   checkboxGroupForm: FormGroup;
   candidatesForm: FormGroup;
   cardForm: FormGroup;
   cards: Card[];
   results: Card[];
-  code = 2;
-  statusArr = ['pending', 'failed', 'open', 'closed', 'cancelled'];
+  statusArr = statusArr;
+  statusIndex = 2;
 
   // new or edit a card
   card = {
@@ -45,41 +41,37 @@ export class CardsComponent implements OnInit {
 
   // list candidates or chose a candidate
   candidates: Candidate[];
-
   constructor(private cardService: CardService,
               private service: ContractsService,
               private modalService: NgbModal, 
               private formBuilder: FormBuilder,
-              private db: AngularFirestore) { }
+            ) { }
 
   ngOnInit() {
     this.getCards();
-    this.searchStatus();
     this.whoAmI();
   }
+
   async whoAmI() {
     this.curUser = await this.service.getAccount();
   }
   
   getCards(): void {
     this.cardService.getCards()
-        .subscribe(cards => this.cards = cards);
+      .subscribe(cards => {
+        this.cards = cards
+        this.searchStatus();
+      });
   }
+  
   searchStatus() {
-    const { cards, code, statusArr } = this;
-    const next = cards.filter(item => item.status === statusArr[code]);
+    const { cards, statusIndex} = this;
+    const next = cards.filter(item => item.status === statusArr[statusIndex]);
     this.results = next;
   }
   open(content, card, type) {
     this.card = card || this.card;
     this.type = type;
-
-    // test form in modal
-    this.checkboxGroupForm = this.formBuilder.group({
-      left: true,
-      middle: false,
-      right: false
-    });
     
     this.modalService.open(content).result.then((result) => {
       // this.closeResult = `Closed with: ${result}`;

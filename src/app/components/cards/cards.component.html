@@ -1,5 +1,5 @@
 <div class="filter d-flex justify-content-between">
-  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="code" (change)="searchStatus()">
+  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="statusIndex" (change)="searchStatus()">
     <label *ngFor="let statusTxt of statusArr; let i=index" ngbButtonLabel class="btn-outline-primary btn-sm btn">
       <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
     </label>

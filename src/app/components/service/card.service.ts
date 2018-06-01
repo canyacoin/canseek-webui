@@ -4,24 +4,25 @@ import { Candidate } from '../model/candidate';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of } from 'rxjs';
-import { Cards } from '../mock/mock-cards';
 
 @Injectable()
 export class CardService {
-  cards: Card[];
   constructor(private contractsService: ContractsService,
-              private db: AngularFirestore) { }
+              private db: AngularFirestore
+            ) { }
+  dbRef: any = this.db.collection('cards');
 
-  getCards(): Observable<Card[]> {
-    this.db.collection('cards').get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-          console.log(doc);
-      });
-  });
-    return of(Cards);
+  getCards(): Observable<any[]> {
+    return this.dbRef.valueChanges();
   }
   addCard(card: Card) {
-
+    this.dbRef.add(card)
+      .then(function(docRef) {
+        return docRef.id;
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });
   }
   updateCard(card: Card) {
 

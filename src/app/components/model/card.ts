@@ -13,3 +13,5 @@ export class Card {
     desc: string;
     candidates: Candidate[]; // 候选人数
 }
+
+export const statusArr = ['pending', 'failed', 'open', 'closed', 'cancelled'];
