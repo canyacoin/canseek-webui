@@ -12,6 +12,7 @@ import { Candidate } from '../model/candidate';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
+  loading: boolean = true;
   checkboxGroupForm: FormGroup;
   candidatesForm: FormGroup;
   cardForm: FormGroup;
@@ -60,6 +61,7 @@ export class CardsComponent implements OnInit {
     this.cardService.getCards()
       .subscribe(cards => {
         this.cards = cards
+        this.loading = false;
         this.searchStatus();
       });
   }
