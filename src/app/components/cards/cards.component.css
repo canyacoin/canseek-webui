@@ -16,6 +16,11 @@
     overflow: hidden;
     cursor: pointer;
 }
+.card-grid {
+    display: grid;
+    grid-gap: 2em;
+    grid-template-columns: repeat(3, 33.3%);
+}
 
 .card::before {
     display: inline-block;
@@ -24,6 +29,8 @@
     left: -1px;
     color: var(--light);
     padding: 2px 6px;
+    max-width: 50px;
+    text-align: center;
 }
 .open::before {
     content: 'open';

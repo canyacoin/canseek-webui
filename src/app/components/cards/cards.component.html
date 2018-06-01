@@ -25,13 +25,13 @@
 </div>
 
 <!-- list -->
-<section *ngIf="!loading && (results && results.length > 1)" class="card-columns">
+<section *ngIf="!loading && (results && results.length > 1)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
-    <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal)">Cancel</a>
+    <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal)">&nbsp;Cancel</a>
     <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave">
+        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave" style="color: #33ccff">
           (pool: C$ {{ card.bounty + (card.candidates || []).length * card.cost }}) 
         </a>
       </h5>
