@@ -28,7 +28,8 @@ contract CanHire is Ownable {
     StandardToken public canYaCoin;
     Escrow public escrow;
     Post[] public posts;
-    uint public numPosts;
+    mapping(string => uint) getPostId;
+    uint public numPosts = 1;
     bool public active;
     uint public cancelFee = 1;
     uint public closeFee = 2;
@@ -38,6 +39,7 @@ contract CanHire is Ownable {
     event EscrowUpdated(address escrowAddress);
     event PostStatusUpdate(Status status);
     event ProfitsExtracted(uint profit);
+    event GetPostId(uint postId);
 
     modifier is_active(){
         require(active);
@@ -91,7 +93,7 @@ contract CanHire is Ownable {
         emit EscrowUpdated(newEscrow);
     }
 
-    function addPost(uint _bounty, uint _cost) public is_active {
+    function addPost(string uniqueId, uint _bounty, uint _cost) public is_active {
         require(_bounty > 0);
         require(canYaCoin.approve(address(escrow), _bounty));
         require(escrow.transferToEscrow(msg.sender, _bounty));
@@ -103,6 +105,7 @@ contract CanHire is Ownable {
         newPost.cost = _cost;
         newPost.honeyPot = _bounty;
         posts.push(newPost);
+        getPostId[uniqueId] = numPosts;
         numPosts = numPosts.add(1);
         emit PostCreated(newPost.id);
     }
@@ -154,6 +157,12 @@ contract CanHire is Ownable {
         require(canYaCoin.approve(address(this), _amount));
         require(canYaCoin.transferFrom(address(this), _to, _amount));
         emit ProfitsExtracted(_amount);
+    }
+
+    function getId(string uniqueId) public {
+        uint postId = getPostId[uniqueId];
+        require(posts[postId].bounty > 0);
+        emit GetPostId(postId);
     }
 
 }
