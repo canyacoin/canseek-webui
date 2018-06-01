@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup/*, FormControl, Validators */ } from '@angular/forms';
 import { Card } from '../model/card';
 import { CardService } from '../service/card.service';
+import { ContractsService } from '../../services/contracts/contracts.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
-import { debug } from 'util';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-cards',
@@ -12,13 +15,14 @@ import { debug } from 'util';
   styleUrls: ['./cards.component.css']
 })
 export class CardsComponent implements OnInit {
+  items: Observable<any[]>;
   checkboxGroupForm: FormGroup;
   candidatesForm: FormGroup;
   cardForm: FormGroup;
   cards: Card[];
   results: Card[];
-  code = 0;
-  statusArr = ['open', 'closed', 'cancelled'];
+  code = 2;
+  statusArr = ['pending', 'failed', 'open', 'closed', 'cancelled'];
 
   // new or edit a card
   card = {
@@ -42,14 +46,24 @@ export class CardsComponent implements OnInit {
   // list candidates or chose a candidate
   candidates: Candidate[];
 
-  constructor(private cardService: CardService, private modalService: NgbModal, private formBuilder: FormBuilder) { }
+  constructor(private cardService: CardService,
+              private service: ContractsService,
+              private modalService: NgbModal, 
+              private formBuilder: FormBuilder,
+              private db: AngularFirestore) { }
 
   ngOnInit() {
     this.getCards();
     this.searchStatus();
+    this.whoAmI();
   }
+  async whoAmI() {
+    this.curUser = await this.service.getAccount();
+  }
+  
   getCards(): void {
-    this.results = this.cards = this.cardService.getCards();
+    this.cardService.getCards()
+        .subscribe(cards => this.cards = cards);
   }
   searchStatus() {
     const { cards, code, statusArr } = this;
@@ -73,7 +87,7 @@ export class CardsComponent implements OnInit {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
-  openCard(content, card, type) {
+  initCardModal(card, type) {
     this.card = card;
     this.type = type;
 
@@ -86,25 +100,23 @@ export class CardsComponent implements OnInit {
         desc: '',
         company: '',
         logo: '',
+        status: 'pending'
       }
     }
     
     this.cardForm = this.formBuilder.group(card);
+  }
+  openCard(content, card, type) {
+    this.initCardModal(card, type);
 
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
         const curCard = { status: 'open', ...this.cardForm.value};
         
         if (type === 'edit') {
-          const nextCards = this.cards.map(card => {
-            if(card.id === curCard.id) {
-              return { ...card, ...curCard };
-            }
-            return card;
-          });
-          this.cards = nextCards;
+          this.editCard(curCard);
         } else if (type === 'new') {
-          this.cards = this.cards.concat(curCard);
+          this.newCard(curCard);
         }
         
         this.searchStatus();
@@ -112,6 +124,42 @@ export class CardsComponent implements OnInit {
     }, (reason) => {
 
     })
+  }
+  newCard(curCard) {
+    // todo add card todo hash todo status
+    const addPost = this.service.addPost;
+    const cardsRef = this.db.collection('cards');
+
+    cardsRef.add(curCard)
+      .then(docRef => {
+        console.log("add card success ref: ", docRef);
+        const { bounty, cost } = curCard;
+
+        addPost(bounty, cost);
+        return docRef.id;
+      })
+      .then(
+        (id) => {
+          cardsRef.doc(id).update({ status: 'open' })},
+        (id) => {
+          cardsRef.doc(id).update({ status: 'failed' })
+        }
+      )
+      .catch(function(error) {
+        console.error("error: ", error);
+      });
+
+    this.cards = this.cards.concat(curCard);
+  }
+  editCard(curCard) {
+    // todo update card
+    const nextCards = this.cards.map(card => {
+      if(card.id === curCard.id) {
+        return { ...card, ...curCard };
+      }
+      return card;
+    });
+    this.cards = nextCards;
   }
   openCandidates(content, candidates, type) {
     this.candidates = candidates;

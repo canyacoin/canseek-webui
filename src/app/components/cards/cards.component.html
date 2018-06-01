@@ -1,13 +1,7 @@
 <div class="filter d-flex justify-content-between">
   <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="code" (change)="searchStatus()">
-    <label ngbButtonLabel class="btn-outline-primary btn-sm btn">
-      <input ngbButton type="radio" [value]="0"> open
-    </label>
-    <label ngbButtonLabel class="btn-outline-primary btn-sm btn">
-      <input ngbButton type="radio" [value]="1"> closed
-    </label>
-    <label ngbButtonLabel class="btn-outline-primary btn-sm btn">
-      <input ngbButton type="radio" [value]="2"> cancelled
+    <label *ngFor="let statusTxt of statusArr; let i=index" ngbButtonLabel class="btn-outline-primary btn-sm btn">
+      <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
     </label>
   </div>
   <button class="btn-primary" (click)="openCard(cardmodal, {}, 'new')">new card</button>
@@ -106,8 +100,8 @@
         <input type="" class="form-control" id="contact" placeholder="email or phone">
       </div>
       <div class="form-group">
-        <label for="reason">Reason</label>
-        <textarea class="form-control" id="reason" rows="3" placeholder="reason here"></textarea>
+        <label for="desc">Description</label>
+        <textarea class="form-control" id="desc" rows="3" placeholder="description here"></textarea>
       </div>
     </form>
   </div>
