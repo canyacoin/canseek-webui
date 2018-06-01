@@ -3,5 +3,4 @@ export class Candidate {
     name: string;
     contact: string;
     desc: string;
-    hash: string;
 }

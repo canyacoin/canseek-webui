@@ -38,7 +38,7 @@ export class CardsComponent implements OnInit {
   email: string;
 
   // cur user address
-  curUser = '0x0';
+  curUser: string;
 
   // list candidates or chose a candidate
   candidates: Candidate[];

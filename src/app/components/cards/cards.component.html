@@ -25,7 +25,7 @@
 </div>
 
 <!-- list -->
-<section *ngIf="!loading && (results && results.length > 1)" class="card-grid">
+<section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
     <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal)">&nbsp;Cancel</a>
     <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
@@ -39,7 +39,7 @@
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.hash)">Update</a>
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.id)">Update</a>
         <a *ngIf="card.status === 'failed' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="repost(card)">Repost</a>
         <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
         <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
@@ -144,7 +144,7 @@
         <ng-template ngbPanelContent>
             <p>name: {{ candidate.name }}</p>
             <p>contact: {{ candidate.contact }}</p>
-            <p>reason: {{ candidate.reason }}</p>
+            <p>description: {{ candidate.description }}</p>
           </ng-template>
       </ngb-panel>
     </ngb-accordion>
