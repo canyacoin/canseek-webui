@@ -7,25 +7,51 @@ import { Observable, of } from 'rxjs';
 
 @Injectable()
 export class CardService {
-  constructor(private contractsService: ContractsService,
+  constructor(private cs: ContractsService,
               private db: AngularFirestore
             ) { }
   dbRef: any = this.db.collection('cards');
+  docRef: any;
 
   getCards(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
   addCard(card: Card) {
     this.dbRef.add(card)
-      .then(function(docRef) {
-        return docRef.id;
+      .then(docRef => {
+        this.docRef = docRef;
+        console.log('add success, ref: ', docRef);
+
+        const { bounty, cost } = card;
+
+        docRef.update({
+          id: docRef.id
+        });
+
+        return this.cs.addPost(docRef.id, bounty, cost);
+      })
+      .then((postId) => {
+        this.docRef.update({
+          status: postId ? 'open' : 'pending',
+          postId
+        })
+        console.log('add to block chain succ: ', postId);
       })
       .catch(function(error) {
           console.error("Error adding document: ", error);
       });
   }
   updateCard(card: Card) {
-
+    const { id } = card;
+    this.dbRef.doc(id).update(card)
+    .catch(err => {
+      console.error(err);
+    })
+  }
+  cancelPost(postId: number) {
+    this.cs.cancelPost(postId).then(
+      args => console.log('cancelPost succ: ', args)
+    )
   }
   addCandidate(candidate: Candidate) {
 

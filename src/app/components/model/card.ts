@@ -1,8 +1,8 @@
 import { Candidate } from './candidate';
 
 export class Card {
-    id: number;
-    status: string = 'open'; // open closed canceled
+    id: string;
+    status: string; // open closed canceled
     title: string; // job title
     ownerAddr: string; 
     company: string;
@@ -12,6 +12,7 @@ export class Card {
     cost: number;
     desc: string;
     candidates: Candidate[]; // 候选人数
+    postId: number;
 }
 
 export const statusArr = ['pending', 'failed', 'open', 'closed', 'cancelled'];

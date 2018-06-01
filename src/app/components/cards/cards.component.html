@@ -27,11 +27,11 @@
 <!-- list -->
 <section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
-    <a *ngIf="curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal)">&nbsp;Cancel</a>
-    <img class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
+    <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal, card)">&nbsp;Cancel</a>
+    <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which cost {{ card.cost }}" triggers="mouseenter:mouseleave" style="color: #33ccff">
+        <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which each cost {{ card.cost }}" triggers="mouseenter:mouseleave" style="color: #33ccff">
           (pool: C$ {{ card.bounty + (card.candidates || []).length * card.cost }}) 
         </a>
       </h5>
@@ -39,10 +39,14 @@
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
+        <!-- todo -->
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.id)">Update</a>
-        <a *ngIf="card.status === 'failed' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="repost(card)">Repost</a>
+        <!-- todo addpost -->
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="card-link" (click)="repost(card)">Repost</a>
+        <!-- todo -->
         <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="open(candidatemodal)">Apply</a>
         <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
+        <!-- todo -->
         <a href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
       </div>
     </div>
@@ -182,6 +186,6 @@
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">No</button>
-      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Yes</button>
+      <button type="button" class="btn btn-outline-dark" (click)="c('cancelPost')">Yes</button>
     </div>
 </ng-template>
