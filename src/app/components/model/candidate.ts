@@ -1,6 +1,8 @@
 export class Candidate {
-    id: number;
-    name: string;
-    contact: string;
-    desc: string;
+    id: string = ''; // firestore id
+    candidateId: number = 0; // block chain id
+    name: string = '';
+    contact: string = '';
+    desc: string = '';
+    status: string = 'pending'; // pending ok chosed
 }

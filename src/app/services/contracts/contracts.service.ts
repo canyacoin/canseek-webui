@@ -19,9 +19,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x3490a25797d5285d6c408b6cb48ada6224068a48';
-const EscrowAddr = '0x935aedb6f1a2409798dda60cce5e9a9df381ecee';
-const CanHireAddr = '0xde175215d3af27a6f701bf3674aa34219210b2f6';
+const CanYaCoinAddr = '0xbb53bc34bd6f018e3343b8e0deb2a5366eeddb8b';
+const EscrowAddr = '0x1f4edd5c19789de5cc04819059f782ae8c4cb164';
+const CanHireAddr = '0x4f47f196f12edb3a14026ca05c83123cd81fb23e';
 
 
 @Injectable()
@@ -230,7 +230,7 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async recommend(postId) {
+  public async recommend(postId, candidateUniqueId) {
     const account = await this.getAccount();
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
     const escrow = await this.Escrow.at(EscrowAddr);
@@ -304,9 +304,10 @@ export class ContractsService {
   }
 
   public async getPostId(uniqueId) {
+    const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.getId(uniqueId).then(postId => {
+      canHire.getId(uniqueId, {account}).then(postId => {
         resolve(postId.toNumber());
       }).catch( err => {
         reject(err);

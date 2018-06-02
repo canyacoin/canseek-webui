@@ -42,9 +42,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   // example of adding a post
-  async addPost(bounty = 1000, cost = 10) {
+  async addPost(id, bounty = 1000, cost = 10) {
     console.log('adding post: bounty = %o, cost = %o', bounty, cost);
-    const postId = await this.cs.addPost(bounty.toString(), cost.toString());
+    const postId = await this.cs.addPost(id, bounty.toString(), cost.toString());
     console.log('post added: postId %o', postId);
   }
 
@@ -95,9 +95,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   // example of recommend/apply for a post
-  async recommend(postId = 0) {
+  async recommend(postId = 0, uniqueId) {
     console.log('recommending to post ', postId);
-    const candidateId = await this.cs.recommend(postId);
+    const candidateId = await this.cs.recommend(postId, uniqueId);
     console.log('candidate id: ', candidateId);
   }
 }

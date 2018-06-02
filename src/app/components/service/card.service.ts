@@ -4,6 +4,8 @@ import { Candidate } from '../model/candidate';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of } from 'rxjs';
+import { CONSTANTS } from '@firebase/util';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Injectable()
 export class CardService {
@@ -16,18 +18,20 @@ export class CardService {
   getCards(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
+  getCandidates(cardId): Observable<any[]> {
+    return this.dbRef.doc(cardId).collection('candidates').valueChanges();
+  }
+
   addCard(card: Card) {
     this.dbRef.add(card)
       .then(docRef => {
-        this.docRef = docRef;
-        console.log('add success, ref: ', docRef);
-
         const { bounty, cost } = card;
-
-        docRef.update({
-          id: docRef.id
+        
+        this.docRef = docRef;
+        this.docRef.update({
+          id: docRef.id,
         });
-
+        console.log(`add succ: ${docRef.id}`);
         return this.cs.addPost(docRef.id, bounty, cost);
       })
       .then((postId) => {
@@ -37,23 +41,96 @@ export class CardService {
         })
         console.log('add to block chain succ: ', postId);
       })
-      .catch(function(error) {
-          console.error("Error adding document: ", error);
+      .catch(function(err) {
+          console.error(`add err ${err}`);
       });
   }
+
   updateCard(card: Card) {
     const { id } = card;
-    this.dbRef.doc(id).update(card)
-    .catch(err => {
-      console.error(err);
-    })
+    this.dbRef.update({card})
   }
-  cancelPost(postId: number) {
-    this.cs.cancelPost(postId).then(
-      args => console.log('cancelPost succ: ', args)
-    )
-  }
-  addCandidate(candidate: Candidate) {
 
+  cancelCard(card: Card) {
+    const { postId, id, nextStatus } = card;
+    this.cs.cancelPost(postId)
+      .then(result => {
+        console.log(`cancel result: ${result}`);
+        this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending',
+          nextStatus
+        })
+      })
+      .catch(err => console.log(`cancel err: ${err}`));
+  }
+
+  updateCardStatus(card: Card) {
+    const { postId, id, nextStatus } = card;
+    this.cs.getPostId(id)
+      .then(result => {
+        console.log(`update card status result: ${result}`)
+        this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending',
+          nextStatus
+        })
+      })
+    this.dbRef.doc(id).update(card)
+      .catch(err => {
+        console.error(`update err: ${err}`);
+      })
+  }
+
+  addCandidate(card: Card, candidate: Candidate) {
+    const { id, postId, candidates = 0 } = card;
+
+    console.log(`candidates: ${candidates}`);
+    // console.log(`will add candidate ${JSON.stringify(candidate)} to card ${JSON.stringify(card)}`);
+    this.dbRef.doc(id).collection('candidates').add(candidate)
+      .then(docRef => {
+        console.log(`add candidate succ: ${docRef.id}`);
+        this.docRef = docRef;
+        this.docRef.update({
+          id: docRef.id,
+        })
+        this.dbRef.doc(id).update({
+          candidates: candidates + 1
+        })
+        return this.cs.recommend(docRef.id, postId);
+      })
+      .then(result => {
+        this.docRef.update({
+          candidateId: result,
+          status: result ? 'ok' : 'pending'
+        })
+      })
+      .catch(err => console.log(`add candidate err: ${err}`))
+  }
+
+  updateCandidateStatus(card: Card, candidate: Candidate) {
+    const { id, postId } = card;
+    const { id: cid, candidateId } = candidate;
+    this.cs.updateCandidateStatus(postId, candidateId)
+      .then(result => {
+        console.log(`update candidate status succ: ${candidateId}`);
+        this.dbRef.doc(id).collection('candidates').doc(cid).update({
+          status: result ? 'ok' : 'pending'
+        })
+      })
+  }
+  closePost(card: Card, candidate: Candidate) {
+    const { id, postId, nextStatus } = card;
+    const { id: cid, candidateId } = candidate;
+    this.cs.closePost(postId, candidateId)
+      .then(result => {
+        console.log(`close post succ: ${result}`);
+        this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending',
+          nextStatus
+        });
+        this.dbRef.doc(id).collection('candidates').doc(cid).update({
+          status: result ? 'chosed' : 'pending',
+        })
+      })
+      .catch(err => console.error(`closepost err: ${err}`))
   }
 }
