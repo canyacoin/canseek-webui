@@ -315,4 +315,8 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  public async updateCandidateStatus(postId, candidateId) {
+    return true;
+  }
+
 }

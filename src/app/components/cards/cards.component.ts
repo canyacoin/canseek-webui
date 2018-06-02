@@ -17,9 +17,10 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   cards: Card[];
-  candidates: Candidate[];
   card: Card = new Card();
   candidate: Candidate = new Candidate();
+  candidates: Candidate[];
+  candidateCard: Card;
 
   results: Card[];
   statusArr = statusArr;
@@ -111,17 +112,19 @@ export class CardsComponent implements OnInit {
     });
   }
 
-  openCandidates(content, candidates, type) {
-    this.candidates = candidates;
+  openCandidates(content, card, type) {
+    this.candidateCard = card;
     this.type = type;
-    console.log(candidates);
-    // this.candidatesForm = this.formBuilder.group({
-    //   candidates: candidates,
-    // });
-    this.modalService.open(content).result.then((result) => {
-      // this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.cardService.getCandidates(card.id).subscribe(candidates => {
+      this.candidates = candidates;
+      console.log(`get candidates succ`);
+      this.modalService.open(content).result.then((result) => {
+        console.log(result);
+      });
+    })
+  }
+  updateCandidateStatus(card, candidate) {
+    console.log(`updateCandidateStatus`, candidate);
+    this.cardService.updateCandidateStatus(card, candidate);
   }
 }

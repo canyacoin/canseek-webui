@@ -31,6 +31,7 @@
     <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
+        <!-- todo bounty -->
         <a href="javascript:;" class="card-link" ngbPopover="bounty: {{ card.bounty }} plus {{ (card.candidates || []).length }} candidates which each cost {{ card.cost }}" triggers="mouseenter:mouseleave" style="color: #33ccff">
           (pool: C$ {{ card.bounty + (card.candidates || []).length * card.cost }}) 
         </a>
@@ -49,7 +50,7 @@
         <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCandidate(candidatemodal, card)">Apply</a>
         <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
         <!-- todo -->
-        <a *ngIf="card.status !== 'pending'" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card.candidates, curUser === card.ownerAddr ? 'edit' : 'read')" style="align-self: center;">{{ (card.candidates || []).length }}+ candidates </a>
+        <a *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')" style="align-self: center;">{{ card.candidates }} candidates </a>
       </div>
     </div>
   </div>
@@ -149,12 +150,26 @@
   </div>
   <div class="modal-body">
     <ngb-accordion [closeOthers]="true" activeIds="candidate{{ candidates[0].id }}">
-      <ngb-panel *ngFor="let candidate of candidates" id="candidate{{ candidate.id }}" title="{{ candidate.name }}">
+      <ngb-panel *ngFor="let candidate of candidates" id="candidate{{ candidate.id }}">
+        <ng-template ngbPanelTitle>
+          {{ candidate.name }}
+        </ng-template>
         <ng-template ngbPanelContent>
-            <p>name: {{ candidate.name }}</p>
-            <p>contact: {{ candidate.contact }}</p>
-            <p>description: {{ candidate.description }}</p>
-          </ng-template>
+          <!-- 在 modal 里发异步请求会有问题 todo -->
+          <!-- <p>
+            <a 
+              *ngIf="candidate.status === 'pending'" 
+              href="javascript:;" 
+              class="card-link" 
+              (click)="updateCandidateStatus(candidateCard, candidate)"
+              >
+              update status
+            </a>
+          </p> -->
+          <p>name: {{ candidate.name }}</p>
+          <p>contact: {{ candidate.contact }}</p>
+          <p>description: {{ candidate.description }}</p>
+        </ng-template>
       </ngb-panel>
     </ngb-accordion>
   </div>

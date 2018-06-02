@@ -16,6 +16,9 @@ export class CardService {
   getCards(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
+  getCandidates(cardId): Observable<any[]> {
+    return this.dbRef.doc(cardId).collection('candidates').valueChanges();
+  }
 
   addCard(card: Card) {
     this.dbRef.add(card)
@@ -74,9 +77,10 @@ export class CardService {
   }
 
   addCandidate(card: Card, candidate: Candidate) {
-    const { id, postId, candidates } = card;
+    const { id, postId, candidates = 0 } = card;
 
-    console.log(`will add candidate ${JSON.stringify(candidate)} to card ${JSON.stringify(card)}`);
+    console.log(`candidates: ${candidates}`);
+    // console.log(`will add candidate ${JSON.stringify(candidate)} to card ${JSON.stringify(card)}`);
     this.dbRef.doc(id).collection('candidates').add(candidate)
       .then(docRef => {
         console.log(`add candidate succ: ${docRef.id}`);
@@ -91,9 +95,22 @@ export class CardService {
       })
       .then(result => {
         this.docRef.update({
-          status: result ? 'open' : 'pending'
+          candidateId: result,
+          status: result ? 'ok' : 'pending'
         })
       })
       .catch(err => console.log(`add candidate err: ${err}`))
+  }
+
+  updateCandidateStatus(card: Card, candidate: Candidate) {
+    const { id, postId } = card;
+    const { id: cid, candidateId } = candidate;
+    this.cs.updateCandidateStatus(postId, candidateId)
+      .then(result => {
+        console.log(`update candidate status succ: ${candidateId}`);
+        this.dbRef.doc(id).collection('candidates').doc(cid).update({
+          status: result ? 'ok' : 'pending'
+        })
+      })
   }
 }
