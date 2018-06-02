@@ -315,15 +315,15 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async hasCandidate(postId, uniqueCandidateId) {
+  public async getCandidateId(uniqueCandidateId, postId) {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.hasCandidate(postId, uniqueCandidateId).then(result => {
-        resolve(result);
+      canHire.getCandidateId(uniqueCandidateId, postId).then(candidateId => {
+        resolve(candidateId.toNumber());
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<boolean>;
+    }) as Promise<number>;
   }
 
 }
