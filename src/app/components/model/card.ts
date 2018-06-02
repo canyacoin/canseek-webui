@@ -13,7 +13,7 @@ export class Card {
     bounty: number = null;
     cost: number = null;
     desc: string = '';
-    // candidates: Candidate[]; // 候选人数
+    candidates: number = 0; // 候选人数
 }
 
 export const statusArr = ['pending', 'open', 'closed', 'cancelled'];

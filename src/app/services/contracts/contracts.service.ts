@@ -230,7 +230,7 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async recommend(postId) {
+  public async recommend(postId, candidateUniqueId) {
     const account = await this.getAccount();
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
     const escrow = await this.Escrow.at(EscrowAddr);

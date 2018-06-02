@@ -106,12 +106,8 @@ export class CardsComponent implements OnInit {
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
-        const value = { id: (card.candidates || []).length, ...this.candidateForm.value};
-        this.cardService.addCandidate(card, value);
+        this.cardService.addCandidate(card, this.candidateForm.value);
       }
-      // this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 

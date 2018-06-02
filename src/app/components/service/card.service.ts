@@ -24,7 +24,7 @@ export class CardService {
         
         this.docRef = docRef;
         this.docRef.update({
-          id: docRef.id
+          id: docRef.id,
         });
         console.log(`add succ: ${docRef.id}`);
         return this.cs.addPost(docRef.id, bounty, cost);
@@ -74,13 +74,26 @@ export class CardService {
   }
 
   addCandidate(card: Card, candidate: Candidate) {
-    this.cs.recommend(card.postId).then(
-      args => console.log(args)
-    )
-    // const { candidates = [] } = card;
-    // const nextCandidates = candidates.concat(candidate);
-    // this.dbRef.doc(card.id).update({
-    //   candidates: nextCandidates
-    // });
+    const { id, postId, candidates } = card;
+
+    console.log(`will add candidate ${JSON.stringify(candidate)} to card ${JSON.stringify(card)}`);
+    this.dbRef.doc(id).collection('candidates').add(candidate)
+      .then(docRef => {
+        console.log(`add candidate succ: ${docRef.id}`);
+        this.docRef = docRef;
+        this.docRef.update({
+          id: docRef.id,
+        })
+        this.dbRef.doc(id).update({
+          candidates: candidates + 1
+        })
+        return this.cs.recommend(postId, docRef.id);
+      })
+      .then(result => {
+        this.docRef.update({
+          status: result ? 'open' : 'pending'
+        })
+      })
+      .catch(err => console.log(`add candidate err: ${err}`))
   }
 }
