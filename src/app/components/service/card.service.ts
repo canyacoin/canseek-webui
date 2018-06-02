@@ -4,6 +4,8 @@ import { Candidate } from '../model/candidate';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of } from 'rxjs';
+import { CONSTANTS } from '@firebase/util';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Injectable()
 export class CardService {
@@ -55,7 +57,8 @@ export class CardService {
       .then(result => {
         console.log(`cancel result: ${result}`);
         this.dbRef.doc(id).update({
-          status: result ? nextStatus : 'pending'
+          status: result ? nextStatus : 'pending',
+          nextStatus
         })
       })
       .catch(err => console.log(`cancel err: ${err}`));
@@ -67,7 +70,8 @@ export class CardService {
       .then(result => {
         console.log(`update card status result: ${result}`)
         this.dbRef.doc(id).update({
-          status: result ? nextStatus : 'pending'
+          status: result ? nextStatus : 'pending',
+          nextStatus
         })
       })
     this.dbRef.doc(id).update(card)
@@ -112,5 +116,21 @@ export class CardService {
           status: result ? 'ok' : 'pending'
         })
       })
+  }
+  closePost(card: Card, candidate: Candidate) {
+    const { id, postId, nextStatus } = card;
+    const { id: cid, candidateId } = candidate;
+    this.cs.closePost(postId, candidateId)
+      .then(result => {
+        console.log(`close post succ: ${result}`);
+        this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending',
+          nextStatus
+        });
+        this.dbRef.doc(id).collection('candidates').doc(cid).update({
+          status: result ? 'chosed' : 'pending',
+        })
+      })
+      .catch(err => console.error(`closepost err: ${err}`))
   }
 }

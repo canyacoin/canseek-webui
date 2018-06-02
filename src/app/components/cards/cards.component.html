@@ -149,6 +149,15 @@
     </button>
   </div>
   <div class="modal-body">
+    <!-- choose -->
+    <div *ngIf="type === 'choose'" class="btn-group btn-group-toggle" ngbRadioGroup name="candidateRadio" [(ngModel)]="candidateId" (change)="changeCan()">
+      choose one as the one
+      <label *ngFor="let candidate of candidates" ngbButtonLabel class="btn-outline-primary btn-sm btn">
+        <input ngbButton type="radio" [value]="candidate"> {{ candidate.name }}
+      </label>
+    </div>
+
+    <!-- list -->
     <ngb-accordion [closeOthers]="true" activeIds="candidate{{ candidates[0].id }}">
       <ngb-panel *ngFor="let candidate of candidates" id="candidate{{ candidate.id }}">
         <ng-template ngbPanelTitle>
@@ -175,7 +184,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
-    <button type="button" class="btn-primary" (click)="c('Close click')">ok</button>
+    <button *ngIf="type === 'choose'" type="button" class="btn-primary" (click)="c('closePost')">ok</button>
   </div>
 </ng-template>
   

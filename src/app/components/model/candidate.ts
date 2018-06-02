@@ -4,5 +4,5 @@ export class Candidate {
     name: string = '';
     contact: string = '';
     desc: string = '';
-    status: string = 'pending'; // pending ok cancel
+    status: string = 'pending'; // pending ok chosed
 }

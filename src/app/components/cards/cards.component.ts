@@ -20,7 +20,6 @@ export class CardsComponent implements OnInit {
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
-  candidateCard: Card;
 
   results: Card[];
   statusArr = statusArr;
@@ -91,6 +90,7 @@ export class CardsComponent implements OnInit {
     console.log(`cancel card: ${JSON.stringify(card)}`);
     this.modalService.open(content).result.then((result) => {
       if(result === 'cancelPost') {
+        card.nextStatus = 'cancelled';
         this.cardService.cancelCard(card);
       }
     });
@@ -113,12 +113,15 @@ export class CardsComponent implements OnInit {
   }
 
   openCandidates(content, card, type) {
-    this.candidateCard = card;
     this.type = type;
     this.cardService.getCandidates(card.id).subscribe(candidates => {
       this.candidates = candidates;
       console.log(`get candidates succ`);
       this.modalService.open(content).result.then((result) => {
+        if (result === 'closePost') {
+          card.nextStatus = 'closed';
+          this.cardService.closePost(card, this.candidate);
+        }
         console.log(result);
       });
     })
@@ -126,5 +129,9 @@ export class CardsComponent implements OnInit {
   updateCandidateStatus(card, candidate) {
     console.log(`updateCandidateStatus`, candidate);
     this.cardService.updateCandidateStatus(card, candidate);
+  }
+  changeCan() {
+    // this.updateCandidateStatus
+    console.log(this.candidate);
   }
 }
