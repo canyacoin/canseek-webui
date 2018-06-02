@@ -19,9 +19,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x925328f9a876fcbe03aeae2c13133c574e758b14';
-const EscrowAddr = '0x28cbf26b9ebfb6d0f89dd8cca9002dae0e663057';
-const CanHireAddr = '0x5bff60fca5bd59e8eb74358d9f160e59b35aeeb8';
+const CanYaCoinAddr = '0x68ff17848babd2cd1d1a22cbfca150a791a37104';
+const EscrowAddr = '0x6e5879bc57943e24c20fa51190e99da82ac2334b';
+const CanHireAddr = '0x464f32ceb29a9b749bff8050621500ab600ea9d5';
 
 
 @Injectable()

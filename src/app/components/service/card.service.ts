@@ -16,18 +16,17 @@ export class CardService {
   getCards(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
+
   addCard(card: Card) {
     this.dbRef.add(card)
       .then(docRef => {
-        this.docRef = docRef;
-        console.log('add success, ref: ', docRef);
-
         const { bounty, cost } = card;
-
-        docRef.update({
+        
+        this.docRef = docRef;
+        this.docRef.update({
           id: docRef.id
         });
-
+        console.log(`add succ: ${docRef.id}`);
         return this.cs.addPost(docRef.id, bounty, cost);
       })
       .then((postId) => {
@@ -37,22 +36,43 @@ export class CardService {
         })
         console.log('add to block chain succ: ', postId);
       })
-      .catch(function(error) {
-          console.error("Error adding document: ", error);
+      .catch(function(err) {
+          console.error(`add err ${err}`);
       });
   }
+
   updateCard(card: Card) {
     const { id } = card;
+    this.dbRef.update({card})
+  }
+
+  cancelCard(card: Card) {
+    const { postId, id, nextStatus } = card;
+    this.cs.cancelPost(postId)
+      .then(result => {
+        console.log(`cancel result: ${result}`);
+        this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending'
+        })
+      })
+      .catch(err => console.log(`cancel err: ${err}`));
+  }
+
+  updateCardStatus(card: Card) {
+    const { postId, id, nextStatus } = card;
+    this.cs.getPostId(postId)
+      .then(result => {
+        console.log(`update card status result: ${result}`)
+        this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending'
+        })
+      })
     this.dbRef.doc(id).update(card)
-    .catch(err => {
-      console.error(err);
-    })
+      .catch(err => {
+        console.error(`update err: ${err}`);
+      })
   }
-  cancelPost(postId: number) {
-    this.cs.cancelPost(postId).then(
-      args => console.log('cancelPost succ: ', args)
-    )
-  }
+
   addCandidate(card: Card, candidate: Candidate) {
     this.cs.recommend(card.postId).then(
       args => console.log(args)
@@ -62,10 +82,5 @@ export class CardService {
     // this.dbRef.doc(card.id).update({
     //   candidates: nextCandidates
     // });
-  }
-  updateStatus(id: string) {
-    // todo firestore
-    this.cs.getPostId(id)
-      .then(args => console.log('query result: ', args))
   }
 }

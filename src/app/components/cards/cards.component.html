@@ -27,7 +27,7 @@
 <!-- list -->
 <section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
-    <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="open(cancelcardmodal, card)">&nbsp;Cancel</a>
+    <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="cancelcard(cancelcardmodal, card)">&nbsp;Cancel</a>
     <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
@@ -39,7 +39,7 @@
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateStatus(card.id)">Update Status</a>
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateCardStatus(card)">Update Status</a>
         <!-- todo addpost -->
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="card-link" (click)="repost(card)" style="align-self: center;">
           Repost 
@@ -67,38 +67,31 @@
     <form [formGroup]="cardForm">
       <div class="form-group">
         <label for="title">Job Title</label>
-        <input *ngIf="type !== 'new'" [attr.disabled] type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
-        <input *ngIf="type === 'new'" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
+        <input [attr.disabled]="type !== 'new' ? true : null" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
       </div>
       <div class="form-group">
         <label for="company">Company</label>
-        <input *ngIf="type !== 'new'" [attr.disabled] type="" class="form-control" formControlName="company" placeholder="google">
-        <input *ngIf="type === 'new'" type="" class="form-control" formControlName="company" placeholder="google">
+        <input [attr.disabled]="type !== 'new' ? true : null" type="text" class="form-control" formControlName="company" placeholder="google">
       </div>
       <div class="form-group">
         <label for="logo">Logo</label>
-        <input *ngIf="type !== 'new'" [attr.disabled] type="" class="form-control" formControlName="logo" placeholder="logo company">
-        <input *ngIf="type === 'new'" type="" class="form-control" formControlName="logo" placeholder="logo company">
+        <input [attr.disabled]="type !== 'new' ? true : null" type="text" class="form-control" formControlName="logo" placeholder="logo company">
       </div>
       <div class="form-group">
         <label for="email">Email address</label>
-        <input *ngIf="type !== 'new'" [attr.disabled] type="email" class="form-control" formControlName="email" placeholder="name@example.com">
-        <input *ngIf="type === 'new'" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+        <input [attr.disabled]="type !== 'new' ? true : null" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input *ngIf="type !== 'new'" [attr.disabled] type="" class="form-control" formControlName="bounty" placeholder="bounty">
-        <input *ngIf="type === 'new'" type="" class="form-control" formControlName="bounty" placeholder="bounty">
+        <input [attr.disabled]="type !== 'new' ? true : null" type="" class="form-control" formControlName="bounty" placeholder="bounty">
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>
-        <input *ngIf="type !== 'new'" [attr.disabled] type="email" class="form-control" formControlName="cost" placeholder="cost">
-        <input [attr.disabled] type="email" class="form-control" formControlName="cost" placeholder="cost">
+        <input [attr.disabled]="type !== 'new' ? true : null" type="email" class="form-control" formControlName="cost" placeholder="cost">
       </div>
       <div class="form-group">
         <label for="desc">Description</label>
-        <textarea *ngIf="type === 'edit'" class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
-        <textarea *ngIf="type !== 'edit'" [attr.disabled] class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
+        <textarea class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
       </div>
     </form>
   </div>

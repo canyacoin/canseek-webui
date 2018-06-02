@@ -13,41 +13,23 @@ import { Candidate } from '../model/candidate';
 })
 export class CardsComponent implements OnInit {
   loading: boolean = true;
-  checkboxGroupForm: FormGroup;
-  candidateForm: FormGroup;
-  cardForm: FormGroup;
+  curUser: string; // cur user address
+  type: string = 'new';// new edit read
+
   cards: Card[];
+  candidates: Candidate[];
+  card: Card = new Card();
+  candidate: Candidate = new Candidate();
+
   results: Card[];
   statusArr = statusArr;
   statusIndex = 1;
-
-  // new or edit a card
-  card = {
-    "title": '',
-    "email": '',
-    "bounty": null,
-    "cost": null,
-    "desc": '',
-    "company": '',
-    "logo": '',
-    "status": 'pending',
-  };
-  type: string = 'new';// new edit read
-
-  // new or list candidate
-  candidate = {
-    "id": 0,
-    "name": '',
-    "contact": '',
-    "desc": ''
-  };
   email: string;
-
-  // cur user address
-  curUser: string;
-
-  // list candidates or chose a candidate
-  candidates: Candidate[];
+  
+  checkboxGroupForm: FormGroup;
+  candidateForm: FormGroup;
+  cardForm: FormGroup;
+  
   constructor(private cardService: CardService,
               private cs: ContractsService,
               private modalService: NgbModal, 
@@ -55,8 +37,8 @@ export class CardsComponent implements OnInit {
             ) { }
 
   ngOnInit() {
-    this.getCards();
     this.whoAmI();
+    this.getCards();
   }
 
   async whoAmI() {
@@ -77,31 +59,10 @@ export class CardsComponent implements OnInit {
     const { cards, statusIndex} = this;
     const next = cards.filter(item => item.status === statusArr[statusIndex]);
     this.results = next;
-  }
-  open(content, card) {
-    console.log('open card: ', card);
-    this.modalService.open(content).result.then((result) => {
-      if(result === 'cancelPost') {
-        this.cardService.cancelPost(card.postId);
-      }
-      // this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  openCandidate(content, card) {
-    this.candidateForm = this.formBuilder.group(this.candidate);
-    this.modalService.open(content).result.then((result) => {
-      if(result === 'onOk') {
-        const value = { id: (card.candidates || []).length, ...this.candidateForm.value};
-        this.cardService.addCandidate(card, value);
-      }
-      // this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    console.log('filter by status: ', this.statusArr[statusIndex])
   }
   
+  // new or edit card
   openCard(content, card, type) {
     this.type = type;
     const initCard = type === 'new' ? this.card : card;
@@ -111,7 +72,7 @@ export class CardsComponent implements OnInit {
       if(result === 'onOk') {
         const curCard = {  ownerAddr: this.curUser, ...initCard, ...this.cardForm.value};
         
-        console.log('curCard: ', curCard);
+        console.log(`${type} curCard: `, curCard);
         if (type === 'edit') {
           this.cardService.updateCard(curCard);
         } else if (type === 'new') {
@@ -124,10 +85,34 @@ export class CardsComponent implements OnInit {
     })
   }
 
-  updateStatus(id: string) {
-    console.log('will update id: ', id);
+  // cancel card
+  cancelcard(content, card) {
+    console.log(`cancel card: ${JSON.stringify(card)}`);
+    this.modalService.open(content).result.then((result) => {
+      if(result === 'cancelPost') {
+        this.cardService.cancelCard(card);
+      }
+    });
+  }
+
+
+  updateCardStatus(card) {
+    console.log(`will update card: ${JSON.stringify(card)}`);
     
-    this.cardService.updateStatus(id);
+    this.cardService.updateCardStatus(card);
+  }
+
+  openCandidate(content, card) {
+    this.candidateForm = this.formBuilder.group(this.candidate);
+    this.modalService.open(content).result.then((result) => {
+      if(result === 'onOk') {
+        const value = { id: (card.candidates || []).length, ...this.candidateForm.value};
+        this.cardService.addCandidate(card, value);
+      }
+      // this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   openCandidates(content, candidates, type) {
@@ -142,15 +127,5 @@ export class CardsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
   }
 }
