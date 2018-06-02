@@ -95,9 +95,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   // example of recommend/apply for a post
-  async recommend(postId = 0) {
+  async recommend(postId = 0, uniqueId) {
     console.log('recommending to post ', postId);
-    const candidateId = await this.cs.recommend(postId);
+    const candidateId = await this.cs.recommend(postId, uniqueId);
     console.log('candidate id: ', candidateId);
   }
 }

@@ -5,7 +5,7 @@
       <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
     </label>
   </div>
-  <button class="btn-primary" (click)="openCard(cardmodal, {}, 'new')">new card</button>
+  <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">new card</button>
 </div>
 
 <!-- loading -->
@@ -40,17 +40,18 @@
           {{ card.desc }}
       </p>
       <div class="d-flex justify-content-between">
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="updateCardStatus(card)">Update Status</a>
+        <a *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="btn-sm btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
+        
+        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="btn-sm btn-primary" (click)="updateCardStatus(card)">Update</a>
         <!-- todo addpost -->
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr" href="javascript:;" class="card-link" (click)="repost(card)" style="align-self: center;">
-          Repost 
-          <i class="fa fa-question-o" ngbPopover="todo" triggers="mouseenter:mouseleave"></i>
+          Retry
         </a>
         <!-- todo -->
         <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCandidate(candidatemodal, card)">Apply</a>
-        <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="btn btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
         <!-- todo -->
         <a *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')" style="align-self: center;">{{ card.candidates }} candidates </a>
+
       </div>
     </div>
   </div>
@@ -65,40 +66,41 @@
     </button>
   </div>
   <div class="modal-body">
+    <p class="tips">Tips: your balance: {{ balance }}</p>
     <form [formGroup]="cardForm" [ngClass]="{'was-validated': cardForm && (cardForm.touched || cardForm.dirty) && !cardForm.valid }">
       <div class="form-group">
         <label for="title">Job Title</label>
-        <input required [attr.disabled]="type !== 'new' ? true : null" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
+        <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="company">Company</label>
-        <input required [attr.disabled]="type !== 'new' ? true : null" type="text" class="form-control" formControlName="company" placeholder="google">
+        <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="company" placeholder="google">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="logo">Logo</label>
-        <input required [attr.disabled]="type !== 'new' ? true : null" type="text" class="form-control" formControlName="logo" placeholder="logo company">
+        <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="logo" placeholder="logo company">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="email">Email address</label>
-        <input required [attr.disabled]="type !== 'new' ? true : null" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+        <input required [attr.disabled]="type === 'read' ? true : null" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input required [attr.disabled]="type !== 'new' ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
+        <input required [attr.disabled]="type === 'read' ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>
-        <input required [attr.disabled]="type !== 'new' ? true : null" type="number" class="form-control" formControlName="cost" placeholder="cost">
+        <input required [attr.disabled]="type === 'read' ? true : null" type="number" class="form-control" formControlName="cost" placeholder="cost">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="desc">Description</label>
-        <textarea required class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
+        <textarea required [attr.disabled]="type === 'read' ? true : null" class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
         <div class="invalid-feedback">Please input valid value</div>
       </div>
     </form>
@@ -165,16 +167,16 @@
         </ng-template>
         <ng-template ngbPanelContent>
           <!-- 在 modal 里发异步请求会有问题 todo -->
-          <!-- <p>
+          <p>
             <a 
               *ngIf="candidate.status === 'pending'" 
               href="javascript:;" 
               class="card-link" 
-              (click)="updateCandidateStatus(candidateCard, candidate)"
+              (click)="updateCandidateStatus(card, candidate)"
               >
               update status
             </a>
-          </p> -->
+          </p>
           <p>name: {{ candidate.name }}</p>
           <p>contact: {{ candidate.contact }}</p>
           <p>description: {{ candidate.description }}</p>

@@ -14,6 +14,7 @@ import { Candidate } from '../model/candidate';
 export class CardsComponent implements OnInit {
   loading: boolean = true;
   curUser: string; // cur user address
+  balance: number;
   type: string = 'new';// new edit read
 
   cards: Card[];
@@ -37,13 +38,18 @@ export class CardsComponent implements OnInit {
             ) { }
 
   ngOnInit() {
-    this.whoAmI();
+    this.getAccount();
     this.getCards();
+    this.getBalance();
   }
 
-  async whoAmI() {
+  async getAccount() {
     this.curUser = await this.cs.getAccount();
     console.log('who am i: ', this.curUser);
+  }
+  async getBalance() {
+    this.balance = await this.cs.getCANBalance();
+    console.log(`balance: ${this.balance}`);
   }
   
   getCards(): void {

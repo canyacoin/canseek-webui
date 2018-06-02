@@ -66,7 +66,7 @@ export class CardService {
 
   updateCardStatus(card: Card) {
     const { postId, id, nextStatus } = card;
-    this.cs.getPostId(postId)
+    this.cs.getPostId(id)
       .then(result => {
         console.log(`update card status result: ${result}`)
         this.dbRef.doc(id).update({
@@ -95,7 +95,7 @@ export class CardService {
         this.dbRef.doc(id).update({
           candidates: candidates + 1
         })
-        return this.cs.recommend(postId, docRef.id);
+        return this.cs.recommend(docRef.id, postId);
       })
       .then(result => {
         this.docRef.update({
