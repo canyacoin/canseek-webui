@@ -314,4 +314,15 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  public async hasCandidate(postId, uniqueCandidateId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.hasCandidate(postId, uniqueCandidateId).then(result => {
+        resolve(result);
+      }).catch( err => {
+        reject(err);
+      });
+    }) as Promise<boolean>;
+  }
+
 }
