@@ -18,9 +18,11 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   cards: Card[];
+  posts: any[];
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
+  cardTmp: any;
 
   results: Card[];
   statusArr = statusArr;
@@ -39,6 +41,7 @@ export class CardsComponent implements OnInit {
 
   ngOnInit() {
     this.getAccount();
+    // this.getAllPosts();
     this.getCards();
     this.getBalance();
   }
@@ -51,7 +54,13 @@ export class CardsComponent implements OnInit {
     this.balance = await this.cs.getCANBalance();
     console.log(`balance: ${this.balance}`);
   }
-  
+  getAllPosts() {
+    this.cs.getAllPosts()
+      .then(results => {
+        console.log(`all posts: ${JSON.stringify(results)}`);
+        this.posts = results;
+      });
+  }
   getCards(): void {
     this.cardService.getCards()
       .subscribe(cards => {
@@ -71,7 +80,7 @@ export class CardsComponent implements OnInit {
   // new or edit card
   openCard(content, card, type) {
     this.type = type;
-    const initCard = type === 'new' ? this.card : card;
+    const initCard = (type === 'new' && JSON.stringify(card) === '{}') ? this.card : card;
     this.cardForm = this.formBuilder.group(initCard);
 
     this.modalService.open(content).result.then((result) => {
@@ -86,22 +95,19 @@ export class CardsComponent implements OnInit {
         }
         this.searchStatus();
       }
-    }, (reason) => {
-
-    })
+    }, (reason) => {})
   }
 
   // cancel card
-  cancelcard(content, card) {
+  openCancelCard(content, card) {
     console.log(`cancel card: ${JSON.stringify(card)}`);
     this.modalService.open(content).result.then((result) => {
       if(result === 'cancelPost') {
         card.nextStatus = 'cancelled';
         this.cardService.cancelCard(card);
       }
-    });
+    }, (reason) => {});
   }
-
 
   updateCardStatus(card) {
     console.log(`will update card: ${JSON.stringify(card)}`);
@@ -110,15 +116,20 @@ export class CardsComponent implements OnInit {
   }
 
   openCandidate(content, card) {
+    this.cardTmp = card;
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
         this.cardService.addCandidate(card, this.candidateForm.value);
       }
-    });
+    }, (reason) => {});
+  }
+  addCandidate(card, candidate) {
+    this.cardService.addCandidate(card, candidate);
   }
 
   openCandidates(content, card, type) {
+    this.cardTmp = card;
     this.type = type;
     this.cardService.getCandidates(card.id).subscribe(candidates => {
       this.candidates = candidates;
@@ -129,12 +140,12 @@ export class CardsComponent implements OnInit {
           this.cardService.closePost(card, this.candidate);
         }
         console.log(result);
-      });
+      }, (reason) => {});
     })
   }
-  updateCandidateStatus(card, candidate) {
-    console.log(`updateCandidateStatus`, candidate);
-    this.cardService.updateCandidateStatus(card, candidate);
+  updateCandidateStatus(candidate) {
+    console.log(`will updateCandidateStatus`, candidate);
+    this.cardService.updateCandidateStatus(this.cardTmp, candidate);
   }
   changeCan() {
     // this.updateCandidateStatus
