@@ -20,9 +20,9 @@ contract CanHire is Ownable {
         uint bounty;
         uint cost;
         uint honeyPot;
-        uint numCandidates;
         uint candidateSelected;
         address[] recommenders;
+        mapping(string => uint) returnCandidateId;
     }
 
     StandardToken public canYaCoin;
@@ -52,12 +52,12 @@ contract CanHire is Ownable {
     }
 
     modifier has_candidate(uint postId, uint candidateId) {
-        require(candidateId < posts[postId].numCandidates);
+        require(candidateId < posts[postId].recommenders.length);
         _;
     }
 
     modifier post_exist(uint postId) {
-        require(postId < numPosts);
+        require(postId <= numPosts);
         _;
     }
 
@@ -70,6 +70,8 @@ contract CanHire is Ownable {
         canYaCoin = _canYaCoin;
         escrow = _escrow;
         setActive(true);
+        Post memory defaultPost;
+        posts.push(defaultPost);
     }
 
     function getRecommenders(uint postId) public view returns (address[] recommenderList) {
@@ -116,8 +118,8 @@ contract CanHire is Ownable {
         post_is_open(postId)
     {
         Post storage post = posts[postId];
-        for(uint i = 0; i < post.numCandidates; i.add(1)) {
-            require(escrow.transferFromEscrow(post.recommenders[i], post.cost));
+        for(uint i = 1; i <= post.recommenders.length; i.add(1)) {
+            // require(escrow.transferFromEscrow(post.recommenders[i], post.cost));
         }
         uint fee = post.bounty.mul(cancelFee).div(100);
         require(escrow.transferFromEscrow(address(this), fee));
@@ -142,12 +144,16 @@ contract CanHire is Ownable {
         emit PostStatusUpdate(Status.Closed);
     }
 
-    function recommend(uint postId) public {
+    function recommend(string uniqueCandidateId, uint postId) 
+        public
+        post_exist(postId)
+        post_is_open(postId)
+    {
         require(canYaCoin.approve(address(escrow), posts[postId].cost));
         require(escrow.transferToEscrow(msg.sender, posts[postId].cost));
-        uint candidateId = posts[postId].numCandidates;
-        posts[postId].numCandidates.add(1);
         posts[postId].recommenders.push(msg.sender);
+        uint candidateId = posts[postId].recommenders.length;
+        posts[postId].returnCandidateId[uniqueCandidateId] = candidateId;
         posts[postId].honeyPot = posts[postId].honeyPot.add(posts[postId].cost);
         emit CandidateRecommended(candidateId);
     }
@@ -161,6 +167,22 @@ contract CanHire is Ownable {
 
     function getId(string uniqueId) public view returns (uint postId) {
         postId = getPostId[uniqueId];
+    }
+
+    function getCandidateId(string uniqueCandidateId, uint postId) 
+        public 
+        view 
+        returns (uint candidateId) 
+    {
+        candidateId = posts[postId].returnCandidateId[uniqueCandidateId];
+    }
+
+    function getNumCandidates(uint postId)
+        public 
+        view 
+        returns (uint numCandidates)
+    {
+        numCandidates = posts[postId].recommenders.length;
     }
 
 }
