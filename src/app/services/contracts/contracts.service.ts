@@ -19,10 +19,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xbb53bc34bd6f018e3343b8e0deb2a5366eeddb8b';
-const EscrowAddr = '0x1f4edd5c19789de5cc04819059f782ae8c4cb164';
-const CanHireAddr = '0x4f47f196f12edb3a14026ca05c83123cd81fb23e';
-
+const CanYaCoinAddr = '0xe71fdb364c5b058bc37571f1b8893c8bf65e0d89';
+const EscrowAddr = '0x38cc895697f0d2573df718d3602597f79d326150';
+const CanHireAddr = '0x5cdf9adec1d89f1f6158c165dfa38edfbf834863';
 
 @Injectable()
 export class ContractsService {
@@ -149,19 +148,19 @@ export class ContractsService {
         let postStatus;
         switch (result.toString()) {
           case '1': {
-            postStatus = 'Open';
+            postStatus = 'open';
             break;
           }
           case '2': {
-            postStatus = 'Closed';
+            postStatus = 'closed';
             break;
           }
           case '3': {
-            postStatus = 'Cancelled';
+            postStatus = 'cancelled';
             break;
           }
           default: {
-            postStatus = 'Default';
+            postStatus = 'pending';
             break;
           }
         }
@@ -272,8 +271,7 @@ export class ContractsService {
                         'bounty': post[3].toNumber(),
                         'cost': post[4].toNumber(),
                         'honeyPot': post[5].toNumber(),
-                        'numCandidates': post[6].toNumber(),
-                        'candidateSelected': post[7].toNumber(),
+                        'candidateSelected': post[6].toNumber(),
                         'recommenders': recommenders
                       };
         resolve(postInfo);
@@ -287,7 +285,7 @@ export class ContractsService {
   public async getAllPosts() {
     const numPosts = await this.getNumPosts();
     const posts = [];
-    for (let i = 0; i < numPosts; i++) {
+    for (let i = 1; i <= numPosts; i++) {
       posts.push(await this.getPost(i));
     }
     return posts;
