@@ -272,8 +272,7 @@ export class ContractsService {
                         'bounty': post[3].toNumber(),
                         'cost': post[4].toNumber(),
                         'honeyPot': post[5].toNumber(),
-                        'numCandidates': post[6].toNumber(),
-                        'candidateSelected': post[7].toNumber(),
+                        'candidateSelected': post[6].toNumber(),
                         'recommenders': recommenders
                       };
         resolve(postInfo);
