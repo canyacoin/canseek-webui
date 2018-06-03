@@ -29,6 +29,7 @@ contract CanHire is Ownable {
     Escrow public escrow;
     Post[] public posts;
     mapping(string => uint) getPostId;
+    mapping(address => uint) refund;
     uint public numPosts = 1;
     bool public active;
     uint public cancelFee = 1;
@@ -108,6 +109,7 @@ contract CanHire is Ownable {
         newPost.honeyPot = _bounty;
         posts.push(newPost);
         getPostId[uniqueId] = numPosts;
+        posts[numPosts].recommenders.push(0x0);
         numPosts = numPosts.add(1);
         emit PostCreated(newPost.id);
     }
@@ -118,14 +120,18 @@ contract CanHire is Ownable {
         post_is_open(postId)
     {
         Post storage post = posts[postId];
-        for(uint i = 1; i <= post.recommenders.length; i.add(1)) {
-            // require(escrow.transferFromEscrow(post.recommenders[i], post.cost));
-        }
+        // for(uint i = 1; i <= post.recommenders.length; i.add(1)) {
+        //     // require(escrow.transferFromEscrow(post.recommenders[i], post.cost));
+        // }
         uint fee = post.bounty.mul(cancelFee).div(100);
         require(escrow.transferFromEscrow(address(this), fee));
         require(escrow.transferFromEscrow(msg.sender, post.bounty.sub(fee)));
         posts[postId].status = Status.Cancelled;
         emit PostStatusUpdate(Status.Cancelled);
+    }
+
+    function getRefund(uint postId) public {
+
     }
 
     function closePost(uint postId, uint candidateId)
@@ -182,7 +188,7 @@ contract CanHire is Ownable {
         view 
         returns (uint numCandidates)
     {
-        numCandidates = posts[postId].recommenders.length;
+        numCandidates = posts[postId].recommenders.length.sub(1);
     }
 
 }
