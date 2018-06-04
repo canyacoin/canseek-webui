@@ -31,7 +31,7 @@
     <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <span style="color: #33ccff">C$: {{ card.candidates * card.cost + card.bounty }}</span>
+        <span style="color: #33ccff">C$: {{ card.honeyPot }}</span>
       </h5>
       <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
           {{ card.desc }}

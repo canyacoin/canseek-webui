@@ -109,10 +109,6 @@ export class CardService {
       this.docRef = this.dbRef.doc(id).collection('candidates').doc(cid);
       this.cs.recommend(cid, postId)
         .then(candidateId => {
-          // card candidates + 1
-          this.dbRef.doc(id).update({
-            candidates: candidateId ? candidates + 1 : candidates
-          });
           this.docRef.update({
             candidateId,
             status: candidateId ? 'ok' : 'pending'
@@ -123,12 +119,16 @@ export class CardService {
         .then(docRef => {
           this.docRef = docRef;
           docRef.update({id: docRef.id});
-          return this.cs.recommend(docRef.id, postId);
-        })
-        .then(candidateId => {
           // card candidates + 1
           this.dbRef.doc(id).update({
-            candidates: candidateId ? candidates + 1 : candidates
+            candidates: candidates + 1,
+          });
+          return this.cs.recommend(docRef.id, postId);
+        })
+        .then(({ honeyPot, candidateId}) => {
+          // update honeypot
+          this.dbRef.doc(id).update({
+            honeyPot,
           });
           this.docRef.update({
             candidateId,

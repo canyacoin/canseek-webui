@@ -18,7 +18,7 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   cards: Card[];
-  honeyPotByPostId: Object = {};
+  // honeyPotByPostId: Object = {};
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
@@ -93,11 +93,10 @@ export class CardsComponent implements OnInit {
       if(result === 'onOk') {
         const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser };
         
-        console.log(`${type} curCard: `, curCard);
         if (type === 'edit') {
           this.cardService.updateCard(curCard);
         } else if (type === 'new') {
-          this.cardService.addCard(curCard);
+          this.cardService.addCard({ ...curCard, honeyPot: curCard.bounty });
         }
         this.searchStatus();
       }

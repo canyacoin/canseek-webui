@@ -13,6 +13,7 @@ export class Card {
     bounty: number = null;
     cost: number = null;
     desc: string = '';
+    honeyPot: number = 0;
     candidates: number = 0; // 候选人数
 }
 
