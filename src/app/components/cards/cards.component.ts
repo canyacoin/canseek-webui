@@ -18,7 +18,7 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   cards: Card[];
-  posts: any[];
+  honeyPotByPostId: Object = {};
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
@@ -41,13 +41,13 @@ export class CardsComponent implements OnInit {
 
   ngOnInit() {
     this.getAccount();
-    // this.getAllPosts();
+    this.getAllPosts();
     this.getCards();
     this.getBalance();
   }
   async getAccount() {
     this.curUser = await this.cs.getAccount();
-    console.log('who am i: ', this.curUser);
+    console.log('get account: ', this.curUser);
   }
   async getBalance() {
     this.balance = await this.cs.getCANBalance();
@@ -56,8 +56,15 @@ export class CardsComponent implements OnInit {
   getAllPosts() {
     this.cs.getAllPosts()
       .then(results => {
-        console.log(`all posts: ${JSON.stringify(results)}`);
-        this.posts = results;
+        console.log(`all posts: `, results);
+        const tmp = results.map(item => {
+          const { id, honeyPot } = item;
+
+          this.honeyPotByPostId[id] = honeyPot;
+
+          return item;
+        })
+        console.log('this.honeyPotByPostId: ', this.honeyPotByPostId)
       });
   }
   getCards(): void {
@@ -84,7 +91,7 @@ export class CardsComponent implements OnInit {
 
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
-        const curCard = {  ownerAddr: this.curUser, ...initCard, ...this.cardForm.value};
+        const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser };
         
         console.log(`${type} curCard: `, curCard);
         if (type === 'edit') {

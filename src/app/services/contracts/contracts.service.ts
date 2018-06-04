@@ -1,4 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
+import { debug } from 'util';
 // const Identicon = require('identicon.js');
 // const _ = require('lodash');
 
@@ -120,8 +121,8 @@ export class ContractsService {
   public async getNumPosts() {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.numPosts().then(result => {
-        resolve(result.toNumber());
+      canHire.numPosts().then(numPosts => {
+        resolve(numPosts.toNumber() - 1);
       })
         .catch(err => {
           reject(err);
@@ -144,9 +145,9 @@ export class ContractsService {
   public async getPostStatus(postId) {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.posts(postId).then(result => {
+      canHire.posts(postId).then(post => {
         let postStatus;
-        switch (result.toString()) {
+        switch (post[2].toString()) {
           case '1': {
             postStatus = 'open';
             break;
@@ -264,7 +265,6 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.posts(postId).then(async post => {
         const status = await this.getPostStatus(postId);
-        console.log(post[8]);
         const postInfo = {'id': post[0].toNumber(),
                         'owner': post[1].toString(),
                         'status': status,
@@ -283,12 +283,18 @@ export class ContractsService {
   }
 
   public async getAllPosts() {
-    const numPosts = await this.getNumPosts();
     const posts = [];
-    for (let i = 1; i <= numPosts; i++) {
-      posts.push(await this.getPost(i));
-    }
-    return posts;
+    return new Promise((resolve, reject) => {
+      this.getNumPosts().then(async numPosts => {
+        for (let i = 1; i <= numPosts; i++) {
+          posts.push(await this.getPost(i));
+        }
+        resolve(posts);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    }) as Promise<object>;
   }
 
   public async getAllCandidates(postId) {
@@ -317,7 +323,20 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.getCandidateId(uniqueCandidateId, postId).then(candidateId => {
+        console.log(candidateId);
         resolve(candidateId.toNumber());
+      }).catch( err => {
+        reject(err);
+      });
+    }) as Promise<number>;
+  }
+
+  public async getRefund(uniqueCandidateid, postId) {
+    const account = await this.getAccount();
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.getRefund(uniqueCandidateid, postId, {from: account}).then(refund => {
+        resolve(refund.toNumber());
       }).catch( err => {
         reject(err);
       });

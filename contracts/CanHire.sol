@@ -33,7 +33,7 @@ contract CanHire is Ownable {
     uint public numPosts = 1;
     bool public active;
     uint public cancelFee = 1;
-    uint public closeFee = 2;
+    uint public closeFee = 1;
 
     event PostCreated(uint postId);
     event CandidateRecommended(uint candidateId);
@@ -41,6 +41,7 @@ contract CanHire is Ownable {
     event PostStatusUpdate(Status status);
     event ProfitsExtracted(uint profit);
     event GetPostId(uint postId);
+    event GetRefund(uint cost);
 
     modifier is_active(){
         require(active);
@@ -83,7 +84,7 @@ contract CanHire is Ownable {
         active = isActive;
     }
 
-    function setCancellationFee(uint _cancelFee) public onlyOwner {
+    function setCancelFee(uint _cancelFee) public onlyOwner {
         cancelFee = _cancelFee;
     }
 
@@ -120,9 +121,6 @@ contract CanHire is Ownable {
         post_is_open(postId)
     {
         Post storage post = posts[postId];
-        // for(uint i = 1; i <= post.recommenders.length; i.add(1)) {
-        //     // require(escrow.transferFromEscrow(post.recommenders[i], post.cost));
-        // }
         uint fee = post.bounty.mul(cancelFee).div(100);
         require(escrow.transferFromEscrow(address(this), fee));
         require(escrow.transferFromEscrow(msg.sender, post.bounty.sub(fee)));
@@ -130,8 +128,14 @@ contract CanHire is Ownable {
         emit PostStatusUpdate(Status.Cancelled);
     }
 
-    function getRefund(uint postId) public {
-
+    function getRefund(string uniqueCandidateId, uint postId) public {
+        Post storage post = posts[postId];
+        require(post.status == Status.Cancelled);
+        require(post.returnCandidateId[uniqueCandidateId] > 0);
+        uint candidateId = post.returnCandidateId[uniqueCandidateId];
+        require(escrow.transferFromEscrow(post.recommenders[candidateId], post.cost));
+        post.returnCandidateId[uniqueCandidateId] = 0;
+        emit GetRefund(post.cost);
     }
 
     function closePost(uint postId, uint candidateId)
@@ -142,7 +146,7 @@ contract CanHire is Ownable {
     {
         Post storage post = posts[postId];
         require(post.recommenders[candidateId] != msg.sender);
-        uint fee = post.bounty.mul(closeFee).div(100);
+        uint fee = post.honeyPot.mul(closeFee).div(100);
         require(escrow.transferFromEscrow(address(this), fee));
         require(escrow.transferFromEscrow(post.recommenders[candidateId], post.honeyPot.sub(fee)));
         post.candidateSelected = candidateId;
@@ -157,8 +161,8 @@ contract CanHire is Ownable {
     {
         require(canYaCoin.approve(address(escrow), posts[postId].cost));
         require(escrow.transferToEscrow(msg.sender, posts[postId].cost));
-        posts[postId].recommenders.push(msg.sender);
         uint candidateId = posts[postId].recommenders.length;
+        posts[postId].recommenders.push(msg.sender);
         posts[postId].returnCandidateId[uniqueCandidateId] = candidateId;
         posts[postId].honeyPot = posts[postId].honeyPot.add(posts[postId].cost);
         emit CandidateRecommended(candidateId);
