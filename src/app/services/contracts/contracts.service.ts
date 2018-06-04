@@ -120,8 +120,8 @@ export class ContractsService {
   public async getNumPosts() {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.numPosts().then(result => {
-        resolve(result.toNumber());
+      canHire.numPosts().then(numPosts => {
+        resolve(numPosts.toNumber() - 1);
       })
         .catch(err => {
           reject(err);
