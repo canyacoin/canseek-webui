@@ -252,11 +252,12 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, ...gas}).then(result => {
         const { candidateId } = result.logs[0].args;
-        resolve(Number(candidateId));
+        const honeypot = this.getPostHoneypot(postId);
+        resolve({honeypot: Number(honeypot), candidateId: Number(candidateId)});
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<object>;
   }
 
   public async getRecommenders(postId) {
