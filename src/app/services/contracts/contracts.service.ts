@@ -230,7 +230,7 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async recommend(postId, candidateUniqueId) {
+  public async recommend(candidateUniqueId, postId) {
     const account = await this.getAccount();
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
     const escrow = await this.Escrow.at(EscrowAddr);
@@ -238,7 +238,7 @@ export class ContractsService {
     const cost = await this.getPostCost(postId);
     await canYaCoin.approve(escrow.address, cost, {from: account, ...gas});
     return new Promise((resolve, reject) => {
-      canHire.recommend(postId, {from: account, ...gas}).then(result => {
+      canHire.recommend(candidateUniqueId, postId, {from: account, ...gas}).then(result => {
         const { candidateId } = result.logs[0].args;
         resolve(candidateId.toString());
       }).catch( err => {
