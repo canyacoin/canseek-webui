@@ -1,4 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
+import { debug } from 'util';
 // const Identicon = require('identicon.js');
 // const _ = require('lodash');
 
@@ -19,9 +20,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xc4ea30310bba371dd05335537f7822a5b0c74e15';
-const EscrowAddr = '0x3723045012ef11667767faf28c4add7fc67fb2d1';
-const CanHireAddr = '0x21bdd2a5fceff2cfada2072811eeb38b1d677ab9';
+const CanYaCoinAddr = '0x6083b3a366afc34f2c41a7e258ac994931bff396';
+const EscrowAddr = '0x43d6a450ce61de47e3923613988ccc01292e9a9a';
+const CanHireAddr = '0x18fcd652bd4df28c19304c394d9c1e134ef28917';
 
 @Injectable()
 export class ContractsService {
@@ -285,7 +286,7 @@ export class ContractsService {
     const posts = [];
     return new Promise((resolve, reject) => {
       this.getNumPosts().then(async numPosts => {
-        for (let i = 1; i <= numPosts; i++) {
+        for (let i = 1; i < numPosts; i++) {
           posts.push(await this.getPost(i));
         }
         resolve(posts);
