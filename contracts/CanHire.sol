@@ -160,6 +160,7 @@ contract CanHire is Ownable {
         post_exist(postId)
         post_is_open(postId)
     {
+        require(getCandidateId(uniqueCandidateId, postId) != 0);
         require(canYaCoin.approve(address(escrow), posts[postId].cost));
         require(escrow.transferToEscrow(msg.sender, posts[postId].cost));
         uint candidateId = posts[postId].recommenders.length;
