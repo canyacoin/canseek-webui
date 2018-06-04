@@ -76,7 +76,6 @@ export class CardService {
     const { postId, id } = card;
     const cardRef = this.dbRef.doc(id);
     
-    debugger
     if (postId) {
       this.cs.getPostStatus(postId) 
         .then(result => {
@@ -92,7 +91,6 @@ export class CardService {
           if (!postId) {
             alert('update error, please retry to add this post');
           } else {
-            console.log(`get post id ${postId}`);
             cardRef.update({
               postId,
               status: 'open'
@@ -108,27 +106,30 @@ export class CardService {
     const { id: cid } = candidate;
 
     if (cid) {// retry
-      this.docRef = this.dbRef().doc(id).collection('candidates').doc(cid);
-      this.docRef.update(candidate);
+      this.docRef = this.dbRef.doc(id).collection('candidates').doc(cid);
       this.cs.recommend(cid, postId)
         .then(candidateId => {
+          // card candidates + 1
+          this.dbRef.doc(id).update({
+            candidates: candidateId ? candidates + 1 : candidates
+          });
           this.docRef.update({
             candidateId,
             status: candidateId ? 'ok' : 'pending'
           })
         })
     } else {
-      this.dbRef().doc(id).collection('candidates').add(candidate)
+      this.dbRef.doc(id).collection('candidates').add(candidate)
         .then(docRef => {
           this.docRef = docRef;
           docRef.update({id: docRef.id});
-          // card candidates + 1
-          this.dbRef.doc(id).update({
-            candidates: candidates + 1
-          });
           return this.cs.recommend(docRef.id, postId);
         })
         .then(candidateId => {
+          // card candidates + 1
+          this.dbRef.doc(id).update({
+            candidates: candidateId ? candidates + 1 : candidates
+          });
           this.docRef.update({
             candidateId,
             status: candidateId ? 'ok' : 'pending'
@@ -144,10 +145,14 @@ export class CardService {
 
     this.cs.getCandidateId(cid, postId)
       .then(candidateId => {
-        candidateRef.update({
-          candidateId,
-          status: 'ok'
-        })
+        if(!candidateId) {
+          alert('update error, please retry to add this candidate');
+        } else {
+          candidateRef.update({
+            candidateId,
+            status: 'ok'
+          })
+        }
       })
       .catch(err => console.error(`get candidate id err: ${err}`))
   }

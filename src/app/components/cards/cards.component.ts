@@ -41,7 +41,7 @@ export class CardsComponent implements OnInit {
 
   ngOnInit() {
     this.getAccount();
-    this.getAllPosts();
+    // this.getAllPosts();
     this.getCards();
     this.getBalance();
   }
@@ -53,20 +53,20 @@ export class CardsComponent implements OnInit {
     this.balance = await this.cs.getCANBalance();
     console.log(`balance: ${this.balance}`);
   }
-  getAllPosts() {
-    this.cs.getAllPosts()
-      .then(results => {
-        console.log(`all posts: `, results);
-        const tmp = results.map(item => {
-          const { id, honeyPot } = item;
+  // getAllPosts() {
+  //   this.cs.getAllPosts()
+  //     .then(results => {
+  //       console.log(`all posts: `, results);
+  //       const tmp = results.map(item => {
+  //         const { id, honeyPot } = item;
 
-          this.honeyPotByPostId[id] = honeyPot;
+  //         this.honeyPotByPostId[id] = honeyPot;
 
-          return item;
-        })
-        console.log('this.honeyPotByPostId: ', this.honeyPotByPostId)
-      });
-  }
+  //         return item;
+  //       })
+  //       console.log('this.honeyPotByPostId: ', this.honeyPotByPostId)
+  //     });
+  // }
   getCards(): void {
     this.cardService.getCards()
       .subscribe(cards => {

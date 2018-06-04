@@ -31,7 +31,7 @@
     <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <span style="color: #33ccff">C$: {{ card.candidates === 0 ? card.bounty : honeyPotByPostId[card.postId] }}</span>
+        <span style="color: #33ccff">C$: {{ card.candidates * card.cost + card.bounty }}</span>
       </h5>
       <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
           {{ card.desc }}
@@ -44,7 +44,7 @@
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCard(cardmodal, card, 'new')">retry add</a>
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">retry close</a>
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCancelCard(cancelcardmodal, card)">retry cancel</a>
-        <a *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')" style="align-self: center;">{{ card.candidates }} candidates </a>
+        <a *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')" style="align-self: center;">{{ card.candidates }}+ candidates </a>
       </div>
     </div>
   </div>
@@ -119,7 +119,7 @@
         <div class="invalid-feedback">Please input valid value</div>        
       </div>
       <div class="form-group">
-        <label for="contact">Contact Email</label>
+        <label for="contact">Contacts</label>
         <input required type="text" class="form-control" formControlName="contact" placeholder="email or phone">
         <div class="invalid-feedback">Please input valid value</div>        
       </div>
@@ -153,29 +153,42 @@
 
     <!-- list -->
     <ngb-accordion [closeOthers]="true" activeIds="candidate{{ candidates[0].id }}">
-      <ngb-panel *ngFor="let candidate of candidates" id="candidate{{ candidate.id }}">
+      <ngb-panel 
+        *ngFor="let candidate of candidates" 
+        id="candidate{{ candidate.id }}"
+        [disabled]="candidate.status === 'pending' ? true : null"
+        >
+
         <ng-template ngbPanelTitle>
-          {{ candidate.name }}
-          <a 
-            *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
-            href="javascript:;" 
-            class="card-link" 
-            (click)="updateCandidateStatus(candidate)"
-            >
-            Update
-          </a>
-          <a 
-            *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
-            href="javascript:;" 
-            class="card-link" 
-            (click)="addCandidate(cardTmp, candidate)"
-            >&nbsp;
-            retry
-          </a>
+          <div class="d-flex justify-content-between">
+            {{ candidate.name }}
+            <div>
+                <a 
+                  *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
+                  href="javascript:;" 
+                  class="card-link" 
+                  (click)="updateCandidateStatus(candidate)"
+                  >
+                  Update
+                </a>
+                <a 
+                  *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
+                  href="javascript:;" 
+                  class="card-link" 
+                  (click)="addCandidate(cardTmp, candidate)"
+                  >&nbsp;
+                  retry
+                </a>
+              </div>
+          </div>
+
+          
         </ng-template>
         <ng-template ngbPanelContent>
           <!-- 在 modal 里发异步请求会有问题 todo -->
-          <p>status: {{ candidate.status }}</p>
+          <p
+            *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
+            >status: {{ candidate.status }}</p>
           <p>name: {{ candidate.name }}</p>
           <p>contact: {{ candidate.contact }}</p>
           <p *ngIf="candidate.desc">description: {{ candidate.desc }}</p>

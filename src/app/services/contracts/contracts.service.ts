@@ -240,7 +240,7 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, ...gas}).then(result => {
         const { candidateId } = result.logs[0].args;
-        resolve(candidateId.toString());
+        resolve(Number(candidateId));
       }).catch( err => {
         reject(err);
       });
@@ -323,7 +323,6 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.getCandidateId(uniqueCandidateId, postId).then(candidateId => {
-        console.log(candidateId);
         resolve(candidateId.toNumber());
       }).catch( err => {
         reject(err);
