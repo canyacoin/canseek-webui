@@ -144,9 +144,9 @@ export class ContractsService {
   public async getPostStatus(postId) {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
-      canHire.posts(postId).then(result => {
+      canHire.posts(postId).then(post => {
         let postStatus;
-        switch (result.toString()) {
+        switch (post[2].toString()) {
           case '1': {
             postStatus = 'open';
             break;
