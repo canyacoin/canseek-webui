@@ -1,4 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
+import { debug } from 'util';
 // const Identicon = require('identicon.js');
 // const _ = require('lodash');
 
@@ -19,9 +20,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xc4ea30310bba371dd05335537f7822a5b0c74e15';
-const EscrowAddr = '0x3723045012ef11667767faf28c4add7fc67fb2d1';
-const CanHireAddr = '0x21bdd2a5fceff2cfada2072811eeb38b1d677ab9';
+const CanYaCoinAddr = '0xff40b970ff8d01d8609a135bd662608ca0d7fe5f';
+const EscrowAddr = '0xdcae66e0452eb9528b9341063c98514e1ceffb13';
+const CanHireAddr = '0x7d3ffc3f84e5c7b6555a3e1440721663cebaddd2';
 
 @Injectable()
 export class ContractsService {
