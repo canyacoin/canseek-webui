@@ -286,7 +286,7 @@ export class ContractsService {
     const posts = [];
     return new Promise((resolve, reject) => {
       this.getNumPosts().then(async numPosts => {
-        for (let i = 1; i < numPosts; i++) {
+        for (let i = 1; i <= numPosts; i++) {
           posts.push(await this.getPost(i));
         }
         resolve(posts);

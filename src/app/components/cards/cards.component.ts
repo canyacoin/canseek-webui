@@ -18,7 +18,7 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   cards: Card[];
-  posts: Object;
+  honeyPotByPostId: Object = {};
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
@@ -58,7 +58,14 @@ export class CardsComponent implements OnInit {
     this.cs.getAllPosts()
       .then(results => {
         console.log(`all posts: `, results);
-        // this.posts = results;
+        const tmp = results.map(item => {
+          const { id, honeyPot } = item;
+
+          this.honeyPotByPostId[id] = honeyPot;
+
+          return item;
+        })
+        console.log('this.honeyPotByPostId: ', this.honeyPotByPostId)
       });
   }
   getCards(): void {
