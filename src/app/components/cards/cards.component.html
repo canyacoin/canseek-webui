@@ -31,7 +31,7 @@
     <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <span style="color: #33ccff">C$: {{ honeyPotByPostId[card.postId] }}</span>
+        <span style="color: #33ccff">C$: {{ card.candidates === 0 ? card.bounty : honeyPotByPostId[card.postId] }}</span>
       </h5>
       <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
           {{ card.desc }}
@@ -82,8 +82,8 @@
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
-        <div class="invalid-feedback">Your CAN Balance is {{ balance }}, Please ensure you have enough CAN balance</div>
+        <input min="100" max="{{ balance }}" required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
+        <div class="invalid-feedback">Please ensure your bounty bigger than 100 and less than {{ balance }}</div>
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>

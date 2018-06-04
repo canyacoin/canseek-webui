@@ -23,27 +23,32 @@ export class CardService {
   }
 
   addCard(card: Card) {
-    this.dbRef.add(card)
-      .then(docRef => {
-        const { bounty, cost } = card;
-        
-        this.docRef = docRef;
-        this.docRef.update({
-          id: docRef.id,
-        });
-        console.log(`add succ: ${docRef.id}`);
-        return this.cs.addPost(docRef.id, bounty, cost);
-      })
-      .then((postId) => {
-        this.docRef.update({
-          status: postId ? 'open' : 'pending',
-          postId
+    const { id, bounty, cost } = card;
+
+    if (id) {// retry add
+      this.docRef = this.dbRef.doc(id);
+      this.docRef.update(card);
+      this.cs.addPost(id, bounty, cost)
+        .then(postId => {
+          this.docRef.update({
+            postId,
+            status: postId ? 'open' : 'pending'
+          })
         })
-        console.log('add to block chain succ: ', postId);
-      })
-      .catch(function(err) {
-          console.error(`add err ${err}`);
-      });
+    } else {
+      this.dbRef.add(card)
+        .then(docRef => {
+          this.docRef = docRef;
+          docRef.update({id: docRef.id});
+          return this.cs.addPost(docRef.id, bounty, cost);
+        })
+        .then(postId => {
+          this.docRef.update({
+            postId,
+            status: postId ? 'open' : 'pending'
+          })
+        })
+    }
   }
 
   updateCard(card: Card) {
@@ -71,9 +76,11 @@ export class CardService {
     const { postId, id } = card;
     const cardRef = this.dbRef.doc(id);
     
+    debugger
     if (postId) {
       this.cs.getPostStatus(postId) 
         .then(result => {
+          console.log(`get post status ${result} with postId: ${postId}`);
           cardRef.update({
             status: result
           })
@@ -82,10 +89,15 @@ export class CardService {
     } else {
       this.cs.getPostId(id)
         .then(postId => {
-          cardRef.update({
-            postId,
-            status: 'open'
-          })
+          if (!postId) {
+            alert('update error, please retry to add this post');
+          } else {
+            console.log(`get post id ${postId}`);
+            cardRef.update({
+              postId,
+              status: 'open'
+            })
+          }
         })
         .catch(err => console.error(`get post id err: ${err}`))
     }
@@ -93,28 +105,36 @@ export class CardService {
 
   addCandidate(card: Card, candidate: Candidate) {
     const { id, postId, candidates = 0 } = card;
+    const { id: cid } = candidate;
 
-    console.log(`candidates: ${candidates}`);
-    // console.log(`will add candidate ${JSON.stringify(candidate)} to card ${JSON.stringify(card)}`);
-    this.dbRef.doc(id).collection('candidates').add(candidate)
-      .then(docRef => {
-        console.log(`add candidate succ: ${docRef.id}`);
-        this.docRef = docRef;
-        this.docRef.update({
-          id: docRef.id,
+    if (cid) {// retry
+      this.docRef = this.dbRef().doc(id).collection('candidates').doc(cid);
+      this.docRef.update(candidate);
+      this.cs.recommend(cid, postId)
+        .then(candidateId => {
+          this.docRef.update({
+            candidateId,
+            status: candidateId ? 'ok' : 'pending'
+          })
         })
-        this.dbRef.doc(id).update({
-          candidates: candidates + 1
+    } else {
+      this.dbRef().doc(id).collection('candidates').add(candidate)
+        .then(docRef => {
+          this.docRef = docRef;
+          docRef.update({id: docRef.id});
+          // card candidates + 1
+          this.dbRef.doc(id).update({
+            candidates: candidates + 1
+          });
+          return this.cs.recommend(docRef.id, postId);
         })
-        return this.cs.recommend(docRef.id, postId);
-      })
-      .then(candidateId => {
-        this.docRef.update({
-          candidateId,
-          status: candidateId ? 'ok' : 'pending'
+        .then(candidateId => {
+          this.docRef.update({
+            candidateId,
+            status: candidateId ? 'ok' : 'pending'
+          })
         })
-      })
-      .catch(err => console.error(`add candidate err: ${err}`))
+    }
   }
   updateCandidateStatus(card: Card, candidate: Candidate) {
     const { postId, id } = card;
