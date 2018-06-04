@@ -185,6 +185,18 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  public async getPostHoneypot(postId) {
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.posts(postId).then(result => {
+        resolve(result[5].toNumber());
+      })
+      .catch(err => {
+        reject(err);
+      });
+    }) as Promise<number>;
+  }
+
   public async addPost(id, bounty, cost) {
     const account = await this.getAccount();
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
