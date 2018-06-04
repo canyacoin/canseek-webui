@@ -19,9 +19,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xe71fdb364c5b058bc37571f1b8893c8bf65e0d89';
-const EscrowAddr = '0x38cc895697f0d2573df718d3602597f79d326150';
-const CanHireAddr = '0x5cdf9adec1d89f1f6158c165dfa38edfbf834863';
+const CanYaCoinAddr = '0xc4ea30310bba371dd05335537f7822a5b0c74e15';
+const EscrowAddr = '0x3723045012ef11667767faf28c4add7fc67fb2d1';
+const CanHireAddr = '0x21bdd2a5fceff2cfada2072811eeb38b1d677ab9';
 
 @Injectable()
 export class ContractsService {
@@ -264,7 +264,6 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.posts(postId).then(async post => {
         const status = await this.getPostStatus(postId);
-        console.log(post[8]);
         const postInfo = {'id': post[0].toNumber(),
                         'owner': post[1].toString(),
                         'status': status,
@@ -283,12 +282,18 @@ export class ContractsService {
   }
 
   public async getAllPosts() {
-    const numPosts = await this.getNumPosts();
     const posts = [];
-    for (let i = 1; i <= numPosts; i++) {
-      posts.push(await this.getPost(i));
-    }
-    return posts;
+    return new Promise((resolve, reject) => {
+      this.getNumPosts().then(async numPosts => {
+        for (let i = 1; i <= numPosts; i++) {
+          posts.push(await this.getPost(i));
+        }
+        resolve(posts);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    }) as Promise<object>;
   }
 
   public async getAllCandidates(postId) {
@@ -317,6 +322,7 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.getCandidateId(uniqueCandidateId, postId).then(candidateId => {
+        console.log(candidateId);
         resolve(candidateId.toNumber());
       }).catch( err => {
         reject(err);
