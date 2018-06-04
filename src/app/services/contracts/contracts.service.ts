@@ -331,4 +331,16 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  public async getRefund(uniqueCandidateid, postId) {
+    const account = await this.getAccount();
+    const canHire = await this.CanHire.at(CanHireAddr);
+    return new Promise((resolve, reject) => {
+      canHire.getRefund(uniqueCandidateid, postId, {from: account}).then(refund => {
+        resolve(refund.toNumber());
+      }).catch( err => {
+        reject(err);
+      });
+    }) as Promise<number>;
+  }
+
 }
