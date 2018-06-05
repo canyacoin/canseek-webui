@@ -33,6 +33,7 @@
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
         <span style="color: #33ccff">C$: {{ card.honeyPot }}</span>
       </h5>
+      <p *ngIf="card.recommenders[curUser]">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></p> 
       <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
           {{ card.desc }}
       </p>
