@@ -157,18 +157,19 @@ export class CardService {
       .catch(err => console.error(`get candidate id err: ${err}`))
   }
   
-  closePost(card: Card, candidate: Candidate) {
+  closePost(card: Card, cid: string, candidateId: number) {
     const { id, postId, nextStatus } = card;
-    const { id: cid, candidateId } = candidate;
+    this.docRef = this.dbRef.doc(id);
+    const candidateRef = this.docRef.collection('candidates').doc(cid);
     this.cs.closePost(postId, candidateId)
       .then(result => {
         console.log(`close post succ: ${result}`);
-        this.dbRef.doc(id).update({
+        this.docRef.update({
           status: result ? nextStatus : 'pending',
           nextStatus
         });
-        this.dbRef.doc(id).collection('candidates').doc(cid).update({
-          status: result ? 'chosed' : 'pending',
+        candidateRef.update({
+          status: result ? 'closed' : 'pending',
         })
       })
       .catch(err => console.error(`closepost err: ${err}`))

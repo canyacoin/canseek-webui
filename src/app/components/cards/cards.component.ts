@@ -23,7 +23,8 @@ export class CardsComponent implements OnInit {
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
   cardTmp: any;
-  candidateTmp: any;
+  candidateID: any;
+  candidateCID: any;
 
   results: Card[];
   statusArr = statusArr;
@@ -140,11 +141,11 @@ export class CardsComponent implements OnInit {
     this.type = type;
     this.cardService.getCandidates(card.id).subscribe(candidates => {
       this.candidates = candidates;
-      console.log(`get candidates succ`);
+      console.log(`get candidates succ`, candidates);
       this.modalService.open(content).result.then((result) => {
         if (result === 'closePost') {
           card.nextStatus = 'closed';
-          this.cardService.closePost(card, this.candidate);
+          this.cardService.closePost(card, this.candidateCID, this.candidateID);
         }
         console.log(result);
       }, (reason) => {});
@@ -156,10 +157,11 @@ export class CardsComponent implements OnInit {
     this.cardService.updateCandidateStatus(this.cardTmp, candidate);
   }
   
-  selectCandidate(e) {
+  selectCandidate(e, candidateId) {
     const id = e.target.value;
-    this.candidateTmp = id;
+    this.candidateCID = id;
+    this.candidateID = candidateId;
     e.stopPropagation();
-    console.log(`select id: ${this.candidateTmp}`);
+    console.log(`select id: ${this.candidateCID} ${this.candidateID}`);
   }
 }

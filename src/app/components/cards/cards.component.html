@@ -168,7 +168,7 @@
                   [name]="closePost"
                   [value]="candidate.id" 
                   [disabled]="candidate.status === 'pending' ? true : null"
-                  (click)="selectCandidate($event)"/>
+                  (click)="selectCandidate($event, candidate.candidateId)"/>
                 {{ candidate.name }}
               </div>
               
