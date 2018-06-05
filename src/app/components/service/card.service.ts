@@ -101,39 +101,57 @@ export class CardService {
     }
   }
 
-  addCandidate(card: Card, candidate: Candidate) {
-    const { id, postId, candidates = 0 } = card;
+  addCandidate(card: Card, candidate: Candidate, curUser: string) {
+    const { id, postId, candidates, recommenders } = card;
     const { id: cid } = candidate;
+    this.docRef = this.dbRef.doc(id);
+    let candidateRef;
 
     if (cid) {// retry
-      this.docRef = this.dbRef.doc(id).collection('candidates').doc(cid);
+      candidateRef = this.docRef.collection('candidates').doc(cid);
+
       this.cs.recommend(cid, postId)
-        .then(candidateId => {
-          this.docRef.update({
-            candidateId,
-            status: candidateId ? 'ok' : 'pending'
-          })
+        .then(({ honeyPot, candidateId }) => {
+          if(candidateId) {
+            recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
+
+            this.docRef.update({
+              recommenders,
+              honeyPot
+            })
+
+            candidateRef.update({
+              candidateId,
+              status: candidateId ? 'ok' : 'pending'
+            })
+          }
         })
     } else {
-      this.dbRef.doc(id).collection('candidates').add(candidate)
+      this.docRef.collection('candidates').add(candidate)
         .then(docRef => {
-          this.docRef = docRef;
-          docRef.update({id: docRef.id});
-          // card candidates + 1
-          this.dbRef.doc(id).update({
+          candidateRef = docRef;
+          candidateRef.update({id: docRef.id});
+          // card candidates ++
+          this.docRef.update({
             candidates: candidates + 1,
-          });
+          })
           return this.cs.recommend(docRef.id, postId);
         })
-        .then(({ honeyPot, candidateId}) => {
-          // update honeypot
-          this.dbRef.doc(id).update({
-            honeyPot,
-          });
-          this.docRef.update({
-            candidateId,
-            status: candidateId ? 'ok' : 'pending'
-          })
+        .then(({ honeyPot, candidateId }) => {
+          if (candidateId) {
+            recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
+
+            this.docRef.update({
+              recommenders,
+              honeyPot
+            })
+            
+            candidateRef.update({
+              candidateId,
+              status: candidateId ? 'ok' : 'pending'
+            })
+          }
+          
         })
     }
   }

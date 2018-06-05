@@ -253,7 +253,7 @@ export class ContractsService {
       canHire.recommend(candidateUniqueId, postId, {from: account, ...gas}).then(result => {
         const { candidateId } = result.logs[0].args;
         const honeypot = this.getPostHoneypot(postId);
-        resolve({honeypot: Number(honeypot), candidateId: Number(candidateId)});
+        resolve({honeyPot: Number(honeypot), candidateId: Number(candidateId)});
       }).catch( err => {
         reject(err);
       });
