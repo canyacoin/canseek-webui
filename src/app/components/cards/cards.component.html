@@ -144,57 +144,67 @@
     </button>
   </div>
   <div class="modal-body">
-    <!-- choose -->
-    <div *ngIf="type === 'choose'" class="btn-group btn-group-toggle" ngbRadioGroup name="candidateRadio" [(ngModel)]="candidateId" (change)="changeCan()">
-      <label *ngFor="let candidate of candidates" ngbButtonLabel class="btn-outline-primary btn-sm btn">
-        <input ngbButton type="radio" [value]="candidate"> {{ candidate.name }}
-      </label>
-    </div>
-
-    <!-- list -->
-    <ngb-accordion [closeOthers]="true" activeIds="candidate{{ candidates[0].id }}">
-      <ngb-panel 
-        *ngFor="let candidate of candidates" 
-        id="candidate{{ candidate.id }}"
-        [disabled]="candidate.status === 'pending' ? true : null"
+    <div 
+      ngbRadioGroup
+      name="closePost"
+      >
+      <ngb-accordion 
+        [closeOthers]="true" 
+        activeIds="candidate{{ candidates[0].id }}"
         >
+        <ngb-panel 
+          *ngFor="let candidate of candidates" 
+          id="candidate{{ candidate.id }}"
+          [disabled]="candidate.status === 'pending' ? true : null"
+          >
 
-        <ng-template ngbPanelTitle>
-          <div class="d-flex justify-content-between">
-            {{ candidate.name }}
-            <div>
-                <a 
-                  *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
-                  href="javascript:;" 
-                  class="card-link" 
-                  (click)="updateCandidateStatus(candidate)"
-                  >
-                  Update
-                </a>
-                <a 
-                  *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
-                  href="javascript:;" 
-                  class="card-link" 
-                  (click)="addCandidate(cardTmp, candidate)"
-                  >&nbsp;
-                  retry
-                </a>
+          <ng-template ngbPanelTitle>
+            <div class="d-flex justify-content-between">
+              <div>
+                  <input
+                  *ngIf="type === 'choose'"
+                  type="radio" 
+                  ngbRadio 
+                  [name]="closePost"
+                  [value]="candidate.id" 
+                  [disabled]="candidate.status === 'pending' ? true : null"
+                  (click)="selectCandidate($event)"/>
+                {{ candidate.name }}
               </div>
-          </div>
-
-          
-        </ng-template>
-        <ng-template ngbPanelContent>
-          <!-- 在 modal 里发异步请求会有问题 todo -->
-          <p
-            *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
-            >status: {{ candidate.status }}</p>
-          <p>name: {{ candidate.name }}</p>
-          <p>contact: {{ candidate.contact }}</p>
-          <p *ngIf="candidate.desc">description: {{ candidate.desc }}</p>
-        </ng-template>
-      </ngb-panel>
-    </ngb-accordion>
+              
+              <div>
+                  <a 
+                    *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
+                    href="javascript:;" 
+                    class="card-link" 
+                    (click)="updateCandidateStatus(candidate, $event)"
+                    >
+                    Update
+                  </a>
+                  <a 
+                    *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
+                    href="javascript:;" 
+                    class="card-link" 
+                    (click)="addCandidate(cardTmp, candidate, $event)"
+                    >&nbsp;
+                    retry
+                  </a>
+                </div>
+            </div>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <!-- 在 modal 里发异步请求会有问题 todo -->
+            <p
+              *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
+              >status: {{ candidate.status }}</p>
+            <p>name: {{ candidate.name }}</p>
+            <p>contact: {{ candidate.contact }}</p>
+            <p *ngIf="candidate.desc">description: {{ candidate.desc }}</p>
+          </ng-template>
+        </ngb-panel>
+      </ngb-accordion>
+    </div>
+    
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>

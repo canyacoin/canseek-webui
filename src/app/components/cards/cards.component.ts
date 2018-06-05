@@ -23,6 +23,7 @@ export class CardsComponent implements OnInit {
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
   cardTmp: any;
+  candidateTmp: any;
 
   results: Card[];
   statusArr = statusArr;
@@ -129,7 +130,8 @@ export class CardsComponent implements OnInit {
       }
     }, (reason) => {});
   }
-  addCandidate(card, candidate) {
+  addCandidate(card, candidate, event) {
+    event && event.stopPropagation();
     this.cardService.addCandidate(card, candidate);
   }
 
@@ -148,12 +150,16 @@ export class CardsComponent implements OnInit {
       }, (reason) => {});
     })
   }
-  updateCandidateStatus(candidate) {
+  updateCandidateStatus(candidate, event) {
+    event && event.stopPropagation();
     console.log(`will updateCandidateStatus`, candidate);
     this.cardService.updateCandidateStatus(this.cardTmp, candidate);
   }
-  changeCan() {
-    // this.updateCandidateStatus
-    console.log(this.candidate);
+  
+  selectCandidate(e) {
+    const id = e.target.value;
+    this.candidateTmp = id;
+    e.stopPropagation();
+    console.log(`select id: ${this.candidateTmp}`);
   }
 }
