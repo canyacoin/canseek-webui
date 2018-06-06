@@ -17,12 +17,12 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // Ropsten contract address
 // const CanYaCoinAddr = '0xbd304683142b93567f398c952dbaba41e9f3a214';
 // const EscrowAddr = '0x4a8ad51bf02f9c538a8e9388a5a2fec477006070';
-// const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
+// const CanHireAddr = '0x8051a782cdcebdee1eedba9db1d08d438ae14724';
 
 // Ganache contract address
 const CanYaCoinAddr = '0xff40b970ff8d01d8609a135bd662608ca0d7fe5f';
 const EscrowAddr = '0xdcae66e0452eb9528b9341063c98514e1ceffb13';
-const CanHireAddr = '0x7d3ffc3f84e5c7b6555a3e1440721663cebaddd2';
+const CanHireAddr = '0x7c680e1e299a13002cdd92c50d7290045faaf829';
 
 @Injectable()
 export class ContractsService {
