@@ -99,7 +99,7 @@ contract CanHire is Ownable {
 
     function addPost(string uniqueId, uint _bounty, uint _cost) public is_active {
         require(_bounty > 0);
-        require(getPostId[uniqueId] != 0);
+        require(getPostId[uniqueId] == 0);
         require(canYaCoin.approve(address(escrow), _bounty));
         require(escrow.transferToEscrow(msg.sender, _bounty));
         Post memory newPost;
@@ -160,7 +160,7 @@ contract CanHire is Ownable {
         post_exist(postId)
         post_is_open(postId)
     {
-        require(getCandidateId(uniqueCandidateId, postId) != 0);
+        require(getCandidateId(uniqueCandidateId, postId) == 0);
         require(canYaCoin.approve(address(escrow), posts[postId].cost));
         require(escrow.transferToEscrow(msg.sender, posts[postId].cost));
         uint candidateId = posts[postId].recommenders.length;

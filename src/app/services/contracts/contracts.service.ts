@@ -20,9 +20,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xe49ae6a977763232052c3476aeb6668ab260de7a';
-const EscrowAddr = '0x8b338636593e110ef182087deef00a908d7da0ee';
-const CanHireAddr = '0x9e0c42d52281893504c3cc7102f7666f2c13d8b2';
+const CanYaCoinAddr = '0xb9008c0b59292f431afd83e0ea166a8ea08c4543';
+const EscrowAddr = '0xde3c2b823fc30eeed56c731c6c8232b85e077dbf';
+const CanHireAddr = '0xe4afdbcbb841353ad83f6f716633982481e48861';
 
 @Injectable()
 export class ContractsService {
@@ -221,7 +221,7 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.cancelPost(postId, { from: account, ...gas }).then(result => {
-        resolve(result.toString());
+        resolve(result.logs[0].args.status.toNumber());
       })
         .catch(err => {
           reject(err);
@@ -248,12 +248,12 @@ export class ContractsService {
     const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
     const cost = await this.getPostCost(postId);
+    const honeypot = await this.getPostHoneypot(postId);
     await canYaCoin.approve(escrow.address, cost, {from: account, ...gas});
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, ...gas}).then(result => {
         const { candidateId } = result.logs[0].args;
-        const honeypot = this.getPostHoneypot(postId);
-        resolve({honeyPot: Number(honeypot), candidateId: Number(candidateId)});
+        resolve({honeypot: Number(honeypot), candidateId: Number(candidateId)});
       }).catch( err => {
         reject(err);
       });
@@ -283,7 +283,7 @@ export class ContractsService {
                         'status': status,
                         'bounty': post[3].toNumber(),
                         'cost': post[4].toNumber(),
-                        'honeyPot': post[5].toNumber(),
+                        'honeypot': post[5].toNumber(),
                         'candidateSelected': post[6].toNumber(),
                         'recommenders': recommenders
                       };

@@ -13,7 +13,7 @@ export class Card {
     bounty: number = null;
     cost: number = null;
     desc: string = '';
-    honeyPot: number = 0;
+    honeypot: number = 0;
     candidates: number = 0; // 候选人数
     recommenders: object = {}; // 推荐人
 }
