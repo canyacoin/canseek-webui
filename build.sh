@@ -1,1 +1,1 @@
-rm -rf build && truffle compile && truffle migrate --reset
+rm -rf build && truffle migrate --reset --compile

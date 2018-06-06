@@ -18,11 +18,13 @@ export class CardsComponent implements OnInit {
   type: string = 'new';// new edit read
 
   cards: Card[];
-  honeyPotByPostId: Object = {};
+  // honeyPotByPostId: Object = {};
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
   cardTmp: any;
+  candidateID: any;
+  candidateCID: any;
 
   results: Card[];
   statusArr = statusArr;
@@ -93,11 +95,10 @@ export class CardsComponent implements OnInit {
       if(result === 'onOk') {
         const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser };
         
-        console.log(`${type} curCard: `, curCard);
         if (type === 'edit') {
           this.cardService.updateCard(curCard);
         } else if (type === 'new') {
-          this.cardService.addCard(curCard);
+          this.cardService.addCard({ ...curCard, honeyPot: curCard.bounty });
         }
         this.searchStatus();
       }
@@ -126,12 +127,13 @@ export class CardsComponent implements OnInit {
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
-        this.cardService.addCandidate(card, this.candidateForm.value);
+        this.cardService.addCandidate(card, this.candidateForm.value, this.curUser);
       }
     }, (reason) => {});
   }
-  addCandidate(card, candidate) {
-    this.cardService.addCandidate(card, candidate);
+  addCandidate(card, candidate, event) {
+    event && event.stopPropagation();
+    this.cardService.addCandidate(card, candidate, this.curUser);
   }
 
   openCandidates(content, card, type) {
@@ -139,22 +141,27 @@ export class CardsComponent implements OnInit {
     this.type = type;
     this.cardService.getCandidates(card.id).subscribe(candidates => {
       this.candidates = candidates;
-      console.log(`get candidates succ`);
+      console.log(`get candidates succ`, candidates);
       this.modalService.open(content).result.then((result) => {
         if (result === 'closePost') {
           card.nextStatus = 'closed';
-          this.cardService.closePost(card, this.candidate);
+          this.cardService.closePost(card, this.candidateCID, this.candidateID);
         }
         console.log(result);
       }, (reason) => {});
     })
   }
-  updateCandidateStatus(candidate) {
+  updateCandidateStatus(candidate, event) {
+    event && event.stopPropagation();
     console.log(`will updateCandidateStatus`, candidate);
     this.cardService.updateCandidateStatus(this.cardTmp, candidate);
   }
-  changeCan() {
-    // this.updateCandidateStatus
-    console.log(this.candidate);
+  
+  selectCandidate(e, candidateId) {
+    const id = e.target.value;
+    this.candidateCID = id;
+    this.candidateID = candidateId;
+    e.stopPropagation();
+    console.log(`select id: ${this.candidateCID} ${this.candidateID}`);
   }
 }

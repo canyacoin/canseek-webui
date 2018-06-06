@@ -20,9 +20,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0x8051a782cdcebdee1eedba9db1d08d438ae14724';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xff40b970ff8d01d8609a135bd662608ca0d7fe5f';
-const EscrowAddr = '0xdcae66e0452eb9528b9341063c98514e1ceffb13';
-const CanHireAddr = '0x7c680e1e299a13002cdd92c50d7290045faaf829';
+const CanYaCoinAddr = '0xe49ae6a977763232052c3476aeb6668ab260de7a';
+const EscrowAddr = '0x8b338636593e110ef182087deef00a908d7da0ee';
+const CanHireAddr = '0x9e0c42d52281893504c3cc7102f7666f2c13d8b2';
 
 @Injectable()
 export class ContractsService {
@@ -253,7 +253,7 @@ export class ContractsService {
       canHire.recommend(candidateUniqueId, postId, {from: account, ...gas}).then(result => {
         const { candidateId } = result.logs[0].args;
         const honeypot = this.getPostHoneypot(postId);
-        resolve({honeypot: Number(honeypot), candidateId: Number(candidateId)});
+        resolve({honeyPot: Number(honeypot), candidateId: Number(candidateId)});
       }).catch( err => {
         reject(err);
       });

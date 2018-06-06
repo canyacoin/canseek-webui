@@ -101,39 +101,57 @@ export class CardService {
     }
   }
 
-  addCandidate(card: Card, candidate: Candidate) {
-    const { id, postId, candidates = 0 } = card;
+  addCandidate(card: Card, candidate: Candidate, curUser: string) {
+    const { id, postId, candidates, recommenders } = card;
     const { id: cid } = candidate;
+    this.docRef = this.dbRef.doc(id);
+    let candidateRef;
 
     if (cid) {// retry
-      this.docRef = this.dbRef.doc(id).collection('candidates').doc(cid);
+      candidateRef = this.docRef.collection('candidates').doc(cid);
+
       this.cs.recommend(cid, postId)
-        .then(candidateId => {
-          // card candidates + 1
-          this.dbRef.doc(id).update({
-            candidates: candidateId ? candidates + 1 : candidates
-          });
-          this.docRef.update({
-            candidateId,
-            status: candidateId ? 'ok' : 'pending'
-          })
+        .then(({ honeyPot, candidateId }) => {
+          if(candidateId) {
+            recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
+
+            this.docRef.update({
+              recommenders,
+              honeyPot
+            })
+
+            candidateRef.update({
+              candidateId,
+              status: candidateId ? 'ok' : 'pending'
+            })
+          }
         })
     } else {
-      this.dbRef.doc(id).collection('candidates').add(candidate)
+      this.docRef.collection('candidates').add(candidate)
         .then(docRef => {
-          this.docRef = docRef;
-          docRef.update({id: docRef.id});
+          candidateRef = docRef;
+          candidateRef.update({id: docRef.id});
+          // card candidates ++
+          this.docRef.update({
+            candidates: candidates + 1,
+          })
           return this.cs.recommend(docRef.id, postId);
         })
-        .then(candidateId => {
-          // card candidates + 1
-          this.dbRef.doc(id).update({
-            candidates: candidateId ? candidates + 1 : candidates
-          });
-          this.docRef.update({
-            candidateId,
-            status: candidateId ? 'ok' : 'pending'
-          })
+        .then(({ honeyPot, candidateId }) => {
+          if (candidateId) {
+            recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
+
+            this.docRef.update({
+              recommenders,
+              honeyPot
+            })
+            
+            candidateRef.update({
+              candidateId,
+              status: candidateId ? 'ok' : 'pending'
+            })
+          }
+          
         })
     }
   }
@@ -157,18 +175,19 @@ export class CardService {
       .catch(err => console.error(`get candidate id err: ${err}`))
   }
   
-  closePost(card: Card, candidate: Candidate) {
+  closePost(card: Card, cid: string, candidateId: number) {
     const { id, postId, nextStatus } = card;
-    const { id: cid, candidateId } = candidate;
+    this.docRef = this.dbRef.doc(id);
+    const candidateRef = this.docRef.collection('candidates').doc(cid);
     this.cs.closePost(postId, candidateId)
       .then(result => {
         console.log(`close post succ: ${result}`);
-        this.dbRef.doc(id).update({
+        this.docRef.update({
           status: result ? nextStatus : 'pending',
           nextStatus
         });
-        this.dbRef.doc(id).collection('candidates').doc(cid).update({
-          status: result ? 'chosed' : 'pending',
+        candidateRef.update({
+          status: result ? 'closed' : 'pending',
         })
       })
       .catch(err => console.error(`closepost err: ${err}`))
