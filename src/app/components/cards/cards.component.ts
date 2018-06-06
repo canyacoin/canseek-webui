@@ -5,6 +5,7 @@ import { CardService } from '../service/card.service';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
+import { Observable, from } from 'rxjs';
 
 @Component({
   selector: 'app-cards',
@@ -14,11 +15,10 @@ import { Candidate } from '../model/candidate';
 export class CardsComponent implements OnInit {
   loading: boolean = true;
   curUser: string; // cur user address
-  balance: number;
+  balance: Observable<number>;
   type: string = 'new';// new edit read
 
   cards: Card[];
-  // honeyPotByPostId: Object = {};
   card: Card = new Card();
   candidate: Candidate = new Candidate();
   candidates: Candidate[];
@@ -43,7 +43,6 @@ export class CardsComponent implements OnInit {
 
   ngOnInit() {
     this.getAccount();
-    // this.getAllPosts();
     this.getCards();
     this.getBalance();
   }
@@ -51,24 +50,10 @@ export class CardsComponent implements OnInit {
     this.curUser = await this.cs.getAccount();
     console.log('get account: ', this.curUser);
   }
-  async getBalance() {
-    this.balance = await this.cs.getCANBalance();
-    console.log(`balance: ${this.balance}`);
+  getBalance() {
+    this.balance = from(this.cs.getCANBalance());
   }
-  // getAllPosts() {
-  //   this.cs.getAllPosts()
-  //     .then(results => {
-  //       console.log(`all posts: `, results);
-  //       const tmp = results.map(item => {
-  //         const { id, honeyPot } = item;
-
-  //         this.honeyPotByPostId[id] = honeyPot;
-
-  //         return item;
-  //       })
-  //       console.log('this.honeyPotByPostId: ', this.honeyPotByPostId)
-  //     });
-  // }
+  
   getCards(): void {
     this.cardService.getCards()
       .subscribe(cards => {
@@ -98,7 +83,7 @@ export class CardsComponent implements OnInit {
         if (type === 'edit') {
           this.cardService.updateCard(curCard);
         } else if (type === 'new') {
-          this.cardService.addCard({ ...curCard, honeyPot: curCard.bounty });
+          this.cardService.addCard({ ...curCard, honeypot: curCard.bounty });
         }
         this.searchStatus();
       }
@@ -146,6 +131,8 @@ export class CardsComponent implements OnInit {
         if (result === 'closePost') {
           card.nextStatus = 'closed';
           this.cardService.closePost(card, this.candidateCID, this.candidateID);
+        } else if (result === 'getRefund') {
+          this.cardService.getRefund(card, this.curUser, this.candidateCID);
         }
         console.log(result);
       }, (reason) => {});

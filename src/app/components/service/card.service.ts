@@ -6,6 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of } from 'rxjs';
 import { CONSTANTS } from '@firebase/util';
 import { identifierModuleUrl, ResourceLoader } from '@angular/compiler';
+import { debug } from 'util';
 
 @Injectable()
 export class CardService {
@@ -109,15 +110,14 @@ export class CardService {
 
     if (cid) {// retry
       candidateRef = this.docRef.collection('candidates').doc(cid);
-
       this.cs.recommend(cid, postId)
-        .then(({ honeyPot, candidateId }) => {
+        .then(({ honeypot, candidateId }) => {
           if(candidateId) {
             recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
 
             this.docRef.update({
               recommenders,
-              honeyPot
+              honeypot
             })
 
             candidateRef.update({
@@ -137,13 +137,13 @@ export class CardService {
           })
           return this.cs.recommend(docRef.id, postId);
         })
-        .then(({ honeyPot, candidateId }) => {
+        .then(({ honeypot, candidateId }) => {
           if (candidateId) {
             recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
 
             this.docRef.update({
               recommenders,
-              honeyPot
+              honeypot
             })
             
             candidateRef.update({
@@ -189,6 +189,27 @@ export class CardService {
         candidateRef.update({
           status: result ? 'closed' : 'pending',
         })
+      })
+      .catch(err => console.error(`closepost err: ${err}`))
+  }
+
+  getRefund(card: Card, curUser: string, cid: string) {
+    const { id, postId, recommenders, candidates } = card;
+    this.docRef = this.dbRef.doc(id);
+    const candidateRef = this.docRef.collection('candidates').doc(cid);
+    
+    this.cs.getRefund(cid, postId)
+      .then(result => {
+        if (result) {
+          recommenders[curUser] -= 1;
+          this.docRef.update({
+            recommenders,
+            candidates: candidates - 1
+          });
+          candidateRef.update({
+            status: 'closed'
+          })
+        }
       })
       .catch(err => console.error(`closepost err: ${err}`))
   }

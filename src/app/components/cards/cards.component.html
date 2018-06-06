@@ -31,7 +31,7 @@
     <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
     <div class="card-body">
       <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <span style="color: #33ccff">C$: {{ card.honeyPot }}</span>
+        <span style="color: #33ccff">C$: {{ card.honeypot }}</span>
       </h5>
       <p *ngIf="card.recommenders[curUser]">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></p> 
       <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
@@ -45,7 +45,13 @@
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCard(cardmodal, card, 'new')">retry add</a>
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">retry close</a>
         <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCancelCard(cancelcardmodal, card)">retry cancel</a>
-        <a *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')" style="align-self: center;">{{ card.candidates }}+ candidates </a>
+        <a 
+          href="javascript:;" class="card-link" style="align-self: center;"
+          *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" 
+          (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser]) ? 'choose' : 'list')" 
+          >
+          {{ card.candidates }}+ candidates 
+        </a>
       </div>
     </div>
   </div>
@@ -83,12 +89,12 @@
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input min="100" max="{{ balance }}" required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
-        <div class="invalid-feedback">Please ensure your bounty bigger than 100 and less than {{ balance }}</div>
+        <input min="500" max="{{ balance | async }}" required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
+        <div class="invalid-feedback">Please ensure your bounty bigger than 500 and less than {{ balance | async }}</div>
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>
-        <input required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="cost" placeholder="cost">
+        <input required min="1" [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="cost" placeholder="cost">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
@@ -112,7 +118,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="tips">Tips: your balance: {{ balance }}, this operation will take {{ cardTmp.cost }}</p>
+    <p class="tips">Tips: your balance: {{ balance | async }}, this operation will take {{ cardTmp.cost }}</p>
     <form [formGroup]="candidateForm" [ngClass]="{'was-validated': candidateForm && (candidateForm.touched || candidateForm.dirty) && !candidateForm.valid }">
       <div class="form-group">
         <label for="name">Candidate's Name</label>
@@ -209,7 +215,16 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
-    <button *ngIf="type === 'choose'" type="button" class="btn-primary" (click)="c('closePost')">ok</button>
+    <button 
+      type="button" class="btn-primary"
+      *ngIf="type === 'choose' && (cardTmp.status === 'pending' || cardTmp.status === 'open')"  
+      (click)="c('closePost')"
+      >ok</button>
+    <button 
+      type="button" class="btn-primary"
+      *ngIf="type === 'choose' && cardTmp.recommenders[curUser] && cardTmp.recommenders[curUser] > 0 && cardTmp.status === 'cancelled'"  
+      (click)="c('getRefund')"
+      >getRefund</button>
   </div>
 </ng-template>
   

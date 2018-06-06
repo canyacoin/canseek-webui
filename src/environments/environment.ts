@@ -5,20 +5,12 @@
 
 export const environment = {
   production: false,
-  // firebase: {
-  //   apiKey: 'AIzaSyD-9WO0u-gr4L7jLNE7KSC2BaQjIBSinmk',
-  //   authDomain: 'canhire-7e91a.firebaseapp.com',
-  //   databaseURL: 'https://canhire-7e91a.firebaseio.com',
-  //   projectId: 'canhire-7e91a',
-  //   storageBucket: 'canhire-7e91a.appspot.com',
-  //   messagingSenderId: '246664280996'
-  // },
   firebase: {
-    apiKey: "AIzaSyB1lKD9kPhIhBH1ii2DWEPujQ1hU4NiF0A",
-    authDomain: "test-aa5fd.firebaseapp.com",
-    databaseURL: "https://test-aa5fd.firebaseio.com",
-    projectId: "test-aa5fd",
-    storageBucket: "test-aa5fd.appspot.com",
-    messagingSenderId: "699447207853"
-  }
+    apiKey: 'AIzaSyD-9WO0u-gr4L7jLNE7KSC2BaQjIBSinmk',
+    authDomain: 'canhire-7e91a.firebaseapp.com',
+    databaseURL: 'https://canhire-7e91a.firebaseio.com',
+    projectId: 'canhire-7e91a',
+    storageBucket: 'canhire-7e91a.appspot.com',
+    messagingSenderId: '246664280996'
+  },
 };
