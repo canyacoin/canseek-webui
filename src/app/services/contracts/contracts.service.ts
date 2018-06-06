@@ -17,7 +17,7 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // Ropsten contract address
 // const CanYaCoinAddr = '0xbd304683142b93567f398c952dbaba41e9f3a214';
 // const EscrowAddr = '0x4a8ad51bf02f9c538a8e9388a5a2fec477006070';
-// const CanHireAddr = '0xe36ec727585e2b33430b176f068b881f35f4b652';
+// const CanHireAddr = '0x8051a782cdcebdee1eedba9db1d08d438ae14724';
 
 // Ganache contract address
 const CanYaCoinAddr = '0xb9008c0b59292f431afd83e0ea166a8ea08c4543';
