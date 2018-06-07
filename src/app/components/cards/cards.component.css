@@ -152,5 +152,8 @@
 }
 .tips {
     font-size: 12px;
-    color: red;
+    color: var(--red);
+}
+.tips.ok {
+    color: var(--success);
 }

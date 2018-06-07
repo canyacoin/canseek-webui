@@ -16,7 +16,7 @@ import * as moment from 'moment';
 export class CardsComponent implements OnInit {
   loading: boolean = true;
   curUser: string; // cur user address
-  balance: Observable<number>;
+  balance: number;
   type: string = 'new';// new edit read
 
   cards: Card[];
@@ -53,7 +53,9 @@ export class CardsComponent implements OnInit {
     console.log('get account: ', this.curUser);
   }
   getBalance() {
-    this.balance = from(this.cs.getCANBalance());
+    this.cs.getCANBalance()
+      .then(b => this.balance = b);
+    console.log(this.balance);
   }
   
   getCards(): void {

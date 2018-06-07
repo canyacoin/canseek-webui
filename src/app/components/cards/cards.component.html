@@ -110,8 +110,8 @@
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input min="500" max="{{ balance | async }}" required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
-        <div class="invalid-feedback">Please ensure your bounty bigger than 500 and less than {{ balance | async }}</div>
+        <input min="500" max="{{ balance }}" required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
+        <div class="invalid-feedback">Please ensure your bounty bigger than 500 and less than {{ balance }}</div>
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>
@@ -139,7 +139,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <p class="tips">Tips: your balance: {{ balance | async }}, this operation will take {{ cardTmp.cost }}</p>
+    <p class="tips {{ balance > cardTmp.cost ? 'ok' : '' }}">Tips: your balance: {{ balance }}, this operation will take {{ cardTmp.cost }}</p>
     <form [formGroup]="candidateForm" [ngClass]="{'was-validated': candidateForm && (candidateForm.touched || candidateForm.dirty) && !candidateForm.valid }">
       <div class="form-group">
         <label for="name">Candidate's Name</label>
