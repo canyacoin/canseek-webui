@@ -5,8 +5,19 @@
     background-color: var(--canyaColor);
     border-color: var(--canyaColor);
 }
-
-
+.card-grid {
+    --red: #ff4954;
+    --gray: #d1d1d1;
+    --success: #30d7a9;
+    --canyaColor: #33ccff;
+}
+.card-grid .btn {
+    border-color: var(--canyaColor);
+    color: var(--canyaColor);
+}
+.card-grid .btn:hover {
+    color: var(--light);
+}
 .filter {
     margin: 30px 0;
 }
@@ -24,13 +35,15 @@
 
 .card::before {
     display: inline-block;
-    position: relative;
-    top: 0px;
-    left: -1px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
     color: var(--light);
-    padding: 2px 6px;
-    max-width: 84px;
+    padding: 2px 12px;
     text-align: center;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-size: 90%;
 }
 .open::before {
     content: 'open';
@@ -49,24 +62,73 @@
     content: 'cancelled';
     background-color: var(--gray);
 }
-.card-img-top {
-    height: 120px;
-    padding: 20px;
-    padding-bottom: 0;
-}
-.fa-trash {
+.honeypot {
     position: absolute;
-    z-index: 0;
-    right: 0;
-    padding: 12px;
+    top: 10px;
+    right: 10px;
+    text-align: right;
+    color: #b5b9bf;
+    font-size: 90%;
+    line-height: 1.2;
 }
+.title {
+    font-weight: 600;
+    font-size: 126%;
+    line-height: 1.5;
+    letter-spacing: .5px;
+    border-bottom: #f1f2f3;
+    margin-bottom: 0;
+}
+.card-img-top {
+    width: auto;
+    height: 120px;
+    margin: 60px 20px 0;
+    margin-bottom: 0;
+    background-color: #f8f8f8;
+}
+.card-content {
+    margin: 1em auto;
+    padding-top: 1em;
+    border-top: 1px solid rgba(83, 83, 83, 0.07);
+    font-size: 15px;
+}
+.card-content div {
+    margin: 0;
+    padding: 0;
+}
+
+.clamp3,
 .clamp4 {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     word-break: break-all;
+    margin-bottom: 1em;
+}
+.clamp3 {
+    -webkit-line-clamp: 3;
+    height: 5.7em;
+}
+.clamp4 {
     -webkit-line-clamp: 4;
-    height: 118px;
+    height: 7.6em;
+}
+.cost {
+    font-size: 90%;
+    color: #b5b9bf;
+    margin-left: 36px;
+    line-height: 32px;
+    position: relative;
+    height: 32px;
+    cursor: default;
+}
+.cost::before {
+    content: url('../../../assets/img/Canya-coin.svg');
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: -42px;
+    bottom: 24px;
 }
 /* var(--breakpoint-lg) */
 @media (max-width: 992px) {
@@ -76,7 +138,44 @@
         grid-template-columns: repeat(2, 45%);
     }
 }
+@media (max-width: 576px) {
+    .card-grid.card-grid {
+        display: block;
+        /* display: grid;
+        grid-gap: 2em 5%;
+        grid-template-columns: repeat(2, 45%); */
+    }
+}
 .tips {
     font-size: 12px;
-    color: red;
+    color: var(--red);
+}
+.tips.ok {
+    color: var(--success);
+}
+@font-face {
+    font-family: 'iconfont';  /* project id 698928 */
+    src: url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.eot');
+    src: url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.woff') format('woff'),
+    url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.svg#iconfont') format('svg');
+  }
+.op .iconf {
+    font-family: 'iconfont';
+    font-size: 28px;
+    font-style: normal;
+    margin: 0 2px;
+}
+.op .card-link {
+    text-transform: uppercase;
+}
+.if-delete {
+    color: var(--red);
+}
+.op .btn {
+    line-height: 1.8;
+}
+.selected {
+    color: var(--success);
 }

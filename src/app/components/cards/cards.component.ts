@@ -6,6 +6,7 @@ import { ContractsService } from '../../services/contracts/contracts.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
 import { Observable, from } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-cards',
@@ -15,7 +16,7 @@ import { Observable, from } from 'rxjs';
 export class CardsComponent implements OnInit {
   loading: boolean = true;
   curUser: string; // cur user address
-  balance: Observable<number>;
+  balance: number;
   type: string = 'new';// new edit read
 
   cards: Card[];
@@ -34,6 +35,7 @@ export class CardsComponent implements OnInit {
   checkboxGroupForm: FormGroup;
   candidateForm: FormGroup;
   cardForm: FormGroup;
+  moment = moment;
   
   constructor(private cardService: CardService,
               private cs: ContractsService,
@@ -51,7 +53,9 @@ export class CardsComponent implements OnInit {
     console.log('get account: ', this.curUser);
   }
   getBalance() {
-    this.balance = from(this.cs.getCANBalance());
+    this.cs.getCANBalance()
+      .then(b => this.balance = b);
+    console.log(this.balance);
   }
   
   getCards(): void {
@@ -65,20 +69,24 @@ export class CardsComponent implements OnInit {
   
   searchStatus() {
     const { cards, statusIndex} = this;
-    const next = cards.filter(item => item.status === statusArr[statusIndex]);
+    const next = cards
+      .filter(item => item.status === statusArr[statusIndex])
+      .sort((a, b) => b.time - a.time);
     this.results = next;
     console.log('filter by status: ', this.statusArr[statusIndex])
   }
   
   // new or edit card
   openCard(content, card, type) {
+    this.getBalance();
     this.type = type;
     const initCard = (type === 'new' && JSON.stringify(card) === '{}') ? this.card : card;
     this.cardForm = this.formBuilder.group(initCard);
 
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
-        const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser };
+        const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser, time: Date.now() };
+        console.log('create card: ', curCard);
         
         if (type === 'edit') {
           this.cardService.updateCard(curCard);
@@ -108,11 +116,14 @@ export class CardsComponent implements OnInit {
   }
 
   openCandidate(content, card) {
+    this.getBalance();
     this.cardTmp = card;
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
+      const curCandidate = { ...this.candidateForm.value, time: Date.now() }
+      console.log(`candidate: `, curCandidate);
       if(result === 'onOk') {
-        this.cardService.addCandidate(card, this.candidateForm.value, this.curUser);
+        this.cardService.addCandidate(card, curCandidate, this.curUser);
       }
     }, (reason) => {});
   }
@@ -125,7 +136,8 @@ export class CardsComponent implements OnInit {
     this.cardTmp = card;
     this.type = type;
     this.cardService.getCandidates(card.id).subscribe(candidates => {
-      this.candidates = candidates;
+      this.candidates = candidates
+        .sort((a, b) => a.time - b.time);
       console.log(`get candidates succ`, candidates);
       this.modalService.open(content).result.then((result) => {
         if (result === 'closePost') {
@@ -150,5 +162,16 @@ export class CardsComponent implements OnInit {
     this.candidateID = candidateId;
     e.stopPropagation();
     console.log(`select id: ${this.candidateCID} ${this.candidateID}`);
+  }
+
+  checkEmail() {
+    const { email, company } = this.cardForm.value;
+    const domain = email.match(/@(\S*)\./) ? email.match(/@(\S*)\./)[1] : '';
+    const errObj = domain === company ? null : { 'nomatch': true };
+    this.cardForm.controls['email'].setErrors(errObj);
+  }
+  buyCan() {
+    this.cs.buyCAN()
+      .then(delta => this.balance += delta)
   }
 }

@@ -16,6 +16,7 @@ export class Card {
     honeypot: number = 0;
     candidates: number = 0; // 候选人数
     recommenders: object = {}; // 推荐人
+    time: number = 0;
 }
 
 export const statusArr = ['pending', 'open', 'closed', 'cancelled'];

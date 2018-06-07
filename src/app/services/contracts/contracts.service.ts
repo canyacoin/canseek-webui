@@ -58,14 +58,14 @@ export class ContractsService {
       this._account = await new Promise((resolve, reject) => {
         this._web3.eth.getAccounts((err, accs) => {
           if (err != null) {
-            alert('There was an error fetching your accounts.');
+            // alert('There was an error fetching your accounts.');
             return;
           }
 
           if (accs.length === 0) {
-            alert(
-              'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
-            );
+            // alert(
+            //   'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
+            // );
             return;
           }
           resolve(accs[0]);
@@ -103,14 +103,14 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async buyCAN(amountInEther) {
+  public async buyCAN(amountInEther = '1') {
     const account = await this.getAccount();
     const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
 
     return new Promise((resolve, reject) => {
       canYaCoin.buy({ from: account, value: amountInWei, ...gas }).then(result => {
-        resolve(result);
+        resolve(result.logs[0].args.value.toNumber());
       })
         .catch(err => {
           reject(err);
