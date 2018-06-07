@@ -31,24 +31,26 @@
 </div>
 
 <!-- list -->
-<section *ngIf="!loading && (results && results.length > 0)" class="card-grid py-30">
+<section *ngIf="!loading && (results && results.length > 0)" class="card-grid my-60">
   <div *ngFor="let card of results" class="card {{ card.status }}">
-    <img onerror="this.src='https://canya.io/images/CanYa_logo.png'" class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
-    <div *ngIf="card.status !== 'cancelled'" class="honeypot">
-      {{ card.honeypot }} CAN <br>
-      Contributed
-    </div>
-    <div *ngIf="card.status === 'cancelled'" class="honeypot">
-      {{ card.honeypot }} CAN <br>
-      will be refunded
-    </div>
-    
-    <div class="card-body">
-      <h5 class="title">{{ card.title }} </h5>
+    <div class="card-head">
+      <img onerror="this.src='https://canya.io/images/CanYa_logo.png'" class="card-img-top mt-40 p-20" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
+      <div *ngIf="card.status !== 'cancelled'" class="honeypot">
+        {{ card.honeypot }} CAN <br>
+        Contributed
+      </div>
+      <div *ngIf="card.status === 'cancelled'" class="honeypot">
+        {{ card.honeypot }} CAN <br>
+        will be refunded
+      </div>
+      <h5 class="title mt-10 mb-0">{{ card.title }} </h5>
       <div class="d-flex justify-content-between">
         <small>@{{ card.company }}</small>
         <small>{{ moment(card.time).fromNow() }}</small>
       </div>
+    </div>
+    
+    <div class="card-body">
       <div class="card-content">
         <div class="clamp{{ card.recommenders[curUser] && card.status !== 'cancelled' ? 3 : 4 }}" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
             {{ card.desc }}
