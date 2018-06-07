@@ -19,3 +19,9 @@ truffle migrate
 npm install --save tn-truffle-test-utils
 truffle test
 ```
+
+### To deploy on Firebase
+```
+ng build --prod --aot
+firebase deploy --only hosting
+```
