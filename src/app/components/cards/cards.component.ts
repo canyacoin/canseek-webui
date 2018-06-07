@@ -136,7 +136,8 @@ export class CardsComponent implements OnInit {
     this.cardTmp = card;
     this.type = type;
     this.cardService.getCandidates(card.id).subscribe(candidates => {
-      this.candidates = candidates;
+      this.candidates = candidates
+        .sort((a, b) => a.time - b.time);
       console.log(`get candidates succ`, candidates);
       this.modalService.open(content).result.then((result) => {
         if (result === 'closePost') {

@@ -4,6 +4,6 @@ export class Candidate {
     name: string = '';
     contact: string = '';
     desc: string = '';
-    status: string = 'pending'; // pending ok closed
+    status: string = 'pending'; // pending ok closed selected
     time: number = 0;
 }

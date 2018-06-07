@@ -44,31 +44,62 @@
         <small>{{ moment(card.time).fromNow() }}</small>
       </div>
       <div class="card-content">
-        <div class="clamp{{ card.recommenders[curUser] ? 3 : 4 }}" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
+        <div class="clamp{{ card.recommenders[curUser] && card.status !== 'cancelled' ? 3 : 4 }}" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
             {{ card.desc }}
         </div>
-        <div *ngIf="card.recommenders[curUser]">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></div>
+        <div *ngIf="card.recommenders[curUser] && card.status === 'open'">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></div>
       </div>
       
-      <div class="d-flex justify-content-between">
+      <div class="d-flex justify-content-between op">
         <div class="cost">{{ card.cost }} CAN</div>
-        <div>
-          <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-outline-primary btn-sm" (click)="openCandidate(candidatemodal, card)">refer talent</a>
+        <div style="height: 32px; line-height: 32px;" class="d-flex">
+          <!-- candidates -->
+          <a 
+            title="candidates"
+            href="javascript:;"
+            *ngIf="card.status !== 'pending' && card.status !== 'cancelled' && card.candidates && card.candidates > 0" 
+            (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser] && card.status === 'cancelled') ? 'choose' : 'list')" 
+            >
+            {{ card.candidates }}<i class="iconf if-group">&#xe613;</i>
+          </a>
 
+          <a 
+            title="get refund"
+            *ngIf="card.status === 'cancelled' && card.recommenders[curUser]" href="javascript:;" class="btn btn-outline-primary btn-sm" 
+            (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser] && card.status === 'cancelled') ? 'choose' : 'list')" 
+          >get refund</a>
+          
 
-            <a *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="btn-sm btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
-            <a *ngIf="card.status === 'pending'" href="javascript:;" class="btn-sm btn-primary" (click)="updateCardStatus(card)">Update</a>
+          <!-- refer -->
+          <a 
+            title="refer talent"
+            *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-outline-primary btn-sm" (click)="openCandidate(candidatemodal, card)">refer</a>
+          <!-- update -->
+          <a 
+            title="update post status"
+            *ngIf="card.status === 'pending'" href="javascript:;" class="iconf if-refresh" (click)="updateCardStatus(card)">&#xe6a4;</a>
+          <!-- edit -->
+          <a 
+            title="edit post"
+            *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="iconf if-edit" (click)="openCard(cardmodal, card, 'edit')">&#xe938;</a>
+          <!-- delete -->
+          <a 
+            title="cancel post"
+            *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="iconf if-delete" (click)="openCancelCard(cancelcardmodal, card)">&#xe603;</a>
             <!-- retry -->
-            <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCard(cardmodal, card, 'new')">retry add</a>
-            <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">retry close</a>
-            <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCancelCard(cancelcardmodal, card)">retry cancel</a>
+            <!-- readd -->
             <a 
-              href="javascript:;" class="card-link" style="align-self: center;"
-              *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" 
-              (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser]) ? 'choose' : 'list')" 
-              >
-              {{ card.candidates }}+ candidates 
-            </a>
+              title="redo adding post"
+              *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" (click)="openCard(cardmodal, card, 'new')">Redo</a>
+            <!-- reclose -->
+            <a 
+              title="redo closing post"
+              *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">Redo</a>
+            <!-- recancel -->
+            <a 
+              title="redo cancelling post"
+              *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" (click)="openCancelCard(cancelcardmodal, card)">Redo</a>
+          
         </div>
       </div>
     </div>
@@ -166,7 +197,7 @@
 
 <ng-template #candidatesmodal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">{{ type }} candidates</h4>
+    <h4 class="modal-title">{{ type === 'choose' ? 'Refer A Talent' : 'All Talents Referred' }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -188,7 +219,7 @@
 
           <ng-template ngbPanelTitle>
             <div class="d-flex justify-content-between">
-              <div>
+              <div [class.selected]="candidate.status === 'selected'">
                   <input
                   *ngIf="type === 'choose'"
                   type="radio" 
@@ -197,25 +228,29 @@
                   [value]="candidate.id" 
                   [disabled]="candidate.status === 'pending' ? true : null"
                   (click)="selectCandidate($event, candidate.candidateId)"/>
-                {{ candidate.name }}
+                &nbsp;{{ candidate.name }}
+                {{ candidate.status === 'selected' ? ' (candidate selected)' : '' }}
+                {{ candidate.status === 'closed' ? ' (refund claimed)' : '' }}
               </div>
               
-              <div>
+              <div class="op">
                   <a 
+                    title="update candidate status"
+                    class="card-link"
                     *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
                     href="javascript:;" 
                     class="card-link" 
                     (click)="updateCandidateStatus(candidate, $event)"
-                    >
-                    Update
+                    >update 
                   </a>
                   <a 
+                    title="redo referring the candidate"
                     *ngIf="!candidate.candidateId && candidate.status === 'pending'" 
                     href="javascript:;" 
                     class="card-link" 
                     (click)="addCandidate(cardTmp, candidate, $event)"
                     >&nbsp;
-                    retry
+                    redo
                   </a>
                 </div>
             </div>
@@ -242,10 +277,10 @@
       (click)="c('closePost')"
       >ok</button>
     <button 
-      type="button" class="btn-primary"
+      type="button" class="btn btn-sm btn-primary"
       *ngIf="type === 'choose' && cardTmp.recommenders[curUser] && cardTmp.recommenders[curUser] > 0 && cardTmp.status === 'cancelled'"  
       (click)="c('getRefund')"
-      >getRefund</button>
+      >get refund</button>
   </div>
 </ng-template>
   
@@ -266,13 +301,14 @@
 
 <ng-template #cancelcardmodal let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">cancel card</h4>
+    <h4 class="modal-title">Cancel Post</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <p>Do you really want to cancel this card?</p>
+    <p> Are you sure to cancel this post? </p>
+    <p> Once cancelled, all contributions will be refunded and a 1% cancellation fee will be imposed.</p>
   </div>
   <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">No</button>

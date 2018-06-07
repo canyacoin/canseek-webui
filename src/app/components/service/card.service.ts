@@ -90,7 +90,7 @@ export class CardService {
       this.cs.getPostId(id)
         .then(postId => {
           if (!postId) {
-            alert('update error, please retry to add this post');
+            alert('update error, please re-add this post');
           } else {
             cardRef.update({
               postId,
@@ -164,7 +164,7 @@ export class CardService {
     this.cs.getCandidateId(cid, postId)
       .then(candidateId => {
         if(!candidateId) {
-          alert('update error, please retry to add this candidate');
+          alert('update error, please re-add this candidate');
         } else {
           candidateRef.update({
             candidateId,
@@ -187,7 +187,7 @@ export class CardService {
           nextStatus
         });
         candidateRef.update({
-          status: result ? 'closed' : 'pending',
+          status: result ? 'selected' : 'pending',
         })
       })
       .catch(err => console.error(`closepost err: ${err}`))

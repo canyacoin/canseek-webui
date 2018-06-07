@@ -96,13 +96,7 @@
     margin: 0;
     padding: 0;
 }
-.fa-trash {
-    position: absolute;
-    z-index: 0;
-    right: 0;
-    padding: 12px;
-    color: var(--red);
-}
+
 .clamp3,
 .clamp4 {
     display: -webkit-box;
@@ -125,6 +119,8 @@
     margin-left: 36px;
     line-height: 32px;
     position: relative;
+    height: 32px;
+    cursor: default;
 }
 .cost::before {
     content: url('../../../assets/img/Canya-coin.svg');
@@ -155,5 +151,31 @@
     color: var(--red);
 }
 .tips.ok {
+    color: var(--success);
+}
+@font-face {
+    font-family: 'iconfont';  /* project id 698928 */
+    src: url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.eot');
+    src: url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.woff') format('woff'),
+    url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_698928_ob33fpnxncanhfr.svg#iconfont') format('svg');
+  }
+.op .iconf {
+    font-family: 'iconfont';
+    font-size: 28px;
+    font-style: normal;
+    margin: 0 2px;
+}
+.op .card-link {
+    text-transform: uppercase;
+}
+.if-delete {
+    color: var(--red);
+}
+.op .btn {
+    line-height: 1.8;
+}
+.selected {
     color: var(--success);
 }
