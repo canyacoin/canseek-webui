@@ -72,6 +72,7 @@ export class CardsComponent implements OnInit {
   
   // new or edit card
   openCard(content, card, type) {
+    this.getBalance();
     this.type = type;
     const initCard = (type === 'new' && JSON.stringify(card) === '{}') ? this.card : card;
     this.cardForm = this.formBuilder.group(initCard);
@@ -108,6 +109,7 @@ export class CardsComponent implements OnInit {
   }
 
   openCandidate(content, card) {
+    this.getBalance();
     this.cardTmp = card;
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
