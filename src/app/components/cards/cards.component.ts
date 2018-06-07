@@ -66,7 +66,9 @@ export class CardsComponent implements OnInit {
   
   searchStatus() {
     const { cards, statusIndex} = this;
-    const next = cards.filter(item => item.status === statusArr[statusIndex]);
+    const next = cards
+      .filter(item => item.status === statusArr[statusIndex])
+      .sort((a, b) => b.time - a.time);
     this.results = next;
     console.log('filter by status: ', this.statusArr[statusIndex])
   }
