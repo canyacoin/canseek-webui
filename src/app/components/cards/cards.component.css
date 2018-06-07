@@ -66,9 +66,11 @@
     margin-bottom: 0;
 }
 .card-img-top {
+    width: auto;
     height: 120px;
-    padding: 20px;
-    padding-bottom: 0;
+    margin: 30px 20px 0;
+    margin-bottom: 0;
+    background-color: #f8f8f8;
 }
 .card-content {
     margin: 1em auto;
