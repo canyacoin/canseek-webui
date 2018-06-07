@@ -5,7 +5,11 @@
       <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
     </label>
   </div>
-  <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">+ job post</button>
+  <div>
+      balance: {{ balance }}CAN
+      <button class="btn-primary btn-sm btn" (click)="buyCan()">buy can</button>
+      <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">+ job post</button>
+  </div>
 </div>
 
 <!-- loading -->

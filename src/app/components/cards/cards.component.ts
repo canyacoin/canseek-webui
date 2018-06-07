@@ -170,4 +170,8 @@ export class CardsComponent implements OnInit {
     const errObj = domain === company ? null : { 'nomatch': true };
     this.cardForm.controls['email'].setErrors(errObj);
   }
+  buyCan() {
+    this.cs.buyCAN()
+      .then(delta => this.balance += delta)
+  }
 }

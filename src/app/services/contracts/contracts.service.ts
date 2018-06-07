@@ -103,14 +103,14 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async buyCAN(amountInEther) {
+  public async buyCAN(amountInEther = '1') {
     const account = await this.getAccount();
     const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
 
     return new Promise((resolve, reject) => {
       canYaCoin.buy({ from: account, value: amountInWei, ...gas }).then(result => {
-        resolve(result);
+        resolve(result.logs[0].args.value.toNumber());
       })
         .catch(err => {
           reject(err);
