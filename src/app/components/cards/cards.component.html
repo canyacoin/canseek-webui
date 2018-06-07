@@ -1,14 +1,16 @@
 <!-- filter & new -->
-<div class="filter d-flex justify-content-between">
-  <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="statusIndex" (change)="searchStatus()">
-    <label *ngFor="let statusTxt of statusArr; let i=index" ngbButtonLabel class="btn-outline-primary btn-sm btn">
-      <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
-    </label>
+<div class="row">
+  <div class="col-md-6 col-sm-12 py-15">
+    <div class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic" [(ngModel)]="statusIndex" (change)="searchStatus()">
+      <label *ngFor="let statusTxt of statusArr; let i=index" ngbButtonLabel class="btn-outline-primary btn-sm btn">
+        <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
+      </label>
+    </div>
   </div>
-  <div>
-      balance: {{ balance }}CAN
-      <button class="btn-primary btn-sm btn" (click)="buyCan()">buy can</button>
-      <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">+ job post</button>
+  <div class="col-md-6 col-sm-12 py-15" style="text-align: right">
+    balance: {{ balance }}CAN
+    <button class="btn-primary btn-sm btn" (click)="buyCan()">buy can</button>
+    <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">+ job post</button>
   </div>
 </div>
 
@@ -29,7 +31,7 @@
 </div>
 
 <!-- list -->
-<section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
+<section *ngIf="!loading && (results && results.length > 0)" class="card-grid py-30">
   <div *ngFor="let card of results" class="card {{ card.status }}">
     <img onerror="this.src='https://canya.io/images/CanYa_logo.png'" class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
     <div *ngIf="card.status !== 'cancelled'" class="honeypot">
