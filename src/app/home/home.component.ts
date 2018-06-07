@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ContractsService } from '../services/contracts/contracts.service';
+declare var BancorConvertWidget: any;
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.activatedRoute.params.subscribe((params) => {
       // PARAM? = params['query'] ? params['query'] : '';
+    });
+    BancorConvertWidget.init({
+      'type': '1',
+      'baseCurrencyId': '5a6f61ece3de16000123763a',
+      'pairCurrencyId': '5937d635231e97001f744267',
+      'primaryColor': '#00BFFF',
+      'primaryColorHover': '55DAFB'
     });
   }
 
