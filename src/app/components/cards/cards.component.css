@@ -5,8 +5,19 @@
     background-color: var(--canyaColor);
     border-color: var(--canyaColor);
 }
-
-
+.card-grid {
+    --red: #ff4954;
+    --gray: #d1d1d1;
+    --success: #30d7a9;
+    --canyaColor: #33ccff;
+}
+.card-grid .btn {
+    border-color: var(--canyaColor);
+    color: var(--canyaColor);
+}
+.card-grid .btn:hover {
+    color: var(--light);
+}
 .filter {
     margin: 30px 0;
 }
@@ -24,15 +35,15 @@
 
 .card::before {
     display: inline-block;
-    position: relative;
+    position: absolute;
     top: 10px;
     left: 10px;
     color: var(--light);
-    padding: 2px 6px;
-    max-width: 84px;
+    padding: 2px 12px;
     text-align: center;
     border-radius: 30px;
     text-transform: uppercase;
+    font-size: 90%;
 }
 .open::before {
     content: 'open';
@@ -57,6 +68,8 @@
     right: 10px;
     text-align: right;
     color: #b5b9bf;
+    font-size: 90%;
+    line-height: 1.2;
 }
 .title {
     font-weight: 600;
@@ -69,7 +82,7 @@
 .card-img-top {
     width: auto;
     height: 120px;
-    margin: 40px 20px 0;
+    margin: 60px 20px 0;
     margin-bottom: 0;
     background-color: #f8f8f8;
 }
@@ -109,14 +122,17 @@
 .cost {
     font-size: 90%;
     color: #b5b9bf;
+    margin-left: 36px;
+    line-height: 32px;
+    position: relative;
 }
 .cost::before {
-    content: url('../../../assets/img/round-icon.svg');
-    display: inline-block;
+    content: url('../../../assets/img/Canya-coin.svg');
     width: 30px;
     height: 30px;
-    margin-right: .6em;
-    vertical-align: -.6em;
+    position: absolute;
+    left: -42px;
+    bottom: 24px;
 }
 /* var(--breakpoint-lg) */
 @media (max-width: 992px) {
@@ -124,6 +140,14 @@
         display: grid;
         grid-gap: 2em 5%;
         grid-template-columns: repeat(2, 45%);
+    }
+}
+@media (max-width: 576px) {
+    .card-grid.card-grid {
+        display: block;
+        /* display: grid;
+        grid-gap: 2em 5%;
+        grid-template-columns: repeat(2, 45%); */
     }
 }
 .tips {

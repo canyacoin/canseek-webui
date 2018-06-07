@@ -5,7 +5,7 @@
       <input ngbButton type="radio" [value]="i"> {{ statusTxt }}
     </label>
   </div>
-  <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">new card</button>
+  <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">+ job post</button>
 </div>
 
 <!-- loading -->
@@ -28,9 +28,13 @@
 <section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
     <img onerror="this.src='https://canya.io/images/CanYa_logo.png'" class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
-    <div class="honeypot">
+    <div *ngIf="card.status !== 'cancelled'" class="honeypot">
       {{ card.honeypot }} CAN <br>
       Contributed
+    </div>
+    <div *ngIf="card.status === 'cancelled'" class="honeypot">
+      {{ card.honeypot }} CAN <br>
+      will be refunded
     </div>
     
     <div class="card-body">
