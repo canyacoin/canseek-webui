@@ -1,0 +1,11 @@
+.img {
+    background: url('../../assets/img/CanHire_Illustration.svg') center / contain no-repeat;
+    height: 400px;
+}
+.logo {
+    background: url('../../assets/img/CanYa_CanHire.svg') left center / contain no-repeat;
+    height: 80px;
+}
+h3 {
+    text-align: left;
+}
