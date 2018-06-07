@@ -9,12 +9,12 @@
 </div>
 
 <!-- loading -->
-<div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center">
+<div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
   <img src="assets/img/loader.svg" height="36px" alt="Loader">
 </div>
 
 <!-- empty -->
-<div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center">
+<div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center" style="min-height: 340px">
   <div class="row">
     <div class="col-12 d-flex flex-column">
       <br>
@@ -27,31 +27,45 @@
 <!-- list -->
 <section *ngIf="!loading && (results && results.length > 0)" class="card-grid">
   <div *ngFor="let card of results" class="card {{ card.status }}">
-    <a *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="fa fa-trash" (click)="openCancelCard(cancelcardmodal, card)">&nbsp;Cancel</a>
-    <img class="card-img-top" src="{{ card.logo || 'https://canya.io/images/CanYa_logo.png' }}" alt="{{ card.company }}'s logo">
+    <img onerror="this.src='https://canya.io/images/CanYa_logo.png'" class="card-img-top" src="{{ card.logo }}" alt="{{ card.company }}'s logo">
+    <div class="honeypot">
+      {{ card.honeypot }} CAN <br>
+      Contributed
+    </div>
+    
     <div class="card-body">
-      <h5 class="card-title">{{ card.title }}@{{ card.company }} 
-        <span style="color: #33ccff">C$: {{ card.honeypot }}</span>
-      </h5>
-      <p *ngIf="card.recommenders[curUser]">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></p> 
-      <p class="card-text clamp4" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
-          {{ card.desc }}
-      </p>
+      <h5 class="title">{{ card.title }} </h5>
       <div class="d-flex justify-content-between">
-        <a *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="btn-sm btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
-        <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn-sm btn-primary" (click)="openCandidate(candidatemodal, card)">Refer</a>
-        <a *ngIf="card.status === 'pending'" href="javascript:;" class="btn-sm btn-primary" (click)="updateCardStatus(card)">Update</a>
-        <!-- retry -->
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCard(cardmodal, card, 'new')">retry add</a>
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">retry close</a>
-        <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCancelCard(cancelcardmodal, card)">retry cancel</a>
-        <a 
-          href="javascript:;" class="card-link" style="align-self: center;"
-          *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" 
-          (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser]) ? 'choose' : 'list')" 
-          >
-          {{ card.candidates }}+ candidates 
-        </a>
+        <small>@{{ card.company }}</small>
+        <small>5 min</small>
+      </div>
+      <div class="card-content">
+        <div class="clamp{{ card.recommenders[curUser] ? 3 : 4 }}" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
+            {{ card.desc }}
+        </div>
+        <div *ngIf="card.recommenders[curUser]">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></div>
+      </div>
+      
+      <div class="d-flex justify-content-between">
+        <div class="cost">{{ card.cost }} CAN</div>
+        <div>
+          <a *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-outline-primary btn-sm" (click)="openCandidate(candidatemodal, card)">refer talent</a>
+
+
+            <a *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="btn-sm btn-primary" (click)="openCard(cardmodal, card, 'edit')">Edit</a>
+            <a *ngIf="card.status === 'pending'" href="javascript:;" class="btn-sm btn-primary" (click)="updateCardStatus(card)">Update</a>
+            <!-- retry -->
+            <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCard(cardmodal, card, 'new')">retry add</a>
+            <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">retry close</a>
+            <a *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" style="align-self: center;" (click)="openCancelCard(cancelcardmodal, card)">retry cancel</a>
+            <a 
+              href="javascript:;" class="card-link" style="align-self: center;"
+              *ngIf="card.status !== 'pending' && card.candidates && card.candidates > 0" 
+              (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser]) ? 'choose' : 'list')" 
+              >
+              {{ card.candidates }}+ candidates 
+            </a>
+        </div>
       </div>
     </div>
   </div>

@@ -20,9 +20,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0x8051a782cdcebdee1eedba9db1d08d438ae14724';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x8239138d97d8e5ca3020f4a9fedb9348d1a792b9';
-const EscrowAddr = '0x24b2af63c9767aced255eecaffc35abdf56e1bd1';
-const CanHireAddr = '0x38cbd62164ff54f0279b2c329558be77feb1cfc0';
+const CanYaCoinAddr = '0x9345b43ee4b87cf1074082aa61188ab07d418d17';
+const EscrowAddr = '0x797f73099bca22585788ebfbedbca09b3f19aebb';
+const CanHireAddr = '0x6391f24c577cb23f455764baeb2af258bce7158e';
 
 @Injectable()
 export class ContractsService {
@@ -58,14 +58,14 @@ export class ContractsService {
       this._account = await new Promise((resolve, reject) => {
         this._web3.eth.getAccounts((err, accs) => {
           if (err != null) {
-            alert('There was an error fetching your accounts.');
+            // alert('There was an error fetching your accounts.');
             return;
           }
 
           if (accs.length === 0) {
-            alert(
-              'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
-            );
+            // alert(
+            //   'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
+            // );
             return;
           }
           resolve(accs[0]);
