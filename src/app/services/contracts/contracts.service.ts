@@ -346,13 +346,8 @@ export class ContractsService {
   public async getRefund(uniqueCandidateid, postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
-    // console.log(uniqueCandidateid, postId);
-    // const candidateId = await this.getCandidateId(uniqueCandidateid, postId);
-    // console.log(candidateId);
-    // const recommenders = await this.getRecommenders(postId);
-    // console.log(recommenders);
     return new Promise((resolve, reject) => {
-      canHire.getRefund(uniqueCandidateid, postId, {from: account}).then(refund => {
+      canHire.getRefund(uniqueCandidateid, postId, {from: account, gasPrice: '1000000000', gas: '5000000'}).then(refund => {
         console.log(refund);
         resolve(refund.logs[0].args.cost.toNumber());
       }).catch( err => {
