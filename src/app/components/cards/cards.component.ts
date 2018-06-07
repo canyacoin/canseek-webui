@@ -35,6 +35,7 @@ export class CardsComponent implements OnInit {
   checkboxGroupForm: FormGroup;
   candidateForm: FormGroup;
   cardForm: FormGroup;
+  moment = moment;
   
   constructor(private cardService: CardService,
               private cs: ContractsService,

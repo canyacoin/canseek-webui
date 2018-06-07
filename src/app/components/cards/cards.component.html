@@ -41,7 +41,7 @@
       <h5 class="title">{{ card.title }} </h5>
       <div class="d-flex justify-content-between">
         <small>@{{ card.company }}</small>
-        <small>5 min</small>
+        <small>{{ moment(card.time).fromNow() }}</small>
       </div>
       <div class="card-content">
         <div class="clamp{{ card.recommenders[curUser] ? 3 : 4 }}" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
