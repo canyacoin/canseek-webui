@@ -115,8 +115,10 @@ export class CardsComponent implements OnInit {
     this.cardTmp = card;
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
+      const curCandidate = { ...this.candidateForm.value, time: Date.now() }
+      console.log(`candidate: `, curCandidate);
       if(result === 'onOk') {
-        this.cardService.addCandidate(card, this.candidateForm.value, this.curUser);
+        this.cardService.addCandidate(card, curCandidate, this.curUser);
       }
     }, (reason) => {});
   }
@@ -154,5 +156,12 @@ export class CardsComponent implements OnInit {
     this.candidateID = candidateId;
     e.stopPropagation();
     console.log(`select id: ${this.candidateCID} ${this.candidateID}`);
+  }
+
+  checkEmail() {
+    const { email, company } = this.cardForm.value;
+    const domain = email.match(/@(\S*)\./) ? email.match(/@(\S*)\./)[1] : '';
+    const errObj = domain === company ? null : { 'nomatch': true };
+    this.cardForm.controls['email'].setErrors(errObj);
   }
 }

@@ -90,19 +90,22 @@
         <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
-      <div class="form-group">
-        <label for="company">Company</label>
-        <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="company" placeholder="google">
-        <div class="invalid-feedback">Please input valid value</div>
-      </div>
+      
       <div class="form-group">
         <label for="logo">Logo</label>
         <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="logo" placeholder="logo company">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
+
       <div class="form-group">
-        <label for="email">Email address</label>
-        <input required [attr.disabled]="type === 'read' ? true : null" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+        <label for="company">Company</label>
+        <input (input)="checkEmail()" required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="company" placeholder="google">
+        <div class="invalid-feedback">Please input valid value</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Work Email(should match company name)</label>
+        <input (input)="checkEmail()" required [attr.disabled]="type === 'read' ? true : null" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
@@ -124,7 +127,7 @@
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">cancel</button>
-    <button *ngIf="type === 'edit' || type === 'new'" type="button" class="btn-primary" [disabled]="!cardForm.valid" (click)="c('onOk')">ok</button>
+    <button *ngIf="type === 'edit' || type === 'new'" type="button" class="btn btn-sm btn-primary" [disabled]="!cardForm.valid && (cardForm.controls.email.errors || {}).nomatch" (click)="c('onOk')">ok</button>
   </div>
 </ng-template>
 
@@ -248,7 +251,7 @@
   
 <ng-template #email let-c="close" let-d="dismiss">
   <div class="modal-header">
-    <h4 class="modal-title">Company's Email</h4>
+    <h4 class="modal-title">Work Email</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
