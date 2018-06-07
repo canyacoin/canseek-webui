@@ -6,6 +6,7 @@ import { ContractsService } from '../../services/contracts/contracts.service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
 import { Observable, from } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-cards',
@@ -79,7 +80,8 @@ export class CardsComponent implements OnInit {
 
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
-        const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser };
+        const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser, time: Date.now() };
+        console.log('create card: ', curCard);
         
         if (type === 'edit') {
           this.cardService.updateCard(curCard);

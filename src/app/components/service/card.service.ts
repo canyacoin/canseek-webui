@@ -111,21 +111,21 @@ export class CardService {
     if (cid) {// retry
       candidateRef = this.docRef.collection('candidates').doc(cid);
       this.cs.recommend(cid, postId)
-        .then(({ honeypot, candidateId }) => {
-          if(candidateId) {
-            recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
+        // .then(({ honeypot, candidateId }) => {
+        //   if(candidateId) {
+        //     recommenders[curUser] = recommenders[curUser] ? recommenders[curUser] + 1 : 1
 
-            this.docRef.update({
-              recommenders,
-              honeypot
-            })
+        //     this.docRef.update({
+        //       recommenders,
+        //       honeypot
+        //     })
 
-            candidateRef.update({
-              candidateId,
-              status: candidateId ? 'ok' : 'pending'
-            })
-          }
-        })
+        //     candidateRef.update({
+        //       candidateId,
+        //       status: candidateId ? 'ok' : 'pending'
+        //     })
+        //   }
+        // })
     } else {
       this.docRef.collection('candidates').add(candidate)
         .then(docRef => {
