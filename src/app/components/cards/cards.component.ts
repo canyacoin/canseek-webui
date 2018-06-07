@@ -155,8 +155,8 @@ export class CardsComponent implements OnInit {
 
   checkEmail() {
     const { email, company } = this.cardForm.value;
-    const domain = email.match(/@(\S*)\./) ? email.match(/@(\S*)\./)[1] : '';
-    const errObj = domain === company ? null : { 'nomatch': true };
+    const domain = email.match(/@(\S*)\./i) ? email.match(/@(\S*)\./)[1] : '';
+    const errObj = domain.toLowerCase() === company.toLowerCase() ? null : { 'nomatch': true };
     this.cardForm.controls['email'].setErrors(errObj);
   }
   buyCan() {
