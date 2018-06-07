@@ -296,13 +296,6 @@ contract("CanHire", accounts => {
     assert.equal(newFee.toNumber(), 7, "wrong cancellation fee");
   });
 
-  // it("should change the escrow contract address", async () => {
-  //   const newEscrow = await utils.deploy(Escrow, token.address);
-  //   await canHire.setEscrow(newEscrow.address, {from: canHireOwner});
-  //   const currentEscrow = await canHire.escrow();
-  //   assert.equal(newEscrow.address.toString(), currentEscrow.address.toSting(), "wrong cancellation fee");
-  // });
-
   it("should change contract activeness", async () => {
     await canHire.setActive(false, {from: canHireOwner});
     const status = await canHire.active();
@@ -319,31 +312,15 @@ contract("CanHire", accounts => {
     assert.equal(postId, 1, "wrong postId.");
   });
 
-  // it("should get the post id", async () => {
-  //   await token.approve(escrow.address, 1000, {from: employer1});
-  //   await canHire.addPost("post001", 1000, 50, {from: employer1});
-    
-  //   const numPosts1 = await canHire.numPosts();
-  //   const post1 = await canHire.posts(0);
-  //   const employer1Balance1 = await token.balanceOf(employer1);
-  //   const escrowBalance1 = await token.balanceOf(escrow.address);
-    
-  //   assert.equal(numPosts1.toNumber(), 2, "wrong total number of posts");
-  //   assert.equal(post1[0].toNumber(), 1, "wrong post id");
-  //   assert.equal(post1[1], employer1.toString(), "wrong post owner");
-  //   assert.equal(post1[2].toNumber(), 1, "wrong post status");
-  //   assert.equal(post1[3].toNumber(), 1000, "wrong post bounty");
-  //   assert.equal(post1[4].toNumber(), 50, "wrong post cost");
-  //   assert.equal(post1[5].toNumber(), 1000, "wrong post honeyPot");
-  //   assert.equal(post1[6].toNumber(), 0, "wrong number of candidates of the post");
-  //   assert.equal(post1[7].toNumber(), 0, "wrong candidated selected");
-  //   assert.equal(employer1Balance1.toNumber(), 1857, "wrong employer balance");
-  //   assert.equal(escrowBalance1.toNumber(), 1000, "wrong escrow balance");
-
-  //   const nonExistingPostId = await canHire.getId("sss");
-  //   assert.equal(nonExistingPostId.toNumber(), 0, "wrong escrow balance");
-  //   const existingPostId = await canHire.getId("post001");
-  //   assert.equal(existingPostId.toNumber(), 1, "wrong escrow balance");
-  // })
+  it("should get refund", async () => {
+    await token.approve(escrow.address, 1000, {from: employer1});
+    await canHire.addPost("p001", 1000, 50, {from: employer1});
+    await token.approve(escrow.address, 100, {from: recruiter1});
+    await canHire.recommend("p001c001", 1, {from: recruiter1});
+    await canHire.cancelPost(1, {from: employer1});
+    await canHire.getRefund("p001c001", 1, {from: recruiter1});
+    const recruiterBalance = await token.balanceOf(recruiter1);
+    assert.equal(recruiterBalance.toNumber(), 1428)
+  });
 
 })

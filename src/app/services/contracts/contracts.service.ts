@@ -20,9 +20,9 @@ const gas = { gasPrice: '5000000000', gas: '500000' };
 // const CanHireAddr = '0x8051a782cdcebdee1eedba9db1d08d438ae14724';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xb9008c0b59292f431afd83e0ea166a8ea08c4543';
-const EscrowAddr = '0xde3c2b823fc30eeed56c731c6c8232b85e077dbf';
-const CanHireAddr = '0xe4afdbcbb841353ad83f6f716633982481e48861';
+const CanYaCoinAddr = '0x9401bd46a678a0c87182e83df4c6e7ea9d78b261';
+const EscrowAddr = '0xcdf482728c3ee52b26bbec430095cac2ca394dc7';
+const CanHireAddr = '0x2891bef1a9dfa26023dc5cbf77e7fdb1f68c66a9';
 
 @Injectable()
 export class ContractsService {
@@ -346,9 +346,15 @@ export class ContractsService {
   public async getRefund(uniqueCandidateid, postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
+    // console.log(uniqueCandidateid, postId);
+    // const candidateId = await this.getCandidateId(uniqueCandidateid, postId);
+    // console.log(candidateId);
+    // const recommenders = await this.getRecommenders(postId);
+    // console.log(recommenders);
     return new Promise((resolve, reject) => {
       canHire.getRefund(uniqueCandidateid, postId, {from: account}).then(refund => {
-        resolve(refund.toNumber());
+        console.log(refund);
+        resolve(refund.logs[0].args.cost.toNumber());
       }).catch( err => {
         reject(err);
       });
