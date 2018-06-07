@@ -131,10 +131,10 @@ contract CanHire is Ownable {
 
     function getRefund(string uniqueCandidateId, uint postId) public {
         Post storage post = posts[postId];
-        require(post.status == Status.Cancelled);
-        require(post.returnCandidateId[uniqueCandidateId] > 0);
+        assert(post.status == Status.Cancelled);
         uint candidateId = post.returnCandidateId[uniqueCandidateId];
-        require(escrow.transferFromEscrow(post.recommenders[candidateId], post.cost));
+        assert(candidateId != 0);
+        assert(escrow.transferFromEscrow(post.recommenders[candidateId], post.cost));
         post.returnCandidateId[uniqueCandidateId] = 0;
         emit GetRefund(post.cost);
     }
