@@ -56,7 +56,6 @@ export class CardService {
     const { id } = card;
     this.dbRef.doc(id).update(card)
       .catch(err => {
-        console.error(`update err: ${err}`);
       })
   }
 
@@ -64,13 +63,11 @@ export class CardService {
     const { postId, id, nextStatus } = card;
     this.cs.cancelPost(postId)
       .then(result => {
-        console.log(`cancel result: ${result}`);
         this.dbRef.doc(id).update({
           status: result ? nextStatus : 'pending',
           nextStatus
         })
       })
-      .catch(err => console.error(`cancel err: ${err}`));
   }
 
   updateCardStatus(card: Card) {
@@ -80,12 +77,10 @@ export class CardService {
     if (postId) {
       this.cs.getPostStatus(postId) 
         .then(result => {
-          console.log(`get post status ${result} with postId: ${postId}`);
           cardRef.update({
             status: result
           })
         })
-        .catch(err => console.log(`get post status err: ${err}`))
     } else {
       this.cs.getPostId(id)
         .then(postId => {
@@ -98,7 +93,6 @@ export class CardService {
             })
           }
         })
-        .catch(err => console.error(`get post id err: ${err}`))
     }
   }
 
@@ -172,7 +166,6 @@ export class CardService {
           })
         }
       })
-      .catch(err => console.error(`get candidate id err: ${err}`))
   }
   
   closePost(card: Card, cid: string, candidateId: number) {
@@ -181,7 +174,6 @@ export class CardService {
     const candidateRef = this.docRef.collection('candidates').doc(cid);
     this.cs.closePost(postId, candidateId)
       .then(result => {
-        console.log(`close post succ: ${result}`);
         this.docRef.update({
           status: result ? nextStatus : 'pending',
           nextStatus
@@ -190,7 +182,6 @@ export class CardService {
           status: result ? 'selected' : 'pending',
         })
       })
-      .catch(err => console.error(`closepost err: ${err}`))
   }
 
   getRefund(card: Card, curUser: string, cid: string) {
@@ -211,6 +202,5 @@ export class CardService {
           })
         }
       })
-      .catch(err => console.error(`closepost err: ${err}`))
   }
 }

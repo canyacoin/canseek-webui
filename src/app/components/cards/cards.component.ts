@@ -50,12 +50,10 @@ export class CardsComponent implements OnInit {
   }
   async getAccount() {
     this.curUser = await this.cs.getAccount();
-    console.log('get account: ', this.curUser);
   }
   getBalance() {
     this.cs.getCANBalance()
       .then(b => this.balance = b);
-    console.log(this.balance);
   }
   
   getCards(): void {
@@ -73,7 +71,6 @@ export class CardsComponent implements OnInit {
       .filter(item => item.status === statusArr[statusIndex])
       .sort((a, b) => b.time - a.time);
     this.results = next;
-    console.log('filter by status: ', this.statusArr[statusIndex])
   }
   
   // new or edit card
@@ -86,7 +83,6 @@ export class CardsComponent implements OnInit {
     this.modalService.open(content).result.then((result) => {
       if(result === 'onOk') {
         const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser, time: Date.now() };
-        console.log('create card: ', curCard);
         
         if (type === 'edit') {
           this.cardService.updateCard(curCard);
@@ -100,7 +96,6 @@ export class CardsComponent implements OnInit {
 
   // cancel card
   openCancelCard(content, card) {
-    console.log(`cancel card: ${JSON.stringify(card)}`);
     this.modalService.open(content).result.then((result) => {
       if(result === 'cancelPost') {
         card.nextStatus = 'cancelled';
@@ -110,7 +105,6 @@ export class CardsComponent implements OnInit {
   }
 
   updateCardStatus(card) {
-    console.log(`will update card: ${JSON.stringify(card)}`);
     
     this.cardService.updateCardStatus(card);
   }
@@ -121,7 +115,6 @@ export class CardsComponent implements OnInit {
     this.candidateForm = this.formBuilder.group(this.candidate);
     this.modalService.open(content).result.then((result) => {
       const curCandidate = { ...this.candidateForm.value, time: Date.now() }
-      console.log(`candidate: `, curCandidate);
       if(result === 'onOk') {
         this.cardService.addCandidate(card, curCandidate, this.curUser);
       }
@@ -138,7 +131,6 @@ export class CardsComponent implements OnInit {
     this.cardService.getCandidates(card.id).subscribe(candidates => {
       this.candidates = candidates
         .sort((a, b) => a.time - b.time);
-      console.log(`get candidates succ`, candidates);
       this.modalService.open(content).result.then((result) => {
         if (result === 'closePost') {
           card.nextStatus = 'closed';
@@ -146,13 +138,11 @@ export class CardsComponent implements OnInit {
         } else if (result === 'getRefund') {
           this.cardService.getRefund(card, this.curUser, this.candidateCID);
         }
-        console.log(result);
       }, (reason) => {});
     })
   }
   updateCandidateStatus(candidate, event) {
     event && event.stopPropagation();
-    console.log(`will updateCandidateStatus`, candidate);
     this.cardService.updateCandidateStatus(this.cardTmp, candidate);
   }
   
@@ -161,7 +151,6 @@ export class CardsComponent implements OnInit {
     this.candidateCID = id;
     this.candidateID = candidateId;
     e.stopPropagation();
-    console.log(`select id: ${this.candidateCID} ${this.candidateID}`);
   }
 
   checkEmail() {
