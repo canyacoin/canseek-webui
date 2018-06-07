@@ -20,9 +20,9 @@ const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
 const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x9401bd46a678a0c87182e83df4c6e7ea9d78b261';
-const EscrowAddr = '0xcdf482728c3ee52b26bbec430095cac2ca394dc7';
-const CanHireAddr = '0x2891bef1a9dfa26023dc5cbf77e7fdb1f68c66a9';
+// const CanYaCoinAddr = '0x9401bd46a678a0c87182e83df4c6e7ea9d78b261';
+// const EscrowAddr = '0xcdf482728c3ee52b26bbec430095cac2ca394dc7';
+// const CanHireAddr = '0x2891bef1a9dfa26023dc5cbf77e7fdb1f68c66a9';
 
 @Injectable()
 export class ContractsService {
