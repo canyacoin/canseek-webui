@@ -16,7 +16,7 @@ import * as moment from 'moment';
 export class CardsComponent implements OnInit {
   loading: boolean = true;
   curUser: string; // cur user address
-  balance: number;
+  balance: number = 0;
   type: string = 'new';// new edit read
 
   cards: Card[];
