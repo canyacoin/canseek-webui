@@ -18,7 +18,12 @@
                   <br>
                   Build your reputation.
               </h4>
-              
+              <a class="btn btn-lg btn-primary shadow-3" href="javascript:;"
+                >
+              + job post</a>
+              <i class="icon question ml-10"
+                (click)="open(tutorialmodal)"
+                >&#xe628;</i>
           </div>
         </div>
       </div>
@@ -27,3 +32,120 @@
   </div>
 </header>
 <!-- END Header -->
+
+<ng-template #tutorialmodal let-c="close" let-d="dismiss">
+<div class="modal-header">
+  <h4 class="modal-title">Tutorial</h4>
+  <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>
+      An employer can create a job post and set up a bounty as reward to those refer good talents. Everyone can refer talents they know or even themselves to the post by paying a samll fee. All fees, together with the bounty will be added to a honeypot. As more talents get referred, the job post will reward more. And whichever talent gets selected finally, his/her recommender will win full amount of the honeypot.
+
+  </p>
+
+    <h5>How to add a job post?</h5>
+    
+    <ul>
+        <li>
+            1. Own / Buy CAN 
+
+        </li>
+        <li>
+            2. Click "+ Job Post" button
+
+        </li>
+        <li>
+            3. Fill in position details, set the bounty & application cost
+
+        </li>
+        <li>
+            4. Submit the form and submit the transaction in the popped up MetaMask window.
+
+        </li>
+        <li>
+            5. Wait and check MetaMask transaction status, and update the job post status or re-add the post.
+
+        </li>
+      </ul>
+    <h5>
+        How to refer a talent ?
+
+    </h5>
+<ul>
+  <li>
+      1. Own / Buy CAN
+
+  </li>
+  <li>
+      2. Click "REFER" button
+
+  </li>
+  <li>
+      3. Fill in talent details
+
+  </li>
+  <li>
+      4. Submit the form and submit the transaction in the popped up MetaMask window.
+
+  </li>
+  <li>
+      5. Wait and check MetaMask transaction status, and update the candidate status or re-refer the candidate.
+
+  </li>
+</ul>
+    
+    <h5>
+        How to close a job post?
+
+    </h5>
+
+    <ul>
+      <li>
+          1. Select a candidate from the candidate list
+
+      </li>
+      <li>
+          2. Pay transaction fee and platform fee (1%)
+
+      </li>
+      <li>
+          3. Close the post and the recommender of the selected candidate gets the reward
+
+      </li>
+    </ul>
+    
+    <h5>
+        How to cancel a job post?
+
+    </h5>
+
+    <ul>
+      <li>
+          1. On the post you created, click the transh can icon
+
+      </li>
+      <li>
+          2. Pay the transaction fee and cancellation fee (1%)
+
+      </li>
+    </ul>
+    
+    
+    
+    <h5>
+        What if a job post gets cancelled?
+
+    </h5>
+    <p>
+        You can claim the application cost by going to the cancelled tab and locate your post and candidate.            
+
+    </p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+  </div>
+</ng-template>
+  
