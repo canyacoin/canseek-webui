@@ -104,6 +104,11 @@ export class CardsComponent implements OnInit {
     }, (reason) => {});
   }
 
+  openContent(content, card) {
+    this.cardTmp = card;
+    this.modalService.open(content).result.then((result) => {}, (reason) => {});
+  }
+
   updateCardStatus(card) {
     
     this.cardService.updateCardStatus(card);
