@@ -50,6 +50,7 @@ export class CardsComponent implements OnInit {
   }
   async getAccount() {
     this.curUser = await this.cs.getAccount();
+    console.log(`this.account: ${this.curUser}`);
   }
   getBalance() {
     this.cs.getCANBalance()
