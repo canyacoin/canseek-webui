@@ -15,9 +15,9 @@ const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
 const gas = { gasPrice: '5000000000', gas: '500000' };
 
 // Ropsten contract address
-// const CanYaCoinAddr = '0xbd304683142b93567f398c952dbaba41e9f3a214';
-// const EscrowAddr = '0x4a8ad51bf02f9c538a8e9388a5a2fec477006070';
-// const CanHireAddr = '0x8051a782cdcebdee1eedba9db1d08d438ae14724';
+const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
+const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
+const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
 const CanYaCoinAddr = '0x54fad4cc70b248d5eaf982689b392400c6bb56b0';
