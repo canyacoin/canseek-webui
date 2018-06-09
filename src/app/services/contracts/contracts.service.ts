@@ -15,14 +15,14 @@ const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
 const gas = { gasPrice: '5000000000', gas: '500000' };
 
 // Ropsten contract address
-const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
-const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
-const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
+// const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
+// const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
+// const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x54fad4cc70b248d5eaf982689b392400c6bb56b0';
-const EscrowAddr = '0xd62c1fbc37e4b0298026c50007c2034337524a39';
-const CanHireAddr = '0x14ff37173c577a651b95f061b885f24d7da9bf6a';
+const CanYaCoinAddr = '0x76038b1003873fa0d682c03d0a62d549325416da';
+const EscrowAddr = '0x555a78d82a7988f0955832ed4432ddb0d3b74570';
+const CanHireAddr = '0x52f24f32a8a011b10b6f5c47c474e9714db769ed';
 
 @Injectable()
 export class ContractsService {

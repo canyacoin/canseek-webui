@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup/*, FormControl, Validators */ } from '@angular/f
 import { Card, statusArr } from '../model/card';
 import { CardService } from '../service/card.service';
 import { ContractsService } from '../../services/contracts/contracts.service';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Candidate } from '../model/candidate';
-import { Observable, from } from 'rxjs';
+import { Message } from '../model/message';
+import { MessageService } from '../service/message.service';
 import * as moment from 'moment';
 
 @Component({
@@ -19,6 +20,7 @@ export class CardsComponent implements OnInit {
   balance: number = 0;
   type: string = 'new';// new edit read
 
+  message: Message = new Message;
   cards: Card[];
   card: Card = new Card();
   candidate: Candidate = new Candidate();
@@ -41,6 +43,7 @@ export class CardsComponent implements OnInit {
               private cs: ContractsService,
               private modalService: NgbModal, 
               private formBuilder: FormBuilder,
+              public ms: MessageService,
             ) { }
 
   ngOnInit() {
