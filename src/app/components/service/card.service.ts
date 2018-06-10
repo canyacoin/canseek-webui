@@ -4,9 +4,6 @@ import { Candidate } from '../model/candidate';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of } from 'rxjs';
-import { CONSTANTS } from '@firebase/util';
-import { identifierModuleUrl, ResourceLoader } from '@angular/compiler';
-import { debug } from 'util';
 
 @Injectable()
 export class CardService {

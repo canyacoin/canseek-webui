@@ -34,6 +34,7 @@ import { CardService } from './components/service/card.service';
 import { MessageComponent } from './components/message/message.component';
 import { MessageService } from './components/service/message.service';
 import { TutorialComponent } from './components/modal/tutorial/tutorial.component';
+import { CardmodalComponent } from './components/modal/cardmodal/cardmodal.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { TutorialComponent } from './components/modal/tutorial/tutorial.componen
     CandidatesComponent,
     MessageComponent,
     TutorialComponent,
+    CardmodalComponent,
   ],
   imports: [
     BrowserModule,
