@@ -171,5 +171,6 @@ export class CardsComponent implements OnInit {
   buyCan() {
     this.cs.buyCAN()
       .then(delta => this.balance += delta)
+      .catch(err => console.error(err));
   }
 }
