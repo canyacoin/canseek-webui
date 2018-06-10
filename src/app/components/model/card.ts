@@ -19,4 +19,7 @@ export class Card {
     time: number = 0;
 }
 
-export const statusArr = ['pending', 'open', 'closed', 'cancelled'];
+export const statusArr = ['all', 'pending', 'open', 'closed', 'cancelled',
+    'my posts',
+    'my talents'
+];

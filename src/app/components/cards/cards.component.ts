@@ -31,7 +31,7 @@ export class CardsComponent implements OnInit {
 
   results: Card[];
   statusArr = statusArr;
-  statusIndex = 1;
+  statusIndex = 0;
   email: string;
   
   checkboxGroupForm: FormGroup;
@@ -70,10 +70,28 @@ export class CardsComponent implements OnInit {
   }
   
   searchStatus() {
-    const { cards, statusIndex} = this;
-    const next = cards
-      .filter(item => item.status === statusArr[statusIndex])
-      .sort((a, b) => b.time - a.time);
+    const { cards, statusIndex } = this;
+    let next;
+    switch(statusIndex) {
+      case 0:
+        next = cards; break;
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+        next = cards
+        .filter(item => item.status === statusArr[statusIndex])
+        .sort((a, b) => b.time - a.time);
+        break;
+      case 5:
+        next = cards.filter(item => item.ownerAddr === this.curUser)
+        .sort((a, b) => b.time - a.time);
+        break;
+      case 6:
+        next = cards.filter(item => item.recommenders[this.curUser])
+        .sort((a, b) => b.time - a.time);
+        break;
+    }
     this.results = next;
   }
   
