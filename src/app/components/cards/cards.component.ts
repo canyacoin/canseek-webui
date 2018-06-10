@@ -54,7 +54,6 @@ export class CardsComponent implements OnInit {
   }
   async getAccount() {
     this.curUser = await this.cs.getAccount();
-    console.log(`this.account: ${this.curUser}`);
   }
   getBalance() {
     this.cs.getCANBalance()
@@ -161,16 +160,18 @@ export class CardsComponent implements OnInit {
         .sort((a, b) => a.time - b.time);
         
       this.candidatesModalTmp = !this.candidatesModalTmp ? this.modalService.open(content) : this.candidatesModalTmp;
-      
       this.candidatesModalTmp.result.then((result) => {
+        this.candidatesModalTmp = null;
+
         if (result === 'closePost') {
           card.nextStatus = 'closed';
           this.cardService.closePost(card, this.candidateCID, this.candidateID);
         } else if (result === 'getRefund') {
           this.cardService.getRefund(card, this.curUser, this.candidateCID);
         }
+      }, () => {
         this.candidatesModalTmp = null;
-      }, () => {});
+      });
     })
   }
   updateCandidateStatus(candidate, event) {
