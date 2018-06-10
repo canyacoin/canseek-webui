@@ -19,6 +19,7 @@ export class CardsComponent implements OnInit {
   curUser: string; // cur user address
   balance: number = 0;
   type: string = 'new';// new edit read
+  candidatesModalTmp: any;
 
   message: Message = new Message;
   cards: Card[];
@@ -158,14 +159,18 @@ export class CardsComponent implements OnInit {
     this.cardService.getCandidates(card.id).subscribe(candidates => {
       this.candidates = candidates
         .sort((a, b) => a.time - b.time);
-      this.modalService.open(content).result.then((result) => {
+        
+      this.candidatesModalTmp = !this.candidatesModalTmp ? this.modalService.open(content) : this.candidatesModalTmp;
+      
+      this.candidatesModalTmp.result.then((result) => {
         if (result === 'closePost') {
           card.nextStatus = 'closed';
           this.cardService.closePost(card, this.candidateCID, this.candidateID);
         } else if (result === 'getRefund') {
           this.cardService.getRefund(card, this.curUser, this.candidateCID);
         }
-      }, (reason) => {});
+        this.candidatesModalTmp = null;
+      }, () => {});
     })
   }
   updateCandidateStatus(candidate, event) {
