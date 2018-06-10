@@ -9,14 +9,18 @@ export class MessageService {
 
   add(message: Message) {
     this.messages.push(message);
-    // setTimeout(() => this.close(message), message.duration);
+    message.type !== 'loading' && setTimeout(() => this.close(message), message.duration);
   }
   close(message) {
-    const index: number = this.messages.indexOf(message);
-    this.messages[index].hide = true;
-    setTimeout(
-      () => this.messages.splice(index, 1),
-      314
-    )
+    setTimeout(() => {
+      const index: number = this.messages.indexOf(message);
+      if (index !== -1) {
+        this.messages[index].hide = true;
+        setTimeout(
+          () => this.messages.splice(index, 1),
+          314
+        )
+      }
+    }, 1314);
   }
 }

@@ -4,14 +4,17 @@ import { Candidate } from '../model/candidate';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of } from 'rxjs';
-
+import { MessageService } from './message.service';
+import { Message } from '../model/message';
 @Injectable()
 export class CardService {
   constructor(private cs: ContractsService,
-              private db: AngularFirestore
+              private db: AngularFirestore,
+              public ms: MessageService,
             ) { }
   dbRef: any = this.db.collection('cards');
   docRef: any;
+  message: Message = new Message();
 
   getCards(): Observable<any[]> {
     return this.dbRef.valueChanges();
@@ -68,12 +71,18 @@ export class CardService {
   }
 
   updateCardStatus(card: Card) {
+    const loadingMsg = {...this.message, message: 'loading...', type: 'loading'};
+    this.ms.add(loadingMsg);
+
     const { postId, id } = card;
     const cardRef = this.dbRef.doc(id);
     
     if (postId) {
       this.cs.getPostStatus(postId) 
         .then(result => {
+
+          this.ms.close(loadingMsg);
+
           cardRef.update({
             status: result
           })
@@ -81,8 +90,11 @@ export class CardService {
     } else {
       this.cs.getPostId(id)
         .then(postId => {
+
+          this.ms.close(loadingMsg);
+
           if (!postId) {
-            alert('update error, please re-add this post');
+            this.ms.add({...this.message, message: 'please re-add this post'});
           } else {
             cardRef.update({
               postId,
@@ -147,6 +159,9 @@ export class CardService {
     }
   }
   updateCandidateStatus(card: Card, candidate: Candidate) {
+    const loadingMsg = {...this.message, message: 'loading...', type: 'loading'};
+    this.ms.add(loadingMsg);
+
     const { postId, id } = card;
     const { id: cid } = candidate;
     const cardRef = this.dbRef.doc(id);
@@ -154,8 +169,11 @@ export class CardService {
 
     this.cs.getCandidateId(cid, postId)
       .then(candidateId => {
+
+        this.ms.close(loadingMsg);
+
         if(!candidateId) {
-          alert('update error, please re-add this candidate');
+          this.ms.add({...this.message, message: 'please re-add this candidate'})
         } else {
           candidateRef.update({
             candidateId,
