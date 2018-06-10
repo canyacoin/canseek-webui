@@ -33,6 +33,7 @@ import { CandidatesComponent } from './components/candidates/candidates.componen
 import { CardService } from './components/service/card.service';
 import { MessageComponent } from './components/message/message.component';
 import { MessageService } from './components/service/message.service';
+import { TutorialComponent } from './components/modal/tutorial/tutorial.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MessageService } from './components/service/message.service';
     CardsComponent,
     CandidatesComponent,
     MessageComponent,
+    TutorialComponent,
   ],
   imports: [
     BrowserModule,
