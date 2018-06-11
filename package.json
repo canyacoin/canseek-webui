@@ -32,7 +32,11 @@
     "moment": "^2.22.2",
     "tn-truffle-test-utils": "^1.0.4",
     "truffle-hdwallet-provider": "0.0.5",
+<<<<<<< HEAD
     "web3": "^1.0.0-beta.34",
+=======
+    "web3": "1.0.0-beta.34",
+>>>>>>> 675aca433a14745e17bbf956abdb1e6d4debe3c4
     "zeppelin-solidity": "^1.9.0",
     "zone.js": "^0.8.23"
   },
@@ -53,7 +57,7 @@
     "karma-coverage-istanbul-reporter": "^1.4.2",
     "karma-jasmine": "^1.1.1",
     "karma-jasmine-html-reporter": "^0.2.2",
-    "protractor": "^5.3.2",
+    "protractor": "^5.3.0",
     "protractor-console-plugin": "^0.1.1",
     "rxjs": "^6.2.0",
     "rxjs-compat": "^6.2.0",
