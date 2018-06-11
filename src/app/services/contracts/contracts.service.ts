@@ -13,13 +13,13 @@ const CanYaCoinArtifacts = require('../../../../build/contracts/CanYaCoin.json')
 const EscrowArtifacts = require('../../../../build/contracts/Escrow.json');
 const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
 const gas = { gasPrice: '503000000', gas: '200000' };
-// const gasAddPost = { gasPrice: '503000000', gas: '60000' };
-// const gasRecommend = { gasPrice: '503000000', gas: '200000' };
-// const gas = { gasPrice: '503000000', gas: '200000' };
-// const gas = { gasPrice: '503000000', gas: '200000' };
-// const gas = { gasPrice: '503000000', gas: '200000' };
-// const gas = { gasPrice: '503000000', gas: '200000' };
-// const gas = { gasPrice: '503000000', gas: '200000' };
+const gasAddPost = { gasPrice: '503000000', gas: '60000' };
+const gasRecommend = { gasPrice: '503000000', gas: '200000' };
+const gas = { gasPrice: '503000000', gas: '200000' };
+const gas = { gasPrice: '503000000', gas: '200000' };
+const gas = { gasPrice: '503000000', gas: '200000' };
+const gas = { gasPrice: '503000000', gas: '200000' };
+const gas = { gasPrice: '503000000', gas: '200000' };
 
 // Ropsten contract address
 // const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
@@ -27,9 +27,9 @@ const gas = { gasPrice: '503000000', gas: '200000' };
 // const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x7c62ba18a7a1f032206034ef085a5f2f2a1d183f';
-const EscrowAddr = '0xdd3e2cdd7a48439b6584ddbed994349df7d4271f';
-const CanHireAddr = '0x539e74774784dae5e2b93b21148959a05f46a05f';
+const CanYaCoinAddr = '0x8a6261b8cf10ca437f6d81f262a97e1b98d464e4';
+const EscrowAddr = '0xe800393ce873f0247e1e663865155e420a6a3ee6';
+const CanHireAddr = '0x065f7b9a40aee62cfa57221b881ec7e6ebef608b';
 
 @Injectable()
 export class ContractsService {
