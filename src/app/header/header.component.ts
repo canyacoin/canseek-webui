@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
       if(result === 'onOk') {
         const curCard = { ...initCard, ...this.cardForm.value, ownerAddr: this.curUser, time: Date.now(), honeypot: this.cardForm.value.bounty };
         
-        console.log(curCard);
+        // console.log(curCard);
         this.cardService.addCard(curCard);
         // this.searchStatus();
       }

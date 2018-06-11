@@ -19,6 +19,7 @@ export class CardmodalComponent implements OnInit {
     const { email, company } = this.cardForm.value;
     const domain = email.match(/@(\S*)\./i) ? email.match(/@(\S*)\./)[1] : '';
     const errObj = domain.toLowerCase() === company.toLowerCase() ? null : { 'nomatch': true };
-    this.cardForm.controls['email'].setErrors(errObj);
+    // console.log(this.cardForm.get('email'));
+    this.cardForm.get('email').setErrors(errObj);
   }
 }
