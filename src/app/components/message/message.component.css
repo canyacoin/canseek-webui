@@ -1,0 +1,82 @@
+.wrapper {
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    z-index: 1060;
+    top: 16px;
+}
+@font-face {
+    font-family: 'iconfont';  /* project id 701274 */
+    src: url('//at.alicdn.com/t/font_701274_fv1upb3fo9ksxlxr.eot');
+    src: url('//at.alicdn.com/t/font_701274_fv1upb3fo9ksxlxr.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_701274_fv1upb3fo9ksxlxr.woff') format('woff'),
+    url('//at.alicdn.com/t/font_701274_fv1upb3fo9ksxlxr.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_701274_fv1upb3fo9ksxlxr.svg#iconfont') format('svg');
+  }
+
+.message {
+    display: inline-block;    
+    background-color: #fff;
+    pointer-events: none;
+    min-width: 120px;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, .15);
+    /* transition: all .314; */
+    animation: show .314s ease-in;
+    padding: 0 12px;
+}
+.message.hide {
+    animation: hide .314s ease-in;
+}
+.icon {
+    font-family: iconfont;
+    font-size: 20px;
+    font-style: normal;
+    vertical-align: middle;
+    color: var(--blue);
+}
+.icon.warning {
+    color: var(--yellow);
+}
+.icon.error {
+    color: red;
+}
+.icon.success {
+    color: var(--green);
+}
+.icon.loading {
+    display: inline-block;
+    animation: loading 1s linear infinite;
+}
+@keyframes show {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -100%, 0);
+    }
+  
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+  }
+  @keyframes hide {
+    from {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+  
+    to {
+        opacity: 0;
+        transform: translate3d(0, -100%, 0);
+    }
+  }
+  @keyframes loading {
+    from {
+        transform: rotate(0deg);
+    }
+  
+    to {
+        transform: rotate(360deg);
+    }
+  }

@@ -7,11 +7,6 @@
       </label>
     </div>
   </div>
-  <div class="col-md-6 col-sm-12 py-15" style="text-align: right">
-    balance: {{ balance }}CAN
-    <button class="btn-primary btn-sm btn" (click)="buyCan()">buy can</button>
-    <button class="btn-primary btn-sm btn" (click)="openCard(cardmodal, {}, 'new')">+ job post</button>
-  </div>
 </div>
 
 <!-- loading -->
@@ -43,7 +38,7 @@
         {{ card.honeypot }} CAN <br>
         will be refunded
       </div>
-      <h5 class="title mt-10 mb-0">{{ card.title }} </h5>
+      <h5 class="title mt-10 mb-0 clamp2">{{ card.title }} </h5>
       <div class="d-flex justify-content-between">
         <small>@{{ card.company }}</small>
         <small>{{ moment(card.time).fromNow() }}</small>
@@ -51,64 +46,61 @@
     </div>
     
     <div class="card-body">
-      <div class="card-content">
-        <div class="clamp{{ card.recommenders[curUser] && card.status !== 'cancelled' ? 3 : 4 }}" (click)="openCard(cardmodal, card, curUser === card.ownerAddr ? 'edit' : 'read')">
-            {{ card.desc }}
-        </div>
-        <div *ngIf="card.recommenders[curUser] && card.status === 'open'">mail: <a class="card-link" href="mailto:{{ card.email }}">{{ card.email }}</a></div>
+      <div (click)="openContent(contentmodal, card)">
+          {{ card.desc }}
       </div>
-      
-      <div class="d-flex justify-content-between op">
-        <div class="cost">{{ card.cost }} CAN</div>
-        <div style="height: 32px; line-height: 32px;" class="d-flex">
-          <!-- candidates -->
-          <a 
-            title="candidates"
-            href="javascript:;"
-            *ngIf="card.status !== 'pending' && card.status !== 'cancelled' && card.candidates && card.candidates > 0" 
-            (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser] && card.status === 'cancelled') ? 'choose' : 'list')" 
-            >
-            {{ card.candidates }}<i class="iconf if-group">&#xe613;</i>
-          </a>
+      <a *ngIf="card.recommenders[curUser] && card.status === 'open'" class="card-link email pl-20 pr-20 pt-10" href="mailto:{{ card.email }}"><i class="iconf if-email pr-2">&#xe6ac;</i>{{ card.email }}</a>
+    </div>
+    <div class="d-flex justify-content-between op p-20 pt-0">
+      <div class="cost">{{ card.cost }} CAN</div>
+      <div style="height: 32px; line-height: 32px;" class="d-flex">
+        <!-- candidates -->
+        <a 
+          title="candidates"
+          href="javascript:;"
+          *ngIf="card.status !== 'pending' && card.status !== 'cancelled' && card.candidates && card.candidates > 0" 
+          (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser] && card.status === 'cancelled') ? 'choose' : 'list')" 
+          >
+          {{ card.candidates }}<i class="iconf if-group">&#xe7f3;</i>
+        </a>
 
-          <a 
-            title="get refund"
-            *ngIf="card.status === 'cancelled' && card.recommenders[curUser]" href="javascript:;" class="btn btn-outline-primary btn-sm" 
-            (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser] && card.status === 'cancelled') ? 'choose' : 'list')" 
-          >get refund</a>
-          
+        <a 
+          title="get refund"
+          *ngIf="card.status === 'cancelled' && card.recommenders[curUser]" href="javascript:;" class="btn btn-outline-primary btn-sm" 
+          (click)="openCandidates(candidatesmodal, card, (curUser === card.ownerAddr && card.status === 'open' || card.recommenders[curUser] && card.status === 'cancelled') ? 'choose' : 'list')" 
+        >get refund</a>
+        
 
-          <!-- refer -->
+        <!-- refer -->
+        <a 
+          title="refer talent"
+          *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-outline-primary btn-sm" (click)="openCandidate(candidatemodal, card)">refer</a>
+        <!-- update -->
+        <a 
+          title="update post status"
+          *ngIf="card.status === 'pending'" href="javascript:;" class="iconf if-refresh" (click)="updateCardStatus(card)">&#xe640;</a>
+        <!-- edit -->
+        <a 
+          title="edit post"
+          *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="iconf if-edit" (click)="openCard(cardmodal, card, 'edit')">&#xe662;</a>
+        <!-- delete -->
+        <a 
+          title="cancel post"
+          *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="iconf if-delete" (click)="openCancelCard(cancelcardmodal, card)">&#xe603;</a>
+          <!-- retry -->
+          <!-- readd -->
           <a 
-            title="refer talent"
-            *ngIf="card.status === 'open' && curUser !== card.ownerAddr" href="javascript:;" class="btn btn-outline-primary btn-sm" (click)="openCandidate(candidatemodal, card)">refer</a>
-          <!-- update -->
+            title="redo adding post"
+            *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" (click)="openCard(cardmodal, card, 'new')">Redo</a>
+          <!-- reclose -->
           <a 
-            title="update post status"
-            *ngIf="card.status === 'pending'" href="javascript:;" class="iconf if-refresh" (click)="updateCardStatus(card)">&#xe6a4;</a>
-          <!-- edit -->
+            title="redo closing post"
+            *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">Redo</a>
+          <!-- recancel -->
           <a 
-            title="edit post"
-            *ngIf="(card.status === 'pending' || card.status === 'open') && curUser === card.ownerAddr" href="javascript:;" class="iconf if-edit" (click)="openCard(cardmodal, card, 'edit')">&#xe938;</a>
-          <!-- delete -->
-          <a 
-            title="cancel post"
-            *ngIf="card.status === 'open' && curUser === card.ownerAddr" href="javascript:;" class="iconf if-delete" (click)="openCancelCard(cancelcardmodal, card)">&#xe603;</a>
-            <!-- retry -->
-            <!-- readd -->
-            <a 
-              title="redo adding post"
-              *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'open'" href="javascript:;" class="card-link" (click)="openCard(cardmodal, card, 'new')">Redo</a>
-            <!-- reclose -->
-            <a 
-              title="redo closing post"
-              *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'closed'" href="javascript:;" class="card-link" (click)="openCandidates(candidatesmodal, card, curUser === card.ownerAddr ? 'choose' : 'list')">Redo</a>
-            <!-- recancel -->
-            <a 
-              title="redo cancelling post"
-              *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" (click)="openCancelCard(cancelcardmodal, card)">Redo</a>
-          
-        </div>
+            title="redo cancelling post"
+            *ngIf="card.status === 'pending' && curUser === card.ownerAddr && card.nextStatus === 'cancelled'" href="javascript:;" class="card-link" (click)="openCancelCard(cancelcardmodal, card)">Redo</a>
+        
       </div>
     </div>
   </div>
@@ -126,40 +118,40 @@
     <form [formGroup]="cardForm" [ngClass]="{'was-validated': cardForm && (cardForm.touched || cardForm.dirty) && !cardForm.valid }">
       <div class="form-group">
         <label for="title">Job Title</label>
-        <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="title" placeholder="fullstack developer">
+        <input required type="text" class="form-control" formControlName="title" maxlength="38" placeholder="fullstack developer">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       
       <div class="form-group">
         <label for="logo">Logo</label>
-        <input required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="logo" placeholder="logo company">
+        <input required type="text" class="form-control" formControlName="logo" placeholder="logo company">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
 
       <div class="form-group">
         <label for="company">Company</label>
-        <input (input)="checkEmail()" required [attr.disabled]="type === 'read' ? true : null" type="text" class="form-control" formControlName="company" placeholder="google">
+        <input (input)="checkEmail()" required type="text" class="form-control" formControlName="company" placeholder="google">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       
       <div class="form-group">
         <label for="email">Work Email(should match company name)</label>
-        <input (input)="checkEmail()" required [attr.disabled]="type === 'read' ? true : null" type="email" class="form-control" formControlName="email" placeholder="name@example.com">
+        <input (input)="checkEmail()" required type="email" class="form-control" formControlName="email" placeholder="name@example.com">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="bounty">Bounty</label>
-        <input min="500" max="{{ balance }}" required [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
+        <input min="500" max="{{ balance }}" required [attr.disabled]="type === 'edit' ? true : null" type="number" class="form-control" formControlName="bounty" placeholder="bounty">
         <div class="invalid-feedback">Please ensure your bounty bigger than 500 and less than {{ balance }}</div>
       </div>
       <div class="form-group">
         <label for="cost">Cost</label>
-        <input required min="1" [attr.disabled]="(type === 'read' || type === 'edit') ? true : null" type="number" class="form-control" formControlName="cost" placeholder="cost">
+        <input required min="1" [attr.disabled]="type === 'edit' ? true : null" type="number" class="form-control" formControlName="cost" placeholder="cost">
         <div class="invalid-feedback">Please input valid value</div>
       </div>
       <div class="form-group">
         <label for="desc">Description</label>
-        <textarea required [attr.disabled]="type === 'read' ? true : null" class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
+        <textarea required class="form-control" formControlName="desc" rows="3" placeholder="description for your job"></textarea>
         <div class="invalid-feedback">Please input valid value</div>
       </div>
     </form>
@@ -321,5 +313,20 @@
   <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">No</button>
       <button type="button" class="btn btn-outline-dark" (click)="c('cancelPost')">Yes</button>
+    </div>
+</ng-template>
+
+<ng-template #contentmodal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Job Description</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="cardTmp">
+    {{ cardTmp.desc }}
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
     </div>
 </ng-template>

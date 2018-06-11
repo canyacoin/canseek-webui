@@ -1,5 +1,5 @@
 <!-- Topbar -->
-<nav class="topbar topbar-expand-md topbar-sticky" id="section-top">
+<nav class="topbar topbar-expand-md topbar-sticky border-bottom" id="section-top">
   <div class="container">
 
     <div class="topbar-left">
@@ -9,7 +9,21 @@
     </div>
 
     <div class="topbar-right">
-      
+    <button class="btn-primary btn-sm btn mr-20" (click)="buyCan()">buy can ({{ balance }}CAN)</button>
+      <ul class="topbar-nav nav">
+        <li class="nav-item">
+          <a class="nav-link" href="https://blog.canya.com.au/" target="_blank">Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://forum.canya.io" target="_blank">Forum</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://t.me/canyacoin" target="_blank">
+            Telegram
+            <i aria-hidden="true" class="fa fa-telegram"></i>
+          </a>
+        </li>
+      </ul>
     </div>
 
   </div>

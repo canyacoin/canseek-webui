@@ -1,5 +1,5 @@
 <!-- Header -->
-<header class="header fadeout pt-90 pb-0" id="section-home">
+<header class="header fadeout pt-120 pb-30" id="section-home">
   <div class="container">
     <div class="row h-full justify-content-center align-items-center text-center text-lg-left">
 
@@ -18,6 +18,13 @@
                   <br>
                   Build your reputation.
               </h4>
+              <a class="btn btn-lg btn-primary shadow-3" href="javascript:;"
+              (click)="opencard(cardmodal)"
+                >
+              + job post</a>
+              <i class="icon question ml-10"
+                (click)="open(tutorialmodal)"
+                >&#xe628;</i>
           </div>
         </div>
       </div>
@@ -26,3 +33,10 @@
   </div>
 </header>
 <!-- END Header -->
+
+<ng-template #tutorialmodal let-c="close" let-d="dismiss">
+   <app-tutorial [c]="c" [d]="d"></app-tutorial>
+</ng-template>
+<ng-template #cardmodal let-c="close" let-d="dismiss">
+    <app-cardmodal [c]="c" [d]="d" [cardForm]="cardForm" [balance]="balance"></app-cardmodal>
+</ng-template>

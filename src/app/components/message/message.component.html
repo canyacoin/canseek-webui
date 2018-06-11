@@ -1,0 +1,16 @@
+<div *ngIf="messageService.messages.length" class="wrapper">
+  <div *ngFor="let message of messageService.messages;let i=index">
+    <p 
+      class="message {{ message.hide ? 'hide' : '' }}" 
+      (close)="messageService.close(message)"
+      [ngSwitch]="message.type"
+      >
+      <i class="icon info" *ngSwitchCase="'info'">&#xe681;</i>
+      <i class="icon success" *ngSwitchCase="'success'">&#xe683;</i>
+      <i class="icon warning" *ngSwitchCase="'warning'">&#xe664;</i>
+      <i class="icon loading" *ngSwitchCase="'loading'">&#xe633;</i>
+      <i class="icon error" *ngSwitchCase="'error'">&#xe62b;</i>
+      {{ message.message }}
+    </p>
+  </div>
+</div>
