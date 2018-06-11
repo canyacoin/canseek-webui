@@ -1,112 +1,70 @@
-// var CanYaCoin = artifacts.require("./CanYaCoin.sol");
-// var Escrow = artifacts.require("./Escrow.sol");
-// var CanHire = artifacts.require("./CanHire.sol");
-// const utils = require("tn-truffle-test-utils");
+var CanYaCoin = artifacts.require("./CanYaCoin.sol");
+var Escrow = artifacts.require("./Escrow.sol");
+var CanHire = artifacts.require("./CanHire.sol");
+const utils = require("tn-truffle-test-utils");
 
-// contract("CanHire", accounts => {
+contract("CanHire", accounts => {
 
-//   let token;
-//   let escrow;
-//   let canHire;
-//   let tokenContractOwner = accounts[7];
-//   let escrowContractOwner = accounts[8];
-//   let canHireOwner = accounts[0];
-//   let employer1 = accounts[1];
-//   let employer2 = accounts[2];
-//   let recruiter1 = accounts[3];
-//   let recruiter2 = accounts[4];
-//   let recruiter3 = accounts[5];
-//   let asset = accounts[9]
+  let token;
+  let escrow;
+  let canHire;
+  let tokenContractOwner = accounts[7];
+  let escrowContractOwner = accounts[8];
+  let canHireOwner = accounts[0];
+  let employer1 = accounts[1];
+  let employer2 = accounts[2];
+  let recruiter1 = accounts[3];
+  let recruiter2 = accounts[4];
+  let recruiter3 = accounts[5];
+  let asset = accounts[9]
 
-//   beforeEach(async () => {
-//     token = await utils.deploy(CanYaCoin, {from: tokenContractOwner});
-//     escrow = await utils.deploy(Escrow, token.address, {from: escrowContractOwner});
-//     canHire = await utils.deploy(CanHire, token.address, escrow.address, {from: canHireOwner});
+  beforeEach(async () => {
+    token = await utils.deploy(CanYaCoin, {from: tokenContractOwner});
+    escrow = await utils.deploy(Escrow, token.address, {from: escrowContractOwner});
+    canHire = await utils.deploy(CanHire, token.address, escrow.address, {from: canHireOwner});
 
-//     await token.buy({from: employer1, value: web3.toWei('2', 'ether')});
-//     await token.buy({from: employer2, value: web3.toWei('1', 'ether')});
-//     await token.buy({from: recruiter1, value: web3.toWei('1', 'ether')});
-//     await token.buy({from: recruiter2, value: web3.toWei('1', 'ether')});
-//     await token.buy({from: recruiter3, value: web3.toWei('1', 'ether')});
+    await token.buy({from: employer1, value: web3.toWei('2', 'ether')});
+    await token.buy({from: employer2, value: web3.toWei('1', 'ether')});
+    await token.buy({from: recruiter1, value: web3.toWei('1', 'ether')});
+    await token.buy({from: recruiter2, value: web3.toWei('1', 'ether')});
+    await token.buy({from: recruiter3, value: web3.toWei('1', 'ether')});
 
-//     const employer1Balance = await token.balanceOf(employer1);
-//     const employer2Balance = await token.balanceOf(employer2);
-//     const recruiter1Balance = await token.balanceOf(recruiter1);
-//     const recruiter2Balance = await token.balanceOf(recruiter2);
-//     const recruiter3Balance = await token.balanceOf(recruiter3);
+    const employer1Balance = await token.balanceOf(employer1);
+    const employer2Balance = await token.balanceOf(employer2);
+    const recruiter1Balance = await token.balanceOf(recruiter1);
+    const recruiter2Balance = await token.balanceOf(recruiter2);
+    const recruiter3Balance = await token.balanceOf(recruiter3);
     
-//     assert(await canHire.active(), "CanHire contract is not active.");
-//     assert.equal(employer1Balance.toNumber(), 2857, "wrong empoloyer1 balance");
-//     assert.equal(employer2Balance.toNumber(), 1428, "wrong employer2 balance");
-//     assert.equal(recruiter1Balance.toNumber(), 1428, "wrong recruiter1 balance");
-//     assert.equal(recruiter2Balance.toNumber(), 1428, "wrong recruiter2 balance");
-//     assert.equal(recruiter3Balance.toNumber(), 1428, "wrong recruiter3 balance");
-//   });
+    assert(await canHire.active(), "CanHire contract is not active.");
+    assert.equal(employer1Balance.toNumber(), 2857, "wrong empoloyer1 balance");
+    assert.equal(employer2Balance.toNumber(), 1428, "wrong employer2 balance");
+    assert.equal(recruiter1Balance.toNumber(), 1428, "wrong recruiter1 balance");
+    assert.equal(recruiter2Balance.toNumber(), 1428, "wrong recruiter2 balance");
+    assert.equal(recruiter3Balance.toNumber(), 1428, "wrong recruiter3 balance");
+  });
 
-//   it("should add 3 new posts", async () => {
-//     await token.approve(escrow.address, 1000, {from: employer1});
-//     await canHire.addPost("p001", 1000, 50, {from: employer1});
+  it("should add 1 new post", async () => {
+    await token.approve(escrow.address, 1000, {from: employer1});
+    await canHire.addPost("p001", 1000, 50, {from: employer1});
     
-//     const numPosts1 = await canHire.numPosts();
-//     const post1 = await canHire.posts(1);
-//     const employer1Balance1 = await token.balanceOf(employer1);
-//     const escrowBalance1 = await token.balanceOf(escrow.address);
-//     const numCandidates1 = await canHire.getNumCandidates(1);
+    const numPosts1 = await canHire.numPosts();
+    const post1 = await canHire.posts(1);
+    const employer1Balance1 = await token.balanceOf(employer1);
+    const escrowBalance1 = await token.balanceOf(escrow.address);
+    const numCandidates1 = await canHire.getNumCandidates(1);
     
-//     assert.equal(numPosts1.toNumber(), 2, "wrong total number of posts");
-//     assert.equal(post1[0].toNumber(), 1, "wrong post id");
-//     assert.equal(post1[1], employer1.toString(), "wrong post owner");
-//     assert.equal(post1[2].toNumber(), 1, "wrong post status");
-//     assert.equal(post1[3].toNumber(), 1000, "wrong post bounty");
-//     assert.equal(post1[4].toNumber(), 50, "wrong post cost");
-//     assert.equal(post1[5].toNumber(), 1000, "wrong post honeyPot");
-//     assert.equal(post1[6].toNumber(), 0, "wrong number of candidates of the post");
-//     assert.equal(numCandidates1.toNumber(), 0, "wrong candidated selected");
-//     assert.equal(employer1Balance1.toNumber(), 1857, "wrong employer balance");
-//     assert.equal(escrowBalance1.toNumber(), 1000, "wrong escrow balance");
-    
-//     await token.approve(escrow.address, 1400, {from: employer2});
-//     await canHire.addPost("p002", 1400, 100, {from: employer2});
-    
-//     const numPosts2 = await canHire.numPosts();
-//     const post2 = await canHire.posts(2);
-//     const employer2Balance = await token.balanceOf(employer2);
-//     const escrowBalance2 = await token.balanceOf(escrow.address);
-//     const numCandidates2 = await canHire.getNumCandidates(2);
-    
-//     assert.equal(numPosts2.toNumber(), 3, "wrong total number of posts");
-//     assert.equal(post2[0].toNumber(), 2, "wrong post id");
-//     assert.equal(post2[1], employer2.toString(), "wrong post owner");
-//     assert.equal(post2[2].toNumber(), 1, "wrong post status");
-//     assert.equal(post2[3].toNumber(), 1400, "wrong post bounty");
-//     assert.equal(post2[4].toNumber(), 100, "wrong post cost");
-//     assert.equal(post2[5].toNumber(), 1400, "wrong post honeyPot");
-//     assert.equal(post2[6].toNumber(), 0, "wrong number of candidates of the post");
-//     assert.equal(numCandidates2, 0, "wrong candidated selected");
-//     assert.equal(employer2Balance.toNumber(), 28, "wrong employer balance");
-//     assert.equal(escrowBalance2.toNumber(), 2400, "wrong escrow balance");
-
-//     await token.approve(escrow.address, 1500, {from: employer1});
-//     await canHire.addPost("p003", 1500, 200, {from: employer1});
-
-//     const numPosts3 = await canHire.numPosts();
-//     const post3 = await canHire.posts(3);
-//     const employer1Balance2 = await token.balanceOf(employer1);
-//     const escrowBalance3 = await token.balanceOf(escrow.address);
-//     const numCandidates3 = await canHire.getNumCandidates(3);
-
-//     assert.equal(numPosts3.toNumber(), 4, "wrong total number of posts");
-//     assert.equal(post3[0].toNumber(), 3, "wrong post id");
-//     assert.equal(post3[1], employer1.toString(), "wrong post owner");
-//     assert.equal(post3[2].toNumber(), 1, "wrong post status");
-//     assert.equal(post3[3].toNumber(), 1500, "wrong post bounty");
-//     assert.equal(post3[4].toNumber(), 200, "wrong post cost");
-//     assert.equal(post3[5].toNumber(), 1500, "wrong post honeyPot");
-//     assert.equal(post3[6].toNumber(), 0, "wrong number of candidates of the post");
-//     assert.equal(numCandidates3, 0, "wrong candidated selected");
-//     assert.equal(employer1Balance2.toNumber(), 357, "wrong employer balance");
-//     assert.equal(escrowBalance3.toNumber(), 3900, "wrong escrow balance");
-//   });
+    assert.equal(numPosts1.toNumber(), 2, "wrong total number of posts");
+    assert.equal(post1[0].toNumber(), 1, "wrong post id");
+    assert.equal(post1[1], employer1.toString(), "wrong post owner");
+    assert.equal(post1[2].toNumber(), 1, "wrong post status");
+    assert.equal(post1[3].toNumber(), 1000, "wrong post bounty");
+    assert.equal(post1[4].toNumber(), 50, "wrong post cost");
+    assert.equal(post1[5].toNumber(), 1000, "wrong post honeyPot");
+    assert.equal(post1[6].toNumber(), 0, "wrong number of candidates of the post");
+    assert.equal(numCandidates1.toNumber(), 0, "wrong candidated selected");
+    assert.equal(employer1Balance1.toNumber(), 1857, "wrong employer balance");
+    assert.equal(escrowBalance1.toNumber(), 1000, "wrong escrow balance");
+  });
 
 //   it("should recommend 2 candidates", async () => { 
 //     // employer1 adds a post
@@ -323,4 +281,4 @@
 //     assert.equal(recruiterBalance.toNumber(), 1428)
 //   });
 
-// })
+})
