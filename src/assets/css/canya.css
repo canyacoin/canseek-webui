@@ -1990,8 +1990,8 @@ button:focus {
 }
 
 .dropdown-toggle::after {
-  content: "\f107";
-  font-family: FontAwesome;
+  content: "\f078";
+  font-family: 'Font Awesome 5 Free';
   margin-left: 8px;
   border: none;
   vertical-align: initial;

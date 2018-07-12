@@ -1,0 +1,94 @@
+<app-cmp-header></app-cmp-header>
+
+<!-- <app-cmp-bancor></app-cmp-bancor> -->
+
+<section class="bg-grey pt-30 pb-100">
+    <div class="container">
+        <!-- filter -->
+        <div class="row pb-45">
+            <nz-radio-group [(ngModel)]="radioValue">
+                <label nz-radio-button nzValue="A">ALL</label>
+                <label nz-radio-button nzValue="B">OPEN</label>
+                <label nz-radio-button nzValue="C">CLOSED</label>
+                <label nz-radio-button nzValue="D">EXPIRED</label>
+                <label nz-radio-button nzValue="E">MY POSTS</label>
+                <label nz-radio-button nzValue="F">MY REFERRALS</label>
+            </nz-radio-group>
+        </div>
+
+        <!-- loading -->
+        <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+            <img src="assets/img/loader.svg" height="36px" alt="Loader">
+        </div>
+        
+        <!-- empty -->
+        <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center" style="min-height: 340px">
+            <div class="row">
+            <div class="col-12 d-flex flex-column">
+                <br>
+                <h4 class="fw-400">Uh, oh!</h4>
+                <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+            </div>
+            </div>
+        </div>
+
+        <!-- posts -->
+        <!-- {{ posts | json }} -->
+        <nz-row [nzGutter]="32">
+            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let card of posts">
+                <div class="card card-bordered card-hover-shadow">
+                    <a routerLink="/post/1">
+                        <div class="card-body">
+                            <!-- status -->
+                            <nz-row nzType="flex" nzJustify="space-between" class="status">
+                                <span class="tag {{ card.status }}">{{ card.status }}</span>
+                                <nz-col>
+                                    <nz-row nzType="flex">
+                                        <nz-col>
+                                            <span class="contrubuted mr-8">$120USD</span>
+                                            <br>
+                                            <span class="desc">Contrubuted</span>
+                                        </nz-col>
+                                        <nz-col>
+                                            <i class="iconfont iconfont-group"></i>
+                                            <span class="num">3</span>
+                                        </nz-col>
+                                    </nz-row>
+                                </nz-col>
+                            </nz-row>
+                            <img class="card-img-top my-10" 
+                                onerror="this.src='https://canya.io/images/CanYa_logo.png'"
+                                src="https://canyacoin.files.wordpress.com/2018/01/canya_origin_blog.png" 
+                                alt="{{ card.company }}logo">
+    
+                            <!-- info -->
+                            <p class="title">Develop Ruby onRails</p>
+                            <p class="text mb-10" style="font-size: 14px">canya</p>
+                            <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
+                                <nz-col><i class="iconfont iconfont-earth"></i> Remote <i class="iconfont iconfont-location ml-8"></i> China</nz-col>
+                                {{ moment(card.time).fromNow() }}
+                            </nz-row>
+
+                            <hr class="mb-24 mt-2">
+                            <p class="card-text mb-20">{{ card.status === 'closed' ? 'x' : 'CanYa is pleased to announce that we have added another awesome new tech stack partner.' }}</p>
+                            <div class="flex">
+                                <i class="can-coin mr-8"></i>
+
+                                <p class="flex1 text">
+                                    $8 USD
+                                    <br>
+                                    Application Fee
+                                </p>
+                                <button
+                                    class="btn btn-primary btn-outline">refer talent</button>
+                            </div>
+                            
+                        </div>
+                    </a>
+                </div>
+            </nz-col>
+        </nz-row>
+    </div>
+</section>
+
+<app-cmp-footer></app-cmp-footer>
