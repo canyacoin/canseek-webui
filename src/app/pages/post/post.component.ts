@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { PostService } from '../../services/post.service';
 import { Router} from '@angular/router';
+import { ContractsService } from '../../services/contracts/contracts.service';
 
 @Component({
   selector: 'app-post',
@@ -17,7 +18,7 @@ import { Router} from '@angular/router';
 export class PostComponent implements AfterViewInit {
   @ViewChild(CmpPoststep1Component)
   private step1: CmpPoststep1Component;
-
+  curUser: string;
   rewardForm: FormGroup;
 
   current = 0;
@@ -55,7 +56,7 @@ export class PostComponent implements AfterViewInit {
   }
 
   done(): void {
-    const postData = {...this.values, time: Date.now() };
+    const postData = {...this.values, time: Date.now(), ownerAddr: this.curUser };
     this.ps.addPost(postData)
     .then(result => {
       debugger
@@ -84,7 +85,8 @@ export class PostComponent implements AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private ps: PostService,
-    private router: Router
+    private router: Router,
+    private cs: ContractsService,
   ) {
     this.rewardForm = this.fb.group({
       reward: [ null, [ Validators.required ] ],
@@ -92,6 +94,9 @@ export class PostComponent implements AfterViewInit {
     });
    }
    ngAfterViewInit() {
-
+    this.getAccount();
    }
+   async getAccount() {
+    this.curUser = await this.cs.getAccount();
+  }
 }
