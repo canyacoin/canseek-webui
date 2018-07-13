@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import { ContractsService } from '../../services/contracts/contracts.service';
-
-// import { Store } from '../../store';
+import { Store } from "../../store";
 import * as moment from 'moment';
 
 @Component({
@@ -11,8 +10,8 @@ import * as moment from 'moment';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
+  store = Store;
   moment = moment;
-  curUser: string;
   loading: boolean = true;
   posts: any;
   results: any;
@@ -28,13 +27,10 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getAccount();
     this.getPosts();
     this.getBalance();
   }
-  async getAccount() {
-    this.curUser = await this.cs.getAccount();
-  }
+  
   getBalance() {
     this.cs.getCANBalance()
       .then(b => this.balance = b);
@@ -50,6 +46,7 @@ export class HomeComponent implements OnInit {
   }
   searchStatus() {
     const { posts, statusValue } = this;
+    const { curUser } = this.store;
     let next;
 
     switch(statusValue) {
@@ -63,11 +60,11 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_posts':
-        next = posts.filter(item => item.ownerAddr === this.curUser)
+        next = posts.filter(item => item.ownerAddr === curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_referrals':
-        next = posts.filter(item => item.recommenders[this.curUser])
+        next = posts.filter(item => item.recommenders[curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }

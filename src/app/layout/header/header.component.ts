@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from "../../store";
 import { CurrencyService } from '../../services/global/currency.service';
+import { ContractsService } from '../../services/contracts/contracts.service';
 
 @Component({
   selector: 'app-header',
@@ -32,13 +33,19 @@ export class HeaderComponent implements OnInit {
 
   selectedCurrency: any = {};
 
-  currentUser: any = JSON.parse(localStorage.getItem('credentials'));
-
-  constructor(private cs: CurrencyService) { }
+  constructor(
+    private cs: CurrencyService,
+    private cons: ContractsService,
+  ) { }
 
   ngOnInit() {
     const currencyName = localStorage.getItem('currencyName') || 'USD';
     this.setCurrency(this.currency[currencyName]);
+    this.getAccount();
+  }
+
+  async getAccount() {
+    this.store.curUser = await this.cons.getAccount();
   }
 
   setCurrency(currency) {
