@@ -92,11 +92,11 @@ export class PostComponent implements AfterViewInit {
       reward: [ null, [ Validators.required ] ],
       cost: [ null, [ Validators.required ] ],
     });
-   }
-   ngAfterViewInit() {
+  }
+  ngAfterViewInit() {
     this.getAccount();
-   }
-   async getAccount() {
+  }
+  async getAccount() {
     this.curUser = await this.cs.getAccount();
   }
 }

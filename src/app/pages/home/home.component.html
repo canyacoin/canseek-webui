@@ -35,9 +35,9 @@
         <!-- posts -->
         <!-- {{ posts | json }} -->
         <nz-row [nzGutter]="32">
-            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let card of posts">
+            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let card of results">
                 <div class="card card-bordered card-hover-shadow">
-                    <a routerLink="/post/1">
+                    <a routerLink="/post/{{ post.id }}">
                         <div class="card-body">
                             <!-- status -->
                             <nz-row nzType="flex" nzJustify="space-between" class="status">
@@ -45,37 +45,37 @@
                                 <nz-col>
                                     <nz-row nzType="flex">
                                         <nz-col>
-                                            <span class="contrubuted mr-8">$120USD</span>
+                                            <span class="contrubuted mr-8">{{ card.honeypot || card.reward }}USD</span>
                                             <br>
                                             <span class="desc">Contrubuted</span>
                                         </nz-col>
                                         <nz-col>
                                             <i class="iconfont iconfont-group"></i>
-                                            <span class="num">3</span>
+                                            <span class="num">{{ card.candidates }}</span>
                                         </nz-col>
                                     </nz-row>
                                 </nz-col>
                             </nz-row>
                             <img class="card-img-top my-10" 
                                 onerror="this.src='https://canya.io/images/CanYa_logo.png'"
-                                src="https://canyacoin.files.wordpress.com/2018/01/canya_origin_blog.png" 
-                                alt="{{ card.company }}logo">
+                                src="{{ card.company_logo }}" 
+                                alt="{{ card.company }} logo">
     
                             <!-- info -->
-                            <p class="title">Develop Ruby onRails</p>
-                            <p class="text mb-10" style="font-size: 14px">canya</p>
+                            <p class="title">{{ card.job_title }}</p>
+                            <p class="text mb-10" style="font-size: 14px">{{ card.company_name }}</p>
                             <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
-                                <nz-col><i class="iconfont iconfont-earth"></i> Remote <i class="iconfont iconfont-location ml-8"></i> China</nz-col>
+                                <nz-col><i class="iconfont iconfont-earth"></i> Remote <i class="iconfont iconfont-location ml-8"></i> {{ card.job_location }}</nz-col>
                                 {{ moment(card.time).fromNow() }}
                             </nz-row>
 
                             <hr class="mb-24 mt-2">
-                            <p class="card-text mb-20">{{ card.status === 'closed' ? 'x' : 'CanYa is pleased to announce that we have added another awesome new tech stack partner.' }}</p>
+                            <p class="card-text mb-20">{{ card.job_desc }}</p>
                             <div class="flex">
                                 <i class="can-coin mr-8"></i>
 
                                 <p class="flex1 text">
-                                    $8 USD
+                                    {{ card.cost }} USD
                                     <br>
                                     Application Fee
                                 </p>
