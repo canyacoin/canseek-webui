@@ -1,4 +1,4 @@
 export let Store = {
     exchangeRate: {},
-    curUser: '',
+    curUser: '0x0',
 };

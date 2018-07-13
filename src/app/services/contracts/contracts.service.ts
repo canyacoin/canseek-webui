@@ -8,11 +8,10 @@ declare let window: any;
 
 const Web3 = require('web3');
 
-const relPath = '../../../../build/contracts/';
 const contract = require('truffle-contract');
-const CanYaCoinArtifacts = require(relPath + 'CanYaCoin.json');
-const EscrowArtifacts = require(relPath + 'Escrow.json');
-const CanHireArtifacts = require(relPath + 'CanHire.json');
+const CanYaCoinArtifacts = require('../../../../build/contracts/CanYaCoin.json');
+const EscrowArtifacts = require('../../../../build/contracts/Escrow.json');
+const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
 const gas = { gasPrice: '503000000', gas: '200000' };
 const gasAddPost = { gasPrice: '503000000', gas: '60000' };
 const gasRecommend = { gasPrice: '503000000', gas: '200000' };

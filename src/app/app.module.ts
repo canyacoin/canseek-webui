@@ -34,6 +34,7 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 
+import { ContractsService } from './services/contracts/contracts.service';
 import { CurrencyService } from './services/global/currency.service';
 import { PostService } from './services/post.service';
 
@@ -77,7 +78,7 @@ registerLocaleData(zh);
     // AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, CurrencyService, PostService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, CurrencyService, PostService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
