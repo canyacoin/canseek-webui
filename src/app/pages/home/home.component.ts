@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+// import { ContractsService } from '../../services/contracts/contracts.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
 
@@ -23,17 +23,11 @@ export class HomeComponent implements OnInit {
   
   constructor(
     private ps: PostService,
-    private cs: ContractsService,
+    // private cs: ContractsService,
   ) { }
 
   ngOnInit() {
     this.getPosts();
-    this.getBalance();
-  }
-  
-  getBalance() {
-    this.cs.getCANBalance()
-      .then(b => this.balance = b);
   }
 
   getPosts(): void {
@@ -64,7 +58,7 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_referrals':
-        next = posts.filter(item => item.recommenders[curUser])
+        next = posts.filter(item => (item.recommenders || {})[curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }

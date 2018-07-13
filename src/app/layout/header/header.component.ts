@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from "../../store";
 import { CurrencyService } from '../../services/global/currency.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+// import { ContractsService } from '../../services/contracts/contracts.service';
 
 @Component({
   selector: 'app-header',
@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private cs: CurrencyService,
-    private cons: ContractsService,
+    // private cons: ContractsService,
   ) { }
 
   ngOnInit() {
@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit {
   }
 
   async getAccount() {
-    this.store.curUser = await this.cons.getAccount();
+    // this.store.curUser = await this.cons.getAccount();
   }
 
   setCurrency(currency) {

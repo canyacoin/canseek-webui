@@ -25,10 +25,11 @@ export class PostService {
         const { id } = docRef;
 
         this.docRef = docRef;
-        docRef.update({ id });
+        // todo status intergrate with contracts
+        docRef.update({ id, status: 'open' });
 
         return Promise.resolve({
-          status: 'pending',
+          status: 'open',
           id
         });
 
