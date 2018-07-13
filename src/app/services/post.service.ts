@@ -16,6 +16,9 @@ export class PostService {
   getPosts(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
+  getPost(id): Observable<any[]> {
+    return this.dbRef.doc(id).valueChanges();
+  }
 
   addPost(post: any) {
     const { id, bounty, cost } = post;

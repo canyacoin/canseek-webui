@@ -44,7 +44,7 @@
                                 <nz-col>
                                     <nz-row nzType="flex">
                                         <nz-col>
-                                            <span class="contrubuted mr-8">{{ post.honeypot || post.reward }}USD</span>
+                                            <span class="contrubuted mr-8">${{ post.honeypot || post.reward }}USD</span>
                                             <br>
                                             <span class="desc">Contrubuted</span>
                                         </nz-col>
@@ -58,7 +58,7 @@
                             <img class="card-img-top my-10" 
                                 onerror="this.src='https://canya.io/images/CanYa_logo.png'"
                                 src="{{ post.company_logo }}" 
-                                alt="{{ post.company }} logo">
+                                alt="{{ post.company_name }} logo">
     
                             <!-- info -->
                             <p class="title">{{ post.job_title }}</p>
@@ -74,7 +74,7 @@
                                 <i class="can-coin mr-8"></i>
 
                                 <p class="flex1 text">
-                                    {{ post.cost }} USD
+                                    ${{ post.cost }} USD
                                     <br>
                                     Application Fee
                                 </p>
