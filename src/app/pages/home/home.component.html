@@ -36,7 +36,7 @@
         <nz-row [nzGutter]="32" *ngIf="!loading && (results && results.length > 0)">
             <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
                 <div class="card card-bordered card-hover-shadow">
-                    <a routerLink="/post/{{ post.id }}">
+                    <a routerLink="/post/detail/{{ post.id }}">
                         <div class="card-body">
                             <!-- status -->
                             <nz-row nzType="flex" nzJustify="space-between" class="status">
@@ -78,7 +78,26 @@
                                     <br>
                                     Application Fee
                                 </p>
+<!-- op -->
+<nz-dropdown 
+  *ngIf="statusValue == 'my_posts'"
+  >
+  <a nz-dropdown>
+    <i class="iconfont iconfont-ellipsis"></i>
+  </a>
+  <ul nz-menu>
+    <li nz-menu-item class="op-item">
+      <a routerLink="/post/edit/{{ post.id }}">edit</a>
+    </li>
+    <li nz-menu-item class="op-item" (click)="showConfirm(post.id)">delete</li>
+    <li nz-menu-item class="op-item">
+      <a routerLink="/applicants/{{ post.id }}">view applicants</a>
+    </li>
+  </ul>
+</nz-dropdown>
+
                                 <button
+                                    *ngIf="statusValue !== 'my_posts'"
                                     class="btn btn-primary btn-outline">refer talent</button>
                             </div>
                             

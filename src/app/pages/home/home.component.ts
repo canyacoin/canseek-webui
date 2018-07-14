@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
-// import { ContractsService } from '../../services/contracts/contracts.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
+import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +16,14 @@ export class HomeComponent implements OnInit {
   posts: any;
   results: any;
 
-  statusValue='all';
+  statusValue = localStorage.getItem('statusValue') || 'all';
   balance: number = 0;
-  // posts=Store.posts;
-  // results=[];
+  confirmModal: NzModalRef;
   
   constructor(
     private ps: PostService,
+    private modal: NzModalService,
+    private message: NzMessageService,
     // private cs: ContractsService,
   ) { }
 
@@ -38,11 +39,13 @@ export class HomeComponent implements OnInit {
         this.searchStatus();
       });
   }
+
   searchStatus() {
     const { posts, statusValue } = this;
     const { curUser } = this.store;
     let next;
 
+    localStorage.setItem('statusValue', statusValue);
     switch(statusValue) {
       case 'all':
         next = posts; break;
@@ -63,5 +66,15 @@ export class HomeComponent implements OnInit {
         break;
     }
     this.results = next;
+  }
+  
+  showConfirm(id): void {
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Are your sure you want to delete this job post?',
+      nzOnOk: () => 
+      this.ps.deletePost(id)
+        .then(() => this.message.create('success', 'Delete success'))
+        .catch(() => this.message.create('error', 'Oops error'))
+    });
   }
 }

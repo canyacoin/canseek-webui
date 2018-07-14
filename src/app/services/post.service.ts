@@ -40,6 +40,9 @@ export class PostService {
 
       })
   }
+  deletePost(id: string) {
+    return this.dbRef.doc(id).delete()
+  }
   addCandidate(post: any, candidate: Object, curUser: string) {
     const { id, candidates, recommenders } = post;
     this.postRef = this.dbRef.doc(id);
