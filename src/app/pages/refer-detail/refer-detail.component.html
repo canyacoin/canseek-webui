@@ -1,0 +1,41 @@
+<nz-row *ngIf="candidate" class="my-30">
+  <nz-col nzType="flex" nzSpan="12" nzOffset="6"> 
+
+    <h2 class="text-center my-30">My Application</h2>
+
+    <h3>Talent’s Contact Details*</h3>
+
+    <p><span class="bold">Contact Name*</span>: {{ candidate.name }}</p>
+    <p><span class="bold">Phone or Email*</span>: {{ candidate.email }}</p>
+    <p><span class="bold">Professional Links</span>: ??todo</p>
+    <p><span class="bold">website</span>: {{ candidate.website }}</p>
+    <p><span class="bold">Why are you referring this talent?</span>: {{ candidate.reason }}</p>
+  
+    <h3>Application</h3>
+
+    <p><span class="bold">CV/Resume*</span>: {{ candidate.resume }} todo download</p>
+    <p><span class="bold">LinkedIn Profile</span>: {{ candidate.website }} ?? todo which field </p>
+
+    <nz-row *ngIf="post" class="my-20 mx-0" nzType="flex" [nzGutter]="32">
+      <span class="bold">Screening Questions*</span>: 
+      <nz-col>
+          <p class="bold">{{ post.job_qu1 }}</p>
+          <p>{{ candidate.qu1 }}</p>
+    
+          <p class="bold">{{ post.job_qu2 }}</p>
+          <p>{{ candidate.qu2 }}</p>
+    
+          <p class="bold">{{ post.job_qu3 }}</p>
+          <p>{{ candidate.qu3 }}</p>
+      </nz-col>
+    </nz-row>
+
+    <p><span class="bold">Cover Letter</span>: {{ candidate.cover_letter }}</p>
+    
+  </nz-col>
+</nz-row>
+
+<!-- loading -->
+<div *ngIf="!candidate" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>

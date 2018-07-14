@@ -23,7 +23,6 @@ import { FaqComponent } from './pages/faq/faq.component';
 import { StatusComponent } from './pages/status/status.component';
 import { ReferComponent } from './pages/refer/refer.component';
 import { CmpReferstep2Component } from './pages/refer/components/cmp-referstep2/cmp-referstep2.component';
-import { ApplicationComponent } from './pages/application/application.component';
 import { ApplicantsComponent } from './pages/applicants/applicants.component';
 
 import { AngularFireModule } from 'angularfire2';
@@ -35,6 +34,7 @@ import { environment } from '../environments/environment';
 import { ContractsService } from './services/contracts/contracts.service';
 import { CurrencyService } from './services/global/currency.service';
 import { PostService } from './services/post.service';
+import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 
 
 registerLocaleData(zh);
@@ -56,8 +56,8 @@ registerLocaleData(zh);
     StatusComponent,
     ReferComponent,
     CmpReferstep2Component,
-    ApplicationComponent,
     ApplicantsComponent,
+    ReferDetailComponent,
   ],
   imports: [
     BrowserModule,

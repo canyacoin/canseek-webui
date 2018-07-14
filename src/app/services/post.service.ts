@@ -66,8 +66,13 @@ export class PostService {
         // this.cs.recommend(candidateRef.id, id);
         
         return Promise.resolve({
-          id: docRef.id
+          pid: post['id'],
+          cid: docRef.id
         })
       })
+  }
+
+  getCandidate(pid: string, cid: string) {
+    return this.dbRef.doc(pid).collection('candidates').doc(cid).valueChanges();
   }
 }
