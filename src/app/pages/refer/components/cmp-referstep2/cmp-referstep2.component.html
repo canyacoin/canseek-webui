@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+<form *ngIf="!!validateForm" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
   <h4 class="my-20">Talent’s Contact Details</h4>
 
   <nz-form-item>

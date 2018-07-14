@@ -70,7 +70,7 @@ export class PostComponent implements AfterViewInit {
 
     if (this.current === 0) {
       formData = this.step1.submitForm();
-      this.values = formData.data;
+      this.values = {...this.values, ...formData.data };
     } else if (this.current === 1) {
       formData = this.submitForm();
       for (const label in formData.data) {

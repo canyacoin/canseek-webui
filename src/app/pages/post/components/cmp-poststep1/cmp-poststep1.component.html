@@ -1,4 +1,4 @@
-<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+<form *ngIf="!!validateForm" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
 
   <h4>Job Information</h4>
 
@@ -35,6 +35,7 @@
         <label nz-radio-button nzValue="C">contract/temp</label>
         <label nz-radio-button nzValue="D">casual</label>
       </nz-radio-group>
+      <nz-form-explain *ngIf="validateForm.get('job_type').dirty && validateForm.get('job_type').errors">Please input your job_type!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
@@ -71,6 +72,7 @@
         <label nz-radio-button nzValue="C">senior</label>
         <label nz-radio-button nzValue="D">excutive</label>
       </nz-radio-group>
+      <nz-form-explain *ngIf="validateForm.get('job_level').dirty && validateForm.get('job_level').errors">Please input your job_level!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
