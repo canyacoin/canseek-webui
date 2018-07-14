@@ -1,31 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators
+} from '@angular/forms';
+import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
+import { PostService } from '../../services/post.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Store } from "../../store";
 
 @Component({
   selector: 'app-refer',
   templateUrl: './refer.component.html',
   styleUrls: ['./refer.component.less']
 })
-export class ReferComponent implements OnInit {
-  current = 0;
+export class ReferComponent implements AfterViewInit {
+  @ViewChild(CmpReferstep2Component)
+  private step2: CmpReferstep2Component;
 
-  index = 'First-content';
+  current = 2;
+  validateForm: FormGroup;
+  values: Object = {};
+
+  
+  store = Store;
+  post: Object;
+  currencyName = localStorage.getItem('currencyName') || 'USD';
+  symbol = Store.currency[this.currencyName].symbol;
+  cost: number = 0;
+
+  constructor(
+    private fb: FormBuilder,
+    private ps: PostService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {
+    this.validateForm = this.fb.group({
+      name         : [ null, [ Validators.required ] ],
+      email        : [ null, [ Validators.email ] ],
+      relation     : [ null, [ Validators.required ] ],
+      address      : [ null, [ Validators.required ] ],
+    });
+    this.getPost();
+  }
+
+  ngAfterViewInit() {
+  }
+
+  submitForm(): any {
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[ i ].markAsDirty();
+      this.validateForm.controls[ i ].updateValueAndValidity();
+      this.values[i] = this.validateForm.controls[ i ].value;
+    }
+    return {
+      valid: this.validateForm.valid,
+      data: this.values,
+    }
+  }
 
   pre(): void {
     this.current -= 1;
-    // this.changeContent();
   }
 
   next(): void {
-    this.current += 1;
-    // this.changeContent();
+    let formData;
+
+    if (this.current === 0) {
+      formData = this.submitForm();
+    } else if (this.current === 1) {
+      formData = this.step2.submitForm();
+      this.values = {...this.values, ...formData.data};
+    }
+    
+    if (formData.valid) {
+      this.current += 1;
+    }
+  }
+
+  getPost(): void {
+    const { id } = this.route.snapshot.params;
+
+    this.ps.getPost(id)
+      .subscribe(post => {
+        this.post = post;
+        this.cost = Number(post['cost']);
+      });
   }
 
   done(): void {
-    console.log('done');
+    const CandidateData = {...this.values, time: Date.now() };
+    this.ps.addCandidate(this.post, CandidateData, this.store.curUser)
+      .then(result => this.router.navigateByUrl(`/status/refer/${result.id}`))
   }
-  constructor() { }
-
-  ngOnInit() {
-  }
-
 }

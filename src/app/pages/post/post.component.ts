@@ -26,6 +26,19 @@ export class PostComponent implements AfterViewInit {
   values: Object = {};
   valuesArr = [];
 
+  constructor(
+    private fb: FormBuilder,
+    private ps: PostService,
+    private router: Router,
+  ) {
+    this.rewardForm = this.fb.group({
+      reward: [ null, [ Validators.required ] ],
+      cost: [ null, [ Validators.required ] ],
+    });
+  }
+  ngAfterViewInit() {
+  }
+  
   pre(): void {
     this.current -= 1;
   }
@@ -43,10 +56,6 @@ export class PostComponent implements AfterViewInit {
           label,
           value: formData.data[label]
         });
-        // if (formData.data.hasOwnProperty(label)) {
-        //   const element = formData.data[label];
-          
-        // }
       }
     }
     
@@ -58,11 +67,7 @@ export class PostComponent implements AfterViewInit {
   done(): void {
     const postData = {...this.values, time: Date.now(), ownerAddr: this.store.curUser };
     this.ps.addPost(postData)
-    .then(result => {
-      debugger
-      const { id } = result;
-      this.router.navigateByUrl(`/status?type=post&id=${id}`);
-    })
+    .then(result => this.router.navigateByUrl(`/status/post/${result.id}`))
   }
 
   submitForm(): any {
@@ -70,28 +75,11 @@ export class PostComponent implements AfterViewInit {
       this.rewardForm.controls[ i ].markAsDirty();
       this.rewardForm.controls[ i ].updateValueAndValidity();
       this.values[i] = this.rewardForm.controls[ i ].value;
-      // this.values.push({
-      //   label: i,
-      //   value: this.rewardForm.controls[ i ].value
-      // })
     }
     
     return {
       valid: this.rewardForm.valid,
       data: this.values,
     }
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private ps: PostService,
-    private router: Router,
-  ) {
-    this.rewardForm = this.fb.group({
-      reward: [ null, [ Validators.required ] ],
-      cost: [ null, [ Validators.required ] ],
-    });
-  }
-  ngAfterViewInit() {
   }
 }

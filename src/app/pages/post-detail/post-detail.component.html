@@ -6,7 +6,7 @@
         <!-- card post -->
         <div class="card" style="min-height: 100%">
           <div class="p-60">
-              <h3 class="cart-title title3">{{ post.job_title }}</h3>
+              <h3 class="cart-title">{{ post.job_title }}</h3>
               <p class="bold">{{ post.company_name }}</p>
               <p class="text my-20">{{ post.job_type }} {{ post.job_range }}</p>
 
@@ -58,7 +58,7 @@
               
             </div>
             <div class="text-center">
-              <a class="btn btn-primary btn-canya-gradient mt-60" routerLink="/refer/{{ post.id }}">
+              <a class="btn btn-primary btn-canya-gradient mt-60" routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
               </a>
             </div>

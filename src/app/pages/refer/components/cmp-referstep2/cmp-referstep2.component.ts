@@ -22,10 +22,17 @@ export class CmpReferstep2Component implements OnInit {
   ];
   validateForm: FormGroup;
 
-  submitForm(): void {
+  submitForm(): any {
+    let data = [];
+
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
+      data[i] = this.validateForm.controls[ i ].value;
+    }
+    return {
+      valid: this.validateForm.valid,
+      data
     }
   }
 
@@ -68,9 +75,10 @@ export class CmpReferstep2Component implements OnInit {
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       name         : [ null, [ Validators.required ] ],
-      email        : [ null, [ Validators.email ] ],
+      email        : [ null, [ Validators.required ] ],
       reason     : [ null, [ Validators.required ] ],
-      resume      : [ null, [ Validators.required ] ],
+      // todo upload
+      resume      : [ null/*, [ Validators.required ]*/ ],
       website: [null],
       qu1      : [ null, [ Validators.required ] ],
       qu2     : [ null, [ Validators.required ] ],

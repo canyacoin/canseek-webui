@@ -10,26 +10,7 @@ import { ContractsService } from '../../services/contracts/contracts.service';
 })
 export class HeaderComponent implements OnInit {
   store = Store;
-  currency = {
-    AUD: {
-        symbol: 'A$',
-        name: 'AUD',
-        string: 'A$ AUD',
-        value: 0
-    },
-    USD: {
-        symbol: '$',
-        name: 'USD',
-        string: '$ USD',
-        value: 0
-    },
-    EUR: {
-        symbol: '€',
-        name: 'EUR',
-        string: '€ EUR',
-        value: 0
-    },
-  };
+  currency = Store.currency;
 
   selectedCurrency: any = {};
 

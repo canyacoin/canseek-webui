@@ -1,32 +1,73 @@
-<section class="container pt-30 pb-100">
-  <div class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-      <nz-steps [nzCurrent]="current" class="steps">
-        <nz-step nzTitle="Your Information "></nz-step>
-        <nz-step nzTitle="Talent Information"></nz-step>
-        <nz-step nzTitle="Application Contribution"></nz-step>
-      </nz-steps>
+<nz-row class="mt-30 mb-100">
+  <nz-col nzType="flex" nzSpan="14" nzOffset="5"> 
+    <nz-steps [nzCurrent]="current" class="steps">
+      <nz-step nzTitle="Your Information "></nz-step>
+      <nz-step nzTitle="Talent Information"></nz-step>
+      <nz-step nzTitle="Application Contribution"></nz-step>
+    </nz-steps>
+    
+    <div class="steps-content mt-100">
+      <!-- step1 -->
+      <form *ngIf="current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired> Name </nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input formControlName="name" id="name">
+            <nz-form-explain *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">Please input your name!</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+        
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>E-mail</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input formControlName="email" id="email">
+            <nz-form-explain *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">The input is not valid E-mail!</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
       
-      <div class="steps-content mt-100">
-        <app-cmp-referstep1 *ngIf="current == 0"></app-cmp-referstep1>
-        <app-cmp-referstep2 *ngIf="current == 1"></app-cmp-referstep2>
-        <app-cmp-referstep3 *ngIf="current == 2"></app-cmp-referstep3>
-      </div>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired>Your relationship</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-radio-group formControlName="relation" id="relation">
+              <label nz-radio-button nzValue="A">recruiter</label>
+              <label nz-radio-button nzValue="B">associate</label>
+              <label nz-radio-button nzValue="C">i'm the talent</label>
+            </nz-radio-group>
+          </nz-form-control>
+        </nz-form-item>
       
-      <div class="steps-action mt-40 text-right">
-        <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
-          <span>Cancel</span>
-        </button>
-        <button nz-button nzType="primary" (click)="next()" *ngIf="current < 2" class="ml-20">
-          <span>Next</span>
-        </button>
-        <button nz-button nzType="primary" (click)="done()" *ngIf="current === 2" class="ml-20">
-          <span>Done</span>
-        </button>
+        <nz-form-item>
+            <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="address" nzRequired> Address </nz-form-label>
+            <nz-form-control [nzSm]="14" [nzXs]="24">
+              <nz-form-extra>For payout of the Referral fund if your talent is successful</nz-form-extra>
+              <input nz-input formControlName="address" id="address">
+              <nz-form-explain *ngIf="validateForm.get('address').dirty && validateForm.get('address').errors">Please input your address!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+      </form>
+      <!-- step2 -->
+      <app-cmp-referstep2 *ngIf="current == 1"></app-cmp-referstep2>
+      <!-- step3 -->
+      <div class="text-center" *ngIf="current == 2">
+        <h4>Application Fee</h4>
+        <!-- todo cost 单位 & can -->
+        <h4><strong>{{ symbol }}{{ cost }}{{ currencyName }}</strong></h4>  
+        <button class="btn btn-primary mt-40 mb-12" (click)="done()">refer talent</button>
+        <p>Total: {{ symbol }}{{ cost }}{{ currencyName }} ≈ 10 CAN</p>
       </div>
-
     </div>
-    <div class="col-md-2"></div>
-  </div>
-</section>
+    
+    <div class="steps-action mt-40 text-right">
+      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
+        <span>Cancel</span>
+      </button>
+      <button nz-button nzType="primary" (click)="next()" *ngIf="current < 2" class="ml-20">
+        <span>Next</span>
+      </button>
+      <button nz-button nzType="primary" (click)="done()" *ngIf="current === 2" class="ml-20">
+        <span>Done</span>
+      </button>
+    </div>
+
+  </nz-col>
+</nz-row>

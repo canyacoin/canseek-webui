@@ -22,9 +22,7 @@ import { PostDetailComponent } from './pages/post-detail/post-detail.component';
 import { FaqComponent } from './pages/faq/faq.component';
 import { StatusComponent } from './pages/status/status.component';
 import { ReferComponent } from './pages/refer/refer.component';
-import { CmpReferstep1Component } from './pages/refer/components/cmp-referstep1/cmp-referstep1.component';
 import { CmpReferstep2Component } from './pages/refer/components/cmp-referstep2/cmp-referstep2.component';
-import { CmpReferstep3Component } from './pages/refer/components/cmp-referstep3/cmp-referstep3.component';
 import { ApplicationComponent } from './pages/application/application.component';
 import { ApplicantsComponent } from './pages/applicants/applicants.component';
 
@@ -57,9 +55,7 @@ registerLocaleData(zh);
     FaqComponent,
     StatusComponent,
     ReferComponent,
-    CmpReferstep1Component,
     CmpReferstep2Component,
-    CmpReferstep3Component,
     ApplicationComponent,
     ApplicantsComponent,
   ],
