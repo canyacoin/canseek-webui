@@ -38,7 +38,7 @@ export class ReferComponent implements AfterViewInit {
   ) {
     this.validateForm = this.fb.group({
       name         : [ null, [ Validators.required ] ],
-      email        : [ null, [ Validators.email ] ],
+      email        : [ null, [ Validators.required, Validators.email ] ],
       relation     : [ null, [ Validators.required ] ],
       address      : [ null, [ Validators.required ] ],
     });

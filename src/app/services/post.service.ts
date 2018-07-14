@@ -40,16 +40,19 @@ export class PostService {
 
       })
   }
+
   updatePost(post: any) {
     const { id } = post;
 
     this.dbRef.doc(id).update(post);
   }
+
   deletePost(id: string) {
     return this.dbRef.doc(id).delete()
   }
+
   addCandidate(post: any, candidate: Object, curUser: string) {
-    const { id, candidates, recommenders } = post;
+    const { id, candidates = 0, recommenders = [] } = post;
     this.postRef = this.dbRef.doc(id);
 
     return this.postRef.collection('candidates').add(candidate)
@@ -57,7 +60,7 @@ export class PostService {
         docRef.update({id: docRef.id});
 
         // post candidates ++
-        this.postRef.update({ candidates: candidates + 1 })
+        this.postRef.update({ candidates: candidates + 1, recommenders: recommenders.concat(curUser) })
 
         // send bc request
         // this.cs.recommend(candidateRef.id, id);

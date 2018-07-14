@@ -33,6 +33,8 @@
               <label nz-radio-button nzValue="B">associate</label>
               <label nz-radio-button nzValue="C">i'm the talent</label>
             </nz-radio-group>
+            <nz-form-explain *ngIf="validateForm.get('relation').dirty && validateForm.get('relation').errors">The input is not valid relation!</nz-form-explain>
+
           </nz-form-control>
         </nz-form-item>
       
