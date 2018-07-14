@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_posts':
-        next = posts.filter(item => item.ownerAddr === curUser)
+        next = posts.filter(item => item.owner_addr === curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_referrals':

@@ -7,7 +7,7 @@ import {
   Validators
 } from '@angular/forms';
 import { PostService } from '../../services/post.service';
-import { Router} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 
 @Component({
@@ -26,19 +26,41 @@ export class PostComponent implements AfterViewInit {
   values: Object = {};
   valuesArr = [];
 
+  // new edit noAuth
+  type: string = 'new';
+
   constructor(
     private fb: FormBuilder,
     private ps: PostService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {
-    this.rewardForm = this.fb.group({
-      reward: [ null, [ Validators.required ] ],
-      cost: [ null, [ Validators.required ] ],
-    });
+    this.genType();
   }
   ngAfterViewInit() {
   }
   
+  genType(): void {
+    const { type, id } = this.route.snapshot.params;
+
+    this.type = type;
+
+    if (type == 'new') {
+      this.rewardForm = this.fb.group({
+        reward: [ null, [ Validators.required ] ],
+        cost: [ null, [ Validators.required ] ],
+      });
+    } else if (type == 'edit'){
+      this.ps.getPost(id)
+        .subscribe(post => {
+          this.values = post;
+          if (post['owner_addr'] != this.store.curUser) {
+            this.type = 'noAuth';
+          }
+        })
+    }
+  }
+
   pre(): void {
     this.current -= 1;
   }
@@ -65,7 +87,7 @@ export class PostComponent implements AfterViewInit {
   }
 
   done(): void {
-    const postData = {...this.values, time: Date.now(), ownerAddr: this.store.curUser };
+    const postData = {...this.values, time: Date.now(), owner_addr: this.store.curUser };
     this.ps.addPost(postData)
     .then(result => this.router.navigateByUrl(`/status/post/${result.id}`))
   }

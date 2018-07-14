@@ -14,9 +14,11 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'post/new', component: PostComponent },
+  // type = new
+  { path: 'post/:type', component: PostComponent },
   { path: 'post/detail/:id', component: PostDetailComponent },
-  { path: 'post/edit/:id', component: PostComponent },
+  // type = edit
+  { path: 'post/:type/:id', component: PostComponent },
   { path: 'status/:type/:id', component: StatusComponent },
   { path: 'refer/new/:id', component: ReferComponent },
   { path: 'application/:id', component: ApplicationComponent },
