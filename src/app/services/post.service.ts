@@ -40,6 +40,11 @@ export class PostService {
 
       })
   }
+  updatePost(post: any) {
+    const { id } = post;
+
+    this.dbRef.doc(id).update(post);
+  }
   deletePost(id: string) {
     return this.dbRef.doc(id).delete()
   }

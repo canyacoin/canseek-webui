@@ -19,7 +19,7 @@ export class PostComponent implements AfterViewInit {
   @ViewChild(CmpPoststep1Component)
   private step1: CmpPoststep1Component;
   store = Store;
-  rewardForm: FormGroup;
+  validateForm: FormGroup;
 
   current = 0;
 
@@ -27,7 +27,7 @@ export class PostComponent implements AfterViewInit {
   valuesArr = [];
 
   // new edit noAuth
-  type: string = 'new';
+  type: string;
 
   constructor(
     private fb: FormBuilder,
@@ -35,32 +35,39 @@ export class PostComponent implements AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
   ) {
-    this.genType();
   }
   ngAfterViewInit() {
+    this.init();
   }
   
-  genType(): void {
+  init(): void {
     const { type, id } = this.route.snapshot.params;
 
     this.type = type;
 
-    if (type == 'new') {
-      this.rewardForm = this.fb.group({
-        reward: [ null, [ Validators.required ] ],
-        cost: [ null, [ Validators.required ] ],
-      });
-    } else if (type == 'edit'){
+    if (type == 'edit'){
       this.ps.getPost(id)
         .subscribe(post => {
           this.values = post;
           if (post['owner_addr'] != this.store.curUser) {
             this.type = 'noAuth';
+          } else {
+            this.initForm(this.values, this.type == 'edit');
           }
         })
+    } else {
+      this.initForm(this.values, false);
     }
   }
+  initForm(values, disabled): void {
+    disabled && this.step1.initForm(values, false);
+    this.validateForm = this.fb.group({
+      reward: [ { value: values['reward'], disabled }, [ Validators.required ] ],
+      cost: [ { value: values['cost'], disabled }, [ Validators.required ] ],
+    });
+  }
 
+  // todo, cancel has no data
   pre(): void {
     this.current -= 1;
   }
@@ -72,7 +79,8 @@ export class PostComponent implements AfterViewInit {
       formData = this.step1.submitForm();
       this.values = {...this.values, ...formData.data };
     } else if (this.current === 1) {
-      formData = this.submitForm();
+      // pass directly when isUpdate
+      formData = this.type == 'edit' ? { ...this.submitForm(), valid: true } : this.submitForm();
       for (const label in formData.data) {
         this.valuesArr.push({
           label,
@@ -88,19 +96,27 @@ export class PostComponent implements AfterViewInit {
 
   done(): void {
     const postData = {...this.values, time: Date.now(), owner_addr: this.store.curUser };
-    this.ps.addPost(postData)
-    .then(result => this.router.navigateByUrl(`/status/post/${result.id}`))
+    const handledData = JSON.parse(JSON.stringify(postData));
+    const isUpdate = this.type == 'edit' ? true : false;
+    
+    if(isUpdate) {
+      this.ps.updatePost(handledData);
+      setTimeout(() => this.router.navigateByUrl(`/status/post/${handledData['id']}`), 0);
+    } else {
+      this.ps.addPost(handledData)
+        .then(result => this.router.navigateByUrl(`/status/post/${result.id}`))
+    }
   }
 
   submitForm(): any {
-    for (const i in this.rewardForm.controls) {
-      this.rewardForm.controls[ i ].markAsDirty();
-      this.rewardForm.controls[ i ].updateValueAndValidity();
-      this.values[i] = this.rewardForm.controls[ i ].value;
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[ i ].markAsDirty();
+      this.validateForm.controls[ i ].updateValueAndValidity();
+      this.values[i] = this.validateForm.controls[ i ].value;
     }
     
     return {
-      valid: this.rewardForm.valid,
+      valid: this.validateForm.valid,
       data: this.values,
     }
   }

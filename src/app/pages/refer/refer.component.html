@@ -8,7 +8,7 @@
     
     <div class="steps-content mt-100">
       <!-- step1 -->
-      <form *ngIf="validateForm && current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <form *ngIf="!!validateForm && current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired> Name </nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
