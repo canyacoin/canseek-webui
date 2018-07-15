@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import { Store } from "../../store";
-import * as moment from 'moment';
-import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-home',
@@ -11,19 +9,16 @@ import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 })
 export class HomeComponent implements OnInit {
   store = Store;
-  moment = moment;
   loading: boolean = true;
   posts: any;
   results: any;
 
   statusValue = localStorage.getItem('statusValue') || 'all';
   balance: number = 0;
-  confirmModal: NzModalRef;
+  
   
   constructor(
     private ps: PostService,
-    private modal: NzModalService,
-    private message: NzMessageService,
     // private cs: ContractsService,
   ) { }
 
@@ -61,20 +56,10 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_referrals':
-        next = posts.filter(item => (item.recommenders || {})[curUser])
+        next = posts.filter(item => (item.referrals_by_user || {})[curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }
     this.results = next;
-  }
-  
-  showConfirm(id): void {
-    this.confirmModal = this.modal.confirm({
-      nzTitle: 'Are your sure you want to delete this job post?',
-      nzOnOk: () => 
-      this.ps.deletePost(id)
-        .then(() => this.message.create('success', 'Delete success'))
-        .catch(() => this.message.create('error', 'Oops error'))
-    });
   }
 }

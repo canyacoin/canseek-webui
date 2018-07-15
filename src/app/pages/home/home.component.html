@@ -3,110 +3,57 @@
 <app-cmp-bancor></app-cmp-bancor>
 
 <section class="bg-grey pt-30 pb-100">
-    <div class="container">
-        <!-- filter -->
-        <div class="row pb-45">
-            <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()">
-                <label nz-radio-button nzValue="all">ALL</label>
-                <label nz-radio-button nzValue="open">OPEN</label>
-                <label nz-radio-button nzValue="closed">CLOSED</label>
-                <label nz-radio-button nzValue="expired">EXPIRED</label>
-                <label nz-radio-button nzValue="my_posts">MY POSTS</label>
-                <label nz-radio-button nzValue="my_referrals">MY REFERRALS</label>
-            </nz-radio-group>
-        </div>
-
-        <!-- loading -->
-        <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
-            <img src="assets/img/loader.svg" height="36px" alt="Loader">
-        </div>
-        
-        <!-- empty -->
-        <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center" style="min-height: 340px">
-            <div class="row">
-            <div class="col-12 d-flex flex-column">
-                <br>
-                <h4 class="fw-400">Uh, oh!</h4>
-                <h5 class="fw-300">We couldn't find what you were looking for.</h5>
-            </div>
-            </div>
-        </div>
-
-        <!-- posts -->
-        <nz-row [nzGutter]="32" *ngIf="!loading && (results && results.length > 0)">
-            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
-                <div class="card card-bordered card-hover-shadow">
-                    <a routerLink="/post/detail/{{ post.id }}">
-                        <div class="card-body">
-                            <!-- status -->
-                            <nz-row nzType="flex" nzJustify="space-between" class="status">
-                                <span class="tag {{ post.status }}">{{ post.status }}</span>
-                                <nz-col>
-                                    <nz-row nzType="flex">
-                                        <nz-col>
-                                            <span class="contrubuted mr-8">${{ post.honeypot || post.reward }}USD</span>
-                                            <br>
-                                            <span class="desc">Contrubuted</span>
-                                        </nz-col>
-                                        <nz-col>
-                                            <i class="iconfont iconfont-group"></i>
-                                            <span class="num">{{ post.candidates }}</span>
-                                        </nz-col>
-                                    </nz-row>
-                                </nz-col>
-                            </nz-row>
-                            <img class="card-img-top my-10" 
-                                onerror="this.src='https://canya.io/images/CanYa_logo.png'"
-                                src="{{ post.company_logo }}" 
-                                alt="{{ post.company_name }} logo">
-    
-                            <!-- info -->
-                            <p class="title">{{ post.job_title }}</p>
-                            <p class="text mb-10" style="font-size: 14px">{{ post.company_name }}</p>
-                            <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
-                                <nz-col><i class="iconfont iconfont-earth"></i> Remote <i class="iconfont iconfont-location ml-8"></i> {{ post.job_location }}</nz-col>
-                                {{ moment(post.time).fromNow() }}
-                            </nz-row>
-
-                            <hr class="mb-24 mt-2">
-                            <p class="card-text mb-20">{{ post.job_desc }}</p>
-                            <div class="flex">
-                                <i class="can-coin mr-8"></i>
-
-                                <p class="flex1 text">
-                                    ${{ post.cost }} USD
-                                    <br>
-                                    Application Fee
-                                </p>
-<!-- op -->
-<nz-dropdown 
-  *ngIf="statusValue == 'my_posts'"
-  >
-  <a nz-dropdown>
-    <i class="iconfont iconfont-ellipsis"></i>
-  </a>
-  <ul nz-menu>
-    <li nz-menu-item class="op-item">
-      <a routerLink="/post/edit/{{ post.id }}">edit</a>
-    </li>
-    <li nz-menu-item class="op-item" (click)="showConfirm(post.id)">delete</li>
-    <li nz-menu-item class="op-item">
-      <a routerLink="/applicants/{{ post.id }}">view applicants</a>
-    </li>
-  </ul>
-</nz-dropdown>
-
-                                <button
-                                    *ngIf="statusValue !== 'my_posts'"
-                                    class="btn btn-primary btn-outline">refer talent</button>
-                            </div>
-                            
-                        </div>
-                    </a>
-                </div>
-            </nz-col>
-        </nz-row>
+  <div class="container">
+    <!-- filter -->
+    <div class="row pb-45">
+      <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()">
+        <label nz-radio-button nzValue="all">ALL</label>
+        <label nz-radio-button nzValue="open">OPEN</label>
+        <label nz-radio-button nzValue="closed">CLOSED</label>
+        <label nz-radio-button nzValue="expired">EXPIRED</label>
+        <label nz-radio-button nzValue="my_posts">MY POSTS</label>
+        <label nz-radio-button nzValue="my_referrals">MY REFERRALS</label>
+      </nz-radio-group>
     </div>
+
+    <!-- loading -->
+    <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+
+    <!-- empty -->
+    <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
+      style="min-height: 340px">
+      <div class="row">
+        <div class="col-12 d-flex flex-column">
+          <br>
+          <h4 class="fw-400">Uh, oh!</h4>
+          <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- posts -->
+    <nz-row [nzGutter]="32" *ngIf="!loading && (results && results.length > 0)">
+
+      <ng-container *ngIf="statusValue !== 'my_referrals'">
+        <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
+          <app-cmp-post [post]="post" [statusValue]="statusValue"></app-cmp-post>
+        </nz-col>
+      </ng-container>
+
+      <ng-container *ngIf="statusValue == 'my_referrals'">
+        <ng-container *ngFor="let post of results">
+          <ng-container *ngFor="let cid of post.referrals_by_user[store.curUser]">
+            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
+              <app-cmp-post [post]="post" [statusValue]="statusValue" [cid]="cid"></app-cmp-post>
+            </nz-col>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+    </nz-row>
+  </div>
 </section>
 
 <app-cmp-footer></app-cmp-footer>
