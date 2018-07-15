@@ -1,0 +1,112 @@
+<div *ngIf="post" class="card card-bordered card-hover-shadow">
+  <a routerLink="/post/detail/{{ post.id }}" *ngIf="statusValue != 'my_referrals'">
+    <div class="card-body">
+      <!-- status -->
+      <nz-row nzType="flex" nzJustify="space-between" class="status">
+        <span class="tag {{ post.status }}">{{ post.status }}</span>
+        <nz-col>
+          <nz-row nzType="flex">
+            <nz-col>
+              <span class="contrubuted mr-8">${{ post.honeypot || post.reward }}USD</span>
+              <br>
+              <span class="desc">Contrubuted</span>
+            </nz-col>
+            <nz-col>
+              <i class="iconfont iconfont-group"></i>
+              <span class="num">{{ post.candidates || 0 }}</span>
+            </nz-col>
+          </nz-row>
+        </nz-col>
+      </nz-row>
+      <img class="card-img-top my-10" onerror="this.src='https://canya.io/images/CanYa_logo.png'" src="{{ post.company_logo }}"
+        alt="{{ post.company_name }} logo">
+
+      <!-- info -->
+      <p class="title">{{ post.job_title }}</p>
+      <p class="text mb-10" style="font-size: 14px">{{ post.company_name }}</p>
+      <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
+        <nz-col>
+          <i class="iconfont iconfont-earth"></i> Remote
+          <i class="iconfont iconfont-location ml-8"></i> {{ post.job_location }}</nz-col>
+        {{ moment(post.time).fromNow() }}
+      </nz-row>
+
+      <hr class="mb-24 mt-2">
+      <p class="card-text mb-20">{{ post.job_desc }}</p>
+      <div class="flex">
+        <i class="can-coin mr-8"></i>
+
+        <p class="flex1 text">
+          ${{ post.cost }} USD
+          <br> Application Fee
+        </p>
+        <!-- op -->
+        <nz-dropdown *ngIf="statusValue == 'my_posts'">
+          <a nz-dropdown>
+            <i class="iconfont iconfont-ellipsis"></i>
+          </a>
+          <ul nz-menu>
+            <li nz-menu-item class="op-item">
+              <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
+            </li>
+            <li nz-menu-item class="op-item" (click)="showConfirm(post.id)">delete</li>
+            <li nz-menu-item class="op-item">
+              <a routerLink="/applicants/{{ post.id }}">view applicants</a>
+            </li>
+          </ul>
+        </nz-dropdown>
+
+        <button *ngIf="statusValue !== 'my_posts'" class="btn btn-primary btn-outline">refer talent</button>
+      </div>
+
+    </div>
+  </a>
+
+  <div class="card-body" *ngIf="statusValue == 'my_referrals'">
+    <!-- status -->
+    <nz-row nzType="flex" nzJustify="space-between" class="status">
+      <span class="tag {{ post.status }}">{{ post.status }}</span>
+      <nz-col>
+        <nz-row nzType="flex">
+          <nz-col>
+            <span class="contrubuted mr-8">${{ post.honeypot || post.reward }}USD</span>
+            <br>
+            <span class="desc">Contrubuted</span>
+          </nz-col>
+          <nz-col>
+            <i class="iconfont iconfont-group"></i>
+            <span class="num">{{ post.candidates || 0 }}</span>
+          </nz-col>
+        </nz-row>
+      </nz-col>
+    </nz-row>
+    <img class="card-img-top my-10" onerror="this.src='https://canya.io/images/CanYa_logo.png'" src="{{ post.company_logo }}"
+      alt="{{ post.company_name }} logo">
+
+    <!-- info -->
+    <p class="title">{{ post.job_title }}</p>
+    <p class="text mb-10" style="font-size: 14px">{{ post.company_name }}</p>
+    <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
+      <nz-col>
+        <i class="iconfont iconfont-earth"></i> Remote
+        <i class="iconfont iconfont-location ml-8"></i> {{ post.job_location }}</nz-col>
+      {{ moment(post.time).fromNow() }}
+    </nz-row>
+
+    <hr class="mb-8 mt-2">
+    <div class="flex">
+      <i class="can-coin mr-8"></i>
+
+      <p class="flex1 text">
+        ${{ post.cost }} USD
+        <br> Application Fee
+      </p>
+    </div>
+
+    <div class="btns">
+      <a routerLink="/post/detail/{{ post.id }}" class="btn btn-primary btn-outline block">view job post</a>
+      <a routerLink="/refer/detail/{{ post.id }}/{{ cid }}" class="btn btn-primary block mt-10">view application</a>
+    </div>
+
+  </div>
+</div>
