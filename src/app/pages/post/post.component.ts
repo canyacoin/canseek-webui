@@ -41,23 +41,24 @@ export class PostComponent implements AfterViewInit {
   }
   
   init(): void {
-    const { type, id } = this.route.snapshot.params;
+    this.route.queryParams.subscribe(params => {
+      const { type, id } = params;
+      this.type = type;
 
-    this.type = type;
-
-    if (type == 'edit'){
-      this.ps.getPost(id)
-        .subscribe(post => {
-          this.values = post;
-          if (post['owner_addr'] != this.store.curUser) {
-            this.type = 'noAuth';
-          } else {
-            this.initForm(this.values, this.type == 'edit');
-          }
-        })
-    } else {
-      this.initForm(this.values, false);
-    }
+      if (type == 'edit'){
+        this.ps.getPost(id)
+          .subscribe(post => {
+            this.values = post;
+            if (post['owner_addr'] != this.store.curUser) {
+              this.type = 'noAuth';
+            } else {
+              this.initForm(this.values, this.type == 'edit');
+            }
+          })
+      } else {
+        this.initForm(this.values, false);
+      }
+    });
   }
   initForm(values, disabled): void {
     disabled && this.step1.initForm(values, false);
