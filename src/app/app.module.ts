@@ -35,6 +35,7 @@ import { ContractsService } from './services/contracts/contracts.service';
 import { CurrencyService } from './services/global/currency.service';
 import { PostService } from './services/post.service';
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
+import { CmpPostComponent } from './pages/home/components/cmp-post/cmp-post.component';
 
 
 registerLocaleData(zh);
@@ -58,6 +59,7 @@ registerLocaleData(zh);
     CmpReferstep2Component,
     ApplicantsComponent,
     ReferDetailComponent,
+    CmpPostComponent,
   ],
   imports: [
     BrowserModule,
