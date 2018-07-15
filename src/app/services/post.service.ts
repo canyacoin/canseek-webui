@@ -62,7 +62,7 @@ export class PostService {
 
         // post candidates ++
         if (referrals_by_user[curUser]) {
-          referrals_by_user[curUser].concat(cid);
+          referrals_by_user[curUser] = referrals_by_user[curUser].concat(cid);
         } else {
           referrals_by_user[curUser] = [cid];
         }
