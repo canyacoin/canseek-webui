@@ -52,22 +52,28 @@ export class PostService {
   }
 
   addCandidate(post: any, candidate: Object, curUser: string) {
-    const { id, candidates = 0, recommenders = [] } = post;
+    const { id, candidates = 0, referrals_by_user = {} } = post;
     this.postRef = this.dbRef.doc(id);
 
     return this.postRef.collection('candidates').add(candidate)
       .then(docRef => {
-        docRef.update({id: docRef.id});
+        const cid = docRef.id;
+        docRef.update({id: cid});
 
         // post candidates ++
-        this.postRef.update({ candidates: candidates + 1, recommenders: recommenders.concat(curUser) })
+        if (referrals_by_user[curUser]) {
+          referrals_by_user[curUser].concat(cid);
+        } else {
+          referrals_by_user[curUser] = [cid];
+        }
+        this.postRef.update({ candidates: candidates + 1, referrals_by_user })
 
         // send bc request
         // this.cs.recommend(candidateRef.id, id);
         
         return Promise.resolve({
-          pid: post['id'],
-          cid: docRef.id
+          pid: id,
+          cid
         })
       })
   }

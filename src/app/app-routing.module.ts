@@ -14,12 +14,10 @@ import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.compone
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
-  // type = new
-  { path: 'post/:type', component: PostComponent },
+  // params: {type: ['new', 'edit'], id}
+  { path: 'post', component: PostComponent },
   { path: 'post/detail/:id', component: PostDetailComponent },
-  // type = edit
-  { path: 'post/:type/:id', component: PostComponent },
-  { path: 'status/:type/:id', component: StatusComponent },
+  { path: 'status', component: StatusComponent },
   { path: 'refer/new/:id', component: ReferComponent },
   { path: 'refer/detail/:pid/:cid', component: ReferDetailComponent },
   { path: 'applicants/:id', component: ApplicantsComponent },

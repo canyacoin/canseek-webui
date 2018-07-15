@@ -101,10 +101,10 @@ export class PostComponent implements AfterViewInit {
     
     if(isUpdate) {
       this.ps.updatePost(handledData);
-      setTimeout(() => this.router.navigateByUrl(`/status/post/${handledData['id']}`), 0);
+      setTimeout(() => this.router.navigateByUrl(`/status?type=post&pid=${handledData['id']}`), 0);
     } else {
       this.ps.addPost(handledData)
-        .then(result => this.router.navigateByUrl(`/status/post/${result.id}`))
+        .then(result => this.router.navigateByUrl(`/status?type=post&pid=${result.id}`))
     }
   }
 

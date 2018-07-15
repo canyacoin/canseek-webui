@@ -9,7 +9,8 @@ import { DOCUMENT } from '@angular/platform-browser';
   styleUrls: ['./status.component.less']
 })
 export class StatusComponent implements OnInit {
-  id: string;
+  pid: string;
+  cid: string;
   type: string;
   host: string;
   
@@ -18,10 +19,15 @@ export class StatusComponent implements OnInit {
     private location: Location,
     @Inject(DOCUMENT) private document
   ) { 
-    const { type, id } = this.route.snapshot.params;
-    this.type = type;
-    this.id = id;
-    this.host = this.document.location.origin;
+    this.route.queryParams.subscribe(params => {
+      const { type, pid, cid } = params;
+
+      this.type = type;
+      this.pid = pid;
+      this.cid = cid;
+      this.host = this.document.location.origin;
+    })
+
   }
 
   ngOnInit() {
