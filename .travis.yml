@@ -1,19 +1,21 @@
 language: node_js
 node_js:
-- "lts/*"
+- lts/*
 before_install:
+- openssl aes-256-cbc -K $encrypted_7c96680af15b_key -iv $encrypted_7c96680af15b_iv
+  -in aliyun2.pem.enc -out aliyun2.pem -d
 - npm install yarn @angular/cli truffle -g
 install:
 - yarn && ng add ng-zorro-antd --theme
 script:
-- git checkout src 
+- git checkout src
 - truffle compile && npm run build
 after_script:
-- scp -i ${aliyun} -r ./dist root@47.94.194.126:/root/CanSeek
+- scp -i $encrypted_7c96680af15b_key -r ./dist root@47.94.194.126:/root/CanSeek
 cache:
   directories:
-    - node_modules
-    - build
+  - node_modules
+  - build
 branches:
   only:
-    - dev
+  - dev
