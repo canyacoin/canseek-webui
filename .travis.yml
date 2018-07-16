@@ -11,7 +11,7 @@ install:
 script: 
 - npm run build
 after_script:
-- scp -i ${aliyun} -r ./dist root@47.94.194.126:/root/CanSeek/dist
+- scp -i ${aliyun} -r ./dist root@47.94.194.126:/root/CanSeek
 cache:
   directories:
     - node_modules
