@@ -100,7 +100,7 @@ contract CanHire is Ownable {
     function addPost(string uniqueId, uint _bounty, uint _cost) public is_active {
         require(_bounty > 0);
         require(getPostId[uniqueId] == 0);
-        require(canYaCoin.approve(address(escrow), _bounty));
+        // require(canYaCoin.approve(address(escrow), _bounty));
         require(escrow.transferToEscrow(msg.sender, _bounty));
         Post memory newPost;
         newPost.id = numPosts;
