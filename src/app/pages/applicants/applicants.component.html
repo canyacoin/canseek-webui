@@ -1,15 +1,44 @@
-<nz-radio-group [(ngModel)]="radioValue">
-  <label nz-radio-button nzValue="A">Hangzhou</label>
-  <label nz-radio-button nzValue="B">Shanghai</label>
-  <label nz-radio-button nzValue="C">Beijing</label>
-  <label nz-radio-button nzValue="D">Chengdu</label>
-</nz-radio-group>
+<nz-row class="bg-gray py-60">
+  <nz-col nzType="flex" nzSpan="18" nzOffset="3"> 
 
-<nz-collapse [nzBordered]="false">
-  <nz-collapse-panel *ngFor="let panel of panels" [nzHeader]="panel.name" [nzActive]="panel.active"
-    [ngStyle]="panel.customStyle">
-    <p>{{panel.name}} content</p>
-  </nz-collapse-panel>
-</nz-collapse>
+    <nz-radio-group [(ngModel)]="statusValue">
+      <label nz-radio-button nzValue="all">all</label>
+      <label nz-radio-button nzValue="shortlist">shortlist</label>
+      <label nz-radio-button nzValue="rejected">rejected</label>
+    </nz-radio-group>
+
+    <!-- loading -->
+    <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+    
+    <!-- empty -->
+    <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
+      style="min-height: 340px">
+      <div class="row">
+        <div class="col-12 d-flex flex-column">
+          <br>
+          <h4 class="fw-400">Uh, oh!</h4>
+          <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- list -->
+    <nz-collapse class="my-40" 
+      [nzBordered]="false"
+      *ngIf="!loading && (results && results.length > 0)">
+      <nz-collapse-panel 
+        *ngFor="let candidate of candidates" 
+        [nzHeader]="candidate.name" 
+        [ngStyle]="customStyle"
+        >
+        <div class="p-20">
+          <app-cmp-candidate [pid]="pid" [cid]="candidate.id"></app-cmp-candidate>
+        </div>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </nz-col>
+</nz-row>
 
 <app-cmp-bancor></app-cmp-bancor>

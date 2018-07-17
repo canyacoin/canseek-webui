@@ -23,7 +23,6 @@ export class ReferComponent implements AfterViewInit {
   validateForm: FormGroup;
   values: Object = {};
 
-  
   store = Store;
   post: Object;
   currencyName = localStorage.getItem('currencyName') || 'USD';

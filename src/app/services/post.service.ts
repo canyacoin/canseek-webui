@@ -78,6 +78,10 @@ export class PostService {
       })
   }
 
+  getCandidates(pid: string): Observable<any[]> {
+    return this.dbRef.doc(pid).collection('candidates').valueChanges();
+  }
+
   getCandidate(pid: string, cid: string) {
     return this.dbRef.doc(pid).collection('candidates').doc(cid).valueChanges();
   }
