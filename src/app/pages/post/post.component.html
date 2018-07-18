@@ -12,28 +12,26 @@
 
 
       <!-- step2 -->
-      <form *ngIf="!!validateForm && current == 1" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <form *ngIf="validateForm && current == 1" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <p class="blue">Important: All Transactions on CanSeek are made in CAN tokens</p>
 
         <nz-form-item>
-          <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="reward" nzRequired> Admission Fee </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24">
+          <nz-form-label nzFor="reward" nzRequired> Admission Fee </nz-form-label>
+          <nz-form-control>
             <nz-form-extra>This is your Company’s contribution to the reward pool.</nz-form-extra>
-            <input nz-input formControlName="reward" id="reward" placeholder="Minimum $50 USD">
-            <nz-form-extra>Important: All Transactions on CanSeek are made in CAN tokens</nz-form-extra>
-            <nz-form-explain *ngIf="validateForm.get('reward').dirty && validateForm.get('reward').errors">Please input your reward!</nz-form-explain>
+            <input nz-input formControlName="reward" id="reward" placeholder="Minimum $500 CAN">
+            <nz-form-explain *ngIf="validateForm.get('reward').dirty && validateForm.get('reward').errors">Please input Admission Fee! Please input number!Please bigger than $500 CAN!</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
-      
+
         <nz-form-item>
-          <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="cost" nzRequired> Application Fee </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24">
-            <nz-form-extra>This is the amount needed for talent hunters to join the pool. </nz-form-extra>
-            <input nz-input formControlName="cost" id="cost" placeholder="Minimum $10 USD / Referral ">
-            <nz-form-extra>Important: All Transactions on CanSeek are made in CAN tokens</nz-form-extra>
-            <nz-form-explain *ngIf="validateForm.get('cost').dirty && validateForm.get('cost').errors">Please input your cost!</nz-form-explain>
-          </nz-form-control>
-        </nz-form-item>
-      
+            <nz-form-label nzFor="reward" nzRequired> Application Fee </nz-form-label>
+            <nz-form-control>
+              <nz-form-extra>This is the amount needed for talent hunters to join the pool. </nz-form-extra>
+              <input nz-input formControlName="cost" id="cost" placeholder="Minimum $500 CAN">
+              <nz-form-explain *ngIf="validateForm.get('cost').dirty && validateForm.get('cost').errors">Please input Application Fee! Please input number!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
       </form>
 
       <!-- step3 -->
@@ -48,7 +46,7 @@
     
     <div class="steps-action mt-40 text-right">
       <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
-        <span>Cancel</span>
+        <span>Back</span>
       </button>
       <button nz-button 
         nzType="primary" 

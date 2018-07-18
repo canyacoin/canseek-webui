@@ -21,7 +21,7 @@ export class PostComponent implements AfterViewInit {
   store = Store;
   validateForm: FormGroup;
 
-  current = 0;
+  current = 1;
 
   values: Object = {};
   valuesArr = [];
@@ -60,11 +60,33 @@ export class PostComponent implements AfterViewInit {
       }
     });
   }
+
+  rewardValidator = (control: FormControl) => {
+    if (!control.value) {
+      return { required: true };
+    } else if (!/^\d+$/.test(control.value) || Number(control.value) < 500) {
+        return { error: true };
+    } else {
+      return null;
+    }
+  }
+
+  costValidator = (control: FormControl) => {
+    if (!control.value) {
+      return { required: true };
+    } else if (!/^\d+$/.test(control.value)) {
+        return { error: true };
+    } else {
+      return null;
+    }
+  }
+  
+
   initForm(values, disabled): void {
     disabled && this.step1.initForm(values, false);
     this.validateForm = this.fb.group({
-      reward: [ { value: values['reward'], disabled }, [ Validators.required ] ],
-      cost: [ { value: values['cost'], disabled }, [ Validators.required ] ],
+      reward: [ { value: values['reward'], disabled }, [ Validators.required, this.rewardValidator ] ],
+      cost: [ { value: values['cost'], disabled }, [ Validators.required, this.costValidator ] ],
     });
   }
 
