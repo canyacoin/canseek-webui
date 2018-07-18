@@ -33,7 +33,7 @@ export class CmpPoststep1Component implements OnInit {
       //   value: this.validateForm.controls[ i ].value
       // })
     }
-
+    console.log('step1', data);
     return {
       valid: this.validateForm.valid,
       data
@@ -71,12 +71,11 @@ export class CmpPoststep1Component implements OnInit {
       job_desc: [ { value: values['job_desc'], disabled }, [ Validators.required ] ],
       job_location: [{ value: values['job_location'], disabled }],
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],
+      job_remote: [ { value: values['job_remote'], disabled } ],
       job_range: [{ value: values['job_range'], disabled }],
       job_attachments: [{ value: values['job_attachments'], disabled }],
       job_level: [ { value: values['job_level'], disabled }, [ Validators.required ] ],
-      job_qu1      : [ { value: values['job_qu1'], disabled }, [ Validators.required ] ],
-      job_qu2     : [ { value: values['job_qu2'], disabled }, [ Validators.required ] ],
-      job_qu3      : [ { value: values['job_qu3'], disabled }, [ Validators.required ] ],
+      screening_questions      : [ { value: values['screening_questions'], disabled }, [ Validators.required ] ],
 
       company_logo: [ { value: values['company_logo'], disabled } ],
       company_name: [ { value: values['company_name'], disabled }, [ Validators.required ] ],
@@ -85,7 +84,7 @@ export class CmpPoststep1Component implements OnInit {
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
       your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
-      your_address: [ { value: values['your_address'], disabled }, [ Validators.required ] ],
+      // your_address: [ { value: values['your_address'], disabled }, [ Validators.required ] ],
     });
   }
 }
