@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { Store } from '../../../../store';
 
 @Component({
   selector: 'app-cmp-poststep1',
@@ -13,6 +14,7 @@ import {
 })
 export class CmpPoststep1Component implements OnInit {
   validateForm: FormGroup;
+  store = Store;
   fileList = [
     {
       uid: -1,
@@ -84,7 +86,7 @@ export class CmpPoststep1Component implements OnInit {
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
       your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
-      // your_address: [ { value: values['your_address'], disabled }, [ Validators.required ] ],
+      owner_addr: [ { value: null, disabled: true } ],
     });
   }
 }

@@ -12,7 +12,7 @@
 
 
       <!-- step2 -->
-      <form *ngIf="validateForm && current == 1" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+      <form *ngIf="current == 1" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <p class="blue">Important: All Transactions on CanSeek are made in CAN tokens</p>
 
         <nz-form-item>
@@ -36,9 +36,13 @@
 
       <!-- step3 -->
       <div *ngIf="current == 2">
-        <div class="row" *ngFor="let item of valuesArr">
-          <p class="my-20">
-            <span class="fw-500">{{ item.label }}:</span> {{ item.value }}</p>
+        <div *ngFor="let category of store.postForm">
+          <h3>{{ category.label }}:</h3>
+          <ng-container *ngFor="let item of category.value">
+            <p class="my-20">
+              <span class="fw-500">{{ item.label }}:</span> {{ values[item.field] }}
+            </p>
+          </ng-container>
         </div>
       </div>
       

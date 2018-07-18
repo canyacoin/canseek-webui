@@ -21,10 +21,9 @@ export class PostComponent implements AfterViewInit {
   store = Store;
   validateForm: FormGroup;
 
-  current = 1;
+  current = 0;
 
   values: Object = {};
-  valuesArr = [];
 
   // new edit noAuth
   type: string;
@@ -102,14 +101,8 @@ export class PostComponent implements AfterViewInit {
       formData = this.step1.submitForm();
       this.values = {...this.values, ...formData.data };
     } else if (this.current === 1) {
-      // pass directly when isUpdate
+      // pass directly when edit,because reward info can't edit
       formData = this.type == 'edit' ? { ...this.submitForm(), valid: true } : this.submitForm();
-      for (const label in formData.data) {
-        this.valuesArr.push({
-          label,
-          value: formData.data[label]
-        });
-      }
     }
     
     if (formData.valid) {

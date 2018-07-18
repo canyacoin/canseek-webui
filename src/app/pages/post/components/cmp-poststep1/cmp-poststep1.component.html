@@ -4,7 +4,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_title" nzRequired> Job Title </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="job_title" id="job_title" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('job_title').dirty && validateForm.get('job_title').errors">Please input Job Title!</nz-form-explain>
     </nz-form-control>
@@ -12,7 +12,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_desc" nzRequired> Job Description </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <textarea formControlName="job_desc" id="job_desc" nz-input rows="4" placeholder="Please input"></textarea>
       <nz-form-explain *ngIf="validateForm.get('job_desc').dirty && validateForm.get('job_desc').errors">Please input Job Description!</nz-form-explain>
     </nz-form-control>
@@ -20,7 +20,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_location"> Job Location </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="job_location" id="job_location" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('job_location').dirty && validateForm.get('job_location').errors">Please input Job Location!</nz-form-explain>
     </nz-form-control>
@@ -28,7 +28,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_type" nzRequired>Position Type</nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <nz-radio-group formControlName="job_type" id="job_type">
         <label nz-radio-button nzValue="A">full time</label>
         <label nz-radio-button nzValue="B">part time</label>
@@ -41,7 +41,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_remote">Allow Remote Working</nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <label nz-checkbox formControlName="job_remote"></label>
       <nz-form-explain *ngIf="validateForm.get('job_remote').dirty && validateForm.get('job_remote').errors">Please select Allow Remote Working!</nz-form-explain>
     </nz-form-control>
@@ -49,7 +49,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_range"> Salary Range </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <!-- formControlName="job_range" id="job_range" -->
       <!-- <nz-input-group nzCompact>
         <input type="text" nz-input placeholder="Minimum" style="width: 180px; text-align: center;">
@@ -62,7 +62,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_attachments"> Attachments </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="14" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <!-- formControlName="job_attachments" id="job_attachments" -->
       <nz-upload
         nzAction="https://jsonplaceholder.typicode.com/posts/"
@@ -79,7 +79,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_level" nzRequired>Experience Level</nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <nz-radio-group formControlName="job_level" id="job_level">
         <label nz-radio-button nzValue="A">entry</label>
         <label nz-radio-button nzValue="B">mid level</label>
@@ -92,7 +92,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions" nzRequired> Screening Questions </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="screening_questions" id="screening_questions">
       <nz-form-explain *ngIf="validateForm.get('screening_questions').dirty && validateForm.get('screening_questions').errors">Please input Screening Question!</nz-form-explain>
     </nz-form-control>
@@ -103,7 +103,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="14" [nzXs]="24">
+    <nz-form-control [nzSm]="14" [nzXs]="24">
       <!-- formControlName="company_logo" id="company_logo" -->
       <nz-upload
         nzAction="https://jsonplaceholder.typicode.com/posts/"
@@ -120,7 +120,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_name" nzRequired> Company Name </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="company_name" id="company_name" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('company_name').dirty && validateForm.get('company_name').errors">Please input your Company Name!</nz-form-explain>
     </nz-form-control>
@@ -128,7 +128,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_website"> Company Website </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="company_website" id="company_website" placeholder="Please input">
       <!-- <nz-form-explain *ngIf="validateForm.get('company_website').dirty && validateForm.get('company_website').errors">Please input your Company Website!</nz-form-explain> -->
     </nz-form-control>
@@ -136,7 +136,7 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_desc" nzRequired> Company Description </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <textarea formControlName="company_desc" id="company_desc" nz-input rows="4" placeholder="Please input"></textarea>
       <nz-form-explain *ngIf="validateForm.get('company_desc').dirty && validateForm.get('company_desc').errors">Please input your Company Description!</nz-form-explain>
     </nz-form-control>
@@ -145,26 +145,25 @@
   <h4>Your Information</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_name" nzRequired> Name </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="your_name" id="your_name" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('your_name').dirty && validateForm.get('your_name').errors">Please input your Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_email" nzRequired> Company Email </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_email" nzRequired> Your Company Email </nz-form-label>
+    <nz-form-control [nzSm]="16" [nzXs]="24">
       <input nz-input formControlName="your_email" id="your_email" placeholder="Please input">
-      <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input your Company Email!</nz-form-explain>
+      <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input Your Company Email!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
-  <!-- <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_address" nzRequired> Your ETH Address </nz-form-label>
-    <nz-form-control nzHasFeedback [nzSm]="16" [nzXs]="24">
-      <input nz-input formControlName="your_address" id="your_address">
-      <nz-form-explain *ngIf="validateForm.get('your_address').dirty && validateForm.get('your_address').errors">Please input your your_address!</nz-form-explain>
-    </nz-form-control>
-  </nz-form-item>  -->
+  <nz-form-item>
+    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+    <nz-col [nzSm]="16" [nzXs]="24">
+      <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
+    </nz-col>
+  </nz-form-item> 
 </form>
