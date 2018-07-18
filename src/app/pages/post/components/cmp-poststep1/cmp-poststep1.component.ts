@@ -35,7 +35,7 @@ export class CmpPoststep1Component implements OnInit {
       //   value: this.validateForm.controls[ i ].value
       // })
     }
-    console.log('step1', data);
+    // console.log('step1', data);
     return {
       valid: this.validateForm.valid,
       data
@@ -86,7 +86,7 @@ export class CmpPoststep1Component implements OnInit {
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
       your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
-      owner_addr: [ { value: null, disabled: true } ],
+      owner_addr: [ { value: this.store.curUser, disabled: true } ],
     });
   }
 }

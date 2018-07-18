@@ -21,24 +21,29 @@ export class PostService {
   getPost(id): Observable<any[]> {
     return this.dbRef.doc(id).valueChanges();
   }
-
+  
   addPost(post: any) {
-    // const { id, bounty, cost } = post;
+    const { reward, cost } = post;
 
     return this.dbRef.add(post)
-      .then(docRef => {
-        const { id } = docRef;
+        .then(docRef => {
+          docRef.update({id: docRef.id})
+          this.postRef = docRef;
+        })
+        .then(
+          () => this.cs.addPost(this.postRef.id, reward, cost)
+        )
+        .then(postId => {
+          this.postRef.update({
+            postId,
+            status: postId ? 'open' : 'pending'
+          })
 
-        this.postRef = docRef;
-        // todo status intergrate with contracts
-        docRef.update({ id, status: 'open' });
-
-        return Promise.resolve({
-          status: 'open',
-          id
-        });
-
-      })
+          return Promise.resolve({
+            status: 'open',
+            id: this.postRef.id
+          });
+        })
   }
 
   updatePost(post: any) {

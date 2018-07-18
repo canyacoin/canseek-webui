@@ -23,10 +23,23 @@ export class HeaderComponent implements OnInit {
     const currencyName = localStorage.getItem('currencyName') || 'USD';
     this.setCurrency(this.currency[currencyName]);
     this.getAccount();
+    this.getBalance();
   }
 
   async getAccount() {
     this.store.curUser = await this.cons.getAccount();
+  }
+
+  getBalance()  {
+    this.cons.getCANBalance()
+      .then(b => this.store.balance = b)
+      .catch(err => console.error(err))
+  }
+  
+  buyCan() {
+    this.cons.buyCAN()
+      .then(delta => this.store.balance += delta)
+      .catch(err => console.error(err));
   }
 
   setCurrency(currency) {

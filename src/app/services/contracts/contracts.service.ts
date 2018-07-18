@@ -22,9 +22,9 @@ const gasRecommend = { gasPrice: '503000000', gas: '200000' };
 // const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x54cd07d1e1518f00f938ddb4d20f7d6aaf4ffecf';
-const EscrowAddr = '0x0a5fcc7ea4c8ee655b314533c3f4949a4960ca8f';
-const CanHireAddr = '0xfce130e95e8a45004ef5d130fc5cc2b44bd57776';
+const CanYaCoinAddr = '0x0927b63b41fe10ab29fb70da0d810953fb5cbc78';
+const EscrowAddr = '0x8cc41490fb3f07a8f02a7e61c0fde407a43277b3';
+const CanHireAddr = '0xa56408bcb78c91b6ec5ec7bcb1f2390732e31cdb';
 
 @Injectable()
 export class ContractsService {
@@ -206,7 +206,7 @@ export class ContractsService {
     const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
     await canYaCoin.approve(escrow.address, bounty, { from: account });
-
+    
     return new Promise((resolve, reject) => {
       canHire.addPost(id, bounty, cost, { from: account, ...gas }).then(result => {
         resolve(result.logs[0].args.postId.toNumber());

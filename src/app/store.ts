@@ -21,6 +21,7 @@ export let Store = {
     },
     exchangeRate: {},
     curUser: '',
+    balance: 0,
     postForm: [{
       label: 'Job Information Preview',
       value: [{
