@@ -63,15 +63,21 @@
 .flex1 {
     flex: 1;
 }
+.clamp1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 .clamp(4);
 
 .clamp(@n, @i: 2) when (@i =< @n) {
   .clamp@{i} {
     display: -webkit-box;
+    -webkit-box-orient: vertical;// todo 不生效
     overflow: hidden;
     word-break: break-all;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+    // white-space: nowrap;
+    // text-overflow: ellipsis;
     -webkit-line-clamp: @i;
   }
   .clamp(@n, (@i + 1));
@@ -151,3 +157,6 @@
 .ant-collapse-borderless {
     background-color: #f8f8f8;
 }
+.uppercase {
+    text-transform: uppercase;
+} 

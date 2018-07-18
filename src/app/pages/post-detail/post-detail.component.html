@@ -36,7 +36,7 @@
               <span class="tag {{ post.status }}">{{ post.status }}</span>
               <nz-col>
                 <i class="iconfont iconfont-group blue"></i>
-                <span class="num blue">{{ post.candidates }}</span>
+                <span class="num blue">{{ post.candidates || 0 }}</span>
               </nz-col>
             </nz-row>
             
@@ -58,7 +58,10 @@
               
             </div>
             <div class="text-center">
-              <a class="btn btn-primary btn-canya-gradient mt-60" routerLink="/refer/new/{{ post.id }}">
+              <a *ngIf="post.status != 'open'" class="btn btn-primary btn-canya-gradient mt-60" disabled routerLink="/refer/new/{{ post.id }}">
+                REFER TALENT
+              </a>
+              <a *ngIf="post.status == 'open'" class="btn btn-primary btn-canya-gradient mt-60" routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
               </a>
             </div>

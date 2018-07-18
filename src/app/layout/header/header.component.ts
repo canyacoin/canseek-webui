@@ -50,9 +50,9 @@ export class HeaderComponent implements OnInit {
     };
 
     localStorage.setItem('currencyName', name);
-    this.selectedCurrency = currency;
+    this.store.selectedCurrency = currency;
     this.cs.changeCurrency(opts)
-    .then(res => this.store.exchangeRate = res);
+    .then(res => this.store.selectedCurrency['rate'] = res['CAN'][name]);
   }
 
 }

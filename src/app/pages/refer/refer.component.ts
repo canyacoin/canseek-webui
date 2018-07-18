@@ -19,16 +19,13 @@ export class ReferComponent implements AfterViewInit {
   @ViewChild(CmpReferstep2Component)
   private step2: CmpReferstep2Component;
 
-  current = 0;
+  current = 2;
   validateForm: FormGroup;
   values: Object = {};
 
   store = Store;
-  post: Object;
-  currencyName = localStorage.getItem('currencyName') || 'USD';
-  symbol = Store.currency[this.currencyName].symbol;
-  cost: number = 0;
-
+  post: Object = {};
+  
   constructor(
     private fb: FormBuilder,
     private ps: PostService,
@@ -36,10 +33,10 @@ export class ReferComponent implements AfterViewInit {
     private route: ActivatedRoute,
   ) {
     this.validateForm = this.fb.group({
-      name         : [ null, [ Validators.required ] ],
-      email        : [ null, [ Validators.required, Validators.email ] ],
+      your_name         : [ null, [ Validators.required ] ],
+      your_email        : [ null, [ Validators.required, Validators.email ] ],
       relation     : [ null, [ Validators.required ] ],
-      address      : [ null, [ Validators.required ] ],
+      owner_addr      : [ { value: this.store.curUser, disabled: true } ],
     });
     this.getPost();
   }
@@ -84,7 +81,6 @@ export class ReferComponent implements AfterViewInit {
     this.ps.getPost(id)
       .subscribe(post => {
         this.post = post;
-        this.cost = Number(post['cost']);
       });
   }
 

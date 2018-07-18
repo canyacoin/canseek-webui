@@ -1,37 +1,54 @@
 <form *ngIf="!!validateForm" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <h4 class="my-20">Talent’s Contact Details</h4>
+  <h4 class="my-20">Talent’s Information</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="name" nzRequired> Contact Name </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_name" nzRequired> Talent’s Name </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-input formControlName="name" id="name">
-      <nz-form-explain *ngIf="validateForm.get('name').dirty && validateForm.get('name').errors">Please input your name!</nz-form-explain>
+      <input nz-input formControlName="candidate_name" id="candidate_name" placeholder="Please input">
+      <nz-form-explain *ngIf="validateForm.get('candidate_name').dirty && validateForm.get('candidate_name').errors">Please input Talent’s Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email" nzRequired>Phone or Email</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_phone">Talent’s Phone</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-input formControlName="email" id="email">
-      <nz-form-explain *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">The input is not valid E-mail!</nz-form-explain>
+      <input nz-input formControlName="candidate_phone" id="candidate_phone" placeholder="Please input">
+      <nz-form-explain *ngIf="validateForm.get('candidate_phone').dirty && validateForm.get('candidate_phone').errors">Please input Talent’s Phone!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_email" nzRequired>Talent’s Email</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="candidate_email" id="candidate_email" placeholder="Please input">
+      <nz-form-explain *ngIf="validateForm.get('candidate_email').dirty && validateForm.get('candidate_email').errors">Please input Talent’s Email!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Reason</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_website">Talent’s Website</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-form-extra>Maximux 100 words</nz-form-extra>
-      <textarea formControlName="reason" id="reason" nz-input rows="4" placeholder="write any thing"></textarea>
+      <input nz-input formControlName="candidate_website" id="candidate_website" placeholder="Please input">
+      <nz-form-explain *ngIf="validateForm.get('candidate_website').dirty && validateForm.get('candidate_website').errors">Please input Talent’s Website!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+  
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_linkedin" nzRequired>Talent’s LinkedIn</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <input nz-input formControlName="candidate_linkedin" id="candidate_linkedin" placeholder="Please input">
+      <nz-form-explain *ngIf="validateForm.get('candidate_linkedin').dirty && validateForm.get('candidate_linkedin').errors">Please input Talent’s LinkedIn!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
-  <h4 class="my-20">Application</h4>
+  <h4 class="my-20">Application Information</h4>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <!-- <input nz-input formControlName="resume" id="resume"> -->
       <!-- formControlName="resume" id="resume" -->
+      <!-- todo -->
       <nz-upload
         nzAction="https://jsonplaceholder.typicode.com/posts/"
         [nzFileList]="fileList"
@@ -42,40 +59,26 @@
           <i class="anticon anticon-upload"></i><span>Upload</span>
         </button>
       </nz-upload>
-      <nz-form-explain *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please input your address!</nz-form-explain>
+      <!-- <nz-form-explain *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please input your address!</nz-form-explain> -->
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="website" nzRequired>Website or LinkedIn</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Referring Reasons</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <input nz-input formControlName="website" id="website">
+      <!-- todo verify -->
+      <nz-form-extra>Maximux 100 words</nz-form-extra>
+      <textarea formControlName="reason" id="reason" nz-input rows="4" placeholder="Please input"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="qu1" nzRequired>Screening Question1</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers" nzRequired>Screening Questions</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
+      <!-- todo components -->
       <nz-form-extra>What’s your experience with cryptocurrencies?</nz-form-extra>
-      <textarea formControlName="qu1" id="qu1" nz-input rows="4" placeholder="write any thing"></textarea>
-      <nz-form-extra>Maximux 200 words</nz-form-extra>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="qu2" nzRequired>Screening Question2</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-form-extra>How many years experience do you have with blockchain?</nz-form-extra>
-      <textarea formControlName="qu2" id="qu2" nz-input rows="4" placeholder="write any thing"></textarea>
-      <nz-form-extra>Maximux 200 words</nz-form-extra>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="qu3" nzRequired>Screening Question3</nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
-      <nz-form-extra>Why do you want to work with us?</nz-form-extra>
-      <textarea formControlName="qu3" id="qu3" nz-input rows="4" placeholder="write any thing"></textarea>
+      <textarea formControlName="answers" id="answers" nz-input rows="4" placeholder="write any thing"></textarea>
       <nz-form-extra>Maximux 200 words</nz-form-extra>
     </nz-form-control>
   </nz-form-item>

@@ -22,12 +22,13 @@
         alt="{{ post.company_name }} logo">
 
       <!-- info -->
-      <p class="title">{{ post.job_title }}</p>
-      <p class="text mb-10" style="font-size: 14px">{{ post.company_name }}</p>
+      <p class="title clamp1">{{ post.job_title }}</p>
+      <p class="text mb-10 clamp1" style="font-size: 14px">{{ post.company_name }}</p>
       <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
         <nz-col>
-          <i class="iconfont iconfont-earth"></i> Remote
-          <i class="iconfont iconfont-location ml-8"></i> {{ post.job_location }}</nz-col>
+          <span *ngIf="post.job_remote" class="mr-8"><i class="iconfont iconfont-earth"></i> Remote</span>
+          <span *ngIf="post.job_location"><i class="iconfont iconfont-location"></i> {{ post.job_location }}</span>
+        </nz-col>
         {{ moment(post.time).fromNow() }}
       </nz-row>
 

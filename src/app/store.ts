@@ -1,9 +1,9 @@
 export let Store = {
     currency: {
       AUD: {
-        symbol: 'A$',
+        symbol: '$',
         name: 'AUD',
-        string: 'A$ AUD',
+        string: '$ AUD',
         value: 0
       },
       USD: {
@@ -19,7 +19,8 @@ export let Store = {
         value: 0
       },
     },
-    exchangeRate: {},
+    selectedCurrency: {},
+
     curUser: '',
     balance: 0,
     postForm: [{

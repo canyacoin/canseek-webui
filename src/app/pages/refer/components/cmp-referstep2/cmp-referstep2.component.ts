@@ -74,25 +74,18 @@ export class CmpReferstep2Component implements OnInit {
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
-      name         : [ null, [ Validators.required ] ],
-      email        : [ null, [ Validators.required ] ],
-      reason     : [ null, [ Validators.required ] ],
+      candidate_name         : [ null, [ Validators.required ] ],
+      // todo Validators.phone?
+      candidate_phone         : [ null ],
+      candidate_email        : [ null, [ Validators.required, Validators.email ] ],
+      candidate_website: [null],
+      candidate_linkedin: [ null, [ Validators.required ] ],
+      
       // todo upload
       resume      : [ null/*, [ Validators.required ]*/ ],
-      website: [null],
-      qu1      : [ null, [ Validators.required ] ],
-      qu2     : [ null, [ Validators.required ] ],
-      qu3      : [ null, [ Validators.required ] ],
+      reason     : [ null, [ Validators.required ] ],
+      answers      : [ null/*, [ Validators.required ]*/ ],
       cover_letter: [null],
-      
-
-      // password         : [ null, [ Validators.required ] ],
-      // checkPassword    : [ null, [ Validators.required, this.confirmationValidator ] ],
-      // phoneNumberPrefix: [ '+86' ],
-      // phoneNumber      : [ null, [ Validators.required ] ],
-      // website          : [ null, [ Validators.required ] ],
-      // captcha          : [ null, [ Validators.required ] ],
-      // agree            : [ false ]
     });
   }
 
