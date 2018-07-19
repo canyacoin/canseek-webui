@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   store = Store;
   currency = Store.currency;
 
-  selectedCurrency: any = {};
+  searchText: string = '';
 
   constructor(
     private cs: CurrencyService,
