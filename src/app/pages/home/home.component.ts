@@ -60,6 +60,22 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
     }
+
     this.results = next;
+
+    this.onHomeSearch(next, posts);
+  }
+  onHomeSearch(next, posts) {
+    this.ps.change.subscribe((s: string) => {
+      if (s) {
+        this.results = posts.filter(post => (
+          (post.job_title || '').includes(s)
+          ||
+          (post.company_name || '').includes(s)
+        ))
+      } else {
+        this.results = next;
+      }
+    })
   }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from "../../store";
 import { CurrencyService } from '../../services/global/currency.service';
 import { ContractsService } from '../../services/contracts/contracts.service';
+import { PostService } from '../../services/post.service';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private cs: CurrencyService,
     private cons: ContractsService,
+    private ps: PostService,
   ) { }
 
   ngOnInit() {
@@ -55,4 +57,7 @@ export class HeaderComponent implements OnInit {
     .then(res => this.store.selectedCurrency['rate'] = res['CAN'][name]);
   }
 
+  onSearch() {
+    this.ps.change.emit(this.searchText);
+  }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of, Subject } from 'rxjs';
 import { ContractsService } from './contracts/contracts.service';
@@ -10,10 +10,14 @@ export class PostService {
   dbRef: any = this.db.collection('posts');
   postRef: any;
 
+  change: EventEmitter<string>;
+
   constructor(
     private db: AngularFirestore,
     private cs: ContractsService,
-  ) { }
+  ) { 
+    this.change = new EventEmitter();
+  }
 
   getPosts(): Observable<any[]> {
     return this.dbRef.valueChanges();
