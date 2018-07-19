@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PostService } from '../../../../services/post.service';
+import { Store } from '../../../../store';
 
 @Component({
   selector: 'app-cmp-candidate',
@@ -9,6 +10,7 @@ import { PostService } from '../../../../services/post.service';
 export class CmpCandidateComponent implements OnInit {
   @Input() pid: string;
   @Input() cid: string;
+  store = Store;
   candidate: any;
   post: any;
   

@@ -19,7 +19,7 @@ export class ReferComponent implements AfterViewInit {
   @ViewChild(CmpReferstep2Component)
   private step2: CmpReferstep2Component;
 
-  current = 2;
+  current = 0;
   validateForm: FormGroup;
   values: Object = {};
 

@@ -4,59 +4,13 @@
 </div>
 
 <section *ngIf="candidate">
-  <h3>Contact Details*</h3>
-
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Contact Name:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">{{ candidate.name }}</nz-col>
-  </nz-row>
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Phone or Email:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">{{ candidate.email }}</nz-col>
-  </nz-row>
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Professional Links:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">??todo</nz-col>
-  </nz-row> 
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Website:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">{{ candidate.website }}</nz-col>
-  </nz-row>
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Why are you referring this talent?:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">{{ candidate.reason }}</nz-col>
-  </nz-row>    
-    
-  <h3>Application</h3>
-
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">CV/Resume:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">{{ candidate.resume }} todo download</nz-col>
-  </nz-row> 
-
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">LinkedIn Profile:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">{{ candidate.website }} ?? todo which field</nz-col>
-  </nz-row>
-  
-  <nz-row class="my-20" *ngIf="post">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Screening Questions:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">
-      <p class="bold">{{ post.job_qu1 }}</p>
-      <p>{{ candidate.qu1 }}</p>
-
-      <p class="bold">{{ post.job_qu2 }}</p>
-      <p>{{ candidate.qu2 }}</p>
-
-      <p class="bold">{{ post.job_qu3 }}</p>
-      <p>{{ candidate.qu3 }}</p>
-    </nz-col>
-  </nz-row>
-
-  <nz-row class="my-20">
-    <nz-col nzType="flex" nzSpan="5" nzOffset="1" class="bold">Cover Letter:</nz-col>
-    <nz-col nzType="flex" nzSpan="10">
-      {{ candidate.cover_letter }}
-    </nz-col>
-  </nz-row>
+  <div *ngFor="let category of store.referForm">
+    <h3>{{ category.label }}:</h3>
+    <ng-container *ngFor="let item of category.value">
+      <nz-row class="my-20" nzGutter="16">
+        <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
+        <nz-col nzSpan="10">{{ candidate[item.field] }}</nz-col>
+      </nz-row>
+    </ng-container>
+  </div>
 </section>

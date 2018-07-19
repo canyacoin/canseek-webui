@@ -90,5 +90,54 @@ export let Store = {
           field: 'owner_addr'
         }]
       }
-    ]
+    ],
+    referForm: [{
+      label: 'Your Information',
+      value: [{
+        label: 'Your Name',
+        field: 'your_name'
+      }, {
+        label: 'Your E-mail',
+        field: 'your_email'
+      }, {
+        label: 'Your relationship to the Talent',
+        field: 'relation'
+      }, {
+        label: 'Your MetaMask Address',
+        field: 'owner_addr'
+      }]
+    }, {
+      label: 'Talent’s Information',
+      value: [{
+        label: 'Talent’s Name',
+        field: 'candidate_name'
+      }, {
+        label: 'Talent’s Phone',
+        field: 'candidate_phone'
+      }, {
+        label: 'Talent’s Email',
+        field: 'candidate_email'
+      }, {
+        label: 'Talent’s Website',
+        field: 'candidate_website'
+      }, {
+        label: 'Talent’s LinkedIn',
+        field: 'candidate_linkedin'
+      }]
+    }, {
+      label: 'Application Information',
+      value: [{
+        label: 'CV/Resume',
+        field: 'resume'
+      }, {
+        label: 'Referring Reasons',
+        field: 'reason'
+      }, {
+        label: 'Screening Questions',
+        field: 'answers'
+      }, {
+        label: 'Cover Letter',
+        field: 'cover_letter'
+      },]
+    }]
 };
