@@ -56,30 +56,39 @@ export class PostService {
     return this.dbRef.doc(id).delete()
   }
 
-  addCandidate(post: any, candidate: Object, curUser: string) {
-    const { id, candidates = 0, referrals_by_user = {} } = post;
+  addCandidate(post: any, candidate: any) {
+    const { id, postId, candidates = 0, referrals_by_user = {} } = post;
+    const { owner_addr: curUser } = candidate;
+    let cid, candidateRef;
+    
     this.postRef = this.dbRef.doc(id);
 
     return this.postRef.collection('candidates').add(candidate)
       .then(docRef => {
-        const cid = docRef.id;
+        cid = docRef.id;
         docRef.update({id: cid});
 
-        // post candidates ++
+        candidateRef = docRef;
+        // update post in order to find transaction again
         if (referrals_by_user[curUser]) {
           referrals_by_user[curUser] = referrals_by_user[curUser].concat(cid);
         } else {
           referrals_by_user[curUser] = [cid];
         }
         this.postRef.update({ candidates: candidates + 1, referrals_by_user })
+      })
+      .then(
+        () => this.cs.recommend(cid, postId)
+      )
+      .then(({ honeypot, candidateId }) => {
+        if (candidateId) {
+          // update candidate-ref candidateId & status
+          candidateRef.update({candidateId, status: 'ok'});
+          // update post-ref honeypot
+          this.postRef.update({honeypot});
 
-        // send bc request
-        // this.cs.recommend(candidateRef.id, id);
-        
-        return Promise.resolve({
-          pid: id,
-          cid
-        })
+          return Promise.resolve({id: cid})
+        }
       })
   }
 

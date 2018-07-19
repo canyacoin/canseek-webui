@@ -87,7 +87,7 @@ export class ReferComponent implements AfterViewInit {
   done(): void {
     const CandidateData = {...this.values, time: Date.now() };
 
-    this.ps.addCandidate(this.post, CandidateData, this.store.curUser)
-      .then(result => this.router.navigateByUrl(`/status?type=refer&pid=${result.pid}&cid=${result.cid}`))
+    this.ps.addCandidate(this.post, CandidateData)
+      .then(result => this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${result.id}`))
   }
 }
