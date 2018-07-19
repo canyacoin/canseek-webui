@@ -50,14 +50,14 @@
             <li nz-menu-item class="op-item">
               <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
             </li>
-            <li nz-menu-item class="op-item" (click)="showConfirm(post.id)">delete</li>
+            <li nz-menu-item class="op-item" (click)="showConfirm(post.id)">cancelled</li>
             <li nz-menu-item class="op-item">
               <a routerLink="/applicants/{{ post.id }}">view applicants</a>
             </li>
           </ul>
         </nz-dropdown>
 
-        <button *ngIf="statusValue !== 'my_posts'" class="btn btn-primary btn-outline">refer talent</button>
+        <button *ngIf="statusValue === 'open'" class="btn btn-primary btn-outline">refer talent</button>
       </div>
 
     </div>

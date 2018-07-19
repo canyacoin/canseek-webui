@@ -44,9 +44,10 @@ export class HomeComponent implements OnInit {
     switch(statusValue) {
       case 'all':
         next = posts; break;
-      case 'open':
-      case 'closed':
-      case 'expired':
+        case 'open':
+        case 'pending':
+        case 'closed':
+      case 'cancelled':
         next = posts
         .filter(item => item.status === statusValue)
         .sort((a, b) => b.time - a.time);
@@ -62,7 +63,7 @@ export class HomeComponent implements OnInit {
     }
 
     this.results = next;
-
+    console.log(this.results);
     this.onHomeSearch(next, posts);
   }
   onHomeSearch(next, posts) {

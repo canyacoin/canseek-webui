@@ -140,10 +140,13 @@
     text-transform: uppercase;
     font-size: 80%;
     font-weight: 400;
+    &.pending {
+        background-color: @gray;
+    }
     &.open {
         background-color: @green;
     }
-    &.expired {
+    &.cancelled {
         background-color: @gray;
     }
     &.closed {
