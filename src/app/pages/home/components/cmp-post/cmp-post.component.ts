@@ -26,12 +26,14 @@ export class CmpPostComponent implements OnInit {
   ngOnInit() {
   }
 
-  showConfirm(id): void {
+  showConfirm(post): void {
+    post.nextStatus = 'cancelled'
+    
     this.confirmModal = this.modal.confirm({
-      nzTitle: 'Are your sure you want to delete this job post?',
+      nzTitle: 'Are your sure you want to cancel this job post?',
       nzOnOk: () => 
-      this.ps.deletePost(id)
-        .then(() => this.message.create('success', 'Delete success'))
+      this.ps.cancelPost(post)
+        .then(() => this.message.create('success', 'Cancel success'))
         .catch(() => this.message.create('error', 'Oops error'))
     });
   }

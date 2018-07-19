@@ -56,8 +56,16 @@ export class PostService {
     this.dbRef.doc(id).update(post);
   }
 
-  deletePost(id: string) {
-    return this.dbRef.doc(id).delete()
+  cancelPost(post: any) {
+    const { postId, id, nextStatus } = post;
+
+    return this.cs.cancelPost(postId)
+      .then(result => {
+        return this.dbRef.doc(id).update({
+          status: result ? nextStatus : 'pending',
+          nextStatus
+        })
+      })
   }
 
   addCandidate(post: any, candidate: any) {
