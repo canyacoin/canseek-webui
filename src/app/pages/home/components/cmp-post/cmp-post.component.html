@@ -57,9 +57,13 @@
           </ul>
         </nz-dropdown>
 
+        <!-- open 下任何人都可以推荐 -->
         <button *ngIf="statusValue === 'open'" class="btn btn-primary btn-outline">refer talent</button>
+        <!-- pending 下只有作者 post 可以 retry -->
+        <button *ngIf="statusValue === 'pending'" class="btn btn-primary btn-outline" (click)="retry(post)">retry **</button>
+        <!-- cancelled 下 refer 者可以操作 -->
+        <button *ngIf="statusValue === 'cancelled' && post.referrals_by_user[curUser]" class="btn btn-primary btn-outline" (click)="retry(post)">get refund **</button>
       </div>
-
     </div>
   </a>
 

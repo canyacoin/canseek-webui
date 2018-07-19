@@ -12,6 +12,8 @@ export class CmpPostComponent implements OnInit {
   @Input() post: any;
   @Input() statusValue: string;
   @Input() cid: string;
+  @Input() curUser: string;
+  
   moment = moment;
   confirmModal: NzModalRef;
 
