@@ -6,13 +6,13 @@
   <div class="container">
     <!-- filter -->
     <div class="row pb-45">
-      <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()">
-        <label nz-radio-button nzValue="all">ALL</label>
-        <label nz-radio-button nzValue="open">OPEN</label>
-        <label nz-radio-button nzValue="closed">CLOSED</label>
-        <label nz-radio-button nzValue="expired">EXPIRED</label>
-        <label nz-radio-button nzValue="my_posts">MY POSTS</label>
-        <label nz-radio-button nzValue="my_referrals">MY REFERRALS</label>
+      <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()" class="uppercase">
+        <label nz-radio-button nzValue="all">all</label>
+        <label nz-radio-button nzValue="open">open</label>
+        <label nz-radio-button nzValue="closed">closed</label>
+        <label nz-radio-button nzValue="expired">expired</label>
+        <label nz-radio-button nzValue="my_posts">my posts</label>
+        <label nz-radio-button nzValue="my_referrals">my referrals</label>
       </nz-radio-group>
     </div>
 

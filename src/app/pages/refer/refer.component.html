@@ -29,9 +29,9 @@
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship to the Talent</nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
             <nz-radio-group formControlName="relation" id="relation" class="uppercase">
-              <label nz-radio-button nzValue="A">recruiter</label>
-              <label nz-radio-button nzValue="B">associate</label>
-              <label nz-radio-button nzValue="C">i'm the talent</label>
+              <label nz-radio-button nzValue="recruiter">recruiter</label>
+              <label nz-radio-button nzValue="associate">associate</label>
+              <label nz-radio-button nzValue="the_talent">i'm the talent</label>
             </nz-radio-group>
             <nz-form-explain *ngIf="validateForm.get('relation').dirty && validateForm.get('relation').errors">Please select your relationship!</nz-form-explain>
 
