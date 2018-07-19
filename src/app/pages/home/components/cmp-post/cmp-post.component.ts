@@ -37,4 +37,10 @@ export class CmpPostComponent implements OnInit {
         .catch(() => this.message.create('error', 'Oops error'))
     });
   }
+
+  getRefund(e, post) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.ps.getRefund(post, this.curUser);
+  }
 }

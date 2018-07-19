@@ -111,4 +111,32 @@ export class PostService {
   getCandidate(pid: string, cid: string) {
     return this.dbRef.doc(pid).collection('candidates').doc(cid).valueChanges();
   }
+
+  getRefund(post: any, curUser: string) {
+    const { id, postId, referrals_by_user, candidates } = post;
+    const cidArr = referrals_by_user[curUser];
+    const referNum = cidArr.length;
+    const postRef = this.dbRef.doc(id);
+    debugger
+    this.cs.getRefund(postId)
+      .then(result => {
+        if (result) {
+          // update post's referrals_by_user candidates
+          delete referrals_by_user[curUser];
+          postRef.update({ candidates: candidates - referNum, referrals_by_user })
+
+          // update candidatesRef
+          cidArr.map(cid => {
+            postRef.collection('candidates').doc(cid).delete();
+            // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
+          })
+        // } else {
+        //   // update post's status nextStatus
+        //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
+        }
+      })
+      // .catch(() => {
+      //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
+      // })
+  }
 }
