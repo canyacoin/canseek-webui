@@ -11,11 +11,11 @@ script:
 - git checkout src
 - truffle compile && npm run build
 after_script:
+- scp -i $encrypted_7c96680af15b_key -o "StrictHostKeyChecking no" -r ./build root@47.94.194.126:/root/CanSeek
 - scp -i $encrypted_7c96680af15b_key -o "StrictHostKeyChecking no" -r ./dist root@47.94.194.126:/root/CanSeek
 cache:
   directories:
   - node_modules
-  - build
 branches:
   only:
   - master
