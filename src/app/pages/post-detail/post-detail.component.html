@@ -5,7 +5,7 @@
       <div class="col-md-8">
         <!-- card post -->
         <div class="card" style="min-height: 100%">
-          <div class="p-60">
+          <div class="p-40">
               <h3 class="cart-title">{{ post.job_title }}</h3>
               <p class="bold">{{ post.company_name }}</p>
               <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>

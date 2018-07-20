@@ -43,21 +43,24 @@ export class HomeComponent implements OnInit {
     localStorage.setItem('statusValue', statusValue);
     switch(statusValue) {
       case 'all':
-        next = posts; break;
-        case 'open':
-        case 'pending':
-        case 'closed':
+        next = next = posts
+        .filter(item => item.status)
+        .sort((a, b) => b.time - a.time); 
+        break;
+      case 'open':
+      case 'pending':
+      case 'closed':
       case 'cancelled':
         next = posts
         .filter(item => item.status === statusValue)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_posts':
-        next = posts.filter(item => item.owner_addr === curUser)
+        next = posts.filter(item => item.status && item.owner_addr === curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_referrals':
-        next = posts.filter(item => item.referrals_by_user[curUser])
+        next = posts.filter(item => item.status && item['referrals_by_user'][curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }
