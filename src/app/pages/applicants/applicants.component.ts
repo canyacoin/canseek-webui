@@ -12,7 +12,7 @@ export class ApplicantsComponent implements OnInit {
   statusValue: string = 'all';
   loading: boolean = true;
   pid: string;
-  hasAuth: boolean = false;
+  hasAuth: boolean = true;
 
   candidates: any;
   results: any;
@@ -69,5 +69,9 @@ export class ApplicantsComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
     }
+  }
+
+  closePost() {
+    console.log('closePost');
   }
 }
