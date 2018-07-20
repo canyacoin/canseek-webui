@@ -10,6 +10,14 @@
       <!-- step1 -->
       <form *ngIf="!!validateForm && current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <nz-form-extra>**Important**: Please ensure your MetaMask address is right for payout of the Referral fund if your talent is successful</nz-form-extra>
+            <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
+          </nz-form-control>
+        </nz-form-item>
+        
+        <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
             <input nz-input formControlName="your_name" id="your_name" placeholder="Please input">
@@ -37,14 +45,6 @@
 
           </nz-form-control>
         </nz-form-item>
-      
-        <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-form-extra>For payout of the Referral fund if your talent is successful</nz-form-extra>
-            <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
-          </nz-form-control>
-        </nz-form-item>
       </form>
 
       <!-- step2 -->
@@ -53,21 +53,18 @@
       <!-- step3 -->
       <div class="text-center" *ngIf="current == 2">
         <h4>Application Fee</h4>
-        <h4><strong>${{ post.cost }} CAN</strong></h4>  
+        <h4><strong>{{ post.cost }} CAN</strong></h4>  
         <button class="btn btn-primary mt-40 mb-12" (click)="done()">refer talent</button>
         <p *ngIf="store.selectedCurrency.symbol">Total: {{ store.selectedCurrency.symbol }}{{ store.selectedCurrency.rate * post.cost || '...' }} {{ store.selectedCurrency.name }}</p>
       </div>
     </div>
     
     <div class="steps-action mt-40 text-right">
-      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
-        <span>Back</span>
+      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0 && current != 2">
+        <span>Cancel</span>
       </button>
       <button nz-button nzType="primary" (click)="next()" *ngIf="current < 2" class="ml-20">
         <span>Next</span>
-      </button>
-      <button nz-button nzType="primary" (click)="done()" *ngIf="current === 2" class="ml-20">
-        <span>Done</span>
       </button>
     </div>
 
