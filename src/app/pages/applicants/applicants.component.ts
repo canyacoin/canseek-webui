@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { PostService } from '../../services/post.service';
 import { Store } from "../../store";
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-applicants',
@@ -9,15 +10,18 @@ import { Store } from "../../store";
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
-  statusValue: string = 'all';
+  filterStatus: string = localStorage.getItem('filterStatus') || 'all';
   loading: boolean = true;
   pid: string;
   hasAuth: boolean = true;
+  canHire: boolean = false;
 
   candidates: any;
   results: any;
 
   store = Store;
+  
+  moment = moment;
 
   customStyle = {
     'background'   : '#fff',
@@ -42,7 +46,7 @@ export class ApplicantsComponent implements OnInit {
     this.pid = id;
     this.ps.getCandidates(id)
       .subscribe(candidates => {
-        this.candidates = candidates
+        this.candidates = candidates;
         this.loading = false;
         this.searchStatus();
       });
@@ -52,23 +56,35 @@ export class ApplicantsComponent implements OnInit {
     const { id } = this.route.snapshot.params;
 
     this.ps.getPost(id)
-      .subscribe(post => this.hasAuth = (post['owner_addr'] === this.store.curUser))
+      .subscribe(post => {
+        this.hasAuth = (post['owner_addr'] === this.store.curUser);
+        this.canHire = post['status'] == 'open';
+      })
   }
 
   searchStatus() {
-    const { candidates, statusValue } = this;
+    const { candidates, filterStatus } = this;
+    let next;
 
-    localStorage.setItem('statusValue', statusValue);
-    switch(statusValue) {
+    localStorage.setItem('filterStatus', filterStatus);
+    switch(filterStatus) {
       case 'all':
-      this.results = candidates; break;
+        next = candidates; 
+        break;
+      case 'unrefined':
+        next = candidates
+        .filter(item => item.status !== 'shortlist' && item.status !== 'rejected')
+        .sort((a, b) => b.time - a.time);
+        break;
       case 'shortlist':
       case 'rejected':
-      this.results = candidates
-        .filter(item => item.status === statusValue)
+      next = candidates
+        .filter(item => item.status === filterStatus)
         .sort((a, b) => b.time - a.time);
         break;
     }
+
+    this.results = next;
   }
 
   closePost() {

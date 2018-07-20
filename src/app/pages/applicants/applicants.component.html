@@ -18,15 +18,15 @@
     <!-- filter & hire btn -->
     <nz-row nzType="flex" nzJustify="space-between">
       <nz-col>
-        <nz-radio-group [(ngModel)]="statusValue" class="uppercase">
+        <nz-radio-group [(ngModel)]="filterStatus" class="uppercase" (ngModelChange)="searchStatus()">
           <label nz-radio-button nzValue="all">all</label>
-          <label nz-radio-button nzValue="unrefined">unrefined</label>
           <label nz-radio-button nzValue="shortlist">shortlist</label>
           <label nz-radio-button nzValue="rejected">rejected</label>
+          <label nz-radio-button nzValue="unrefined">unrefined</label>
         </nz-radio-group>
       </nz-col>
 
-      <nz-col>
+      <nz-col *ngIf="canHire">
           <button *ngIf="statusValue == 'rejected'" disabled nz-button nzType="primary" class="uppercase">hire</button>
           <button 
             (click)="closePost()"
@@ -40,20 +40,74 @@
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
     </div>
 
+    <!-- empty -->
+    <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
+      style="min-height: 340px">
+      <div class="row">
+        <div class="col-12 d-flex flex-column">
+          <br>
+          <h4 class="fw-400">Uh, oh!</h4>
+          <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+        </div>
+      </div>
+    </div>
+
     <!-- list -->
     <nz-collapse class="my-40" 
       [nzBordered]="false"
       *ngIf="!loading && (results && results.length > 0)">
       <nz-collapse-panel 
         *ngFor="let candidate of candidates" 
-        [nzHeader]="candidate.name" 
+        [nzHeader]="candidateHeader"
         [ngStyle]="customStyle"
         >
+
+        <ng-template #candidateHeader>
+          <nz-row nzType="flex" nzJustify="space-between" gutter="16">
+            <nz-col nzSpan="18">
+              <h4 class="border-bottom pb-10">{{ candidate.candidate_name }}</h4>
+              <nz-row nzType="flex" nzJustify="space-between">
+                <nz-col>
+                  <a href="{{ candidate.candidate_linkedin }}">LinkedIn</a>
+                </nz-col>
+                <nz-col>
+                  <a href="mailto:{{ candidate_email }}" (click)="changeStatus($event, 'rejected')" class="uppercase">
+                    <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> Contact Candidate 
+                  </a>
+                </nz-col>
+                <!-- <nz-col>
+                  todo
+                  <i class="anticon anticon-cloud-download"></i> CV/reume
+                  </a>
+                </nz-col> -->
+                <nz-col class="text">
+                  {{ moment(candidate.time).fromNow() }}
+                </nz-col>
+              </nz-row>
+            </nz-col>
+
+            <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
+              <a *ngIf="candidate.status !== 'shortlist'" href="javascript:;" (click)="changeStatus($event, 'shortlist')" class="uppercase">
+                add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
+              </a>
+              <br>
+              <a *ngIf="candidate.status !== 'rejected'" href="javascript:;" (click)="changeStatus($event, 'rejected')" class="uppercase">
+                reject candidate <i class="iconfont iconfont-close-o ml-10" style="font-size: 24px"></i>
+              </a>
+            </nz-col>
+          </nz-row>
+        </ng-template>
+
         <div class="p-20">
           <app-cmp-candidate [pid]="pid" [cid]="candidate.id"></app-cmp-candidate>
         </div>
       </nz-collapse-panel>
     </nz-collapse>
+
+    <!-- template -->
+    <!-- <ng-container *ngTemplateOutlet="candidateHeader;context:{candidate: candidate}"></ng-container> -->
+    
+
   </nz-col>
 </nz-row>
 
