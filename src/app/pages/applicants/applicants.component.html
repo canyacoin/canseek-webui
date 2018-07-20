@@ -1,8 +1,22 @@
-<nz-row class="bg-gray py-60">
+<!-- auth -->
+<div *ngIf="!hasAuth" class="container d-flex flex-column justify-content-center text-center"
+style="min-height: 340px">
+  <div class="row">
+    <div class="col-12 d-flex flex-column">
+      <br>
+      <h4 class="fw-400">Permission denied !</h4>
+      <h5 class="fw-300">You don't have the authority</h5>
+    </div>
+  </div>
+</div>
+
+
+<nz-row class="bg-gray py-60" *ngIf="hasAuth">
   <nz-col nzType="flex" nzSpan="18" nzOffset="3"> 
 
     <nz-radio-group [(ngModel)]="statusValue" class="uppercase">
       <label nz-radio-button nzValue="all">all</label>
+      <label nz-radio-button nzValue="unrefined">unrefined</label>
       <label nz-radio-button nzValue="shortlist">shortlist</label>
       <label nz-radio-button nzValue="rejected">rejected</label>
     </nz-radio-group>
@@ -10,18 +24,6 @@
     <!-- loading -->
     <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
       <img src="assets/img/loader.svg" height="36px" alt="Loader">
-    </div>
-    
-    <!-- empty -->
-    <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
-      style="min-height: 340px">
-      <div class="row">
-        <div class="col-12 d-flex flex-column">
-          <br>
-          <h4 class="fw-400">Uh, oh!</h4>
-          <h5 class="fw-300">We couldn't find what you were looking for.</h5>
-        </div>
-      </div>
     </div>
 
     <!-- list -->

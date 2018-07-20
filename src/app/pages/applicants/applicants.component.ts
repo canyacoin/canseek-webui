@@ -9,7 +9,7 @@ import { Store } from "../../store";
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
-  statusValue:string = 'all';
+  statusValue: string = 'all';
   loading: boolean = true;
   pid: string;
   hasAuth: boolean = false;
@@ -25,6 +25,7 @@ export class ApplicantsComponent implements OnInit {
     'margin-bottom': '24px',
     'border'       : '0px'
   };
+
   constructor(
     private route: ActivatedRoute,
     private ps: PostService,
