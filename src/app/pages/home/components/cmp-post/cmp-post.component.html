@@ -47,10 +47,10 @@
             <i class="iconfont iconfont-ellipsis"></i>
           </a>
           <ul nz-menu>
-            <li nz-menu-item class="op-item">
+            <li nz-menu-item class="op-item" *ngIf="post.status == 'open'">
               <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
             </li>
-            <li nz-menu-item class="op-item" (click)="showConfirm(post)">cancelled</li>
+            <li nz-menu-item class="op-item" *ngIf="post.status == 'open'" (click)="showConfirm(post)">cancel</li>
             <li nz-menu-item class="op-item">
               <a routerLink="/applicants/{{ post.id }}">view applicants</a>
             </li>
