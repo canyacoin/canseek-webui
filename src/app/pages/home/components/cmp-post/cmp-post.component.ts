@@ -41,6 +41,14 @@ export class CmpPostComponent implements OnInit {
   getRefund(e, post) {
     e.preventDefault();
     e.stopPropagation();
+    
     this.ps.getRefund(post, this.curUser);
+  }
+
+  updateStatus(e, post) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.ps.updateStatus(post);
   }
 }

@@ -2,6 +2,8 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of, Subject } from 'rxjs';
 import { ContractsService } from './contracts/contracts.service';
+import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,8 @@ export class PostService {
   constructor(
     private db: AngularFirestore,
     private cs: ContractsService,
+    private message: NzMessageService,
+    private router: Router,
   ) { 
     this.change = new EventEmitter();
   }
@@ -138,5 +142,35 @@ export class PostService {
       // .catch(() => {
       //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
       // })
+  }
+
+  updateStatus(post) {
+    const { postId, id } = post;
+    const postRef = this.dbRef.doc(id);
+    
+    if (postId) {
+      this.cs.getPostStatus(postId) 
+        .then(result => {
+          postRef.update({
+            status: result
+          })
+        })
+    } else {
+      this.cs.getPostId(id)
+        .then(postId => {
+          if (!postId) {
+            this.message.warning('please re-add this post, will redirect in 3 seconds');
+            setTimeout(
+              () => this.router.navigateByUrl(`post?type=edit&id=${id}`),
+              3000
+            )
+          } else {
+            postRef.update({
+              postId,
+              status: 'open'
+            })
+          }
+        })
+    }
   }
 }
