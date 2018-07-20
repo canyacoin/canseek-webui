@@ -1,5 +1,6 @@
 <nz-row class="mt-30 mb-100">
   <nz-col nzType="flex" nzSpan="14" nzOffset="5" class="text-center"> 
+    <!-- refer succ -->
     <div *ngIf="type && type == 'refer'">
       <div class="blue fw-500">
         <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
@@ -8,6 +9,8 @@
       <h4 class="my-50">Referral Successful!</h4>
   
       <p>Your talent has been sent to the job poster. </p>
+      <a *ngIf="post" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
+
   
       <div class="btns mt-60">
         <a routerLink="/refer/detail/{{ pid }}/{{ cid }}" class="btn  btn-primary btn-outline">View</a>
@@ -15,6 +18,7 @@
       </div>
     </div>
 
+    <!-- new post succ -->
     <div *ngIf="type && type == 'post'">
       <div class="blue fw-500">
         <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>

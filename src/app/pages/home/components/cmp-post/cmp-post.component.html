@@ -61,7 +61,7 @@
         <button *ngIf="statusValue === 'open'" class="btn btn-primary btn-outline">refer talent</button>
         <!-- pending 下只有作者可以 update -->
         <button *ngIf="statusValue === 'pending' && post.owner_addr == curUser" class="btn btn-primary btn-outline" (click)="updateStatus($event, post)">update</button>
-        <!-- cancelled 下 refer 者可以操作 -->
+        <!-- cancelled 下只有申请人者可以getrefund -->
         <button *ngIf="statusValue === 'cancelled' && post.referrals_by_user[curUser]" class="btn btn-primary btn-outline" (click)="getRefund($event, post)">get refund</button>
       </div>
     </div>

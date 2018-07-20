@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DOCUMENT } from '@angular/platform-browser';
+import { PostService } from '../../services/post.service';
 
 @Component({
   selector: 'app-status',
@@ -13,11 +14,13 @@ export class StatusComponent implements OnInit {
   cid: string;
   type: string;
   host: string;
+  post: any;
   
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    @Inject(DOCUMENT) private document
+    private ps: PostService,
+    @Inject(DOCUMENT) private document,
   ) { 
     this.route.queryParams.subscribe(params => {
       const { type, pid, cid } = params;
@@ -31,6 +34,7 @@ export class StatusComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.type == 'refer' && this.ps.getPost(this.pid).subscribe(post => this.post = post);
   }
 
 }
