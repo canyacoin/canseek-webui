@@ -57,13 +57,12 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my_referrals':
-        next = posts.filter(item => (item.referrals_by_user || {})[curUser])
+        next = posts.filter(item => item.referrals_by_user[curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }
 
     this.results = next;
-    console.log(this.results);
     this.onHomeSearch(next, posts);
   }
   onHomeSearch(next, posts) {

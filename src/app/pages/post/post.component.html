@@ -40,7 +40,7 @@
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
               <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
-              <nz-col nzSpan="10">{{ values[item.field] }}</nz-col>
+              <nz-col nzSpan="18">{{ values[item.field] }}</nz-col>
             </nz-row>
           </ng-container>
         </div>
@@ -71,8 +71,8 @@
     <div class="row">
     <div class="col-12 d-flex flex-column">
         <br>
-        <h4 class="fw-400">Uh, oh!</h4>
-        <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+        <h4 class="fw-400">Permission denied !</h4>
+        <h5 class="fw-300">You don't have the authority</h5>
     </div>
     </div>
 </div>
