@@ -92,7 +92,7 @@ export let Store = {
       }
     ],
     referForm: [{
-      label: 'Your Information',
+      label: 'Referrer Information',
       value: [{
         label: 'Your Name',
         field: 'your_name'
