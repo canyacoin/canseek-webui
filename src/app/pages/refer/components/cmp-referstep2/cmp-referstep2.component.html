@@ -34,7 +34,7 @@
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_linkedin" nzRequired>Talent’s LinkedIn</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_linkedin">Talent’s LinkedIn</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <input nz-input formControlName="candidate_linkedin" id="candidate_linkedin" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('candidate_linkedin').dirty && validateForm.get('candidate_linkedin').errors">Please input Talent’s LinkedIn!</nz-form-explain>

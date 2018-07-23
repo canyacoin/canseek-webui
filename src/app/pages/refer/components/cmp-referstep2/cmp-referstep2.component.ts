@@ -79,7 +79,7 @@ export class CmpReferstep2Component implements OnInit {
       candidate_phone         : [ null ],
       candidate_email        : [ null, [ Validators.required, Validators.email ] ],
       candidate_website: [null],
-      candidate_linkedin: [ null, [ Validators.required ] ],
+      candidate_linkedin: [ null ],
       
       // todo upload
       resume      : [ null/*, [ Validators.required ]*/ ],
