@@ -83,7 +83,9 @@ export class ApplicantsComponent implements OnInit {
           .sort((a, b) => b.time - a.time);
         break;
     }
-    
+
+    this.canHire = filterStatus != 'rejected';
+
     this.results = next;
   }
 
