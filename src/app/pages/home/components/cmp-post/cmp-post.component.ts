@@ -31,6 +31,8 @@ export class CmpPostComponent implements OnInit {
     
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Are your sure you want to cancel this job post?',
+      nzOkText: 'OK',
+      nzCancelText: 'Cancel',
       nzOnOk: () => 
       this.ps.cancelPost(post)
         .then(() => this.message.create('success', 'Cancel success'))
