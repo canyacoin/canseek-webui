@@ -27,10 +27,10 @@
       </nz-col>
 
       <nz-col *ngIf="canHire">
-          <button *ngIf="statusValue == 'rejected'" disabled nz-button nzType="primary" class="uppercase">hire</button>
+          <button *ngIf="filterStatus == 'rejected'" disabled nz-button nzType="primary" class="uppercase">hire</button>
           <button 
             (click)="closePost()"
-            *ngIf="statusValue !== 'rejected'" nz-button nzType="primary" class="uppercase">hire</button>
+            *ngIf="filterStatus != 'rejected'" nz-button nzType="primary" class="uppercase">hire</button>
         </nz-col>
     </nz-row>
     

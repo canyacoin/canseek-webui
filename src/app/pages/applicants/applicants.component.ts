@@ -84,8 +84,6 @@ export class ApplicantsComponent implements OnInit {
         break;
     }
 
-    this.canHire = filterStatus != 'rejected';
-
     this.results = next;
   }
 
