@@ -57,7 +57,7 @@
       [nzBordered]="false"
       *ngIf="!loading && (results && results.length > 0)">
       <nz-collapse-panel 
-        *ngFor="let candidate of candidates" 
+        *ngFor="let candidate of results" 
         [nzHeader]="candidateHeader"
         [ngStyle]="customStyle"
         >
@@ -68,7 +68,7 @@
               <h4 class="border-bottom pb-10">{{ candidate.candidate_name }}</h4>
               <nz-row nzType="flex" nzJustify="space-between">
                 <nz-col>
-                  <a href="mailto:{{ candidate.candidate_email }}" (click)="changeStatus($event, 'rejected')">
+                  <a href="mailto:{{ candidate.candidate_email }}">
                     <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> {{ candidate.candidate_email }} 
                   </a>
                 </nz-col>
@@ -80,11 +80,11 @@
             </nz-col>
 
             <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
-              <a *ngIf="candidate.status !== 'shortlist'" href="javascript:;" (click)="changeStatus($event, 'shortlist')" class="uppercase">
+              <a *ngIf="candidate.status !== 'shortlist'" href="javascript:;" (click)="changeCandidateStatus($event, candidate.id, 'shortlist')" class="uppercase">
                 add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
               </a>
               <br>
-              <a *ngIf="candidate.status !== 'rejected'" href="javascript:;" (click)="changeStatus($event, 'rejected')" class="uppercase">
+              <a *ngIf="candidate.status !== 'rejected'" href="javascript:;" (click)="changeCandidateStatus($event, candidate.id, 'rejected')" class="uppercase">
                 reject candidate <i class="iconfont iconfont-close-o ml-10" style="font-size: 24px"></i>
               </a>
             </nz-col>

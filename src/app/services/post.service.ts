@@ -173,4 +173,10 @@ export class PostService {
         })
     }
   }
+
+  changeCandidateStatus(pid, cid, status) {
+    const candidateRef = this.dbRef.doc(pid).collection('candidates').doc(cid);
+
+    candidateRef.update({status});
+  }
 }

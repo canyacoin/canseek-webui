@@ -73,18 +73,25 @@ export class ApplicantsComponent implements OnInit {
         break;
       case 'unrefined':
         next = candidates
-        .filter(item => item.status !== 'shortlist' && item.status !== 'rejected')
-        .sort((a, b) => b.time - a.time);
+          .filter(item => item.status != 'shortlist' && item.status != 'rejected')
+          .sort((a, b) => b.time - a.time);
         break;
       case 'shortlist':
       case 'rejected':
-      next = candidates
-        .filter(item => item.status === filterStatus)
-        .sort((a, b) => b.time - a.time);
+        next = candidates
+          .filter(item => item.status == filterStatus)
+          .sort((a, b) => b.time - a.time);
         break;
     }
-
+    
     this.results = next;
+  }
+
+  changeCandidateStatus(e, cid, status) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.ps.changeCandidateStatus(this.pid, cid, status);
   }
 
   closePost() {
