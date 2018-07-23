@@ -9,7 +9,7 @@
               <h3 class="cart-title">{{ post.job_title }}</h3>
               <p class="bold">{{ post.company_name }}</p>
               <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
-              <p class="text my-20">{{ post.job_type }} {{ post.job_range }}</p>
+              <p class="text my-20">{{ post.job_type }} {{ post.job_range }} {{ post.job_location ? ', ' + post.job_location : '' }}</p>
 
               <section class="my-40">
                 <p class="bold">Job Description</p>
