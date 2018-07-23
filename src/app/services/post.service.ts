@@ -179,4 +179,22 @@ export class PostService {
 
     candidateRef.update({status});
   }
+
+  closePost(post: any, cid: string, candidateId: number) {
+    const { id, postId, nextStatus } = post;
+    const postRef = this.dbRef.doc(id);
+    const candidateRef = postRef.collection('candidates').doc(cid);
+
+    return this.cs.closePost(postId, candidateId)
+      .then(result => {
+        postRef.update({
+          status: result ? nextStatus : 'pending',
+          nextStatus
+        });
+        candidateRef.update({
+          status: result ? 'selected' : 'pending',
+        })
+        return Promise.resolve({result});
+      })
+  }
 }

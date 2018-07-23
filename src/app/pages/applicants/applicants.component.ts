@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { PostService } from '../../services/post.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
@@ -12,6 +13,7 @@ import * as moment from 'moment';
 export class ApplicantsComponent implements OnInit {
   filterStatus: string = localStorage.getItem('filterStatus') || 'all';
   loading: boolean = true;
+  post: any;
   pid: string;
   hasAuth: boolean = true;
   canHire: boolean = false;
@@ -22,17 +24,24 @@ export class ApplicantsComponent implements OnInit {
   store = Store;
   
   moment = moment;
+  confirmModal: NzModalRef;
+
+  selectedCandidates = [];
 
   customStyle = {
     'background'   : '#fff',
     'border-radius': '4px',
     'margin-bottom': '24px',
-    'border'       : '0px'
+    'border'       : '0px',
+    'padding'      : '10px 20px 18px 40px'
   };
 
   constructor(
     private route: ActivatedRoute,
     private ps: PostService,
+    private modal: NzModalService,
+    private message: NzMessageService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -57,6 +66,7 @@ export class ApplicantsComponent implements OnInit {
 
     this.ps.getPost(id)
       .subscribe(post => {
+        this.post = post;
         this.hasAuth = (post['owner_addr'] === this.store.curUser);
         this.canHire = post['status'] == 'open';
       })
@@ -87,14 +97,37 @@ export class ApplicantsComponent implements OnInit {
     this.results = next;
   }
 
-  changeCandidateStatus(e, cid, status) {
-    e.preventDefault();
-    e.stopPropagation();
-
+  changeCandidateStatus(cid, status) {
     this.ps.changeCandidateStatus(this.pid, cid, status);
   }
 
+  selectC(v) {
+    this.selectedCandidates = v;
+  }
+
+  changeActive(cid) {
+    this.results = this.results.map(c => {
+      if (c.id == cid) {
+        const { active } = c;
+        return {...c, active: !active};
+      }
+      return c;
+    })
+  }
+
   closePost() {
-    console.log('closePost');
+    const item = this.selectedCandidates[0];
+    const cid = item.split(' ')[0];
+    const candidateId = item.split(' ')[1];
+
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Are your sure you want to select this candidate?',
+      nzOkText: 'Yes',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => 
+      this.ps.closePost(this.post, cid, candidateId)
+        .then(() => this.message.create('succ', 'closePost succ!'))
+        .catch(() => this.message.create('error', 'Oops error'))
+    });
   }
 }

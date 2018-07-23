@@ -27,10 +27,10 @@
       </nz-col>
 
       <nz-col *ngIf="canHire">
-          <button *ngIf="filterStatus == 'rejected'" disabled nz-button nzType="primary" class="uppercase">hire</button>
+          <button *ngIf="filterStatus == 'rejected' || !selectedCandidates.length" disabled nz-button nzType="primary" class="uppercase">hire</button>
           <button 
             (click)="closePost()"
-            *ngIf="filterStatus != 'rejected'" nz-button nzType="primary" class="uppercase">hire</button>
+            *ngIf="filterStatus != 'rejected' && selectedCandidates.length" nz-button nzType="primary" class="uppercase">hire</button>
         </nz-col>
     </nz-row>
     
@@ -53,54 +53,56 @@
     </div>
 
     <!-- list -->
-    <nz-collapse class="my-40" 
-      [nzBordered]="false"
-      *ngIf="!loading && (results && results.length > 0)">
-      <nz-collapse-panel 
-        *ngFor="let candidate of results" 
-        [nzHeader]="candidateHeader"
-        [ngStyle]="customStyle"
-        >
+    <nz-checkbox-wrapper style="width: 100%" (nzOnChange)="selectC($event)">
+      <nz-collapse class="my-40" 
+        [nzBordered]="false"
+        *ngIf="!loading && (results && results.length > 0)">
+        <nz-collapse-panel 
+          *ngFor="let candidate of results" 
+          [nzHeader]="candidateHeader"
+          [ngStyle]="customStyle"
+          [nzShowArrow]="false"
+          nzDisabled
+          [nzActive]="candidate.active"
+          >
 
-        <ng-template #candidateHeader>
-          <nz-row nzType="flex" nzJustify="space-between" gutter="16">
-            <nz-col nzSpan="18">
-              <h4 class="border-bottom pb-10">{{ candidate.candidate_name }}</h4>
-              <nz-row nzType="flex" nzJustify="space-between">
-                <nz-col>
-                  <a href="mailto:{{ candidate.candidate_email }}">
-                    <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> {{ candidate.candidate_email }} 
-                  </a>
-                </nz-col>
-                
-                <nz-col class="text">
-                  {{ moment(candidate.time).fromNow() }}
-                </nz-col>
-              </nz-row>
-            </nz-col>
+          <ng-template #candidateHeader>
+            <nz-row nzType="flex" nzJustify="space-between" gutter="16">
+              <label *ngIf="filterStatus != rejected" nz-checkbox nzValue="{{ candidate.id }} {{ candidate.candidateId }}" class="checkbox"></label>
+              
+              <nz-col nzSpan="17">
+                <a href="javascript:;" (click)="changeActive(candidate.id)" class="border-bottom pb-10 card-title uppercase">{{ candidate.candidate_name }}</a>
+                <nz-row nzType="flex" nzJustify="space-between">
+                  <nz-col>
+                    <a href="mailto:{{ candidate.candidate_email }}">
+                      <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> {{ candidate.candidate_email }} 
+                    </a>
+                  </nz-col>
+                  
+                  <nz-col class="text">
+                    {{ moment(candidate.time).fromNow() }}
+                  </nz-col>
+                </nz-row>
+              </nz-col>
 
-            <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
-              <a *ngIf="candidate.status !== 'shortlist'" href="javascript:;" (click)="changeCandidateStatus($event, candidate.id, 'shortlist')" class="uppercase">
-                add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
-              </a>
-              <br>
-              <a *ngIf="candidate.status !== 'rejected'" href="javascript:;" (click)="changeCandidateStatus($event, candidate.id, 'rejected')" class="uppercase">
-                reject candidate <i class="iconfont iconfont-close-o ml-10" style="font-size: 24px"></i>
-              </a>
-            </nz-col>
-          </nz-row>
-        </ng-template>
+              <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
+                <a *ngIf="candidate.status !== 'shortlist'" href="javascript:;" (click)="changeCandidateStatus(candidate.id, 'shortlist')" class="uppercase">
+                  add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
+                </a>
+                <br>
+                <a *ngIf="candidate.status !== 'rejected'" href="javascript:;" (click)="changeCandidateStatus(candidate.id, 'rejected')" class="uppercase">
+                  reject candidate <i class="iconfont iconfont-close-o ml-10" style="font-size: 24px"></i>
+                </a>
+              </nz-col>
+            </nz-row>
+          </ng-template>
 
-        <div class="p-20">
-          <app-cmp-candidate [pid]="pid" [cid]="candidate.id"></app-cmp-candidate>
-        </div>
-      </nz-collapse-panel>
-    </nz-collapse>
-
-    <!-- template -->
-    <!-- <ng-container *ngTemplateOutlet="candidateHeader;context:{candidate: candidate}"></ng-container> -->
-    
-
+          <div class="p-20">
+            <app-cmp-candidate [pid]="pid" [cid]="candidate.id"></app-cmp-candidate>
+          </div>
+        </nz-collapse-panel>
+      </nz-collapse>
+    </nz-checkbox-wrapper>
   </nz-col>
 </nz-row>
 
