@@ -55,11 +55,11 @@ export class HomeComponent implements OnInit {
         .filter(item => item.status === statusValue)
         .sort((a, b) => b.time - a.time);
         break;
-      case 'my_posts':
+      case 'my posts':
         next = posts.filter(item => item.status && item.owner_addr === curUser)
         .sort((a, b) => b.time - a.time);
         break;
-      case 'my_referrals':
+      case 'my referrals':
         next = posts.filter(item => item.status && item['referrals_by_user'][curUser])
         .sort((a, b) => b.time - a.time);
         break;
