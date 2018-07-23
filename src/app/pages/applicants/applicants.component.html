@@ -68,18 +68,11 @@
               <h4 class="border-bottom pb-10">{{ candidate.candidate_name }}</h4>
               <nz-row nzType="flex" nzJustify="space-between">
                 <nz-col>
-                  <a href="{{ candidate.candidate_linkedin }}">LinkedIn</a>
-                </nz-col>
-                <nz-col>
-                  <a href="mailto:{{ candidate_email }}" (click)="changeStatus($event, 'rejected')" class="uppercase">
-                    <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> Contact Candidate 
+                  <a href="mailto:{{ candidate.candidate_email }}" (click)="changeStatus($event, 'rejected')">
+                    <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> {{ candidate.candidate_email }} 
                   </a>
                 </nz-col>
-                <!-- <nz-col>
-                  todo
-                  <i class="anticon anticon-cloud-download"></i> CV/reume
-                  </a>
-                </nz-col> -->
+                
                 <nz-col class="text">
                   {{ moment(candidate.time).fromNow() }}
                 </nz-col>
