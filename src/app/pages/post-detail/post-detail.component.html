@@ -9,7 +9,7 @@
               <h3 class="cart-title">{{ post.job_title }}</h3>
               <p class="bold">{{ post.company_name }}</p>
               <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
-              <p class="text my-20">{{ post.job_type }} {{ post.job_range }} {{ post.job_location ? ', ' + post.job_location : '' }}</p>
+              <p class="text my-20">{{ post.job_type }}{{ post.job_range ? ', ' + post.job_range : ''}}{{ post.job_location ? ', ' + post.job_location : '' }}</p>
 
               <section class="my-40">
                 <p class="bold">Job Description</p>
@@ -59,10 +59,17 @@
               
             </div>
             <div class="text-center">
-              <a *ngIf="post.status != 'open'" class="btn btn-primary btn-canya-gradient mt-60" disabled routerLink="/refer/new/{{ post.id }}">
+              <a 
+                disabled
+                *ngIf="post.status != 'open' || post.owner_addr == store.curUser" 
+                class="btn btn-primary btn-canya-gradient mt-60"  
+                routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
               </a>
-              <a *ngIf="post.status == 'open'" class="btn btn-primary btn-canya-gradient mt-60" routerLink="/refer/new/{{ post.id }}">
+              <a 
+                *ngIf="post.status == 'open' && post.owner_addr != store.curUser" 
+                class="btn btn-primary btn-canya-gradient mt-60" 
+                routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
               </a>
             </div>
