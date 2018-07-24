@@ -27,13 +27,14 @@ import { ApplicantsComponent } from './pages/applicants/applicants.component';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
-// import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 
 import { ContractsService } from './services/contracts/contracts.service';
 import { CurrencyService } from './services/global/currency.service';
 import { PostService } from './services/post.service';
+import { AuthService } from './services/auth.service';
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 import { CmpPostComponent } from './pages/home/components/cmp-post/cmp-post.component';
 import { CmpCandidateComponent } from './pages/refer-detail/components/cmp-candidate/cmp-candidate.component';
@@ -76,10 +77,10 @@ registerLocaleData(zh);
 
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFireDatabaseModule, // imports firebase/database, only needed for database features
-    // AngularFireAuthModule, // imports firebase/auth, only needed for auth features
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, CurrencyService, PostService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, CurrencyService, PostService, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

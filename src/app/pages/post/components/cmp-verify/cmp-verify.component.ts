@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-cmp-verify',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CmpVerifyComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private auth: AuthService,
+  ) { }
 
   ngOnInit() {
+  }
+
+  verify(email, name) {
+    this.auth.emailVerify(email, name);
   }
 
 }
