@@ -97,10 +97,10 @@ export class PostComponent implements AfterViewInit {
   next(): void {
     let formData;
 
-    if (this.current === 0) {
+    if (this.current === 1) {
       formData = this.step1.submitForm();
       this.values = {...this.values, ...formData.data };
-    } else if (this.current === 1) {
+    } else if (this.current === 2) {
       // pass directly when edit,because reward info can't edit
       formData = this.type == 'edit' ? { ...this.submitForm(), valid: true } : this.submitForm();
     }

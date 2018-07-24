@@ -37,6 +37,7 @@ import { PostService } from './services/post.service';
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 import { CmpPostComponent } from './pages/home/components/cmp-post/cmp-post.component';
 import { CmpCandidateComponent } from './pages/refer-detail/components/cmp-candidate/cmp-candidate.component';
+import { CmpVerifyComponent } from './pages/post/components/cmp-verify/cmp-verify.component';
 
 registerLocaleData(zh);
 
@@ -61,6 +62,7 @@ registerLocaleData(zh);
     ReferDetailComponent,
     CmpPostComponent,
     CmpCandidateComponent,
+    CmpVerifyComponent,
   ],
   imports: [
     BrowserModule,
