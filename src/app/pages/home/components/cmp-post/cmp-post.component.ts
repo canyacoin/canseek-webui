@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PostService } from '../../../../services/post.service';
 import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { Store } from "../../../../store";
 import * as moment from 'moment';
 
 @Component({
@@ -13,6 +14,8 @@ export class CmpPostComponent implements OnInit {
   @Input() statusValue: string;
   @Input() cid: string;
   @Input() curUser: string;
+  
+  store = Store;
   
   moment = moment;
   confirmModal: NzModalRef;
