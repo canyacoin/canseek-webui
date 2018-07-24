@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -12,6 +12,7 @@ import {
   styleUrls: ['./cmp-referstep2.component.less']
 })
 export class CmpReferstep2Component implements OnInit {
+  @Input() post: any;
   fileList = [
     {
       uid: -1,
@@ -84,7 +85,9 @@ export class CmpReferstep2Component implements OnInit {
       // todo upload
       resume      : [ null/*, [ Validators.required ]*/ ],
       reason     : [ null, [ Validators.required ] ],
-      answers      : [ null/*, [ Validators.required ]*/ ],
+      answers      : [ null, [ Validators.required ] ],
+      answers2      : [ null, [ Validators.required ] ],
+      answers3      : [ null, [ Validators.required ] ],
       cover_letter: [null],
     });
   }

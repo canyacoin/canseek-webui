@@ -12,7 +12,7 @@
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-form-extra>**Important**: Please ensure your MetaMask address is right for payout of the Referral fund if your talent is successful</nz-form-extra>
+            <nz-form-extra class="red">Important: For payout of the Referral fund if your talent is successful!</nz-form-extra>
             <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
           </nz-form-control>
         </nz-form-item>
@@ -48,7 +48,7 @@
       </form>
 
       <!-- step2 -->
-      <app-cmp-referstep2 *ngIf="current == 1"></app-cmp-referstep2>
+      <app-cmp-referstep2 *ngIf="current == 1" [post]="post"></app-cmp-referstep2>
       
       <!-- step3 -->
       <div class="text-center" *ngIf="current == 2">

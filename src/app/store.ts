@@ -52,6 +52,12 @@ export let Store = {
         }, {
           label: 'Screening Questions',
           field: 'screening_questions'
+        }, {
+          label: 'Screening Questions',
+          field: 'screening_questions2'
+        }, {
+          label: 'Screening Questions',
+          field: 'screening_questions3'
         }]
       },{
         label: 'Company Information Preview',

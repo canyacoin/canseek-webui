@@ -74,12 +74,32 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers" nzRequired>Screening Questions</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers" nzRequired>Screening Questions
+      <br>
+      <span class="text">The job poster requested</span>
+    </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <!-- todo components -->
-      <nz-form-extra>What’s your experience with cryptocurrencies?</nz-form-extra>
+      <nz-form-extra>{{ post.screening_questions }}</nz-form-extra>
       <textarea formControlName="answers" id="answers" nz-input rows="4" placeholder="write any thing"></textarea>
-      <nz-form-extra>Maximux 200 words</nz-form-extra>
+      <nz-form-explain *ngIf="validateForm.get('answers').dirty && validateForm.get('answers').errors">Please input Your answer!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item *ngIf="post.screening_questions2">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2" nzRequired>Screening Questions</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-form-extra>{{ post.screening_questions2 }}</nz-form-extra>
+      <textarea formControlName="answers2" id="answers2" nz-input rows="4" placeholder="write any thing"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('answers2').dirty && validateForm.get('answers2').errors">Please input Your answer!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item *ngIf="post.screening_questions3">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3" nzRequired>Screening Questions</nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <nz-form-extra>{{ post.screening_questions3 }}</nz-form-extra>
+      <textarea formControlName="answers3" id="answers3" nz-input rows="4" placeholder="write any thing"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('answers3').dirty && validateForm.get('answers3').errors">Please input Your answer!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
