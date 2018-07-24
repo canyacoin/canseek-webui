@@ -34,7 +34,8 @@ export class PostComponent implements AfterViewInit {
 
   email: string = null;
   emailVerified: boolean = false;
-  
+  verifyLoading: boolean = false;
+
   constructor(
     private afAuth: AngularFireAuth,
     private fb: FormBuilder,
@@ -103,9 +104,15 @@ export class PostComponent implements AfterViewInit {
   }
 
   emailVerify(password:string = '' + new Date) {
+    if (!this.email) return;
+
+    this.verifyLoading = true;
     return this.afAuth.auth.createUserWithEmailAndPassword(this.email, password)
       .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
-      .then(() => this.message.success('please verify your email'))
+      .then(() => {
+        this.message.success('please verify your email')
+        this.verifyLoading = false;
+      })
       .catch(error => {
         console.log(error)
         this.message.error(error.message)
@@ -176,6 +183,19 @@ export class PostComponent implements AfterViewInit {
     
     return {
       valid: this.validateForm.valid,
+      data: this.values,
+    }
+  }
+
+  submitEmailForm(): any {
+    for (const i in this.emailForm.controls) {
+      this.emailForm.controls[ i ].markAsDirty();
+      this.emailForm.controls[ i ].updateValueAndValidity();
+      this.values[i] = this.emailForm.controls[ i ].value;
+    }
+    
+    return {
+      valid: this.emailForm.valid,
       data: this.values,
     }
   }

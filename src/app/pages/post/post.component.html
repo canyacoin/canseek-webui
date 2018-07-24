@@ -25,7 +25,7 @@
                 <input [(ngModel)]="email" nz-input formControlName="your_email" id="your_email" placeholder="Please input">
               </nz-col>
               <nz-col [nzSpan]="8">
-                <button nz-button (click)="emailVerify()">Verify</button>
+                <button nz-button [nzLoading]="verifyLoading" (click)="emailVerify()">Verify</button>
               </nz-col>
             </nz-row >
             <nz-form-explain *ngIf="emailForm.get('your_email').dirty && emailForm.get('your_email').errors">Please input Your Company Email!</nz-form-explain>
