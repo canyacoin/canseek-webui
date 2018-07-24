@@ -1,5 +1,7 @@
 import { Component, AfterViewInit, ViewChild  } from '@angular/core';
 import { CmpPoststep1Component } from './components/cmp-poststep1/cmp-poststep1.component';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { NzMessageService } from 'ng-zorro-antd';
 import {
   FormBuilder,
   FormControl,
@@ -19,6 +21,7 @@ export class PostComponent implements AfterViewInit {
   @ViewChild(CmpPoststep1Component)
   private step1: CmpPoststep1Component;
   store = Store;
+  emailForm: FormGroup;
   validateForm: FormGroup;
 
   current = 0;
@@ -26,17 +29,47 @@ export class PostComponent implements AfterViewInit {
   values: Object = {};
 
   // new edit noAuth
-  type: string;
+  type: string = 'new';
 
+  email: string = null;
+  emailVerified: boolean = false;
+  
   constructor(
+    private afAuth: AngularFireAuth,
     private fb: FormBuilder,
     private ps: PostService,
     private router: Router,
     private route: ActivatedRoute,
+    private message: NzMessageService,
   ) {
+    this.afAuth.authState.subscribe((auth) => {
+      this.emailVerified = (auth||{})['emailVerified'];
+      this.email = (auth||{})['email']
+
+      if (this.emailVerified) {
+        this.current = 1;
+      }
+    })
   }
+
   ngAfterViewInit() {
+    if (this.type == 'edit') {
+      this.step1.initForm(this.values, false)
+    }
+  }
+
+  ngOnInit() {
     this.init();
+  }
+
+  emailVerify(password:string = '' + new Date) {
+    return this.afAuth.auth.createUserWithEmailAndPassword(this.email, password)
+      .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
+      .then(() => this.message.success('please verify your email'))
+      .catch(error => {
+        console.log(error)
+        this.message.error(error.message)
+      });
   }
   
   init(): void {
@@ -45,6 +78,8 @@ export class PostComponent implements AfterViewInit {
       this.type = type;
 
       if (type == 'edit'){
+        // 编辑的时候无需验证
+        this.current = 1;
         this.ps.getPost(id)
           .subscribe(post => {
             this.values = post;
@@ -79,10 +114,13 @@ export class PostComponent implements AfterViewInit {
       return null;
     }
   }
-  
 
   initForm(values, disabled): void {
-    disabled && this.step1.initForm(values, false);
+    this.emailForm = this.fb.group({
+      your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required, this.emailValidator ] ],
+      owner_addr: [ { value: this.store.curUser, disabled: true } ],
+    });
+
     this.validateForm = this.fb.group({
       reward: [ { value: values['reward'], disabled }, [ Validators.required, this.rewardValidator ] ],
       cost: [ { value: values['cost'], disabled }, [ Validators.required, this.costValidator ] ],

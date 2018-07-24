@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -13,6 +13,8 @@ import { Store } from '../../../../store';
   styleUrls: ['./cmp-poststep1.component.less']
 })
 export class CmpPoststep1Component implements OnInit {
+  @Input() email;
+
   validateForm: FormGroup;
   store = Store;
   fileList = [
@@ -87,7 +89,7 @@ export class CmpPoststep1Component implements OnInit {
       company_desc     : [ { value: values['company_desc'], disabled }, [ Validators.required ] ],
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
-      your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
+      your_email: [ { value: values['your_email'] || this.email, disabled: true }, [ Validators.email, Validators.required ] ],
       owner_addr: [ { value: this.store.curUser, disabled: true } ],
     });
   }
