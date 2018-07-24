@@ -28,6 +28,7 @@ export class PostComponent implements AfterViewInit {
 
   values: Object = {};
 
+  id: string; // post id
   // new edit noAuth
   type: string = 'new';
 
@@ -49,17 +50,56 @@ export class PostComponent implements AfterViewInit {
       if (this.emailVerified) {
         this.current = 1;
       }
+    });
+
+    this.route.queryParams.subscribe(params => {
+      this.id = params.id;
+      this.type = params.type;
     })
   }
 
   ngAfterViewInit() {
-    if (this.type == 'edit') {
-      this.step1.initForm(this.values, false)
+    if (this.type == 'edit'){
+      this.ps.getPost(this.id)
+      .subscribe(post => {
+        // init sub cmp
+        this.step1.initForm(post, false);
+      })
     }
   }
 
   ngOnInit() {
-    this.init();
+    if (this.type == 'edit'){
+      this.initEdit();
+    } else {
+      this.initForm(this.values, false);
+    }
+  }
+
+  initEdit() {
+    // 编辑的时候无需验证邮箱
+    this.current = 1;
+    this.ps.getPost(this.id)
+      .subscribe(post => {
+        this.values = post;
+        if (post['owner_addr'] != this.store.curUser) {
+          this.type = 'noAuth';
+        } else {
+          this.initForm(this.values, this.type == 'edit');
+        }
+      })
+  }
+
+  initForm(values, disabled): void {
+    this.emailForm = this.fb.group({
+      your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
+      owner_addr: [ { value: this.store.curUser, disabled: true } ],
+    });
+
+    this.validateForm = this.fb.group({
+      reward: [ { value: values['reward'], disabled }, [ Validators.required, this.rewardValidator ] ],
+      cost: [ { value: values['cost'], disabled }, [ Validators.required, this.costValidator ] ],
+    });
   }
 
   emailVerify(password:string = '' + new Date) {
@@ -70,29 +110,6 @@ export class PostComponent implements AfterViewInit {
         console.log(error)
         this.message.error(error.message)
       });
-  }
-  
-  init(): void {
-    this.route.queryParams.subscribe(params => {
-      const { type, id } = params;
-      this.type = type;
-
-      if (type == 'edit'){
-        // 编辑的时候无需验证
-        this.current = 1;
-        this.ps.getPost(id)
-          .subscribe(post => {
-            this.values = post;
-            if (post['owner_addr'] != this.store.curUser) {
-              this.type = 'noAuth';
-            } else {
-              this.initForm(this.values, this.type == 'edit');
-            }
-          })
-      } else {
-        this.initForm(this.values, false);
-      }
-    });
   }
 
   rewardValidator = (control: FormControl) => {
@@ -113,18 +130,6 @@ export class PostComponent implements AfterViewInit {
     } else {
       return null;
     }
-  }
-
-  initForm(values, disabled): void {
-    this.emailForm = this.fb.group({
-      your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required, this.emailValidator ] ],
-      owner_addr: [ { value: this.store.curUser, disabled: true } ],
-    });
-
-    this.validateForm = this.fb.group({
-      reward: [ { value: values['reward'], disabled }, [ Validators.required, this.rewardValidator ] ],
-      cost: [ { value: values['cost'], disabled }, [ Validators.required, this.costValidator ] ],
-    });
   }
 
   // todo, cancel has no data
