@@ -30,34 +30,23 @@ export class PostService {
     return this.dbRef.doc(id).valueChanges();
   }
   
-  addPost(post: any) {
-    const { reward, cost } = post;
-
+  addPostDb(post: any): Promise<any> {
     return this.dbRef.add(post)
-        .then(docRef => {
-          docRef.update({id: docRef.id})
-          this.postRef = docRef;
-        })
-        .then(
-          () => this.cs.addPost(this.postRef.id, reward, cost)
-        )
-        .then(postId => {
-          this.postRef.update({
-            postId,
-            status: postId ? 'open' : 'pending'
-          })
-
-          return Promise.resolve({
-            status: 'open',
-            id: this.postRef.id
-          });
-        })
+      .then(docRef => {
+        docRef.update({id: docRef.id, status: 'pending'})
+        return Promise.resolve(docRef.id)
+      })
   }
 
-  updatePost(post: any) {
-    const { id } = post;
+  addPostCb(id, postId): Promise<any> {
+    return this.dbRef.doc(id).update({postId, status: 'open'});
+  }
 
-    this.dbRef.doc(id).update(post);
+  updatePost(post: any): Promise<any> {
+    const { id } = post;
+    // todo
+    return this.dbRef.doc(id).update(post)
+            .then(() => id)
   }
 
   cancelPost(post: any) {

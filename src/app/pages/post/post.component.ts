@@ -9,6 +9,7 @@ import {
   Validators
 } from '@angular/forms';
 import { PostService } from '../../services/post.service';
+import { ContractsService } from '../../services/contracts/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 
@@ -36,10 +37,13 @@ export class PostComponent implements AfterViewInit {
   emailVerified: boolean = false;
   verifyLoading: boolean = false;
 
+  doneLoading: boolean = false;
+
   constructor(
     private afAuth: AngularFireAuth,
     private fb: FormBuilder,
     private ps: PostService,
+    private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
     private message: NzMessageService,
@@ -160,18 +164,47 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
+  timeoutRace(id, timeout) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => reject({id}), timeout)
+    })
+  }
+
   done(): void {
+    this.doneLoading = true;
+
     const postData = {referrals_by_user: {}, time: Date.now(), owner_addr: this.store.curUser, ...this.values };
     const handledData = JSON.parse(JSON.stringify(postData));
     const isUpdate = this.type == 'edit' ? true : false;
     
     if(isUpdate) {
-      this.ps.updatePost(handledData);
-      setTimeout(() => this.router.navigateByUrl(`/status?type=post&pid=${handledData['id']}`), 0);
+      this.ps.updatePost(handledData)
+      // todo Ceshi 
+      .then(id => this.redireact(id))
     } else {
-      this.ps.addPost(handledData)
-        .then(result => this.router.navigateByUrl(`/status?type=post&pid=${result.id}`))
+      const { reward, cost } = handledData;
+
+      this.ps.addPostDb(handledData)
+        .then(id => {
+          return Promise.race([
+            this.cs.addPost(id, Number(reward), Number(cost)), 
+            this.timeoutRace(id, 3000)
+          ])
+          .then(postId => this.ps.addPostCb(id, postId))
+          .then(() => this.redireact(id))
+        })
+        .catch(err => {
+          if (err.id) {
+            this.redireact(err.id)
+          } else {
+            console.log(err);
+          }
+        })
     }
+  }
+
+  redireact(id) {
+    this.router.navigateByUrl(`/status?type=post&pid=${id}`)
   }
 
   submitForm(): any {
