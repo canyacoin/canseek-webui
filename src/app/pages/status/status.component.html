@@ -1,7 +1,7 @@
 <nz-row class="mt-30 mb-100">
   <nz-col nzType="flex" nzSpan="14" nzOffset="5" class="text-center"> 
     <!-- refer succ -->
-    <div *ngIf="type && type == 'refer'">
+    <div *ngIf="type == 'refer' && post && candidate">
       <div class="blue fw-500">
         <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
       </div>
@@ -19,19 +19,25 @@
     </div>
 
     <!-- new post succ -->
-    <div *ngIf="type && type == 'post'">
+    <div *ngIf="type == 'post'">
       <div class="blue fw-500">
         <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
       </div>
   
-      <h4 class="my-50">Job Posted!</h4>
+      <h4 class="my-50">Job Posted! <small *ngIf="post">({{ post.status }})</small> </h4>
   
       <p>Your job has been posted to CanSeek.  </p>
       <p>Share the post to maximise your chances of a successful referral.</p>
 
-      <nz-input-group nzAddOnBefore="share" style="max-width: 400px;">
+      <nz-input-group [nzAddOnBefore]="suffixTemplate" style="max-width: 400px;">
         <input type="text" nz-input value="{{ host }}/post/{{ pid }}">
       </nz-input-group>
+      <ng-template #suffixTemplate>
+        <span nz-tooltip nzTitle="copy">
+          <i class="anticon anticon-copy" (click)="copy()" *ngIf="!copied"></i>
+          <i class="anticon anticon-check" *ngIf="copied" style="color: green"></i>
+        </span>
+      </ng-template>
   
       <div class="btns mt-60">
         <a routerLink="/post/detail/{{ pid }}" class="btn  btn-primary btn-outline">View</a>

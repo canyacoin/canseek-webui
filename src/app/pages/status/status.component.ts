@@ -16,6 +16,7 @@ export class StatusComponent implements OnInit {
   host: string;
   post: any;
   candidate: any;
+  copied: boolean = false;
   
   constructor(
     private route: ActivatedRoute,
@@ -39,5 +40,10 @@ export class StatusComponent implements OnInit {
     if (this.cid) {
       this.ps.getCandidate(this.pid, this.cid).subscribe(candidate => this.candidate = candidate)
     }
+  }
+
+  copy() {
+    this.copied = !this.copied;
+    console.log(0);
   }
 }
