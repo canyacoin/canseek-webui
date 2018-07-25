@@ -46,4 +46,9 @@ export class StatusComponent implements OnInit {
     this.copied = !this.copied;
     console.log(0);
   }
+
+  updateStatus() {
+    this.ps.updateStatus(this.post)
+      .then(status => this.post['status'] = status)
+  }
 }

@@ -132,31 +132,32 @@ export class PostService {
       // })
   }
 
-  updateStatus(post) {
+  updateStatus(post): Promise<any> {
     const { postId, id } = post;
     const postRef = this.dbRef.doc(id);
     
     if (postId) {
-      this.cs.getPostStatus(postId) 
-        .then(result => {
-          postRef.update({
-            status: result
-          })
+      return this.cs.getPostStatus(postId) 
+        .then(status => {
+          postRef.update({ status })
+
+          return Promise.resolve({status})
         })
     } else {
-      this.cs.getPostId(id)
+      return this.cs.getPostId(id)
         .then(postId => {
-          if (!postId) {
-            this.message.warning('please re-add this post, will redirect in 3 seconds');
-            setTimeout(
-              () => this.router.navigateByUrl(`post?type=edit&id=${id}`),
-              3000
-            )
-          } else {
+          if (postId) {
+          //   this.message.warning('please re-add this post, will redirect in 3 seconds');
+          //   setTimeout(
+          //     () => this.router.navigateByUrl(`post?type=edit&id=${id}`),
+          //     3000
+          //   )
+          // } else {
             postRef.update({
               postId,
               status: 'open'
             })
+            return Promise.resolve({status: 'open'})
           }
         })
     }
