@@ -21,12 +21,13 @@ export class CmpReferstep2Component implements OnInit {
   submitForm(): any {
     let data = [];
 
-    this.validateForm.controls['resume'].value = this.fileList;
+    this.handleChange({fileList: this.fileList});
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
       data[i] = this.validateForm.controls[ i ].value;
     }
+    data['resume'] = this.fileList;
 
     return {
       valid: this.validateForm.valid,
@@ -47,7 +48,7 @@ export class CmpReferstep2Component implements OnInit {
       candidate_website: [null],
       candidate_linkedin: [ null ],
       
-      resume      : [ null, [ Validators.required ] ],
+      resume      : [ null ],
       reason     : [ null, [ Validators.required ] ],
       answers      : [ null, [ Validators.required ] ],
       answers2      : [ null ],
@@ -57,11 +58,14 @@ export class CmpReferstep2Component implements OnInit {
   }
 
   handleChange(info: any, key: string = 'fileList') {
-    // console.log('handleChange', info);
     this[key] = info.fileList;
-    if (info.fileList.length) {
-      this.validateForm.controls['resume'].setErrors(null);
+
+    let errObj = null;
+    if (!info.fileList.length) {
+      errObj = { required: true };
     }
+    this.validateForm.controls['resume'].setErrors(errObj);
+    // console.log(errObj);
   }
 
   uploadFile = (item: any) => {
