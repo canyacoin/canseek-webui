@@ -153,7 +153,7 @@ export class CmpPoststep1Component implements OnInit {
       })
   }
 
-  handlePreview = (file: UploadFile) => {
+  handlePreview = (file: any) => {
     this.previewImage = file.url || file.thumbUrl;
     this.previewVisible = true;
   }
