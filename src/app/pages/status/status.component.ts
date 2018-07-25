@@ -15,6 +15,7 @@ export class StatusComponent implements OnInit {
   type: string;
   host: string;
   post: any;
+  candidate: any;
   
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +35,9 @@ export class StatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.type == 'refer' && this.ps.getPost(this.pid).subscribe(post => this.post = post);
+    this.ps.getPost(this.pid).subscribe(post => this.post = post);
+    if (this.cid) {
+      this.ps.getCandidate(this.pid, this.cid).subscribe(candidate => this.candidate = candidate)
+    }
   }
-
 }
