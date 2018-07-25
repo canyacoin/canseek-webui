@@ -5,6 +5,8 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cmp-referstep2',
@@ -13,77 +15,39 @@ import {
 })
 export class CmpReferstep2Component implements OnInit {
   @Input() post: any;
-  fileList = [
-    {
-      uid: -1,
-      name: 'xxx.png',
-      status: 'done',
-      url: 'http://www.baidu.com/xxx.png'
-    }
-  ];
+  fileList = [];
   validateForm: FormGroup;
 
   submitForm(): any {
     let data = [];
 
+    this.validateForm.controls['resume'].value = this.fileList;
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
       data[i] = this.validateForm.controls[ i ].value;
     }
+
     return {
       valid: this.validateForm.valid,
       data
     }
   }
 
-  updateConfirmValidator(): void {
-    /** wait for refresh value */
-    Promise.resolve().then(() => this.validateForm.controls.checkPassword.updateValueAndValidity());
-  }
-
-  confirmationValidator = (control: FormControl): { [s: string]: boolean } => {
-    if (!control.value) {
-      return { required: true };
-    } else if (control.value !== this.validateForm.controls.password.value) {
-      return { confirm: true, error: true };
-    }
-  }
-
-  getCaptcha(e: MouseEvent): void {
-    e.preventDefault();
-  }
-
-  constructor(private fb: FormBuilder) {
-  }
-
-  // tslint:disable-next-line:no-any
-  handleChange(info: any): void {
-    const fileList = info.fileList;
-    // 2. read from response and show file link
-    if (info.file.response) {
-      info.file.url = info.file.response.url;
-    }
-    // 3. filter successfully uploaded files according to response from server
-    this.fileList = fileList.filter(item => {
-      if (item.response) {
-        return item.response.status === 'success';
-      }
-      return true;
-    });
-  }
+  constructor(
+    private fb: FormBuilder,
+    private storage: AngularFireStorage,
+  ) {}
 
   ngOnInit(): void {
     this.validateForm = this.fb.group({
       candidate_name         : [ null, [ Validators.required ] ],
-      // todo Validators.phone?
       candidate_phone         : [ null ],
       candidate_email        : [ null, [ Validators.required, Validators.email ] ],
       candidate_website: [null],
       candidate_linkedin: [ null ],
       
-      // todo upload
-      resume      : [ null/*, [ Validators.required ]*/ ],
+      resume      : [ null, [ Validators.required ] ],
       reason     : [ null, [ Validators.required ] ],
       answers      : [ null, [ Validators.required ] ],
       answers2      : [ null, [ Validators.required ] ],
@@ -92,4 +56,45 @@ export class CmpReferstep2Component implements OnInit {
     });
   }
 
+  handleChange(info: any, key: string = 'fileList') {
+    // console.log('handleChange', info);
+    this[key] = info.fileList;
+    if (info.fileList.length) {
+      this.validateForm.controls['resume'].setErrors(null);
+    }
+  }
+
+  uploadFile = (item: any) => {
+    const file = item.file;
+    const fileName = file.name;
+    const filePath = `${file.lastModified}-${fileName}`;
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+
+    task.snapshotChanges()
+      .pipe(
+        finalize(() => {
+          fileRef.getDownloadURL().subscribe(url => {
+            this.fileList = this.fileList.map(item => {
+              if (item.name == fileName){
+                return {...item, url, thumbUrl: url}
+              }
+              return item
+            })
+            this.handleChange({fileList: this.fileList})
+          })
+        })
+      )
+      .subscribe(snapshot => {
+        if (snapshot.bytesTransferred == snapshot.totalBytes) {
+          this.fileList = this.fileList.map(item => {
+            if (item.name == fileName) {
+              return { ...item, status: 'done', percent: 100 }
+            }
+            return item;
+          })
+          this.handleChange({fileList: this.fileList})
+        }
+      })
+  }
 }

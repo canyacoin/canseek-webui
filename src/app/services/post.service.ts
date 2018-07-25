@@ -109,7 +109,6 @@ export class PostService {
     const cidArr = referrals_by_user[curUser];
     const referNum = cidArr.length;
     const postRef = this.dbRef.doc(id);
-    debugger
     this.cs.getRefund(postId)
       .then(result => {
         if (result) {

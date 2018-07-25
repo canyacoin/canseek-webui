@@ -46,28 +46,22 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <!-- <input nz-input formControlName="resume" id="resume"> -->
-      <!-- formControlName="resume" id="resume" -->
-      <!-- todo -->
       <nz-upload
-        nzAction="https://jsonplaceholder.typicode.com/posts/"
         [nzFileList]="fileList"
-        nzMultiple
-        [nzLimit]="2"
-        (nzChange)="handleChange($event)">
+        [nzCustomRequest]="uploadFile"
+        (nzChange)="handleChange($event)"
+        >
         <button nz-button>
           <i class="anticon anticon-upload"></i><span>Upload</span>
         </button>
       </nz-upload>
-      <!-- <nz-form-explain *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please input your address!</nz-form-explain> -->
+      <nz-form-explain class="red" *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please upload your CV/Resume!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Referring Reasons</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <!-- todo verify -->
-      <nz-form-extra>Maximux 100 words</nz-form-extra>
       <textarea formControlName="reason" id="reason" nz-input rows="4" placeholder="Please input"></textarea>
       <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons!</nz-form-explain>
     </nz-form-control>
@@ -76,7 +70,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers" nzRequired>Screening Questions
       <br>
-      <span class="text">The job poster requested</span>
+      <span class="text">(The job poster requested)</span>
     </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions }}</nz-form-extra>
