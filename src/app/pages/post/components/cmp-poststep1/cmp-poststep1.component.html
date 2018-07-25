@@ -138,15 +138,19 @@
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-upload
+        nzListType="picture-card"
         [nzFileList]="logo"
         [nzCustomRequest]="uploadImage"
-        (nzChange)="handleChange($event, 'logo')">
-        <button nz-button>
-          <i class="anticon anticon-upload"></i><span>Upload</span>
-        </button>
+        (nzChange)="handleChange($event, 'logo')"
+        [nzShowButton]="logo.length < 1"
+        [nzPreview]="handlePreview"
+        >
+        <i class="anticon anticon-plus"></i>
+        <div class="ant-upload-text">Upload</div>
       </nz-upload>
     </nz-form-control>
   </nz-form-item>
+  
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_name" nzRequired> Company Name </nz-form-label>
@@ -172,3 +176,9 @@
     </nz-form-control>
   </nz-form-item>
 </form>
+
+<nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
+  <ng-template #modalContent>
+    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
+  </ng-template>
+</nz-modal>

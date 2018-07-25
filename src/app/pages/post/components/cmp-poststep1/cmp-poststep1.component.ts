@@ -22,6 +22,9 @@ export class CmpPoststep1Component implements OnInit {
   fileList = [];
   logo = [];
 
+  previewImage = '';
+  previewVisible = false;
+
   submitForm(): any {
     const data = [];
 
@@ -148,5 +151,10 @@ export class CmpPoststep1Component implements OnInit {
           this.handleChange({fileList: this.logo}, 'logo')
         }
       })
+  }
+
+  handlePreview = (file: UploadFile) => {
+    this.previewImage = file.url || file.thumbUrl;
+    this.previewVisible = true;
   }
 }
