@@ -137,13 +137,10 @@
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <!-- formControlName="company_logo" id="company_logo" -->
       <nz-upload
-        nzAction="https://jsonplaceholder.typicode.com/posts/"
-        [nzFileList]="fileList"
-        nzMultiple
-        [nzLimit]="2"
-        (nzChange)="handleChange($event)">
+        [nzFileList]="logo"
+        [nzCustomRequest]="uploadImage"
+        (nzChange)="handleChange($event, 'logo')">
         <button nz-button>
           <i class="anticon anticon-upload"></i><span>Upload</span>
         </button>
