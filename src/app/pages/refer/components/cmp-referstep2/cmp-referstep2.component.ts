@@ -50,8 +50,8 @@ export class CmpReferstep2Component implements OnInit {
       resume      : [ null, [ Validators.required ] ],
       reason     : [ null, [ Validators.required ] ],
       answers      : [ null, [ Validators.required ] ],
-      answers2      : [ null, [ Validators.required ] ],
-      answers3      : [ null, [ Validators.required ] ],
+      answers2      : [ null ],
+      answers3      : [ null ],
       cover_letter: [null],
     });
   }
