@@ -30,11 +30,11 @@
       <p>Share the post to maximise your chances of a successful referral.</p>
 
       <nz-input-group [nzAddOnBefore]="suffixTemplate" style="max-width: 400px;">
-        <input type="text" nz-input value="{{ host }}/post/{{ pid }}">
+        <input type="text" #shareLink nz-input value="{{ host }}/post/{{ pid }}">
       </nz-input-group>
       <ng-template #suffixTemplate>
         <span nz-tooltip nzTitle="copy">
-          <i class="anticon anticon-copy" (click)="copy()" *ngIf="!copied"></i>
+          <i class="anticon anticon-copy" [ngxClipboard]="shareLink" (click)="copy()" *ngIf="!copied"></i>
           <i class="anticon anticon-check" *ngIf="copied" style="color: green"></i>
         </span>
       </ng-template>

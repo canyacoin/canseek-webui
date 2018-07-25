@@ -24,21 +24,21 @@
     "angularfire2": "5.0.0-rc.9",
     "core-js": "^2.5.4",
     "firebase": "5.0.2",
+    "less": "^2.7.3",
     "moment": "^2.22.2",
     "ng-zorro-antd": "^1.1.1",
+    "ngx-clipboard": "^11.1.1",
     "rxjs": "^6.0.0",
     "tn-truffle-test-utils": "^1.0.4",
     "truffle-hdwallet-provider": "0.0.5",
     "web3": "1.0.0-beta.34",
     "zeppelin-solidity": "^1.9.0",
-    "zone.js": "^0.8.26",
-    "less": "^2.7.3"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "@angular/compiler-cli": "^6.0.2",
     "@angular-devkit/build-angular": "git+https://github.com/thetadotonline/angular-devkit-build-angular-builds.git#v1.0.0",
-    "typescript": "~2.7.2",
-    "@angular/cli": "~6.0.3",
+    "@angular/cli": "^6.0.8",
+    "@angular/compiler-cli": "^6.0.2",
     "@angular/language-service": "^6.0.2",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
@@ -55,6 +55,7 @@
     "rxjs-compat": "^6.2.0",
     "truffle-contract": "^3.0.4",
     "ts-node": "~5.0.1",
-    "tslint": "~5.9.1"
+    "tslint": "~5.9.1",
+    "typescript": "~2.7.2"
   }
 }

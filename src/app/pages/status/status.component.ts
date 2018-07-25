@@ -44,7 +44,6 @@ export class StatusComponent implements OnInit {
 
   copy() {
     this.copied = !this.copied;
-    console.log(0);
   }
 
   updateStatus() {
