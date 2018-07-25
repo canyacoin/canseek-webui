@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
 import { PostService } from '../../services/post.service';
+import { ContractsService } from '../../services/contracts/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 
@@ -25,10 +26,13 @@ export class ReferComponent implements AfterViewInit {
 
   store = Store;
   post: Object = {};
+
+  doneLoading: boolean = false;
   
   constructor(
     private fb: FormBuilder,
     private ps: PostService,
+    private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
   ) {
@@ -84,10 +88,30 @@ export class ReferComponent implements AfterViewInit {
       });
   }
 
+  redireact(id) {
+    this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`)
+  }
+
   done(): void {
+    this.doneLoading = true;
+
     const CandidateData = {...this.values, time: Date.now() };
 
-    this.ps.addCandidate(this.post, CandidateData)
-      .then(result => this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${result.id}`))
+    this.ps.addCandidateDb(this.post, CandidateData)
+      .then(cid => {
+        return Promise.race([
+          this.cs.recommend(cid, this.post['postId']), 
+          this.ps.timeoutRace({id: cid}, 3000)
+        ])
+        .then((res) => this.ps.addCandidateCb(cid, this.post['id'], res))
+        .then(() => this.redireact(cid))
+      })
+      .catch(err => {
+        if (err.id) {
+          this.redireact(err.id)
+        } else {
+          console.log(err);
+        }
+      })
   }
 }

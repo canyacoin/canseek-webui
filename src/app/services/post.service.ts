@@ -61,40 +61,39 @@ export class PostService {
       })
   }
 
-  addCandidate(post: any, candidate: any) {
-    const { id, postId, candidates = 0, referrals_by_user = {} } = post;
+  timeoutRace(obj, timeout) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => reject(obj), timeout)
+    })
+  }
+
+  addCandidateDb(post: any, candidate: any): Promise<any> {
+    const { id, candidates = 0, referrals_by_user } = post;
     const { owner_addr: curUser } = candidate;
-    let cid, candidateRef;
-    
-    this.postRef = this.dbRef.doc(id);
+    const postRef = this.dbRef.doc(id);
 
-    return this.postRef.collection('candidates').add(candidate)
+    return postRef.collection('candidates').add(candidate)
       .then(docRef => {
-        cid = docRef.id;
-        docRef.update({id: cid});
+        const cid = docRef.id;
 
-        candidateRef = docRef;
-        // update post in order to find transaction again
-        if (referrals_by_user[curUser]) {
-          referrals_by_user[curUser] = referrals_by_user[curUser].concat(cid);
-        } else {
-          referrals_by_user[curUser] = [cid];
-        }
-        this.postRef.update({ candidates: candidates + 1, referrals_by_user })
-      })
-      .then(
-        () => this.cs.recommend(cid, postId)
-      )
-      .then(({ honeypot, candidateId }) => {
-        if (candidateId) {
-          // update candidate-ref candidateId & status
-          candidateRef.update({candidateId, status: 'ok'});
-          // update post-ref honeypot
-          this.postRef.update({honeypot});
+        docRef.update({ id: cid, status: 'pending' })
 
-          return Promise.resolve({id: cid})
-        }
+        referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
+        postRef.update({ candidates: candidates + 1, referrals_by_user })
+
+        return Promise.resolve(cid);
       })
+  }
+
+  addCandidateCb(cid: string, pid: string, res: any): Promise<any> {
+    const {honeypot, candidateId} = res;
+    const postRef = this.dbRef.doc(pid);
+    const candidateRef = postRef.collection('candidates').doc(cid);
+
+    postRef.update({honeypot});
+    candidateRef.update({candidateId, status: 'open'});
+    
+    return Promise.resolve();
   }
 
   getCandidates(pid: string): Observable<any[]> {

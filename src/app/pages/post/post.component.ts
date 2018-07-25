@@ -164,12 +164,6 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  timeoutRace(id, timeout) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject({id}), timeout)
-    })
-  }
-
   done(): void {
     this.doneLoading = true;
 
@@ -188,7 +182,7 @@ export class PostComponent implements AfterViewInit {
         .then(id => {
           return Promise.race([
             this.cs.addPost(id, Number(reward), Number(cost)), 
-            this.timeoutRace(id, 3000)
+            this.ps.timeoutRace({id}, 3000)
           ])
           .then(postId => this.ps.addPostCb(id, postId))
           .then(() => this.redireact(id))

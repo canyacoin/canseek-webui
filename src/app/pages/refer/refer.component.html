@@ -54,7 +54,11 @@
       <div class="text-center" *ngIf="current == 2">
         <h4>Application Fee</h4>
         <h4><strong>{{ post.cost }} CAN</strong></h4>  
-        <button class="btn btn-primary mt-40 mb-12" (click)="done()">refer talent</button>
+        <button 
+          nz-button
+          [nzLoading]="doneLoading"
+          class="btn btn-primary mt-40 mb-12" 
+          (click)="done()">refer talent</button>
         <p *ngIf="store.selectedCurrency.symbol">Total: {{ store.selectedCurrency.symbol }}{{ store.selectedCurrency.rate * post.cost || '...' }} {{ store.selectedCurrency.name }}</p>
       </div>
     </div>
