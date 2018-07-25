@@ -77,16 +77,14 @@
       <input nz-input formControlName="job_range" id="job_range">
     </nz-form-control>
   </nz-form-item>
+  
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_attachments"> Attachments </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <!-- formControlName="job_attachments" id="job_attachments" -->
       <nz-upload
-        nzAction="https://jsonplaceholder.typicode.com/posts/"
         [nzFileList]="fileList"
-        nzMultiple
-        [nzLimit]="2"
-        (nzChange)="handleChange($event)">
+        [nzCustomRequest]="uploadFile"
+        nzMultiple>
         <button nz-button>
           <i class="anticon anticon-upload"></i><span>Upload</span>
         </button>
