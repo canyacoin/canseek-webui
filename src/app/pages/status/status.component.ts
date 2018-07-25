@@ -36,7 +36,12 @@ export class StatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ps.getPost(this.pid).subscribe(post => this.post = post);
+    this.ps.getPost(this.pid).subscribe(post => {
+      this.post = post;
+      if (post['status'] == 'pending') {
+        this.ps.updateStatus(post);
+      }
+    });
     if (this.cid) {
       this.ps.getCandidate(this.pid, this.cid).subscribe(candidate => this.candidate = candidate)
     }
@@ -44,10 +49,5 @@ export class StatusComponent implements OnInit {
 
   copy() {
     this.copied = !this.copied;
-  }
-
-  updateStatus() {
-    this.ps.updateStatus(this.post)
-      .then(status => this.post['status'] = status)
   }
 }
