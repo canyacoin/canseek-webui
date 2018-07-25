@@ -39,11 +39,16 @@ export class StatusComponent implements OnInit {
     this.ps.getPost(this.pid).subscribe(post => {
       this.post = post;
       if (post['status'] == 'pending') {
-        this.ps.updateStatus(post);
+        this.ps.updatePostStatus(post);
       }
     });
     if (this.cid) {
-      this.ps.getCandidate(this.pid, this.cid).subscribe(candidate => this.candidate = candidate)
+      this.ps.getCandidate(this.pid, this.cid).subscribe(candidate => {
+        this.candidate = candidate;
+        if (candidate['status'] == 'pending') {
+          this.ps.updateCandidateStatus(this.post, candidate);
+        }
+      })
     }
   }
 

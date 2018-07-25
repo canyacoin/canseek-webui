@@ -60,11 +60,11 @@ export class CmpReferstep2Component implements OnInit {
   handleChange(info: any, key: string = 'fileList') {
     this[key] = info.fileList;
 
-    let errObj = null;
-    if (!info.fileList.length) {
-      errObj = { required: true };
-    }
-    this.validateForm.controls['resume'].setErrors(errObj);
+    // let errObj = null;
+    // if (!info.fileList.length) {
+    //   errObj = { required: true };
+    // }
+    // this.validateForm.controls['resume'].setErrors(errObj);
     // console.log(errObj);
   }
 

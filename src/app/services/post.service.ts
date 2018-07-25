@@ -131,32 +131,48 @@ export class PostService {
       // })
   }
 
-  updateStatus(post): Promise<any> {
+  updatePostStatus(post) {
     const { postId, id } = post;
     const postRef = this.dbRef.doc(id);
     
     if (postId) {
-      return this.cs.getPostStatus(postId) 
+      this.cs.getPostStatus(postId) 
         .then(status => {
           postRef.update({ status })
-
-          return Promise.resolve({status})
         })
     } else {
-      return this.cs.getPostId(id)
+      this.cs.getPostId(id)
         .then(postId => {
           if (postId) {
-          //   this.message.warning('please re-add this post, will redirect in 3 seconds');
-          //   setTimeout(
-          //     () => this.router.navigateByUrl(`post?type=edit&id=${id}`),
-          //     3000
-          //   )
-          // } else {
             postRef.update({
               postId,
               status: 'open'
             })
-            return Promise.resolve({status: 'open'})
+          }
+        })
+    }
+  }
+
+  updateCandidateStatus(post, candidate) {
+    const { postId, id: pid } = post;
+    const { candidateId, id: cid } = candidate;
+    const postRef = this.dbRef.doc(pid);
+    const candidateRef = postRef.collection('candidates').doc(cid);
+    
+    if (candidateId) {
+      console.log('update existed candidates status, todo');
+      // this.cs.getPostStatus(postId) 
+      //   .then(status => {
+      //     postRef.update({ status })
+      //   })
+    } else {
+      this.cs.getCandidateId(cid, postId)
+        .then(candidateId => {
+          if (candidateId) {
+            candidateRef.update({
+              candidateId,
+              status: 'open'
+            })
           }
         })
     }

@@ -8,7 +8,7 @@ export const environment = {
     authDomain: "canseek-dev.firebaseapp.com",
     databaseURL: "https://canseek-dev.firebaseio.com",
     projectId: "canseek-dev",
-    storageBucket: "",
+    storageBucket: "canseek-dev.appspot.com",
     messagingSenderId: "694155772067"
   }
 };

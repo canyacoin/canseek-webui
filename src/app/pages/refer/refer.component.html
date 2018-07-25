@@ -59,7 +59,10 @@
           nzType="primary"
           [nzLoading]="doneLoading"
           class="uppercase mt-40 mb-12" 
-          (click)="done()">refer talent</button>
+          (click)="done()"
+          >
+          refer talent
+        </button>
         <p *ngIf="store.selectedCurrency.symbol">Total: {{ store.selectedCurrency.symbol }}{{ store.selectedCurrency.rate * post.cost || '...' }} {{ store.selectedCurrency.name }}</p>
       </div>
     </div>

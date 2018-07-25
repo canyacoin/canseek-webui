@@ -54,6 +54,7 @@ export class CmpPostComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
 
-    this.ps.updateStatus(post);
+    // todo
+    // this.ps.updateStatus(post);
   }
 }
