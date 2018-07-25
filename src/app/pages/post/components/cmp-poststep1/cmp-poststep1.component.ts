@@ -19,14 +19,7 @@ export class CmpPoststep1Component implements OnInit {
 
   validateForm: FormGroup;
   store = Store;
-  fileList = [
-    {
-      uid: -1,
-      name: 'xxx.png',
-      status: 'done',
-      url: 'http://www.baidu.com/xxx.png'
-    }
-  ];
+  fileList = [];
   submitForm(): any {
     const data = [];
 
@@ -39,6 +32,7 @@ export class CmpPoststep1Component implements OnInit {
       //   value: this.validateForm.controls[ i ].value
       // })
     }
+    data['job_attachments'] = this.fileList;
     // console.log('step1', data);
     return {
       valid: this.validateForm.valid,
@@ -80,6 +74,11 @@ export class CmpPoststep1Component implements OnInit {
     });
   }
 
+  handleChange(info: any) {
+    // console.log('handleChange', info);
+    this.fileList = info.fileList;
+  }
+
   uploadFile = (item: any) => {
     const file = item.file;
     const fileName = file.name;
@@ -97,6 +96,7 @@ export class CmpPoststep1Component implements OnInit {
               }
               return item
             })
+            this.handleChange({fileList: this.fileList})
           })
         })
       )
@@ -108,6 +108,7 @@ export class CmpPoststep1Component implements OnInit {
             }
             return item;
           })
+          this.handleChange({fileList: this.fileList})
         }
       })
   }

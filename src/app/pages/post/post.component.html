@@ -67,7 +67,10 @@
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
               <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
-              <nz-col nzSpan="18">{{ values[item.field] }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">{{ values[item.field] }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">
+                <a class="mr-12" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
+              </nz-col>
             </nz-row>
           </ng-container>
         </div>

@@ -84,6 +84,7 @@
       <nz-upload
         [nzFileList]="fileList"
         [nzCustomRequest]="uploadFile"
+        (nzChange)="handleChange($event)"
         nzMultiple>
         <button nz-button>
           <i class="anticon anticon-upload"></i><span>Upload</span>
