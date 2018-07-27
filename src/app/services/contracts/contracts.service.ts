@@ -51,13 +51,13 @@ export class ContractsService {
       this._web3 = new Web3(window.web3.currentProvider);
       this._web3.eth.net.getId().then(netId => {
         if (netId !== 3) {
-          // alert('Please connect to the Ropsten network');
+          alert('Please connect to the Ropsten network');
+          return;
         }
       });
     } else {
-      console.warn(
-        'Please use a dapp browser like mist or MetaMask plugin for chrome'
-      );
+      alert('Please use a DApp browser like mist or MetaMask plugin for chrome');
+      return;
     }
     this._web3.eth.getGasPrice().then(price => {
       gasPrice = price;
@@ -71,20 +71,24 @@ export class ContractsService {
   public async getAccount(): Promise<string> {
     if (this._account == null) {
       this._account = await new Promise((resolve, reject) => {
-        this._web3.eth.getAccounts((err, accs) => {
-          if (err != null) {
-            // alert('There was an error fetching your accounts.');
-            return;
-          }
-
-          if (accs.length === 0) {
-            // alert(
-            //   'Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.'
-            // );
-            return;
-          }
-          resolve(accs[0]);
-        });
+        if (this._web3) {
+          this._web3.eth.getAccounts((err, accs) => {
+            if (err != null) {
+              alert('There was an error fetching your accounts.');
+              return;
+            }
+  
+            if (accs.length === 0) {
+              alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+              return;
+            }
+            resolve(accs[0]);
+          });
+        } else {
+          alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+          return;
+        }
+        
       }) as string;
 
       this._web3.eth.defaultAccount = this._account;
