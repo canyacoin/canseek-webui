@@ -1,0 +1,60 @@
+<app-cmp-header></app-cmp-header>
+
+<app-cmp-bancor></app-cmp-bancor>
+
+<section class="bg-grey pt-30 pb-100">
+  <div class="container">
+    <!-- filter -->
+    <div class="row pb-45">
+      <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()" class="uppercase">
+        <label nz-radio-button nzValue="all">all</label>
+        <label nz-radio-button nzValue="open">open</label>
+        <label nz-radio-button nzValue="pending">pending</label>
+        <label nz-radio-button nzValue="closed">closed</label>
+        <label nz-radio-button nzValue="cancelled">cancelled</label>
+        <label nz-radio-button nzValue="my posts">my posts</label>
+        <label nz-radio-button nzValue="my referrals">my referrals</label>
+      </nz-radio-group>
+    </div>
+
+    <!-- loading -->
+    <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+
+    <!-- empty -->
+    <div *ngIf="!loading && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
+      style="min-height: 340px">
+      <div class="row">
+        <div class="col-12 d-flex flex-column">
+          <br>
+          <h4 class="fw-400">Uh, oh!</h4>
+          <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- posts -->
+    <nz-row [nzGutter]="32" *ngIf="!loading && (results && results.length > 0)">
+
+      <ng-container *ngIf="statusValue !== 'my_referrals'">
+        <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
+          <app-cmp-post [post]="post" [statusValue]="statusValue" [curUser]="store.curUser"></app-cmp-post>
+        </nz-col>
+      </ng-container>
+
+      <ng-container *ngIf="statusValue == 'my_referrals'">
+        <ng-container *ngFor="let post of results">
+          <ng-container *ngFor="let cid of post.referrals_by_user[store.curUser]">
+            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
+              <app-cmp-post [post]="post" [statusValue]="statusValue" [curUser]="store.curUser" [cid]="cid"></app-cmp-post>
+            </nz-col>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+    </nz-row>
+  </div>
+</section>
+
+<app-cmp-footer></app-cmp-footer>

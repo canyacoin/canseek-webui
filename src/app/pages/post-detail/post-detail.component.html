@@ -1,0 +1,96 @@
+
+<section class="bg-gray pt-60">
+  <div class="container pb-120">
+    <div class="row" *ngIf="post">
+      <div class="col-md-8">
+        <!-- card post -->
+        <div class="card" style="min-height: 100%">
+          <div class="p-40">
+              <h3 class="cart-title">{{ post.job_title }}</h3>
+              <p class="bold">{{ post.company_name }}</p>
+              <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
+              <p class="text my-20">{{ post.job_type }}{{ post.job_range ? ', ' + post.job_range : ''}}{{ post.job_location ? ', ' + post.job_location : '' }}</p>
+
+              <section class="my-40">
+                <p class="bold">Job Description</p>
+                <div class="card-text text">{{ post.job_desc }}</div>
+              </section>
+
+              <section class="my-40" *ngIf="post.job_attachments">
+                <p class="bold">Attachments</p>
+                <!-- todo 下载 -->
+                <p class="bold"> <i class="iconfont iconfont-pdf"></i> {{ post.job_attachments }}</p>
+              </section>
+              
+              <section class="my-40">
+                <p class="bold">Company Description</p>
+                <div class="card-text text">{{ post.company_desc }}</div>
+              </section>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <!-- card reward -->
+        <div class="card">
+          <div class="card-body">
+            <nz-row nzType="flex" nzJustify="space-between" class="mb-46">
+              <span class="tag {{ post.status }}">{{ post.status }}</span>
+              <nz-col>
+                <i class="iconfont iconfont-group blue"></i>
+                <span class="num blue">{{ post.candidates || 0 }}</span>
+              </nz-col>
+            </nz-row>
+            
+            <div class="flex bold mt-20">
+              <p class="flex1">Company Contributions:</p>
+              ${{ post.reward }} USD
+            </div>
+            <div class="flex bold">
+              <p class="flex1">Referral  Contributions:</p>
+              ${{ post.cost }} USD
+            </div>
+            <div class="flex bold">
+              <p class="flex1"></p>
+              <p>
+                ${{ post.honeypot || post.reward }} USD
+                <br>
+                <span class="desc">Total Reward</span>
+              </p>
+              
+            </div>
+            <div class="text-center">
+              <a 
+                disabled
+                *ngIf="post.status != 'open' || post.owner_addr == store.curUser" 
+                class="btn btn-primary btn-canya-gradient mt-60"  
+                routerLink="/refer/new/{{ post.id }}">
+                REFER TALENT
+              </a>
+              <a 
+                *ngIf="post.status == 'open' && post.owner_addr != store.curUser" 
+                class="btn btn-primary btn-canya-gradient mt-60" 
+                routerLink="/refer/new/{{ post.id }}">
+                REFER TALENT
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <!-- card company -->
+        <div class="card text-center mt-30">
+          <div class="card-body">
+            <img class="card-img-top" 
+              onerror="this.src='https://canya.io/images/CanYa_logo.png'"
+              src="{{ post.company_logo }}" 
+              alt="{{ post.company_name }} logo">
+
+              <h3 class="card-title mt-24 mb-40">{{ post.company_name }}</h3>
+              <a *ngIf="post.company_website" href="{{ post.company_website }}" target="_blank" class="btn btn-primary btn-outline mb-20">view website</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <app-cmp-footer></app-cmp-footer>
+</section>

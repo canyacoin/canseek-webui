@@ -1,0 +1,16 @@
+<!-- loading -->
+<div *ngIf="!candidate" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>
+
+<section *ngIf="candidate">
+  <div *ngFor="let category of store.referForm">
+    <h3>{{ category.label }}:</h3>
+    <ng-container *ngFor="let item of category.value">
+      <nz-row class="my-20" nzGutter="16">
+        <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
+        <nz-col nzSpan="10">{{ candidate[item.field] }}</nz-col>
+      </nz-row>
+    </ng-container>
+  </div>
+</section>

@@ -1,0 +1,49 @@
+<nz-row class="mt-30 mb-100">
+  <nz-col nzType="flex" nzSpan="14" nzOffset="5" class="text-center"> 
+    <!-- refer succ -->
+    <div *ngIf="type == 'refer' && post && candidate">
+      <div class="blue fw-500">
+        <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
+      </div>
+  
+      <h4 class="my-50">Referral Successful! <small *ngIf="candidate">({{ candidate.status }})</small></h4>
+  
+      <p>Your talent has been sent to the job poster. </p>
+      <a *ngIf="post" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
+
+  
+      <div class="btns mt-60">
+        <a routerLink="/refer/detail/{{ pid }}/{{ cid }}" class="btn  btn-primary btn-outline">View</a>
+        <a routerLink="/" class="btn btn-primary ml-20">HOME</a>
+      </div>
+    </div>
+
+    <!-- new post succ -->
+    <div *ngIf="type == 'post'">
+      <div class="blue fw-500">
+        <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
+      </div>
+  
+      <h4 class="my-50">Job Posted! <small *ngIf="post">({{ post.status }})</small> </h4>
+  
+      <p>Your job has been posted to CanSeek.  </p>
+      <p>Share the post to maximise your chances of a successful referral.</p>
+
+      <nz-input-group [nzAddOnBefore]="suffixTemplate" style="max-width: 400px;">
+        <input type="text" #shareLink nz-input value="{{ host }}/post/{{ pid }}">
+      </nz-input-group>
+      <ng-template #suffixTemplate>
+        <span nz-tooltip nzTitle="copy">
+          <i class="anticon anticon-copy" [ngxClipboard]="shareLink" (click)="copy()" *ngIf="!copied"></i>
+          <i class="anticon anticon-check" *ngIf="copied" style="color: green"></i>
+        </span>
+      </ng-template>
+  
+      <div class="btns mt-60">
+        <a routerLink="/post/detail/{{ pid }}" class="btn  btn-primary btn-outline">View</a>
+        <a routerLink="/" class="btn btn-primary ml-20">HOME</a>
+      </div>
+    </div>
+    
+  </nz-col>
+</nz-row>

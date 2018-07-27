@@ -1,16 +1,26 @@
-// The file contents for the current environment will overwrite these during build.
-// The build system defaults to the dev environment which uses `environment.ts`, but if you do
-// `ng build --env=prod` then `environment.prod.ts` will be used instead.
-// The list of which env maps to which file can be found in `.angular-cli.json`.
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
 
 export const environment = {
   production: false,
-  firebase: {
-    apiKey: 'AIzaSyD-9WO0u-gr4L7jLNE7KSC2BaQjIBSinmk',
-    authDomain: 'canhire-7e91a.firebaseapp.com',
-    databaseURL: 'https://canhire-7e91a.firebaseio.com',
-    projectId: 'canhire-7e91a',
-    storageBucket: 'canhire-7e91a.appspot.com',
-    messagingSenderId: '246664280996'
+  URL: {
+    changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti'
   },
+  firebase: {
+    apiKey: "AIzaSyCxRQdQyKjdTyMbHt1F4gl7V2EGwqgekJU",
+    authDomain: "canseek-dev.firebaseapp.com",
+    databaseURL: "https://canseek-dev.firebaseio.com",
+    projectId: "canseek-dev",
+    storageBucket: "canseek-dev.appspot.com",
+    messagingSenderId: "694155772067"
+  }
 };
+
+/*
+ * In development mode, to ignore zone related error stack frames such as
+ * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
+ * import the following file, but please comment it out in production mode
+ * because it will have performance impact when throw error
+ */
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

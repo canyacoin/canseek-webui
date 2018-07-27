@@ -1,11 +1,14 @@
 export const environment = {
   production: true,
+  URL: {
+    changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti'
+  },
   firebase: {
-    apiKey: 'AIzaSyD-9WO0u-gr4L7jLNE7KSC2BaQjIBSinmk',
-    authDomain: 'canhire-7e91a.firebaseapp.com',
-    databaseURL: 'https://canhire-7e91a.firebaseio.com',
-    projectId: 'canhire-7e91a',
-    storageBucket: 'canhire-7e91a.appspot.com',
-    messagingSenderId: '246664280996'
+    apiKey: "AIzaSyCxRQdQyKjdTyMbHt1F4gl7V2EGwqgekJU",
+    authDomain: "canseek-dev.firebaseapp.com",
+    databaseURL: "https://canseek-dev.firebaseio.com",
+    projectId: "canseek-dev",
+    storageBucket: "canseek-dev.appspot.com",
+    messagingSenderId: "694155772067"
   }
 };

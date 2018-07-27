@@ -1,0 +1,113 @@
+<nz-row class="mt-30 mb-100" *ngIf="type != 'noAuth'">
+  <nz-col nzType="flex" nzSpan="14" nzOffset="5"> 
+    <nz-steps [nzCurrent]="current" class="steps">
+        <nz-step nzTitle="Identity Verify"></nz-step>
+        <nz-step nzTitle="Job Infomation"></nz-step>
+        <nz-step nzTitle="Set Fees and Reward"></nz-step>
+      <nz-step nzTitle="Review"></nz-step>
+    </nz-steps>
+    <div class="steps-content mt-100">
+
+      <!-- step0 -->
+      <form *ngIf="type == 'new' && current == 0" nz-form [nzLayout]="vertical" [formGroup]="emailForm" (ngSubmit)="submitEmailForm()">
+        <nz-form-item>
+          <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+          <nz-col [nzSm]="16" [nzXs]="24">
+            <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
+          </nz-col>
+        </nz-form-item>
+      
+        <nz-form-item>
+          <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_email" nzRequired> Your Company Email </nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24">
+            <nz-row [nzGutter]="32">
+              <nz-col [nzSpan]="16">
+                <input [(ngModel)]="email" nz-input formControlName="your_email" id="your_email" placeholder="Please input">
+              </nz-col>
+              <nz-col [nzSpan]="8">
+                <button nz-button [nzLoading]="verifyLoading" (click)="emailVerify()">Verify</button>
+              </nz-col>
+            </nz-row >
+            <nz-form-explain *ngIf="emailForm.get('your_email').dirty && emailForm.get('your_email').errors">Please input Your Company Email!</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+
+      </form>
+
+      <!-- step1 -->
+      <app-cmp-poststep1 *ngIf="current == 1" [email]="email"></app-cmp-poststep1>
+
+      <!-- step2 -->
+      <form *ngIf="current == 2" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <p class="blue">Important: All Transactions on CanSeek are made in CAN tokens</p>
+
+        <nz-form-item>
+          <nz-form-label nzFor="reward" nzRequired> Admission Fee </nz-form-label>
+          <nz-form-control>
+            <nz-form-extra>This is your Company’s contribution to the reward pool.</nz-form-extra>
+            <input nz-input formControlName="reward" id="reward" placeholder="Minimum $500 CAN">
+            <nz-form-explain *ngIf="validateForm.get('reward').dirty && validateForm.get('reward').errors">Please input Admission Fee! Please input number!Please bigger than $500 CAN!</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+            <nz-form-label nzFor="reward" nzRequired> Application Fee </nz-form-label>
+            <nz-form-control>
+              <nz-form-extra>This is the amount needed for talent hunters to join the pool. </nz-form-extra>
+              <input nz-input formControlName="cost" id="cost" placeholder="">
+              <nz-form-explain *ngIf="validateForm.get('cost').dirty && validateForm.get('cost').errors">Please input Application Fee! Please input number!</nz-form-explain>
+            </nz-form-control>
+          </nz-form-item>
+      </form>
+
+      <!-- step3 -->
+      <div *ngIf="current == 3">
+        <div *ngFor="let category of store.postForm">
+          <h3>{{ category.label }}:</h3>
+          <ng-container *ngFor="let item of category.value">
+            <nz-row class="my-20" nzGutter="16">
+              <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
+              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">{{ values[item.field] }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">
+                <a class="mr-12" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
+              </nz-col>
+            </nz-row>
+          </ng-container>
+        </div>
+      </div>
+      
+    </div>
+    
+    <div class="steps-action mt-40 text-right">
+      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 1">
+        <span>Back</span>
+      </button>
+      <button nz-button 
+        nzType="primary" 
+        (click)="next()" 
+        *ngIf="emailVerified && current < 3" 
+        class="ml-20"
+        >
+        <span>Next</span>
+      </button>
+      <button 
+        nz-button
+        nzType="primary" 
+        [nzLoading]="doneLoading"
+        class="ml-20" 
+        *ngIf="current === 3" (click)="done()">Done</button>
+    </div>
+  </nz-col>
+</nz-row>  
+
+<app-cmp-bancor *ngIf="current == 2"></app-cmp-bancor>
+
+<div *ngIf="type == 'noAuth'" class="container d-flex flex-column justify-content-center text-center" style="min-height: 340px">
+    <div class="row">
+    <div class="col-12 d-flex flex-column">
+        <br>
+        <h4 class="fw-400">Permission denied !</h4>
+        <h5 class="fw-300">You don't have the authority</h5>
+    </div>
+    </div>
+</div>
