@@ -27,14 +27,14 @@ let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 
 // Ropsten contract address
-// const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
-// const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
-// const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
+const CanYaCoinAddr = '0xb90d83be4ffcae44330dc1d9481afe5a4f6fa5a4';
+const EscrowAddr = '0x8b182b83ba4957228d9ce11e6605bfec4976f3c8';
+const CanHireAddr = '0x4f517434fb59fe319c57a8c89933324a58a7efe0';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xd6b8eb16ba6fad23254812ecf2cb280eefed773d';
-const EscrowAddr = '0x5e6d65e438bc8d0b7ed51d0bf71499f3bd0cc074';
-const CanHireAddr = '0xbe1f2929ffc8c4756a666637b48b93c19e315ba7';
+// const CanYaCoinAddr = '0xd6b8eb16ba6fad23254812ecf2cb280eefed773d';
+// const EscrowAddr = '0x5e6d65e438bc8d0b7ed51d0bf71499f3bd0cc074';
+// const CanHireAddr = '0xbe1f2929ffc8c4756a666637b48b93c19e315ba7';
 
 @Injectable()
 export class ContractsService {
