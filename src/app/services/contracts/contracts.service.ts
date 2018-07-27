@@ -36,6 +36,7 @@ const CanHireAddr = '0x4f517434fb59fe319c57a8c89933324a58a7efe0';
 // const EscrowAddr = '0x5e6d65e438bc8d0b7ed51d0bf71499f3bd0cc074';
 // const CanHireAddr = '0xbe1f2929ffc8c4756a666637b48b93c19e315ba7';
 
+
 @Injectable()
 export class ContractsService {
   private _account: string = null;
