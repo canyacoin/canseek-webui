@@ -126,8 +126,10 @@ export class PostComponent implements AfterViewInit {
   rewardValidator = (control: FormControl) => {
     if (!control.value) {
       return { required: true };
-    } else if (!/^\d+$/.test(control.value) || Number(control.value) < 500) {
-        return { error: true };
+    } else if (!/^\d+$/.test(control.value)) {
+      return { number: true };
+    } else if (Number(control.value) < 500) {
+      return { minimum: true };
     } else {
       return null;
     }
@@ -137,7 +139,7 @@ export class PostComponent implements AfterViewInit {
     if (!control.value) {
       return { required: true };
     } else if (!/^\d+$/.test(control.value)) {
-        return { error: true };
+        return { number: true };
     } else {
       return null;
     }
