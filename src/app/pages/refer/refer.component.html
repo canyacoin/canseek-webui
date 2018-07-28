@@ -54,16 +54,18 @@
       <div class="text-center" *ngIf="current == 2">
         <h4>Application Fee</h4>
         <h4><strong>{{ post.cost }} CAN</strong></h4>  
+        <p class="text mt-40">This is used to pay into the post’s honeypot and increases the quality of referrals.
+          If you win, you will receive the entire honeypot plus all fees paid by other referrers, including your own. If the job post is cancelled, you will be refunded. If you do not win, your fee will be paid to the winner. There is a 1% payment sent to the CanYaDAO for sustainability on all fees.</p>
         <button 
           nz-button
           nzType="primary"
           [nzLoading]="doneLoading"
-          class="uppercase mt-40 mb-12" 
+          class="uppercase mb-12" 
           (click)="done()"
           >
           refer talent
         </button>
-        <p *ngIf="store.selectedCurrency.symbol">Total: {{ store.selectedCurrency.symbol }}{{ store.selectedCurrency.rate * post.cost || '...' }} {{ store.selectedCurrency.name }}</p>
+        <p *ngIf="store.selectedCurrency.symbol">Total: {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}</p>
       </div>
     </div>
     
