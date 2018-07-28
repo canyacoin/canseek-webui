@@ -50,11 +50,21 @@ export class CmpReferstep2Component implements OnInit {
       
       resume      : [ null ],
       reason     : [ null, [ Validators.required ] ],
-      answers      : [ null, [ Validators.required ] ],
-      answers2      : [ null ],
-      answers3      : [ null ],
+      answers      : [ null, [ Validators.required, this.answerValidator ] ],
+      answers2      : [ null, [this.answerValidator] ],
+      answers3      : [ null, [this.answerValidator] ],
       cover_letter: [null],
     });
+  }
+
+  answerValidator = (control: FormControl) => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value.split(' ').length > 200) {
+      return { maxlength: true };
+    } else {
+      return null;
+    }
   }
 
   handleChange(info: any, key: string = 'fileList') {
