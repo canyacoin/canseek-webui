@@ -65,7 +65,7 @@ export class CmpPoststep1Component implements OnInit {
       job_range: [{ value: values['job_range'], disabled }],
       job_attachments: [{ value: values['job_attachments'], disabled }],
       job_level: [ { value: values['job_level'], disabled }, [ Validators.required ] ],
-      screening_questions      : [ { value: values['screening_questions'], disabled }, [ Validators.required ] ],
+      screening_questions      : [ { value: values['screening_questions'], disabled } ],
       screening_questions2      : [ { value: values['screening_questions2'], disabled } ],
       screening_questions3      : [ { value: values['screening_questions3'], disabled } ],
 
