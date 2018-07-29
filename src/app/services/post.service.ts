@@ -61,12 +61,6 @@ export class PostService {
       })
   }
 
-  timeoutRace(obj, timeout) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(obj), timeout)
-    })
-  }
-
   addCandidateDb(post: any, candidate: any): Promise<any> {
     const { id, candidates = 0, referrals_by_user } = post;
     const { owner_addr: curUser } = candidate;

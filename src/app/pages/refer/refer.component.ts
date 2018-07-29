@@ -106,19 +106,11 @@ export class ReferComponent implements AfterViewInit {
         this.cid = cid;
         this.pid = this.post['id'];
         return this.cs.recommend(cid, this.post['postId'])
-        // return Promise.race([
-        //   this.cs.recommend(cid, this.post['postId']), 
-        //   this.ps.timeoutRace({id: cid}, 3000)
-        // ])
-        .then((res) => this.ps.addCandidateCb(this.post, cid, res))
-        .then(() => this.redireact(cid))
+          .then((res) => this.ps.addCandidateCb(this.post, cid, res))
+          .then(() => this.redireact(cid))
       })
       .catch(err => {
-        // if (err.id) {
-        //   this.redireact(err.id)
-        // } else {
-          console.log(err);
-        // }
+        console.log(err);
       })
   }
 }

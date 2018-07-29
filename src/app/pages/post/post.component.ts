@@ -185,19 +185,11 @@ export class PostComponent implements AfterViewInit {
         .then(id => {
           this.pid = id;
           return this.cs.addPost(id, Number(reward), Number(cost))
-          // return Promise.race([
-          //   this.cs.addPost(id, Number(reward), Number(cost)), 
-          //   this.ps.timeoutRace({id}, 3000)
-          // ])
-          .then(postId => this.ps.addPostCb(id, postId))
-          .then(() => this.redireact(id))
+            .then(postId => this.ps.addPostCb(id, postId))
+            .then(() => this.redireact(id))
         })
         .catch(err => {
-          // if (err.id) {
-          //   this.redireact(err.id)
-          // } else {
-            console.log(err);
-          // }
+          console.log(err);
         })
     }
   }
