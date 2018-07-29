@@ -18,6 +18,12 @@ export let Store = {
         string: '€ EUR',
         value: 0
       },
+      CAN: {
+        symbol: '$',
+        name: 'CAN',
+        string: '$ CAN',
+        value: 0
+      },
     },
     selectedCurrency: {},
 
