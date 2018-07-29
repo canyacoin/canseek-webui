@@ -19,7 +19,7 @@
       </nz-col>
     </nz-row>
     <a routerLink="/post/detail/{{ post.id }}">
-      <img class="card-img-top my-10" onerror="this.src='https://canya.io/images/CanYa_logo.png'" src="{{ (post.company_logo[0] || {}).url }}"
+      <img class="card-img-top my-10" onerror="this.src='https://canya.io/images/CanYa_logo.png'" src="{{ ((post.company_logo || [])[0] || {}).url }}"
       alt="{{ post.company_name }} logo">
     </a>
 
