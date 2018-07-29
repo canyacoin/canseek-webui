@@ -103,7 +103,18 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cover_letter">Cover Letter</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <textarea formControlName="cover_letter" id="cover_letter" nz-input rows="4" placeholder="write anything"></textarea>
+      <nz-upload
+        [nzFileList]="cover_letter"
+        [nzCustomRequest]="uploadCoverLetter"
+        (nzChange)="handleChange($event, 'cover_letter')"
+        >
+        <button nz-button disabled *ngIf="cover_letter.length > 0">
+          <i class="anticon anticon-upload"></i><span>Upload</span>
+        </button>
+        <button nz-button *ngIf="cover_letter.length == 0">
+          <i class="anticon anticon-upload"></i><span>Upload</span>
+        </button>
+      </nz-upload>
     </nz-form-control>
   </nz-form-item>
   

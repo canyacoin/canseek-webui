@@ -102,8 +102,8 @@ export class CmpPoststep1Component implements OnInit {
             }
             return item;
           })
+          this.handleChange({fileList: this.fileList})
         })
-        this.handleChange({fileList: this.fileList})
       }
     })
   }
@@ -117,7 +117,7 @@ export class CmpPoststep1Component implements OnInit {
     return isImage;
   }
 
-  uploadImage= (item: any) => {
+  uploadImage = (item: any) => {
     const file = item.file;
     const fileName = file.name;
     const filePath = `${file.lastModified}-${fileName}`;
@@ -132,7 +132,7 @@ export class CmpPoststep1Component implements OnInit {
               return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
             }
             return item;
-          })
+          });
           this.handleChange({fileList: this.logo}, 'logo')
         })
       }
