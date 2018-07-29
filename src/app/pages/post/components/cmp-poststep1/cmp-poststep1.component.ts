@@ -114,31 +114,19 @@ export class CmpPoststep1Component implements OnInit {
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
 
-    task.snapshotChanges()
-      .pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe(url => {
-            this.logo = this.logo.map(item => {
-              if (item.name == fileName){
-                return {...item, url, thumbUrl: url}
-              }
-              return item
-            })
-            this.handleChange({fileList: this.logo}, 'logo')
-          })
-        })
-      )
-      .subscribe(snapshot => {
-        if (snapshot.bytesTransferred == snapshot.totalBytes) {
+    task.snapshotChanges().subscribe(snapshot => {
+      if (snapshot.bytesTransferred == snapshot.totalBytes) {
+        fileRef.getDownloadURL().subscribe(url => {
           this.logo = this.logo.map(item => {
             if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100 }
+              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
             }
             return item;
           })
           this.handleChange({fileList: this.logo}, 'logo')
-        }
-      })
+        })
+      }
+    })
   }
 
   handlePreview = (file: any) => {
