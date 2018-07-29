@@ -136,20 +136,25 @@ export class PostService {
     const postRef = this.dbRef.doc(id);
     
     if (postId) {
-      this.cs.getPostStatus(postId) 
+      return this.cs.getPostStatus(postId) 
         .then(status => {
           postRef.update({ status })
+          Promise.resolve(status);
         })
     } else {
-      this.cs.getPostId(id)
+      return this.cs.getPostId(id)
         .then(postId => {
           if (postId) {
             postRef.update({
               postId,
               status: 'open'
             })
+            Promise.resolve(status);
+          } else {
+            Promise.reject();
           }
         })
+        .catch(() => Promise.reject())
     }
   }
 
