@@ -18,8 +18,12 @@
 
               <section class="my-40" *ngIf="post.job_attachments">
                 <p class="bold">Attachments</p>
-                <!-- todo 下载 -->
-                <p class="bold"> <i class="iconfont iconfont-pdf"></i> {{ post.job_attachments }}</p>
+                <a class="mr-12 blue" target="_blank" 
+                  href="{{ file.url }}" 
+                  *ngFor="let file of post.job_attachments">
+                  <i class="iconfont iconfont-pdf mr-6"></i> 
+                  {{ file.name }}
+                </a>
               </section>
               
               <section class="my-40">
