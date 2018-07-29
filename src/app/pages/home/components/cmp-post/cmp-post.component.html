@@ -47,27 +47,31 @@
             <br> Application Fee
           </p>
           <!-- op -->
-          <nz-dropdown *ngIf="statusValue == 'my posts'" [nzTrigger]="'click'">
+          <nz-dropdown [nzTrigger]="'click'">
             <a nz-dropdown>
               <i class="iconfont iconfont-ellipsis blue"></i>
             </a>
             <ul nz-menu>
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open'">
+              <!-- edit: open 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser">
                 <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
               </li>
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open'" (click)="showConfirm(post)">cancel</li>
+              <!-- cancel: open 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
+              <!-- update: pending 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'pending' && post.owner_addr == curUser" (click)="updatePostStatus(post)">update</li>
+              <!-- refer: open 非创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr !== curUser">
+                <a routerLink="/refer/new" [queryParams]="{ id: post.id }">refer talent</a>
+              </li>
+              <!-- getrefund: cancelled 推荐人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status === 'cancelled' && post.referrals_by_user[curUser]" (click)="getRefund(post)">get refund</li>
+              <!-- applicants: 所有人 -->
               <li nz-menu-item class="op-item">
                 <a routerLink="/applicants/{{ post.id }}">view applicants</a>
               </li>
             </ul>
           </nz-dropdown>
-    
-          <!-- open 下任何人都可以推荐 -->
-          <button *ngIf="statusValue === 'open'" class="btn btn-primary btn-outline">refer talent</button>
-          <!-- pending 下只有作者可以 update -->
-          <button *ngIf="statusValue === 'pending' && post.owner_addr == curUser" class="btn btn-primary btn-outline" (click)="updateStatus($event, post)">update</button>
-          <!-- cancelled 下只有申请人者可以getrefund -->
-          <button *ngIf="statusValue === 'cancelled' && post.referrals_by_user[curUser]" class="btn btn-primary btn-outline" (click)="getRefund($event, post)">get refund</button>
         </div>
     </div>
 

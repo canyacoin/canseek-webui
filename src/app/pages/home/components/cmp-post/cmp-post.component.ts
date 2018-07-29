@@ -43,18 +43,14 @@ export class CmpPostComponent implements OnInit {
     });
   }
 
-  getRefund(e, post) {
-    e.preventDefault();
-    e.stopPropagation();
-    
+  getRefund(post) {
+    debugger
     this.ps.getRefund(post, this.curUser);
   }
 
-  updateStatus(e, post) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // todo
-    // this.ps.updateStatus(post);
+  updatePostStatus(post) {
+    this.ps.updatePostStatus(post)
+      .then(status => this.message.success('updated'))
+      .catch(err => this.message.error('error'));
   }
 }

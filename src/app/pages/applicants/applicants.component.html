@@ -16,7 +16,7 @@
 
 
   <nz-col *ngIf="hasAuth" nzType="flex" nzSpan="18" nzOffset="3"> 
-    <h4>{{ post.job_title }} <small>({{ post.status }})</small></h4>
+    <h4 *ngIf="post">{{ post.job_title }} <small>({{ post.status }})</small></h4>
     <!-- filter & hire btn -->
     <nz-row nzType="flex" nzJustify="space-between">
       <nz-col>
