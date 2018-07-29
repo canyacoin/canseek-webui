@@ -79,6 +79,8 @@ export class CmpPoststep1Component implements OnInit {
       your_email: [ { value: values['your_email'] || this.email, disabled: true }, [ Validators.email, Validators.required ] ],
       owner_addr: [ { value: this.store.curUser, disabled: true } ],
     });
+    this.fileList = values['job_attachments'] || [];
+    this.logo = values['company_logo'] || [];
   }
 
   handleChange(info: any, key: string = 'fileList') {
