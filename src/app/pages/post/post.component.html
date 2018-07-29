@@ -97,7 +97,10 @@
         nzType="primary" 
         [nzLoading]="doneLoading"
         class="ml-20" 
-        *ngIf="current === 3" (click)="done()">Done</button>
+        *ngIf="current === 3" (click)="done()">Submit</button>
+
+        <a target="_blank" routerLink="/status" [queryParams]="{ type: 'post', pid: pid }" class="ml-20" *ngIf="type == 'new' && pid"> view status</a>  
+        <p class="text mt-8" *ngIf="type == 'new'">you will click 2 times submit in metamask dialog</p>
     </div>
   </nz-col>
 </nz-row>  

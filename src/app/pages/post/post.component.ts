@@ -38,6 +38,7 @@ export class PostComponent implements AfterViewInit {
   verifyLoading: boolean = false;
 
   doneLoading: boolean = false;
+  pid: string; // type new post id
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -182,19 +183,21 @@ export class PostComponent implements AfterViewInit {
 
       this.ps.addPostDb(handledData)
         .then(id => {
-          return Promise.race([
-            this.cs.addPost(id, Number(reward), Number(cost)), 
-            this.ps.timeoutRace({id}, 3000)
-          ])
+          this.pid = id;
+          return this.cs.addPost(id, Number(reward), Number(cost))
+          // return Promise.race([
+          //   this.cs.addPost(id, Number(reward), Number(cost)), 
+          //   this.ps.timeoutRace({id}, 3000)
+          // ])
           .then(postId => this.ps.addPostCb(id, postId))
           .then(() => this.redireact(id))
         })
         .catch(err => {
-          if (err.id) {
-            this.redireact(err.id)
-          } else {
+          // if (err.id) {
+          //   this.redireact(err.id)
+          // } else {
             console.log(err);
-          }
+          // }
         })
     }
   }
