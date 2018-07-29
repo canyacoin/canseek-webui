@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Store } from '../../../../store';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { finalize } from 'rxjs/operators';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-cmp-poststep1',
@@ -49,6 +49,7 @@ export class CmpPoststep1Component implements OnInit {
   constructor(
     private fb: FormBuilder,
     private storage: AngularFireStorage,
+    private message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -105,6 +106,15 @@ export class CmpPoststep1Component implements OnInit {
         this.handleChange({fileList: this.fileList})
       }
     })
+  }
+
+  beforeUpload = (file) => {
+    const isImage = /^image\//.test(file.type);
+    
+    if (!isImage) {
+      this.message.error('You can only upload a Image!');
+    }
+    return isImage;
   }
 
   uploadImage= (item: any) => {

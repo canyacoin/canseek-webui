@@ -139,6 +139,7 @@
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-upload
         nzListType="picture-card"
+        [nzBeforeUpload]="beforeUpload"
         [nzFileList]="logo"
         [nzCustomRequest]="uploadImage"
         (nzChange)="handleChange($event, 'logo')"
