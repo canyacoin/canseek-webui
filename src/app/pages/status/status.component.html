@@ -24,7 +24,18 @@
         <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
       </div>
   
-      <h4 class="my-50">Job Posted! <small *ngIf="post">({{ post.status }})</small> </h4>
+      <h4 class="my-50">Job Posted! 
+        <small *ngIf="post">(
+          {{ post.status }}
+          <span nz-tooltip nzTitle="update status">
+            <i class="anticon anticon-loading-3-quarters blue" 
+              (click)="updateStatus(post)"
+              [class.anticon-spin]="loading"
+              *ngIf="post.status === 'pending'"
+              ></i>
+          </span>
+        )</small> 
+      </h4>
   
       <p>Your job has been posted to CanSeek.  </p>
       <p>Share the post to maximise your chances of a successful referral.</p>
