@@ -83,6 +83,7 @@
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-upload
         [nzFileList]="fileList"
+        [nzBeforeUpload]="isPdf"
         [nzCustomRequest]="uploadFile"
         (nzChange)="handleChange($event)"
         nzMultiple>
@@ -139,7 +140,7 @@
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-upload
         nzListType="picture"
-        [nzBeforeUpload]="beforeUpload"
+        [nzBeforeUpload]="isImage"
         [nzFileList]="logo"
         [nzCustomRequest]="uploadImage"
         (nzChange)="handleChange($event, 'logo')"

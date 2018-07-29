@@ -110,13 +110,22 @@ export class CmpPoststep1Component implements OnInit {
     })
   }
 
-  beforeUpload = (file) => {
+  isImage = (file) => {
     const isImage = /^image\//.test(file.type);
     
     if (!isImage) {
       this.message.error('You can only upload a Image!');
     }
     return isImage;
+  }
+
+  isPdf = (file) => {
+    const isPdf = file.type == 'application/pdf';
+    
+    if (!isPdf) {
+      this.message.error('You can only upload a PDF!');
+    }
+    return isPdf;
   }
 
   uploadImage = (item: any) => {

@@ -6,6 +6,7 @@ import {
   Validators
 } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-cmp-referstep2',
@@ -38,6 +39,7 @@ export class CmpReferstep2Component implements OnInit {
   constructor(
     private fb: FormBuilder,
     private storage: AngularFireStorage,
+    private message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -113,5 +115,14 @@ export class CmpReferstep2Component implements OnInit {
         })
       }
     })
+  }
+
+  isPdf = (file) => {
+    const isPdf = file.type == 'application/pdf';
+    
+    if (!isPdf) {
+      this.message.error('You can only upload a PDF!');
+    }
+    return isPdf;
   }
 }
