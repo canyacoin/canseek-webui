@@ -154,7 +154,10 @@ export class PostService {
             Promise.reject(false);
           }
         })
-        .catch(() => Promise.reject(false))
+        .catch(err => {
+          console.log(err);
+          Promise.reject(false);
+        })
     }
   }
 
@@ -165,20 +168,25 @@ export class PostService {
     const candidateRef = postRef.collection('candidates').doc(cid);
     
     if (candidateId) {
-      console.log('update existed candidates status, todo');
+      alert('update existed candidates status, todo');
       // this.cs.getPostStatus(postId) 
       //   .then(status => {
       //     postRef.update({ status })
       //   })
     } else {
-      this.cs.getCandidateId(cid, postId)
+      return this.cs.getCandidateId(cid, postId)
         .then(candidateId => {
           if (candidateId) {
             candidateRef.update({
               candidateId,
               status: 'open'
             })
+            Promise.resolve('open');
           }
+        })
+        .catch(err => {
+          console.log(err);
+          Promise.reject(false);
         })
     }
   }

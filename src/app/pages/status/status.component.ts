@@ -57,6 +57,17 @@ export class StatusComponent implements OnInit {
       })
   }
 
+  updateCandidateStatus(post, candidate) {
+    this.loading = true;
+
+    this.ps.updateCandidateStatus(post, candidate)
+      .then(status => this.loading = false)
+      .catch(err => {
+        this.message.error(err)
+        console.log(err);
+      })
+  }
+
   copy() {
     this.copied = !this.copied;
   }

@@ -6,7 +6,18 @@
         <i class="anticon anticon-check-circle-o" style="font-size: 80px"></i>
       </div>
   
-      <h4 class="my-50">Referral Successful! <small *ngIf="candidate">({{ candidate.status }})</small></h4>
+      <h4 class="my-50">Referral Successful! 
+        <small *ngIf="candidate && post">(
+            {{ candidate.status }}
+            <span nz-tooltip nzTitle="update status">
+              <i class="anticon anticon-loading-3-quarters blue" 
+                (click)="updateCandidateStatus(post, candidate)"
+                [class.anticon-spin]="loading"
+                *ngIf="candidate.status === 'pending'"
+                ></i>
+            </span>
+          )</small> 
+      </h4>
   
       <p>Your talent has been sent to the job poster. </p>
       <a *ngIf="post" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
