@@ -151,10 +151,10 @@ export class PostService {
             })
             Promise.resolve(status);
           } else {
-            Promise.reject();
+            Promise.reject(false);
           }
         })
-        .catch(() => Promise.reject())
+        .catch(() => Promise.reject(false))
     }
   }
 

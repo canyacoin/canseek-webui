@@ -28,6 +28,9 @@ export class ReferComponent implements AfterViewInit {
   post: Object = {};
 
   doneLoading: boolean = false;
+
+  pid: string = '';
+  cid: string = '';
   
   constructor(
     private fb: FormBuilder,
@@ -99,19 +102,22 @@ export class ReferComponent implements AfterViewInit {
 
     this.ps.addCandidateDb(this.post, CandidateData)
       .then(cid => {
-        return Promise.race([
-          this.cs.recommend(cid, this.post['postId']), 
-          this.ps.timeoutRace({id: cid}, 3000)
-        ])
+        this.cid = cid;
+        this.pid = this.post['id'];
+        return this.cs.recommend(cid, this.post['postId'])
+        // return Promise.race([
+        //   this.cs.recommend(cid, this.post['postId']), 
+        //   this.ps.timeoutRace({id: cid}, 3000)
+        // ])
         .then((res) => this.ps.addCandidateCb(cid, this.post['id'], res))
         .then(() => this.redireact(cid))
       })
       .catch(err => {
-        if (err.id) {
-          this.redireact(err.id)
-        } else {
+        // if (err.id) {
+        //   this.redireact(err.id)
+        // } else {
           console.log(err);
-        }
+        // }
       })
   }
 }
