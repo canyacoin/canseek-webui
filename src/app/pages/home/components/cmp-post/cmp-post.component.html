@@ -7,7 +7,7 @@
       <nz-col>
         <nz-row nzType="flex">
           <nz-col>
-            <span class="contrubuted mr-8">{{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * (post.honeypot || reward) || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}</span>
+            <span class="contrubuted mr-8">{{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * (post.honeypot || post.reward) || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}</span>
             <br>
             <span class="desc">Contrubuted</span>
           </nz-col>
