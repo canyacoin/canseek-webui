@@ -109,7 +109,7 @@ export class ReferComponent implements AfterViewInit {
         //   this.cs.recommend(cid, this.post['postId']), 
         //   this.ps.timeoutRace({id: cid}, 3000)
         // ])
-        .then((res) => this.ps.addCandidateCb(cid, this.post['id'], res))
+        .then((res) => this.ps.addCandidateCb(this.post, cid, res))
         .then(() => this.redireact(cid))
       })
       .catch(err => {

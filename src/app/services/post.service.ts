@@ -79,18 +79,19 @@ export class PostService {
         docRef.update({ id: cid, status: 'pending' })
 
         referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
-        postRef.update({ candidates: candidates + 1, referrals_by_user })
+        postRef.update({ referrals_by_user })
 
         return Promise.resolve(cid);
       })
   }
 
-  addCandidateCb(cid: string, pid: string, res: any): Promise<any> {
+  addCandidateCb(post: any, cid: string, res: any): Promise<any> {
     const {honeypot, candidateId} = res;
+    const { id: pid, candidates = 0 } = post;
     const postRef = this.dbRef.doc(pid);
     const candidateRef = postRef.collection('candidates').doc(cid);
 
-    postRef.update({honeypot});
+    postRef.update({candidates: candidates + 1, honeypot});
     candidateRef.update({candidateId, status: 'open'});
     
     return Promise.resolve();
