@@ -99,8 +99,9 @@ export class ReferComponent implements AfterViewInit {
     this.doneLoading = true;
 
     const CandidateData = {...this.values, time: Date.now() };
+    const CandidatedData = JSON.parse(JSON.stringify(CandidateData));
 
-    this.ps.addCandidateDb(this.post, CandidateData)
+    this.ps.addCandidateDb(this.post, CandidatedData)
       .then(cid => {
         this.cid = cid;
         this.pid = this.post['id'];
