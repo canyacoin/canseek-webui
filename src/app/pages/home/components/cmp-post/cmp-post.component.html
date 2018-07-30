@@ -12,8 +12,17 @@
             <span class="desc">Contrubuted</span>
           </nz-col>
           <nz-col>
-            <i class="iconfont iconfont-group blue"></i>
-            <span class="num blue">{{ post.candidates || 0 }}</span>
+            <ng-template *ngIf="post.owner_addr != curUser">
+              <i class="iconfont iconfont-group blue"></i>
+              <span class="num blue">{{ post.candidates || 0 }}</span>
+            </ng-template>
+            <a 
+              *ngIf="post.owner_addr == curUser"
+              routerLink="/applicants/{{ post.id }}">
+              <i class="iconfont iconfont-group blue"></i>
+              <span class="num blue">{{ post.candidates || 0 }}</span>
+            </a>
+            
           </nz-col>
         </nz-row>
       </nz-col>
