@@ -158,12 +158,14 @@ export class PostService {
             })
             Promise.resolve(status);
           } else {
-            Promise.reject(false);
+            // Promise.reject(false);
+            throw 'Post didn\'t exist!';
           }
         })
         .catch(err => {
           console.log(err);
-          Promise.reject(false);
+          // Promise.reject(false);
+          throw err;
         })
     }
   }
