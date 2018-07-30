@@ -46,11 +46,32 @@
             {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
             <br> Application Fee
           </p>
-          <!-- op -->
-          <nz-dropdown [nzTrigger]="'click'">
-            <a nz-dropdown>
-              <i class="iconfont iconfont-ellipsis blue"></i>
-            </a>
+          <!-- op 按照三种样式划分 -->
+          <!-- 1. 单独的按钮: refer getrefund -->
+          <!-- refer: open 非创建人 单独按钮 -->
+          <a 
+            *ngIf="post.status == 'open' && post.owner_addr !== curUser"
+            class="btn btn-primary btn-outline"
+            routerLink="/refer/new/{{post.id}}">refer talent</a>
+
+          <!-- getrefund: cancelled 推荐人 外面 -->
+          <button
+            *ngIf="post.status === 'cancelled' && post.referrals_by_user[curUser]"
+            class="btn btn-primary btn-outline"
+            (click)="getRefund(post)"
+            >
+            get refund
+          </button>
+    
+          <!-- 2. dropdown...: update + applicants -->
+          <nz-dropdown-button
+            [nzSize]="small"
+            [nzTrigger]="'click'"
+            *ngIf="post.status == 'pending' && post.owner_addr == curUser"
+            (nzClick)="updatePostStatus(post)"
+            [nzDisabled]="loading"
+            >
+            UPDATE
             <ul nz-menu>
               <!-- edit: open 创建人 -->
               <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser">
@@ -58,18 +79,31 @@
               </li>
               <!-- cancel: open 创建人 -->
               <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
-              <!-- update: pending 创建人 -->
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'pending' && post.owner_addr == curUser" (click)="updatePostStatus(post)">update</li>
-              <!-- refer: open 非创建人 -->
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr !== curUser">
-                <a routerLink="/refer/new/{{post.id}}">refer talent</a>
-              </li>
-              <!-- getrefund: cancelled 推荐人 -->
-              <li nz-menu-item class="op-item" *ngIf="post.status === 'cancelled' && post.referrals_by_user[curUser]" (click)="getRefund(post)">get refund</li>
-              <!-- applicants: 所有人 -->
-              <li nz-menu-item class="op-item">
+              <!-- applicants: 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
                 <a routerLink="/applicants/{{ post.id }}">view applicants</a>
               </li>
+            </ul>
+          </nz-dropdown-button>
+
+          <!-- 3. dropdown: 创建人&非 pending 状态 -->
+          <nz-dropdown 
+            *ngIf="post.status !== 'pending' && post.owner_addr == curUser"
+            [nzTrigger]="'click'">
+            <a nz-dropdown>
+              <i class="iconfont iconfont-ellipsis blue"></i>
+            </a>
+            <ul nz-menu>
+                <!-- edit: open 创建人 -->
+                <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser">
+                <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
+                </li>
+                <!-- cancel: open 创建人 -->
+                <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
+                <!-- applicants: 创建人 -->
+                <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
+                <a routerLink="/applicants/{{ post.id }}">view applicants</a>
+                </li>
             </ul>
           </nz-dropdown>
         </div>
