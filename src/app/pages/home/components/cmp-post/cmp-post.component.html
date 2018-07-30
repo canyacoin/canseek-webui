@@ -12,10 +12,10 @@
             <span class="desc">Contrubuted</span>
           </nz-col>
           <nz-col>
-            <ng-template *ngIf="post.owner_addr != curUser">
+            <ng-container *ngIf="post.owner_addr != curUser">
               <i class="iconfont iconfont-group blue"></i>
               <span class="num blue">{{ post.candidates || 0 }}</span>
-            </ng-template>
+            </ng-container>
             <a 
               *ngIf="post.owner_addr == curUser"
               routerLink="/applicants/{{ post.id }}">
