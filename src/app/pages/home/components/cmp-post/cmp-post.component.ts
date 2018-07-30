@@ -19,6 +19,7 @@ export class CmpPostComponent implements OnInit {
   
   moment = moment;
   confirmModal: NzModalRef;
+  loading: boolean = false;
 
   constructor(
     private ps: PostService,
@@ -36,10 +37,10 @@ export class CmpPostComponent implements OnInit {
       nzTitle: 'Are your sure you want to cancel this job post?',
       nzOkText: 'OK',
       nzCancelText: 'Cancel',
-      nzOnOk: () => 
-      this.ps.cancelPost(post)
-        .then(() => this.message.create('success', 'Cancel success'))
-        .catch(() => this.message.create('error', 'Oops error'))
+      nzOnOk: () => this.ps.cancelPostDb(post)
+          .then(() => this.ps.cancelPost(post))
+          .then(() => this.message.success('Cancel success'))
+          .catch(() => this.message.error('Oops error'))
     });
   }
 
@@ -49,8 +50,15 @@ export class CmpPostComponent implements OnInit {
   }
 
   updatePostStatus(post) {
+    this.loading = true;
     this.ps.updatePostStatus(post)
-      .then(status => this.message.success('updated'))
-      .catch(err => this.message.error('error'));
+      .then(status => {
+        this.loading = false;
+        this.message.success('updated');
+      })
+      .catch(err => {
+        this.loading = false;
+        this.message.error('error')
+      })
   }
 }

@@ -49,6 +49,18 @@ export class PostService {
             .then(() => id)
   }
 
+  cancelPostDb(post: any) {
+    const { id } = post;
+
+    return this.dbRef.doc(id).update({
+      status: 'pending',
+      nextStatus: 'pending',
+    })
+    .then(() => {
+      Promise.resolve()
+    })
+  }
+
   cancelPost(post: any) {
     const { postId, id, nextStatus } = post;
 
@@ -57,7 +69,7 @@ export class PostService {
         return this.dbRef.doc(id).update({
           status: result ? nextStatus : 'pending',
           nextStatus
-        })
+        });
       })
   }
 
