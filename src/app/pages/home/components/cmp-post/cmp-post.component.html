@@ -62,7 +62,7 @@
               <li nz-menu-item class="op-item" *ngIf="post.status == 'pending' && post.owner_addr == curUser" (click)="updatePostStatus(post)">update</li>
               <!-- refer: open 非创建人 -->
               <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr !== curUser">
-                <a routerLink="/refer/new" [queryParams]="{ id: post.id }">refer talent</a>
+                <a routerLink="/refer/new/{{post.id}}">refer talent</a>
               </li>
               <!-- getrefund: cancelled 推荐人 -->
               <li nz-menu-item class="op-item" *ngIf="post.status === 'cancelled' && post.referrals_by_user[curUser]" (click)="getRefund(post)">get refund</li>
