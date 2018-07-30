@@ -4,6 +4,7 @@
 </div>
 
 <section *ngIf="candidate">
+  <h3 *ngIf="candidate.status == 'pending'">Application Status: <small>{{ candidate.status }}</small></h3>
   <div *ngFor="let category of store.referForm">
     <h3>{{ category.label }}:</h3>
     <ng-container *ngFor="let item of category.value">
