@@ -164,13 +164,14 @@ export class PostComponent implements AfterViewInit {
     
     if (formData.valid) {
       this.current += 1;
+      window.scroll(0,0);
     }
   }
 
   done(): void {
     this.doneLoading = true;
 
-    const postData = {referrals_by_user: {}, time: Date.now(), owner_addr: this.store.curUser, ...this.values };
+    const postData = {referrals_by_user: {}, honeypot: this.values['reward'], time: Date.now(), owner_addr: this.store.curUser, ...this.values };
     const handledData = JSON.parse(JSON.stringify(postData));
     const isUpdate = this.type == 'edit' ? true : false;
     

@@ -79,6 +79,7 @@ export class ReferComponent implements AfterViewInit {
     
     if (formData.valid) {
       this.current += 1;
+      window.scroll(0,0);
     }
   }
 

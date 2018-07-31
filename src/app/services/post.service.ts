@@ -74,7 +74,7 @@ export class PostService {
   }
 
   addCandidateDb(post: any, candidate: any): Promise<any> {
-    const { id, candidates = 0, referrals_by_user } = post;
+    const { id, candidateTrend = 0, referrals_by_user } = post;
     const { owner_addr: curUser } = candidate;
     const postRef = this.dbRef.doc(id);
 
@@ -85,7 +85,7 @@ export class PostService {
         docRef.update({ id: cid, status: 'pending' })
 
         referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
-        postRef.update({ referrals_by_user })
+        postRef.update({ candidateTrend: candidateTrend + 1, referrals_by_user })
 
         return Promise.resolve(cid);
       })
@@ -160,13 +160,10 @@ export class PostService {
             })
             Promise.resolve(status);
           } else {
-            // Promise.reject(false);
             throw 'Post didn\'t exist!';
           }
         })
         .catch(err => {
-          console.log(err);
-          // Promise.reject(false);
           throw err;
         })
     }

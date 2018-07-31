@@ -270,13 +270,17 @@ export class ContractsService {
     const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
     const cost = await this.getPostCost(postId);
-    const honeypot = await this.getPostHoneypot(postId);
     await canYaCoin.approve(escrow.address, cost, {from: account, gasPrice: gasPrice, gas: gasApprove});
 
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend}).then(result => {
         const { candidateId } = result.logs[0].args;
-        resolve({honeypot: Number(honeypot), candidateId: Number(candidateId)});
+
+        this.getPostHoneypot(postId).then(
+          honeypot => {
+            resolve({honeypot, candidateId: Number(candidateId)});
+          }
+        )
       }).catch( err => {
         reject(err);
       });
