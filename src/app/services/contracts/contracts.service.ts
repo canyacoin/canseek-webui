@@ -358,13 +358,14 @@ export class ContractsService {
 
   public async getCandidateId(uniqueCandidateId, postId) {
     const canHire = await this.CanHire.at(CanHireAddr);
+    const honeypot = await this.getPostHoneypot(postId);
     return new Promise((resolve, reject) => {
       canHire.getCandidateId(uniqueCandidateId, postId).then(candidateId => {
-        resolve(candidateId.toNumber());
+        resolve({honeypot, candidateId: candidateId.toNumber()});
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<any>;
   }
 
   public async getRefund(postId) {

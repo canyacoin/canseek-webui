@@ -91,13 +91,14 @@ export class PostService {
       })
   }
 
-  addCandidateCb(post: any, cid: string, res: any): Promise<any> {
+  updatePostAndCandidate(post: any, candidtae: any, res: any): Promise<any> {
     const {honeypot, candidateId} = res;
-    const { id: pid, candidates = 0 } = post;
+    const { id: pid } = post;
+    const { cost, reward, id: cid } = candidtae;
     const postRef = this.dbRef.doc(pid);
     const candidateRef = postRef.collection('candidates').doc(cid);
 
-    postRef.update({candidates: candidates + 1, honeypot});
+    postRef.update({candidates: (Number(honeypot) - Number(reward)) / Number(cost), honeypot});
     candidateRef.update({candidateId, status: 'open'});
     
     return Promise.resolve();

@@ -104,9 +104,10 @@ export class ReferComponent implements AfterViewInit {
     this.ps.addCandidateDb(this.post, CandidatedData)
       .then(cid => {
         this.cid = cid;
+        CandidatedData.id = cid;
         this.pid = this.post['id'];
         return this.cs.recommend(cid, this.post['postId'])
-          .then((res) => this.ps.addCandidateCb(this.post, cid, res))
+          .then((res) => this.ps.updatePostAndCandidate(this.post, CandidatedData, res))
           .then(() => this.redireact(cid))
       })
       .catch(err => {
