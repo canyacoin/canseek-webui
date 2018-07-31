@@ -100,7 +100,6 @@ export class PostService {
     const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
 
     postRef.update({candidates, honeypot});
-    debugger
     candidateRef.update({candidateId, status: nextStatus});
     
     return Promise.resolve();
@@ -198,7 +197,6 @@ export class PostService {
     const postRef = this.dbRef.doc(id);
     const candidateRef = postRef.collection('candidates').doc(cid);
 
-    debugger
     return this.cs.closePost(postId, candidateId)
       .then(result => {
         postRef.update({

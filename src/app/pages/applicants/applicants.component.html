@@ -83,7 +83,9 @@
                 nzValue="{{ candidate.id }} {{ candidate.candidateId }}" class="checkbox"></label>
               
               <nz-col nzSpan="17">
-                <a href="javascript:;" (click)="changeActive(candidate.id)" class="border-bottom pb-10 card-title uppercase">{{ candidate.candidate_name }}</a>
+                <a href="javascript:;" (click)="changeActive(candidate.id)" class="border-bottom pb-10 card-title uppercase">{{ candidate.candidate_name }}
+                  <small class="red" *ngIf="candidate.status == 'selected'" style="font-size: 50%">({{ candidate.status }})</small>
+                </a>
                 <nz-row nzType="flex" nzJustify="space-between">
                   <nz-col>
                     <a href="mailto:{{ candidate.candidate_email }}">
