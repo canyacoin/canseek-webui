@@ -40,7 +40,7 @@ export class CmpCandidateComponent implements OnInit {
     this.loading = true;
 
     this.ps.updateCandidateStatus(post, candidate)
-      .then(status => {
+      .then(() => {
         this.loading = false;
         this.message.success('updated');
       })

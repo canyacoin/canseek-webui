@@ -93,12 +93,13 @@ export class PostService {
 
   updatePostAndCandidate(post: any, candidtae: any, res: any): Promise<any> {
     const {honeypot, candidateId} = res;
-    const { id: pid } = post;
-    const { cost, reward, id: cid } = candidtae;
+    const { id: pid, cost, reward } = post;
+    const { id: cid } = candidtae;
     const postRef = this.dbRef.doc(pid);
     const candidateRef = postRef.collection('candidates').doc(cid);
+    const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
 
-    postRef.update({candidates: (Number(honeypot) - Number(reward)) / Number(cost), honeypot});
+    postRef.update({candidates, honeypot});
     candidateRef.update({candidateId, status: 'open'});
     
     return Promise.resolve();
@@ -171,34 +172,25 @@ export class PostService {
     }
   }
 
+  // include callback after status updated
   updateCandidateStatus(post, candidate) {
     const { postId, id: pid } = post;
-    const { candidateId, id: cid } = candidate;
+    const { id: cid } = candidate;
     const postRef = this.dbRef.doc(pid);
     const candidateRef = postRef.collection('candidates').doc(cid);
     
-    if (candidateId) {
-      alert('update existed candidates status, todo');
-      // this.cs.getPostStatus(postId) 
-      //   .then(status => {
-      //     postRef.update({ status })
-      //   })
-    } else {
-      return this.cs.getCandidateId(cid, postId)
-        .then(candidateId => {
-          if (candidateId) {
-            candidateRef.update({
-              candidateId,
-              status: 'open'
-            })
-            Promise.resolve('open');
-          }
-        })
-        .catch(err => {
-          console.log(err);
-          Promise.reject(false);
-        })
-    }
+    return this.cs.getCandidateId(cid, postId)
+      .then(({honeypot, candidateId}) => {
+        if (candidateId) {
+          this.updatePostAndCandidate(post, candidate, {honeypot, candidateId})
+          .then(() => Promise.resolve())
+        } else {
+          throw 'Candidate didn\'t exist';
+        }
+      })
+      .catch(err => {
+        throw err;
+      })
   }
 
   changeCandidateStatus(pid, cid, status) {
