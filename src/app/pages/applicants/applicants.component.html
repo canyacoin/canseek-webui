@@ -29,7 +29,7 @@
     <!-- filter & hire btn -->
     <nz-row nzType="flex" nzJustify="space-between">
       <nz-col>
-        <nz-radio-group [(ngModel)]="filterStatus" class="uppercase" (ngModelChange)="searchStatus()">
+        <nz-radio-group [(ngModel)]="category" class="uppercase" (ngModelChange)="searchCategory()">
           <label nz-radio-button nzValue="all">all</label>
           <label nz-radio-button nzValue="shortlist">shortlist</label>
           <label nz-radio-button nzValue="rejected">rejected</label>
@@ -38,10 +38,10 @@
       </nz-col>
 
       <nz-col *ngIf="canHire">
-          <button *ngIf="filterStatus == 'rejected' || !selectedCandidates.length" disabled nz-button nzType="primary" class="uppercase">hire</button>
+          <button *ngIf="category == 'rejected' || !selectedCandidates.length" disabled nz-button nzType="primary" class="uppercase">hire</button>
           <button 
             (click)="closePost()"
-            *ngIf="filterStatus != 'rejected' && selectedCandidates.length" nz-button nzType="primary" class="uppercase">hire</button>
+            *ngIf="category != 'rejected' && selectedCandidates.length" nz-button nzType="primary" class="uppercase">hire</button>
         </nz-col>
     </nz-row>
     
@@ -79,7 +79,7 @@
 
           <ng-template #candidateHeader>
             <nz-row nzType="flex" nzJustify="space-between" gutter="16">
-              <label *ngIf="post && post.status == 'open' && filterStatus != rejected" nz-checkbox 
+              <label *ngIf="post && post.status == 'open' && category != rejected" nz-checkbox 
                 nzValue="{{ candidate.id }} {{ candidate.candidateId }}" class="checkbox"></label>
               
               <nz-col nzSpan="17">
@@ -98,11 +98,11 @@
               </nz-col>
 
               <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
-                <a *ngIf="candidate.status !== 'shortlist'" href="javascript:;" (click)="changeCandidateStatus(candidate.id, 'shortlist')" class="uppercase">
+                <a *ngIf="candidate.category !== 'shortlist'" href="javascript:;" (click)="changeCandidateCat(candidate.id, 'shortlist')" class="uppercase">
                   add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
                 </a>
                 <br>
-                <a *ngIf="candidate.status !== 'rejected'" href="javascript:;" (click)="changeCandidateStatus(candidate.id, 'rejected')" class="uppercase">
+                <a *ngIf="candidate.category !== 'rejected'" href="javascript:;" (click)="changeCandidateCat(candidate.id, 'rejected')" class="uppercase">
                   reject candidate <i class="iconfont iconfont-close-o ml-10" style="font-size: 24px"></i>
                 </a>
               </nz-col>

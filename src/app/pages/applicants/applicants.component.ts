@@ -11,7 +11,7 @@ import * as moment from 'moment';
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
-  filterStatus: string = localStorage.getItem('filterStatus') || 'all';
+  category: string = localStorage.getItem('category') || 'all';
   loading: boolean = true;
   post: any;
   pid: string;
@@ -58,7 +58,7 @@ export class ApplicantsComponent implements OnInit {
       .subscribe(candidates => {
         this.candidates = candidates;
         this.loading = false;
-        this.searchStatus();
+        this.searchCategory();
       });
   }
 
@@ -73,24 +73,24 @@ export class ApplicantsComponent implements OnInit {
       })
   }
 
-  searchStatus() {
-    const { candidates, filterStatus } = this;
+  searchCategory() {
+    const { candidates, category } = this;
     let next;
 
-    localStorage.setItem('filterStatus', filterStatus);
-    switch(filterStatus) {
+    localStorage.setItem('category', category);
+    switch(category) {
       case 'all':
         next = candidates; 
         break;
       case 'unrefined':
         next = candidates
-          .filter(item => item.status != 'shortlist' && item.status != 'rejected')
+          .filter(item => item.category != 'shortlist' && item.category != 'rejected')
           .sort((a, b) => b.time - a.time);
         break;
       case 'shortlist':
       case 'rejected':
         next = candidates
-          .filter(item => item.status == filterStatus)
+          .filter(item => item.category == category)
           .sort((a, b) => b.time - a.time);
         break;
     }
@@ -98,8 +98,8 @@ export class ApplicantsComponent implements OnInit {
     this.results = next;
   }
 
-  changeCandidateStatus(cid, status) {
-    this.ps.changeCandidateStatus(this.pid, cid, status);
+  changeCandidateCat(cid, category) {
+    this.ps.changeCandidateCat(this.pid, cid, category);
   }
 
   selectC(v) {

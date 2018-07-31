@@ -190,10 +190,8 @@ export class PostService {
       })
   }
 
-  changeCandidateStatus(pid, cid, status) {
-    const candidateRef = this.dbRef.doc(pid).collection('candidates').doc(cid);
-
-    candidateRef.update({status});
+  changeCandidateCat(pid, cid, category) {
+    this.dbRef.doc(pid).collection('candidates').doc(cid).update({category});
   }
 
   closePost(post: any, cid: string, candidateId: number) {
