@@ -4,7 +4,19 @@
 </div>
 
 <section *ngIf="candidate">
-  <h3 *ngIf="candidate.status == 'pending'">Application Status: <small>{{ candidate.status }}</small></h3>
+  <h3 *ngIf="post && candidate.status == 'pending'">Status: 
+    <small>{{ candidate.status }}
+      <span nz-tooltip nzTitle="update status">
+        <i class="anticon anticon-loading-3-quarters blue" 
+          (click)="updateCandidateStatus(post, candidate)"
+          [class.anticon-spin]="loading"
+          *ngIf="candidate.status === 'pending'"
+          style="vertical-align: -2px"
+          ></i>
+      </span>
+    </small>
+  </h3>
+
   <div *ngFor="let category of store.referForm">
     <h3>{{ category.label }}:</h3>
     <ng-container *ngFor="let item of category.value">

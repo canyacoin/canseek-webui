@@ -58,7 +58,7 @@ export class CmpPostComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error('error')
+        this.message.error(err);
       })
   }
 }
