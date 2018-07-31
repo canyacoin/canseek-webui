@@ -10,6 +10,7 @@ import { PostService } from '../../services/post.service';
 import { ContractsService } from '../../services/contracts/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-refer',
@@ -38,6 +39,7 @@ export class ReferComponent implements AfterViewInit {
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
+    private message: NzMessageService,
   ) {
     this.validateForm = this.fb.group({
       your_name         : [ null, [ Validators.required ] ],
@@ -112,7 +114,7 @@ export class ReferComponent implements AfterViewInit {
           .then(() => this.redireact(cid))
       })
       .catch(err => {
-        console.log(err);
+        this.message.error(err.message)
       })
   }
 }
