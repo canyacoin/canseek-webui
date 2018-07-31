@@ -16,7 +16,16 @@
 
 
   <nz-col *ngIf="hasAuth" nzType="flex" nzSpan="18" nzOffset="3"> 
-    <h4 *ngIf="post">{{ post.job_title }} <small>({{ post.status }})</small></h4>
+    <h4 *ngIf="post">{{ post.job_title }} <small>(
+      {{ post.status }}
+      <span nz-tooltip nzTitle="update status">
+        <i class="anticon anticon-loading-3-quarters blue" 
+          (click)="updatePostStatus(post)"
+          [class.anticon-spin]="loadingStatus"
+          *ngIf="post.status === 'pending'"
+          ></i>
+      </span>
+    )</small></h4>
     <!-- filter & hire btn -->
     <nz-row nzType="flex" nzJustify="space-between">
       <nz-col>
@@ -70,7 +79,8 @@
 
           <ng-template #candidateHeader>
             <nz-row nzType="flex" nzJustify="space-between" gutter="16">
-              <label *ngIf="filterStatus != rejected" nz-checkbox nzValue="{{ candidate.id }} {{ candidate.candidateId }}" class="checkbox"></label>
+              <label *ngIf="post && post.status == 'open' && filterStatus != rejected" nz-checkbox 
+                nzValue="{{ candidate.id }} {{ candidate.candidateId }}" class="checkbox"></label>
               
               <nz-col nzSpan="17">
                 <a href="javascript:;" (click)="changeActive(candidate.id)" class="border-bottom pb-10 card-title uppercase">{{ candidate.candidate_name }}</a>

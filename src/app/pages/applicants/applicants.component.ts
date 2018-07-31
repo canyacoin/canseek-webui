@@ -27,6 +27,7 @@ export class ApplicantsComponent implements OnInit {
   confirmModal: NzModalRef;
 
   selectedCandidates = [];
+  loadingStatus: boolean = false;
 
   customStyle = {
     'background'   : '#fff',
@@ -119,6 +120,7 @@ export class ApplicantsComponent implements OnInit {
     const item = this.selectedCandidates[0];
     const cid = item.split(' ')[0];
     const candidateId = item.split(' ')[1];
+    this.post['nextStatus'] = 'closed';
 
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Are your sure you want to select this candidate?',
@@ -126,8 +128,24 @@ export class ApplicantsComponent implements OnInit {
       nzCancelText: 'Cancel',
       nzOnOk: () => 
       this.ps.closePost(this.post, cid, candidateId)
-        .then(() => this.message.create('succ', 'closePost succ!'))
-        .catch(() => this.message.create('error', 'Oops error'))
+        .then(() => this.message.success('closePost succ!'))
+        .catch(err => {
+          console.log(err);
+          this.message.error(err);
+        })
     });
+  }
+
+  updatePostStatus(post) {
+    this.loadingStatus = true;
+    this.ps.updatePostStatus(post)
+      .then(() => {
+        this.loadingStatus = false;
+        this.message.success('updated');
+      })
+      .catch(err => {
+        this.loadingStatus = false;
+        this.message.error(err);
+      })
   }
 }
