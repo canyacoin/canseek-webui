@@ -48,7 +48,6 @@ export class CmpPostComponent implements OnInit {
   }
 
   getRefund(post) {
-    debugger
     this.ps.getRefund(post, this.curUser);
   }
 
