@@ -35,7 +35,9 @@ export class HeaderComponent implements OnInit {
   getBalance()  {
     this.cons.getCANBalance()
       .then(b => this.store.balance = b)
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err);
+      })
   }
   
   buyCan() {
