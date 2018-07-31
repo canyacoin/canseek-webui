@@ -131,7 +131,7 @@ export class ApplicantsComponent implements OnInit {
         .then(() => this.message.success('closePost succ!'))
         .catch(err => {
           console.log(err);
-          this.message.error(err);
+          this.message.error(err.message);
         })
     });
   }
@@ -145,7 +145,8 @@ export class ApplicantsComponent implements OnInit {
       })
       .catch(err => {
         this.loadingStatus = false;
-        this.message.error(err);
+        this.message.error(err.message);
+        console.log(err);
       })
   }
 }

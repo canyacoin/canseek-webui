@@ -40,7 +40,10 @@ export class CmpPostComponent implements OnInit {
       nzOnOk: () => this.ps.cancelPostDb(post)
           .then(() => this.ps.cancelPost(post))
           .then(() => this.message.success('Cancel success'))
-          .catch(() => this.message.error('Oops error'))
+          .catch(err => {
+            this.message.error(err.message);
+            console.log(err);
+          })
     });
   }
 
@@ -58,7 +61,8 @@ export class CmpPostComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err);
+        this.message.error(err.message);
+        console.log(err);
       })
   }
 }

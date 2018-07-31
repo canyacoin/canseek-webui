@@ -118,9 +118,9 @@ export class PostComponent implements AfterViewInit {
         this.message.success('please verify your email')
         this.verifyLoading = false;
       })
-      .catch(error => {
-        console.log(error)
-        this.message.error(error.message)
+      .catch(err => {
+        console.log(err)
+        this.message.error(err.message)
       });
   }
 

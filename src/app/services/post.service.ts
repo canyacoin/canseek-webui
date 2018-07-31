@@ -94,13 +94,14 @@ export class PostService {
   updatePostAndCandidate(post: any, candidtae: any, res: any): Promise<any> {
     const {honeypot, candidateId} = res;
     const { id: pid, cost, reward } = post;
-    const { id: cid } = candidtae;
+    const { id: cid, nextStatus = 'open' } = candidtae;
     const postRef = this.dbRef.doc(pid);
     const candidateRef = postRef.collection('candidates').doc(cid);
     const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
 
     postRef.update({candidates, honeypot});
-    candidateRef.update({candidateId, status: 'open'});
+    debugger
+    candidateRef.update({candidateId, status: nextStatus});
     
     return Promise.resolve();
   }
@@ -171,11 +172,9 @@ export class PostService {
 
   // include callback after status updated
   updateCandidateStatus(post, candidate) {
-    const { postId, id: pid } = post;
+    const { postId } = post;
     const { id: cid } = candidate;
-    const postRef = this.dbRef.doc(pid);
-    const candidateRef = postRef.collection('candidates').doc(cid);
-    
+
     return this.cs.getCandidateId(cid, postId)
       .then(({honeypot, candidateId}) => {
         if (candidateId) {
@@ -199,6 +198,7 @@ export class PostService {
     const postRef = this.dbRef.doc(id);
     const candidateRef = postRef.collection('candidates').doc(cid);
 
+    debugger
     return this.cs.closePost(postId, candidateId)
       .then(result => {
         postRef.update({
@@ -207,6 +207,7 @@ export class PostService {
         });
         candidateRef.update({
           status: result ? 'selected' : 'pending',
+          nextStatus: 'selected'
         })
         return Promise.resolve({result});
       })

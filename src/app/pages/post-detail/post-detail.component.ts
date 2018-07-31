@@ -40,7 +40,9 @@ export class PostDetailComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err);
+        this.message.error(err.message);
+        console.log(err);
+
       })
   }
 

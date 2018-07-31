@@ -52,7 +52,7 @@ export class StatusComponent implements OnInit {
     this.ps.updatePostStatus(post)
       .then(status => this.loading = false)
       .catch(err => {
-        this.message.error(err)
+        this.message.error(err.message)
         console.log(err);
       })
   }
@@ -63,7 +63,7 @@ export class StatusComponent implements OnInit {
     this.ps.updateCandidateStatus(post, candidate)
       .then(status => this.loading = false)
       .catch(err => {
-        this.message.error(err)
+        this.message.error(err.message)
         console.log(err);
       })
   }
