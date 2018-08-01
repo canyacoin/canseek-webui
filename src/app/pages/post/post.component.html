@@ -82,6 +82,8 @@
     </div>
     
     <div class="steps-action mt-40 text-right">
+      <app-cmp-buycan *ngIf="current === 3"></app-cmp-buycan>
+
       <button nz-button nzType="default" (click)="pre()" *ngIf="current > 1">
         <span>Back</span>
       </button>
