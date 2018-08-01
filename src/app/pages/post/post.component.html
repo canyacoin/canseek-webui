@@ -14,7 +14,7 @@
           <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
           <nz-form-control [nzSm]="16" [nzXs]="24" nzValidateStatus="{{ store.curUser ? '' : 'validating' }}" nzHasFeedback>
             <nz-form-extra>Make sure your MetaMask address is filled</nz-form-extra>
-            <input style="width: 90%" [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
+            <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
           </nz-form-control>
         </nz-form-item>
       
