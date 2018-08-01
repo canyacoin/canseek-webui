@@ -10,7 +10,7 @@ import { ContractsService } from './services/contracts.service';
   styleUrls: ['./app.component.less']
 })
 export class AppComponent {
-  title = 'app';
+  loading: boolean = false;
   store = Store;
 
   constructor(
@@ -25,7 +25,7 @@ export class AppComponent {
 
     // check account
     const routeName = e.constructor.name;
-    console.log(routeName);
+    // console.log(routeName);
     if (['PostComponent', 'ReferComponent'].includes(routeName)) {
       this.checkAccount();
     }
@@ -34,7 +34,9 @@ export class AppComponent {
   async checkAccount() {
     try {
       if (!this.store.curUser) {
+        this.loading = true;
         this.store.curUser = await this.cs.getAccount();
+        this.loading = false;
       }
     } catch (err) {
       if(confirm('Couldn\'t get any accounts!Do you want to install Chrome MetaMask extention?')) {
