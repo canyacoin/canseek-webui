@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Store } from "../../store";
 
 @Component({
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit {
   
   constructor(
     private gs: GlobalService,
-    // private cs: ContractsService,
+    private cs: ContractsService,
   ) { }
 
   ngOnInit() {
@@ -35,7 +36,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  searchStatus() {
+  async searchStatus() {
     const { posts, statusValue } = this;
     const { curUser } = this.store;
     let next;
@@ -56,15 +57,21 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my posts':
+        this.results = [];
+        this.store.curUser = !this.store.curUser ? await this.cs.getAccount() : this.store.curUser;
+
         next = posts.filter(item => item.status && item.owner_addr === curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my referrals':
+        this.results = [];
+        this.store.curUser = !this.store.curUser ? await this.cs.getAccount() : this.store.curUser;
+
         next = posts.filter(item => item.status && item['referrals_by_user'][curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }
-
+    
     this.results = next;
     this.onHomeSearch(next, posts);
   }
