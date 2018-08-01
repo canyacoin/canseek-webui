@@ -73,20 +73,13 @@ export class ContractsService {
       this._account = await new Promise((resolve, reject) => {
         if (this._web3) {
           this._web3.eth.getAccounts((err, accs) => {
-            if (err != null) {
-              alert('There was an error fetching your accounts.');
-              return;
-            }
-  
-            if (accs.length === 0) {
-              alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-              return;
+            if (err != null || accs.length === 0) {
+              throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
             }
             resolve(accs[0]);
           });
         } else {
-          alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-          return;
+          throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
         }
         
       }) as string;

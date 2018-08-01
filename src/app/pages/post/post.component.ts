@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild  } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, Inject } from '@angular/core';
 import { CmpPoststep1Component } from './components/cmp-poststep1/cmp-poststep1.component';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -80,11 +80,6 @@ export class PostComponent implements AfterViewInit {
     } else {
       this.initForm(this.values, false);
     }
-    this.getAccount();
-  }
-
-  async getAccount() {
-    this.store.curUser = await this.cs.getAccount();
   }
 
   initEdit() {

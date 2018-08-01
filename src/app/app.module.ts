@@ -40,6 +40,7 @@ import { CmpCandidateComponent } from './pages/refer-detail/components/cmp-candi
 
 import { ClipboardModule } from 'ngx-clipboard';
 import { CmpBuycanComponent } from './components/cmp-buycan/cmp-buycan.component';
+import { NoauthComponent } from './pages/noauth/noauth.component';
 
 registerLocaleData(zh);
 
@@ -65,6 +66,7 @@ registerLocaleData(zh);
     CmpPostComponent,
     CmpCandidateComponent,
     CmpBuycanComponent,
+    NoauthComponent,
   ],
   imports: [
     BrowserModule,

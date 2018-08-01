@@ -27,6 +27,16 @@ export class HomeComponent implements OnInit {
     this.getPosts();
   }
 
+  async getAccount() {
+    try {
+      if (!this.store.curUser) {
+        this.store.curUser = await this.cs.getAccount();
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   getPosts(): void {
     this.gs.getPosts()
       .subscribe(posts => {
@@ -58,14 +68,14 @@ export class HomeComponent implements OnInit {
         break;
       case 'my posts':
         this.results = [];
-        this.store.curUser = !this.store.curUser ? await this.cs.getAccount() : this.store.curUser;
+        this.getAccount();
 
         next = posts.filter(item => item.status && item.owner_addr === curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my referrals':
         this.results = [];
-        this.store.curUser = !this.store.curUser ? await this.cs.getAccount() : this.store.curUser;
+        this.getAccount();
 
         next = posts.filter(item => item.status && item['referrals_by_user'][curUser])
         .sort((a, b) => b.time - a.time);
