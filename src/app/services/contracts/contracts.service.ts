@@ -27,15 +27,14 @@ let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 
 // Ropsten contract address
-const CanYaCoinAddr = '0xb90d83be4ffcae44330dc1d9481afe5a4f6fa5a4';
-const EscrowAddr = '0x8b182b83ba4957228d9ce11e6605bfec4976f3c8';
-const CanHireAddr = '0x4f517434fb59fe319c57a8c89933324a58a7efe0';
+// const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
+// const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
+// const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-// const CanYaCoinAddr = '0xd6b8eb16ba6fad23254812ecf2cb280eefed773d';
-// const EscrowAddr = '0x5e6d65e438bc8d0b7ed51d0bf71499f3bd0cc074';
-// const CanHireAddr = '0xbe1f2929ffc8c4756a666637b48b93c19e315ba7';
-
+const CanYaCoinAddr = '0x5877b0d8a13dfd5e14973fe16c41be7b587f03c6';
+const EscrowAddr = '0xc27d35a45ea0c094af8014d1a0e10565df2327f4';
+const CanHireAddr = '0xec7b9be7c2a42c35c84d29a3e68b67c1a4c78fb5';
 
 @Injectable()
 export class ContractsService {
@@ -270,6 +269,7 @@ export class ContractsService {
     const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
     const cost = await this.getPostCost(postId);
+    const honeypot = await this.getPostHoneypot(postId);
     await canYaCoin.approve(escrow.address, cost, {from: account, gasPrice: gasPrice, gas: gasApprove});
 
     return new Promise((resolve, reject) => {
