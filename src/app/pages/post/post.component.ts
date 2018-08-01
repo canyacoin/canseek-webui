@@ -80,6 +80,11 @@ export class PostComponent implements AfterViewInit {
     } else {
       this.initForm(this.values, false);
     }
+    this.getAccount();
+  }
+
+  async getAccount() {
+    this.store.curUser = await this.cs.getAccount();
   }
 
   initEdit() {
