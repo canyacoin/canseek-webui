@@ -9,9 +9,9 @@ declare let window: any;
 const Web3 = require('web3');
 
 const contract = require('truffle-contract');
-const CanYaCoinArtifacts = require('../../../../build/contracts/CanYaCoin.json');
-const EscrowArtifacts = require('../../../../build/contracts/Escrow.json');
-const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
+const CanYaCoinArtifacts = require('../../../build/contracts/CanYaCoin.json');
+const EscrowArtifacts = require('../../../build/contracts/Escrow.json');
+const CanHireArtifacts = require('../../../build/contracts/CanHire.json');
 let gasBuy = '50000';
 let gasPrice = '503000000';
 let gasApprove = '45600';
@@ -32,9 +32,9 @@ let gasRecommend = '200000';
 // const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x5877b0d8a13dfd5e14973fe16c41be7b587f03c6';
-const EscrowAddr = '0xc27d35a45ea0c094af8014d1a0e10565df2327f4';
-const CanHireAddr = '0xec7b9be7c2a42c35c84d29a3e68b67c1a4c78fb5';
+const CanYaCoinAddr = '0x9de4cf310f74c31aea4b1355fac82f7790a06b27';
+const EscrowAddr = '0xac64f63c72be5ddc37f1abc947d72f17566dcbf0';
+const CanHireAddr = '0x7e60dc6d2b3faa20b4a0fc97ef40a10e6847214b';
 
 @Injectable()
 export class ContractsService {
@@ -51,7 +51,7 @@ export class ContractsService {
       this._web3 = new Web3(window.web3.currentProvider);
       this._web3.eth.net.getId().then(netId => {
         if (netId !== 3) {
-          alert('Please connect to the Ropsten network');
+          // alert('Please connect to the Ropsten network');
           return;
         }
       });

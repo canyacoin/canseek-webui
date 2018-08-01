@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PostService } from '../../../../services/post.service';
+import { GlobalService } from '../../../../services/global.service';
 import { Store } from '../../../../store';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -17,7 +17,7 @@ export class CmpCandidateComponent implements OnInit {
   loading: boolean = false;
   
   constructor(
-    private ps: PostService,
+    private gs: GlobalService,
     private message: NzMessageService,
   ) { }
 
@@ -27,19 +27,19 @@ export class CmpCandidateComponent implements OnInit {
   }
 
   getCandidate(): void {
-    this.ps.getCandidate(this.pid, this.cid)
+    this.gs.getCandidate(this.pid, this.cid)
       .subscribe(candidate => this.candidate = candidate)
   }
 
   getPost(): void {
-    this.ps.getPost(this.pid)
+    this.gs.getPost(this.pid)
       .subscribe(post => this.post = post);
   }
 
   updateCandidateStatus(post, candidate) {
     this.loading = true;
 
-    this.ps.updateCandidateStatus(post, candidate)
+    this.gs.updateCandidateStatus(post, candidate)
       .then(() => {
         this.loading = false;
         this.message.success('updated');

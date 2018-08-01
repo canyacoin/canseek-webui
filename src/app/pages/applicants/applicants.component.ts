@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
 
@@ -39,7 +39,7 @@ export class ApplicantsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private ps: PostService,
+    private gs: GlobalService,
     private modal: NzModalService,
     private message: NzMessageService,
     private router: Router,
@@ -54,7 +54,7 @@ export class ApplicantsComponent implements OnInit {
     const { id } = this.route.snapshot.params;
 
     this.pid = id;
-    this.ps.getCandidates(id)
+    this.gs.getCandidates(id)
       .subscribe(candidates => {
         this.candidates = candidates;
         this.loading = false;
@@ -65,7 +65,7 @@ export class ApplicantsComponent implements OnInit {
   checkAuth() {
     const { id } = this.route.snapshot.params;
 
-    this.ps.getPost(id)
+    this.gs.getPost(id)
       .subscribe(post => {
         this.post = post;
         this.hasAuth = (post['owner_addr'] === this.store.curUser);
@@ -99,7 +99,7 @@ export class ApplicantsComponent implements OnInit {
   }
 
   changeCandidateCat(cid, category) {
-    this.ps.changeCandidateCat(this.pid, cid, category);
+    this.gs.changeCandidateCat(this.pid, cid, category);
   }
 
   selectC(v) {
@@ -127,7 +127,7 @@ export class ApplicantsComponent implements OnInit {
       nzOkText: 'Yes',
       nzCancelText: 'Cancel',
       nzOnOk: () => 
-      this.ps.closePost(this.post, cid, candidateId)
+      this.gs.closePost(this.post, cid, candidateId)
         .then(() => this.message.success('closePost succ!'))
         .catch(err => {
           console.log(err);
@@ -138,7 +138,7 @@ export class ApplicantsComponent implements OnInit {
 
   updatePostStatus(post) {
     this.loadingStatus = true;
-    this.ps.updatePostStatus(post)
+    this.gs.updatePostStatus(post)
       .then(() => {
         this.loadingStatus = false;
         this.message.success('updated');

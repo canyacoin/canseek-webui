@@ -8,8 +8,8 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { PostService } from '../../services/post.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 
@@ -43,7 +43,7 @@ export class PostComponent implements AfterViewInit {
   constructor(
     private afAuth: AngularFireAuth,
     private fb: FormBuilder,
-    private ps: PostService,
+    private gs: GlobalService,
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -66,7 +66,7 @@ export class PostComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.type == 'edit'){
-      this.ps.getPost(this.id)
+      this.gs.getPost(this.id)
       .subscribe(post => {
         // init sub cmp
         this.step1.initForm(post, false);
@@ -85,7 +85,7 @@ export class PostComponent implements AfterViewInit {
   initEdit() {
     // 编辑的时候无需验证邮箱
     this.current = 1;
-    this.ps.getPost(this.id)
+    this.gs.getPost(this.id)
       .subscribe(post => {
         this.values = post;
         if (post['owner_addr'] != this.store.curUser) {
@@ -176,17 +176,17 @@ export class PostComponent implements AfterViewInit {
     const isUpdate = this.type == 'edit' ? true : false;
     
     if(isUpdate) {
-      this.ps.updatePost(handledData)
+      this.gs.updatePost(handledData)
       // todo Ceshi 
       .then(id => this.redireact(id))
     } else {
       const { reward, cost } = handledData;
 
-      this.ps.addPostDb(handledData)
+      this.gs.addPostDb(handledData)
         .then(id => {
           this.pid = id;
           return this.cs.addPost(id, Number(reward), Number(cost))
-            .then(postId => this.ps.addPostCb(id, postId))
+            .then(postId => this.gs.addPostCb(id, postId))
             .then(() => this.redireact(id))
         })
         .catch(err => {

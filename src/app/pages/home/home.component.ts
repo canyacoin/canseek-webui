@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
 import { Store } from "../../store";
 
 @Component({
@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   
   
   constructor(
-    private ps: PostService,
+    private gs: GlobalService,
     // private cs: ContractsService,
   ) { }
 
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
 
   getPosts(): void {
-    this.ps.getPosts()
+    this.gs.getPosts()
       .subscribe(posts => {
         this.posts = posts
         this.loading = false;
@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
     this.onHomeSearch(next, posts);
   }
   onHomeSearch(next, posts) {
-    this.ps.change.subscribe((s: string) => {
+    this.gs.change.subscribe((s: string) => {
       if (s) {
         this.results = posts.filter(post => (
           (post.job_title || '').includes(s)

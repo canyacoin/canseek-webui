@@ -1,14 +1,18 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of, Subject } from 'rxjs';
-import { ContractsService } from './contracts/contracts.service';
+import { ContractsService } from './contracts.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import qs from 'qs';
+
+const { URL } = environment;
 
 @Injectable({
   providedIn: 'root'
 })
-export class PostService {
+export class GlobalService {
   dbRef: any = this.db.collection('posts');
   postRef: any;
 
@@ -21,6 +25,12 @@ export class PostService {
     private router: Router,
   ) { 
     this.change = new EventEmitter();
+  }
+
+  async changeCurrency(currency): Promise<any> {
+    return await fetch(`${URL.changeCurrency}?${qs.stringify(currency)}`)
+      .then(response => response.json())
+      .catch(err => console.log('Err, changeCurrency: ', err));
   }
 
   getPosts(): Observable<any[]> {
