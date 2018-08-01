@@ -25,15 +25,11 @@ contract CanHire is Ownable {
         mapping(string => uint) returnCandidateId;
     }
 
-    struct Refund {
-        mapping(uint => uint) amount; // mapping from postId to refund amount
-    }
-
     StandardToken public canYaCoin;
     Escrow public escrow;
     Post[] public posts;
     mapping(string => uint) getPostId; // map unique post id to post id
-    mapping(address => Refund) refund;
+    mapping(address => mapping(uint => uint)) contribution; // recommender => postId => refund amount
     uint public numPosts = 1;
     bool public active;
     uint public cancelFee = 1;
@@ -46,6 +42,7 @@ contract CanHire is Ownable {
     event ProfitsExtracted(uint profit);
     event GetPostId(uint postId);
     event GetRefund(uint cost);
+    event UpdateContribution(address recommender, uint postId);
 
     modifier is_active(){
         require(active);
@@ -104,7 +101,6 @@ contract CanHire is Ownable {
     function addPost(string uniqueId, uint _bounty, uint _cost) public is_active {
         require(_bounty > 0);
         require(getPostId[uniqueId] == 0);
-        // require(canYaCoin.approve(address(escrow), _bounty));
         require(escrow.transferToEscrow(msg.sender, _bounty));
         Post memory newPost;
         newPost.id = numPosts;
@@ -125,21 +121,20 @@ contract CanHire is Ownable {
         is_post_owner(postId, msg.sender)
         post_is_open(postId)
     {
-        Post storage post = posts[postId];
-        uint fee = post.bounty.mul(cancelFee).div(100);
+        uint fee = posts[postId].bounty.mul(cancelFee).div(100);
         require(escrow.transferFromEscrow(address(this), fee));
-        require(escrow.transferFromEscrow(msg.sender, post.bounty.sub(fee)));
+        require(escrow.transferFromEscrow(msg.sender, posts[postId].bounty.sub(fee)));
         posts[postId].status = Status.Cancelled;
         emit PostStatusUpdate(Status.Cancelled);
     }
 
     function getRefund(uint postId) public {
-        Post storage post = posts[postId];
-        require(post.status == Status.Cancelled);
-        require(refund[msg.sender].amount[postId] > 0);
-        require(escrow.transferFromEscrow(msg.sender, refund[msg.sender].amount[postId]));
-        refund[msg.sender].amount[postId] = 0;
-        emit GetRefund(refund[msg.sender].amount[postId]);
+        require(posts[postId].status == Status.Cancelled);
+        require(contribution[msg.sender][postId] > 0);
+        require(escrow.transferFromEscrow(msg.sender, contribution[msg.sender][postId]));
+        posts[postId].honeyPot = posts[postId].honeyPot.sub(contribution[msg.sender][postId]);
+        contribution[msg.sender][postId] = 0;
+        emit GetRefund(contribution[msg.sender][postId]);
     }
 
     function closePost(uint postId, uint candidateId)
@@ -170,7 +165,7 @@ contract CanHire is Ownable {
         posts[postId].recommenders.push(msg.sender);
         posts[postId].returnCandidateId[uniqueCandidateId] = candidateId;
         posts[postId].honeyPot = posts[postId].honeyPot.add(posts[postId].cost);
-        refund[msg.sender].amount[postId].add(posts[postId].cost);
+        contribution[msg.sender][postId] = contribution[msg.sender][postId].add(posts[postId].cost);
         emit CandidateRecommended(candidateId);
     }
 
@@ -199,6 +194,10 @@ contract CanHire is Ownable {
         returns (uint numCandidates)
     {
         numCandidates = posts[postId].recommenders.length.sub(1);
+    }
+
+    function checkContribution(uint postId) public view returns (uint) {
+        return contribution[msg.sender][postId];
     }
 
 }
