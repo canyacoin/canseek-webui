@@ -56,7 +56,7 @@ export class ContractsService {
         }
       });
     } else {
-      alert('Please use a DApp browser like mist or MetaMask plugin for chrome');
+      // alert('Please use a DApp browser like mist or MetaMask plugin for chrome');
       return;
     }
     this._web3.eth.getGasPrice().then(price => {
