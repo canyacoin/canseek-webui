@@ -101,18 +101,20 @@ export class GlobalService {
       })
   }
 
-  updatePostAndCandidate(post: any, candidtae: any, res: any): Promise<any> {
-    const {honeypot, candidateId} = res;
-    const { id: pid, cost, reward } = post;
-    const { id: cid, nextStatus = 'open' } = candidtae;
-    const postRef = this.dbRef.doc(pid);
-    const candidateRef = postRef.collection('candidates').doc(cid);
-    const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
-
-    postRef.update({candidates, honeypot});
-    candidateRef.update({candidateId, status: nextStatus});
-    
-    return Promise.resolve();
+  updatePostAndCandidate(post: any, candidtae: any, candidateId: number): Promise<any> {
+    if(candidateId) {
+      const { id: pid, cost, reward, candidates = 0, honeypot = reward } = post;
+      const { id: cid, nextStatus = 'open' } = candidtae;
+      const postRef = this.dbRef.doc(pid);
+      const candidateRef = postRef.collection('candidates').doc(cid);
+  
+      postRef.update({candidates: Number(candidates) + 1, honeypot: Number(honeypot) + Number(cost) });
+      candidateRef.update({candidateId, status: nextStatus});
+      
+      return Promise.resolve();
+    } else {
+      throw new Error('Oops error! Candidate didn\'t add success');
+    }
   }
 
   getCandidates(pid: string): Observable<any[]> {
@@ -185,14 +187,7 @@ export class GlobalService {
     const { id: cid } = candidate;
 
     return this.cs.getCandidateId(cid, postId)
-      .then(({honeypot, candidateId}) => {
-        if (candidateId) {
-          this.updatePostAndCandidate(post, candidate, {honeypot, candidateId})
-          .then(() => Promise.resolve())
-        } else {
-          throw new Error('Candidate didn\'t exist');
-        }
-      })
+      .then((candidateId) => this.updatePostAndCandidate(post, candidate, candidateId))
       .catch(err => {
         throw err;
       })

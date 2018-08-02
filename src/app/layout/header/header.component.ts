@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const currencyName = localStorage.getItem('currencyName') || 'USD';
+    const currencyName = localStorage.getItem('currencyName') || 'CAN';
     this.setCurrency(this.currency[currencyName]);
   }
 
