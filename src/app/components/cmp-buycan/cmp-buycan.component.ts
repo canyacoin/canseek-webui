@@ -13,31 +13,12 @@ export class CmpBuycanComponent implements OnInit {
     private cs: ContractsService
   ) { }
 
-  // ngOnInit() {
   async ngOnInit() {
-    // this.store.curUser = await this.cs.getAccount();
     this.store.balance = await this.cs.getCANBalance();
-    // this.getAccount();
-    // this.getBalance();
   }
-
-  // async getAccount() {
-  //   this.store.curUser = await this.cs.getAccount();
-  // }
-
-  // getBalance()  {
-  //   this.cs.getCANBalance()
-  //     .then(b => this.store.balance = b)
-  //     .catch(err => {
-  //       console.error(err);
-  //     })
-  // }
   
   async buyCan() {
     this.store.balance += await this.cs.buyCAN();
-    // this.cs.buyCAN()
-    //   .then(delta => this.store.balance += delta)
-    //   .catch(err => console.error(err));
   }
 
 }
