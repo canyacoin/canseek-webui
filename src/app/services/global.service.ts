@@ -170,7 +170,7 @@ export class GlobalService {
             })
             Promise.resolve(status);
           } else {
-            throw 'Post didn\'t exist!';
+            throw new Error('Post didn\'t exist!');
           }
         })
         .catch(err => {
@@ -190,7 +190,7 @@ export class GlobalService {
           this.updatePostAndCandidate(post, candidate, {honeypot, candidateId})
           .then(() => Promise.resolve())
         } else {
-          throw 'Candidate didn\'t exist';
+          throw new Error('Candidate didn\'t exist');
         }
       })
       .catch(err => {
