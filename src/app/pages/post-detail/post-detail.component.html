@@ -80,13 +80,13 @@
             <div class="text-center">
               <a 
                 disabled
-                *ngIf="post.status != 'open' || post.owner_addr == store.curUser" 
+                *ngIf="post.status != 'open'" 
                 class="btn btn-primary btn-canya-gradient mt-60"  
                 routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
               </a>
               <a 
-                *ngIf="post.status == 'open' && post.owner_addr != store.curUser" 
+                *ngIf="post.status == 'open'" 
                 class="btn btn-primary btn-canya-gradient mt-60" 
                 routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT

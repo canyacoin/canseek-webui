@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
       case 'my posts':
         this.results = [];
         await this.getAccount();
-        console.log(this.store.curUser);
+        
         next = posts.filter(item => item.status && item.owner_addr === this.store.curUser)
         .sort((a, b) => b.time - a.time);
         break;

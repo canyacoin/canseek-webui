@@ -25,8 +25,8 @@ export class AppComponent {
 
     // check account
     const routeName = e.constructor.name;
-    // console.log(routeName);
-    if (['PostComponent', 'ReferComponent'].includes(routeName)) {
+    console.log(routeName);
+    if (['PostComponent', 'ReferComponent', 'ApplicantsComponent'].includes(routeName)) {
       this.checkAccount();
     }
   }
