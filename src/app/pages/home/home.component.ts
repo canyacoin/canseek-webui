@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
   statusValue = localStorage.getItem('statusValue') || 'all';
   balance: number = 0;
   
-  
   constructor(
     private gs: GlobalService,
     private cs: ContractsService,
@@ -30,7 +29,9 @@ export class HomeComponent implements OnInit {
   async getAccount() {
     try {
       if (!this.store.curUser) {
+        this.loading = true;
         this.store.curUser = await this.cs.getAccount();
+        this.loading = false;
       }
     } catch (err) {
       alert(err.message);
@@ -48,7 +49,6 @@ export class HomeComponent implements OnInit {
 
   async searchStatus() {
     const { posts, statusValue } = this;
-    const { curUser } = this.store;
     let next;
 
     localStorage.setItem('statusValue', statusValue);
@@ -68,16 +68,16 @@ export class HomeComponent implements OnInit {
         break;
       case 'my posts':
         this.results = [];
-        this.getAccount();
-
-        next = posts.filter(item => item.status && item.owner_addr === curUser)
+        await this.getAccount();
+        console.log(this.store.curUser);
+        next = posts.filter(item => item.status && item.owner_addr === this.store.curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my referrals':
         this.results = [];
-        this.getAccount();
+        await this.getAccount();
 
-        next = posts.filter(item => item.status && item['referrals_by_user'][curUser])
+        next = posts.filter(item => item.status && item['referrals_by_user'][this.store.curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }
