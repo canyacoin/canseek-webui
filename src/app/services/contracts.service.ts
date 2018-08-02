@@ -366,8 +366,8 @@ export class ContractsService {
 
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
-        console.log(refund);
-        resolve(refund.logs[0].args.cost.toNumber());
+        const result = refund.logs[0].args.cost.toNumber();
+        resolve(result);
       }).catch( err => {
         reject(err);
       });

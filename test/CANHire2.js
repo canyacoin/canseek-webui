@@ -87,21 +87,24 @@ contract("CanHire", accounts => {
   //   // const newNumCandidates = await canHire.getNumCandidates(1);
   // });
 
-  it("should refund correctly", async () => {
+  it("test refund", async () => {
     await token.approve(escrow.address, 1000, {from: employer1});
-    await canHire.addPost("p001", 1000, 50, {from: employer1});
-    await token.approve(escrow.address, 100, {from: recruiter1});
+    await canHire.addPost("p001", 500, 50, {from: employer1});
+    await canHire.addPost("p002", 500, 50, {from: employer1});
+
+    await token.approve(escrow.address, 150, {from: recruiter1});
     await canHire.recommend("p001c001", 1, {from: recruiter1});
     await canHire.recommend("p001c002", 1, {from: recruiter1});
+    await canHire.recommend("p002c001", 2, {from: recruiter1});
 
     const refund = await canHire.checkContribution(1, {from: recruiter1});
-    console.log(refund.toNumber());
-    
+    assert.equal(refund.toNumber(), 100, "wrong escrow refund");
+
     await canHire.cancelPost(1, {from: employer1});
-    // await canHire.getRefund(1, {recruiter1});
+    const result = await canHire.getRefund(1, {from: recruiter1});
+    // console result.logs[0].args.cost.toNumber()
     
-    const rrefund = await canHire.checkContribution(1, {from: recruiter1});
-    console.log(rrefund.toNumber());
+    console.log(result);
   })
 
   // it("should cancel a post and get refunds", async () => {
