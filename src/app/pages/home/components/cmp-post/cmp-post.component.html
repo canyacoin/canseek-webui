@@ -133,7 +133,7 @@
       <div class="btns op-area">
         <a routerLink="/post/detail/{{ post.id }}" class="btn btn-primary btn-outline block">view job post</a>
         <a *ngIf="post.status == 'open'" routerLink="/refer/detail/{{ post.id }}/{{ cid }}" class="btn btn-primary block mt-10">view application</a>
-        <a *ngIf="post.status == 'cancelled'" (click)="getRefund(post)" class="btn btn-primary block mt-10">get refund</a>
+        <a *ngIf="post.status == 'cancelled'" href="javascript:;" (click)="getRefund(post)" class="btn btn-primary block mt-10">get refund</a>
       </div>
     </div>
   </div>

@@ -126,30 +126,31 @@ export class GlobalService {
   }
 
   getRefund(post: any, curUser: string) {
-    const { id, postId, referrals_by_user, candidates } = post;
-    const cidArr = referrals_by_user[curUser];
+    const { id, postId, referrals_by_user, candidates, honeypot, cost } = post;
+    const cidArr = referrals_by_user[curUser] || [];
     const referNum = cidArr.length;
     const postRef = this.dbRef.doc(id);
+
     this.cs.getRefund(postId)
       .then(result => {
+        debugger
         if (result) {
           // update post's referrals_by_user candidates
           delete referrals_by_user[curUser];
-          postRef.update({ candidates: candidates - referNum, referrals_by_user })
+          postRef.update({ 
+            candidates: Number(candidates) - referNum, 
+            honeypot: Number(honeypot) - Number(cost) * referNum, 
+            referrals_by_user 
+          })
 
           // update candidatesRef
           cidArr.map(cid => {
             postRef.collection('candidates').doc(cid).delete();
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
           })
-        // } else {
-        //   // update post's status nextStatus
-        //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
         }
       })
-      // .catch(() => {
-      //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
-      // })
+      .catch(err => this.message.error(err.message))
   }
 
   updatePostStatus(post) {

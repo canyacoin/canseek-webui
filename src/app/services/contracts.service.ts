@@ -32,9 +32,9 @@ let gasRecommend = '200000';
 // const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x3cd5f81ac3d0c7a36bc22c36cb876c2f316a0c90';
-const EscrowAddr = '0xe4cb96e239e1f123b0235e451a60470a37789f5c';
-const CanHireAddr = '0x6d495c7a92f635af501d01b70a5c81111cc95ca7';
+const CanYaCoinAddr = '0xb3ef3f733e3b9fc3c3abec7c2789af7b50695f0e';
+const EscrowAddr = '0xfcd83a2c0c3e0ea1a124d1982a02202ef2932e39';
+const CanHireAddr = '0x0d45ecb2930a28806ba778798b582d129a891c9a';
 
 @Injectable()
 export class ContractsService {
@@ -363,7 +363,9 @@ export class ContractsService {
   public async getRefund(postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
-
+    const checkContribution = await canHire.checkContribution(postId);
+    console.log(checkContribution.toNumber(), 'checkContribution');
+    
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
         const result = refund.logs[0].args.cost.toNumber();
