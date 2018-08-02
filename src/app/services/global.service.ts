@@ -1,14 +1,18 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, of, Subject } from 'rxjs';
-import { ContractsService } from './contracts/contracts.service';
+import { ContractsService } from './contracts.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+import qs from 'qs';
+
+const { URL } = environment;
 
 @Injectable({
   providedIn: 'root'
 })
-export class PostService {
+export class GlobalService {
   dbRef: any = this.db.collection('posts');
   postRef: any;
 
@@ -21,6 +25,12 @@ export class PostService {
     private router: Router,
   ) { 
     this.change = new EventEmitter();
+  }
+
+  async changeCurrency(currency): Promise<any> {
+    return await fetch(`${URL.changeCurrency}?${qs.stringify(currency)}`)
+      .then(response => response.json())
+      .catch(err => console.log('Err, changeCurrency: ', err));
   }
 
   getPosts(): Observable<any[]> {
@@ -49,6 +59,18 @@ export class PostService {
             .then(() => id)
   }
 
+  cancelPostDb(post: any) {
+    const { id } = post;
+
+    return this.dbRef.doc(id).update({
+      status: 'pending',
+      nextStatus: 'pending',
+    })
+    .then(() => {
+      Promise.resolve()
+    })
+  }
+
   cancelPost(post: any) {
     const { postId, id, nextStatus } = post;
 
@@ -57,18 +79,12 @@ export class PostService {
         return this.dbRef.doc(id).update({
           status: result ? nextStatus : 'pending',
           nextStatus
-        })
+        });
       })
   }
 
-  timeoutRace(obj, timeout) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => reject(obj), timeout)
-    })
-  }
-
   addCandidateDb(post: any, candidate: any): Promise<any> {
-    const { id, candidates = 0, referrals_by_user } = post;
+    const { id, candidateTrend = 0, referrals_by_user } = post;
     const { owner_addr: curUser } = candidate;
     const postRef = this.dbRef.doc(id);
 
@@ -79,21 +95,26 @@ export class PostService {
         docRef.update({ id: cid, status: 'pending' })
 
         referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
-        postRef.update({ candidates: candidates + 1, referrals_by_user })
+        postRef.update({ candidateTrend: candidateTrend + 1, referrals_by_user })
 
         return Promise.resolve(cid);
       })
   }
 
-  addCandidateCb(cid: string, pid: string, res: any): Promise<any> {
-    const {honeypot, candidateId} = res;
-    const postRef = this.dbRef.doc(pid);
-    const candidateRef = postRef.collection('candidates').doc(cid);
-
-    postRef.update({honeypot});
-    candidateRef.update({candidateId, status: 'open'});
-    
-    return Promise.resolve();
+  updatePostAndCandidate(post: any, candidtae: any, candidateId: number): Promise<any> {
+    if(candidateId) {
+      const { id: pid, cost, reward, candidates = 0, honeypot = reward } = post;
+      const { id: cid, nextStatus = 'open' } = candidtae;
+      const postRef = this.dbRef.doc(pid);
+      const candidateRef = postRef.collection('candidates').doc(cid);
+  
+      postRef.update({candidates: Number(candidates) + 1, honeypot: Number(honeypot) + Number(cost) });
+      candidateRef.update({candidateId, status: nextStatus});
+      
+      return Promise.resolve();
+    } else {
+      throw new Error('Oops error! Candidate didn\'t add success');
+    }
   }
 
   getCandidates(pid: string): Observable<any[]> {
@@ -105,30 +126,31 @@ export class PostService {
   }
 
   getRefund(post: any, curUser: string) {
-    const { id, postId, referrals_by_user, candidates } = post;
-    const cidArr = referrals_by_user[curUser];
+    const { id, postId, referrals_by_user, candidates, honeypot, cost } = post;
+    const cidArr = referrals_by_user[curUser] || [];
     const referNum = cidArr.length;
     const postRef = this.dbRef.doc(id);
+
     this.cs.getRefund(postId)
       .then(result => {
+        debugger
         if (result) {
           // update post's referrals_by_user candidates
           delete referrals_by_user[curUser];
-          postRef.update({ candidates: candidates - referNum, referrals_by_user })
+          postRef.update({ 
+            candidates: Number(candidates) - referNum, 
+            honeypot: Number(honeypot) - Number(cost) * referNum, 
+            referrals_by_user 
+          })
 
           // update candidatesRef
           cidArr.map(cid => {
             postRef.collection('candidates').doc(cid).delete();
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
           })
-        // } else {
-        //   // update post's status nextStatus
-        //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
         }
       })
-      // .catch(() => {
-      //   postRef.update({ status: 'pending', nextStatus: 'getRefund' })
-      // })
+      .catch(err => this.message.error(err.message))
   }
 
   updatePostStatus(post) {
@@ -136,52 +158,44 @@ export class PostService {
     const postRef = this.dbRef.doc(id);
     
     if (postId) {
-      this.cs.getPostStatus(postId) 
+      return this.cs.getPostStatus(postId) 
         .then(status => {
           postRef.update({ status })
+          Promise.resolve(status);
         })
     } else {
-      this.cs.getPostId(id)
+      return this.cs.getPostId(id)
         .then(postId => {
           if (postId) {
             postRef.update({
               postId,
               status: 'open'
             })
+            Promise.resolve(status);
+          } else {
+            throw new Error('Post didn\'t exist!');
           }
+        })
+        .catch(err => {
+          throw err;
         })
     }
   }
 
+  // include callback after status updated
   updateCandidateStatus(post, candidate) {
-    const { postId, id: pid } = post;
-    const { candidateId, id: cid } = candidate;
-    const postRef = this.dbRef.doc(pid);
-    const candidateRef = postRef.collection('candidates').doc(cid);
-    
-    if (candidateId) {
-      console.log('update existed candidates status, todo');
-      // this.cs.getPostStatus(postId) 
-      //   .then(status => {
-      //     postRef.update({ status })
-      //   })
-    } else {
-      this.cs.getCandidateId(cid, postId)
-        .then(candidateId => {
-          if (candidateId) {
-            candidateRef.update({
-              candidateId,
-              status: 'open'
-            })
-          }
-        })
-    }
+    const { postId } = post;
+    const { id: cid } = candidate;
+
+    return this.cs.getCandidateId(cid, postId)
+      .then((candidateId) => this.updatePostAndCandidate(post, candidate, candidateId))
+      .catch(err => {
+        throw err;
+      })
   }
 
-  changeCandidateStatus(pid, cid, status) {
-    const candidateRef = this.dbRef.doc(pid).collection('candidates').doc(cid);
-
-    candidateRef.update({status});
+  changeCandidateCat(pid, cid, category) {
+    this.dbRef.doc(pid).collection('candidates').doc(cid).update({category});
   }
 
   closePost(post: any, cid: string, candidateId: number) {
@@ -197,6 +211,7 @@ export class PostService {
         });
         candidateRef.update({
           status: result ? 'selected' : 'pending',
+          nextStatus: 'selected'
         })
         return Promise.resolve({result});
       })

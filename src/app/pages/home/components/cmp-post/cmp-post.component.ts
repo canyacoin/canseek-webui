@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PostService } from '../../../../services/post.service';
+import { GlobalService } from '../../../../services/global.service';
 import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { Store } from "../../../../store";
 import * as moment from 'moment';
@@ -19,9 +19,10 @@ export class CmpPostComponent implements OnInit {
   
   moment = moment;
   confirmModal: NzModalRef;
+  loading: boolean = false;
 
   constructor(
-    private ps: PostService,
+    private gs: GlobalService,
     private modal: NzModalService,
     private message: NzMessageService,
   ) { }
@@ -36,25 +37,31 @@ export class CmpPostComponent implements OnInit {
       nzTitle: 'Are your sure you want to cancel this job post?',
       nzOkText: 'OK',
       nzCancelText: 'Cancel',
-      nzOnOk: () => 
-      this.ps.cancelPost(post)
-        .then(() => this.message.create('success', 'Cancel success'))
-        .catch(() => this.message.create('error', 'Oops error'))
+      nzOnOk: () => this.gs.cancelPostDb(post)
+          .then(() => this.gs.cancelPost(post))
+          .then(() => this.message.success('Cancel success'))
+          .catch(err => {
+            this.message.error(err.message);
+            console.log(err);
+          })
     });
   }
 
-  getRefund(e, post) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    this.ps.getRefund(post, this.curUser);
+  getRefund(post) {
+    this.gs.getRefund(post, this.curUser);
   }
 
-  updateStatus(e, post) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // todo
-    // this.ps.updateStatus(post);
+  updatePostStatus(post) {
+    this.loading = true;
+    this.gs.updatePostStatus(post)
+      .then(status => {
+        this.loading = false;
+        this.message.success('updated');
+      })
+      .catch(err => {
+        this.loading = false;
+        this.message.error(err.message);
+        console.log(err);
+      })
   }
 }

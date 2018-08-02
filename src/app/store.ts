@@ -18,6 +18,12 @@ export let Store = {
         string: '€ EUR',
         value: 0
       },
+      CAN: {
+        symbol: '$',
+        name: 'CAN',
+        string: '$ CAN',
+        value: 0
+      },
     },
     selectedCurrency: {},
 
@@ -77,7 +83,7 @@ export let Store = {
       },{
         label: 'Reward Information Preview',
         value: [{
-          label: 'Admission Fee',
+          label: 'Honeypot',
           field: 'reward'
         }, {
           label: 'Application Fee',

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild  } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, Inject } from '@angular/core';
 import { CmpPoststep1Component } from './components/cmp-poststep1/cmp-poststep1.component';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -8,8 +8,8 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { PostService } from '../../services/post.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 
@@ -38,11 +38,12 @@ export class PostComponent implements AfterViewInit {
   verifyLoading: boolean = false;
 
   doneLoading: boolean = false;
+  pid: string; // type new post id
 
   constructor(
     private afAuth: AngularFireAuth,
     private fb: FormBuilder,
-    private ps: PostService,
+    private gs: GlobalService,
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -65,7 +66,7 @@ export class PostComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.type == 'edit'){
-      this.ps.getPost(this.id)
+      this.gs.getPost(this.id)
       .subscribe(post => {
         // init sub cmp
         this.step1.initForm(post, false);
@@ -84,7 +85,7 @@ export class PostComponent implements AfterViewInit {
   initEdit() {
     // 编辑的时候无需验证邮箱
     this.current = 1;
-    this.ps.getPost(this.id)
+    this.gs.getPost(this.id)
       .subscribe(post => {
         this.values = post;
         if (post['owner_addr'] != this.store.curUser) {
@@ -117,17 +118,19 @@ export class PostComponent implements AfterViewInit {
         this.message.success('please verify your email')
         this.verifyLoading = false;
       })
-      .catch(error => {
-        console.log(error)
-        this.message.error(error.message)
+      .catch(err => {
+        console.log(err)
+        this.message.error(err.message)
       });
   }
 
   rewardValidator = (control: FormControl) => {
     if (!control.value) {
       return { required: true };
-    } else if (!/^\d+$/.test(control.value) || Number(control.value) < 500) {
-        return { error: true };
+    } else if (!/^\d+$/.test(control.value)) {
+      return { number: true };
+    } else if (Number(control.value) < 500) {
+      return { minimum: true };
     } else {
       return null;
     }
@@ -137,7 +140,7 @@ export class PostComponent implements AfterViewInit {
     if (!control.value) {
       return { required: true };
     } else if (!/^\d+$/.test(control.value)) {
-        return { error: true };
+        return { number: true };
     } else {
       return null;
     }
@@ -161,38 +164,33 @@ export class PostComponent implements AfterViewInit {
     
     if (formData.valid) {
       this.current += 1;
+      window.scroll(0,0);
     }
   }
 
   done(): void {
     this.doneLoading = true;
 
-    const postData = {referrals_by_user: {}, time: Date.now(), owner_addr: this.store.curUser, ...this.values };
+    const postData = {referrals_by_user: {}, honeypot: Number(this.values['reward']), time: Date.now(), owner_addr: this.store.curUser, ...this.values };
     const handledData = JSON.parse(JSON.stringify(postData));
     const isUpdate = this.type == 'edit' ? true : false;
     
     if(isUpdate) {
-      this.ps.updatePost(handledData)
+      this.gs.updatePost(handledData)
       // todo Ceshi 
       .then(id => this.redireact(id))
     } else {
       const { reward, cost } = handledData;
 
-      this.ps.addPostDb(handledData)
+      this.gs.addPostDb(handledData)
         .then(id => {
-          return Promise.race([
-            this.cs.addPost(id, Number(reward), Number(cost)), 
-            this.ps.timeoutRace({id}, 3000)
-          ])
-          .then(postId => this.ps.addPostCb(id, postId))
-          .then(() => this.redireact(id))
+          this.pid = id;
+          return this.cs.addPost(id, Number(reward), Number(cost))
+            .then(postId => this.gs.addPostCb(id, postId))
+            .then(() => this.redireact(id))
         })
         .catch(err => {
-          if (err.id) {
-            this.redireact(err.id)
-          } else {
-            console.log(err);
-          }
+          console.log(err);
         })
     }
   }

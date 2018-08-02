@@ -1,6 +1,11 @@
 
 <section class="bg-gray pt-60">
   <div class="container pb-120">
+    <!-- loading -->
+    <div *ngIf="!post" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+      
     <div class="row" *ngIf="post">
       <div class="col-md-8">
         <!-- card post -->
@@ -18,8 +23,12 @@
 
               <section class="my-40" *ngIf="post.job_attachments">
                 <p class="bold">Attachments</p>
-                <!-- todo 下载 -->
-                <p class="bold"> <i class="iconfont iconfont-pdf"></i> {{ post.job_attachments }}</p>
+                <a class="mr-12 blue" target="_blank" 
+                  href="{{ file.url }}" 
+                  *ngFor="let file of post.job_attachments">
+                  <i class="iconfont iconfont-pdf mr-6"></i> 
+                  {{ file.name }}
+                </a>
               </section>
               
               <section class="my-40">
@@ -34,7 +43,17 @@
         <div class="card">
           <div class="card-body">
             <nz-row nzType="flex" nzJustify="space-between" class="mb-46">
-              <span class="tag {{ post.status }}">{{ post.status }}</span>
+              <p>
+                <span class="tag {{ post.status }}">{{ post.status }}</span>
+                <span class="ml-12" nz-tooltip nzTitle="update status">
+                  <i class="anticon anticon-loading-3-quarters blue" 
+                    (click)="updatePostStatus(post)"
+                    [class.anticon-spin]="loading"
+                    *ngIf="post.status === 'pending'"
+                    ></i>
+                </span>
+              </p>
+              
               <nz-col>
                 <i class="iconfont iconfont-group blue"></i>
                 <span class="num blue">{{ post.candidates || 0 }}</span>
@@ -61,13 +80,13 @@
             <div class="text-center">
               <a 
                 disabled
-                *ngIf="post.status != 'open' || post.owner_addr == store.curUser" 
+                *ngIf="post.status != 'open'" 
                 class="btn btn-primary btn-canya-gradient mt-60"  
                 routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
               </a>
               <a 
-                *ngIf="post.status == 'open' && post.owner_addr != store.curUser" 
+                *ngIf="post.status == 'open'" 
                 class="btn btn-primary btn-canya-gradient mt-60" 
                 routerLink="/refer/new/{{ post.id }}">
                 REFER TALENT
@@ -80,8 +99,8 @@
         <div class="card text-center mt-30">
           <div class="card-body">
             <img class="card-img-top" 
-              onerror="this.src='https://canya.io/images/CanYa_logo.png'"
-              src="{{ post.company_logo }}" 
+              onerror="this.src='assets/img/logo.svg'"
+              src="{{ ((post.company_logo || [])[0] || {}).url }}" 
               alt="{{ post.company_name }} logo">
 
               <h3 class="card-title mt-24 mb-40">{{ post.company_name }}</h3>
@@ -90,6 +109,7 @@
         </div>
       </div>
     </div>
+
   </div>
   
   <app-cmp-footer></app-cmp-footer>

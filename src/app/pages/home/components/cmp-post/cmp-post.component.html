@@ -7,19 +7,30 @@
       <nz-col>
         <nz-row nzType="flex">
           <nz-col>
-            <span class="contrubuted mr-8">{{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * (post.honeypot || reward) || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}</span>
+            <span class="contrubuted mr-8">
+              {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.honeypot || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
+            </span>
             <br>
             <span class="desc">Contrubuted</span>
           </nz-col>
           <nz-col>
-            <i class="iconfont iconfont-group blue"></i>
-            <span class="num blue">{{ post.candidates || 0 }}</span>
+            <ng-container *ngIf="post.owner_addr != curUser">
+              <i class="iconfont iconfont-group blue"></i>
+              <span class="num blue">{{ post.candidateTrend || 0 }}</span>
+            </ng-container>
+            <a 
+              *ngIf="post.owner_addr == curUser"
+              routerLink="/applicants/{{ post.id }}">
+              <i class="iconfont iconfont-group blue"></i>
+              <span class="num blue">{{ post.candidateTrend || 0 }}</span>
+            </a>
+            
           </nz-col>
         </nz-row>
       </nz-col>
     </nz-row>
     <a routerLink="/post/detail/{{ post.id }}">
-      <img class="card-img-top my-10" onerror="this.src='https://canya.io/images/CanYa_logo.png'" src="{{ (post.company_logo[0] || {}).url }}"
+      <img class="card-img-top my-10" onerror="this.src='assets/img/logo.svg'" src="{{ ((post.company_logo || [])[0] || {}).url }}"
       alt="{{ post.company_name }} logo">
     </a>
 
@@ -27,51 +38,89 @@
     <p class="title clamp1">{{ post.job_title }}</p>
     <p class="text mb-10 clamp1" style="font-size: 14px">{{ post.company_name }}</p>
     <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
-      <nz-col>
+      <nz-col class="location clamp2" style="-webkit-box-orient: vertical;">
         <span *ngIf="post.job_remote" class="mr-8"><i class="iconfont iconfont-earth"></i> Remote</span>
         <span *ngIf="post.job_location"><i class="iconfont iconfont-location"></i> {{ post.job_location }}</span>
       </nz-col>
       {{ moment(post.time).fromNow() }}
     </nz-row>
 
-    <hr class="mb-24 mt-2">
+    <hr class="mb-20 mt-2">
     <div *ngIf="statusValue != 'my referrals'">
         <a routerLink="/post/detail/{{ post.id }}">
           <p class="card-text mb-20">{{ post.job_desc }}</p>
         </a>
-        <div class="flex">
+        <div class="flex op-area">
           <i class="can-coin mr-8"></i>
     
           <p class="flex1 text">
             {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
             <br> Application Fee
           </p>
-          <!-- op -->
-          <nz-dropdown *ngIf="statusValue == 'my posts'" [nzTrigger]="'click'">
+          <!-- op 按照三种样式划分 -->
+          <!-- 1. 单独的按钮: refer getrefund -->
+          <!-- refer: open 非创建人 单独按钮 -->
+          <a 
+            *ngIf="post.status == 'open' && post.owner_addr !== curUser"
+            class="btn btn-primary btn-outline"
+            routerLink="/refer/new/{{post.id}}">refer talent</a>
+
+          <!-- getrefund: cancelled 推荐人 外面 -->
+          <button
+            *ngIf="post.status === 'cancelled' && post.referrals_by_user[curUser]"
+            class="btn btn-primary btn-outline"
+            (click)="getRefund(post)"
+            >
+            get refund
+          </button>
+    
+          <!-- 2. dropdown...: update + applicants -->
+          <nz-dropdown-button
+            [nzSize]="small"
+            [nzTrigger]="'click'"
+            *ngIf="post.status == 'pending' && post.owner_addr == curUser"
+            (nzClick)="updatePostStatus(post)"
+            [nzDisabled]="loading"
+            >
+            UPDATE
+            <ul nz-menu>
+              <!-- edit: open 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser">
+                <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
+              </li>
+              <!-- cancel: open 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
+              <!-- applicants: 创建人 -->
+              <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
+                <a routerLink="/applicants/{{ post.id }}">view applicants</a>
+              </li>
+            </ul>
+          </nz-dropdown-button>
+
+          <!-- 3. dropdown: 创建人&非 pending 状态 -->
+          <nz-dropdown 
+            *ngIf="post.status !== 'pending' && post.owner_addr == curUser"
+            [nzTrigger]="'click'">
             <a nz-dropdown>
               <i class="iconfont iconfont-ellipsis blue"></i>
             </a>
             <ul nz-menu>
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open'">
+                <!-- edit: open 创建人 -->
+                <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser">
                 <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
-              </li>
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open'" (click)="showConfirm(post)">cancel</li>
-              <li nz-menu-item class="op-item">
+                </li>
+                <!-- cancel: open 创建人 -->
+                <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
+                <!-- applicants: 创建人 -->
+                <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
                 <a routerLink="/applicants/{{ post.id }}">view applicants</a>
-              </li>
+                </li>
             </ul>
           </nz-dropdown>
-    
-          <!-- open 下任何人都可以推荐 -->
-          <button *ngIf="statusValue === 'open'" class="btn btn-primary btn-outline">refer talent</button>
-          <!-- pending 下只有作者可以 update -->
-          <button *ngIf="statusValue === 'pending' && post.owner_addr == curUser" class="btn btn-primary btn-outline" (click)="updateStatus($event, post)">update</button>
-          <!-- cancelled 下只有申请人者可以getrefund -->
-          <button *ngIf="statusValue === 'cancelled' && post.referrals_by_user[curUser]" class="btn btn-primary btn-outline" (click)="getRefund($event, post)">get refund</button>
         </div>
     </div>
 
-    <div *ngIf="statusValue == 'my referrals'">
+    <div *ngIf="statusValue == 'my referrals' && cid">
       <div class="flex">
         <i class="can-coin mr-8"></i>
   
@@ -81,9 +130,10 @@
         </p>
       </div>
   
-      <div class="btns">
+      <div class="btns op-area">
         <a routerLink="/post/detail/{{ post.id }}" class="btn btn-primary btn-outline block">view job post</a>
-        <a routerLink="/refer/detail/{{ post.id }}/{{ cid }}" class="btn btn-primary block mt-10">view application</a>
+        <a *ngIf="post.status == 'open'" routerLink="/refer/detail/{{ post.id }}/{{ cid }}" class="btn btn-primary block mt-10">view application</a>
+        <a *ngIf="post.status == 'cancelled'" href="javascript:;" (click)="getRefund(post)" class="btn btn-primary block mt-10">get refund</a>
       </div>
     </div>
   </div>

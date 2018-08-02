@@ -2,7 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { DOCUMENT } from '@angular/platform-browser';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-status',
@@ -17,12 +18,14 @@ export class StatusComponent implements OnInit {
   post: any;
   candidate: any;
   copied: boolean = false;
+  loading: boolean = false;
   
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    private ps: PostService,
+    private gs: GlobalService,
     @Inject(DOCUMENT) private document,
+    private message: NzMessageService,
   ) { 
     this.route.queryParams.subscribe(params => {
       const { type, pid, cid } = params;
@@ -36,20 +39,33 @@ export class StatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ps.getPost(this.pid).subscribe(post => {
-      this.post = post;
-      if (post['status'] == 'pending') {
-        this.ps.updatePostStatus(post);
-      }
-    });
+    this.gs.getPost(this.pid).subscribe(post => this.post = post);
+    
     if (this.cid) {
-      this.ps.getCandidate(this.pid, this.cid).subscribe(candidate => {
-        this.candidate = candidate;
-        if (candidate['status'] == 'pending') {
-          this.ps.updateCandidateStatus(this.post, candidate);
-        }
-      })
+      this.gs.getCandidate(this.pid, this.cid).subscribe(candidate => this.candidate = candidate)
     }
+  }
+
+  updateStatus(post) {
+    this.loading = true;
+
+    this.gs.updatePostStatus(post)
+      .then(status => this.loading = false)
+      .catch(err => {
+        this.message.error(err.message)
+        console.log(err);
+      })
+  }
+
+  updateCandidateStatus(post, candidate) {
+    this.loading = true;
+
+    this.gs.updateCandidateStatus(post, candidate)
+      .then(status => this.loading = false)
+      .catch(err => {
+        this.message.error(err.message)
+        console.log(err);
+      })
   }
 
   copy() {

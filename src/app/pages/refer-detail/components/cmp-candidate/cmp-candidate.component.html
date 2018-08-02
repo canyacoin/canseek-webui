@@ -4,12 +4,32 @@
 </div>
 
 <section *ngIf="candidate">
+  <h3 *ngIf="post && candidate.status == 'pending'">Status: 
+    <small>{{ candidate.status }}
+      <span nz-tooltip nzTitle="update status">
+        <i class="anticon anticon-loading-3-quarters blue" 
+          (click)="updateCandidateStatus(post, candidate)"
+          [class.anticon-spin]="loading"
+          *ngIf="candidate.status === 'pending'"
+          ></i>
+      </span>
+    </small>
+  </h3>
+
   <div *ngFor="let category of store.referForm">
     <h3>{{ category.label }}:</h3>
     <ng-container *ngFor="let item of category.value">
       <nz-row class="my-20" nzGutter="16">
         <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
-        <nz-col nzSpan="10">{{ candidate[item.field] }}</nz-col>
+        <nz-col nzSpan="10" *ngIf="!['cover_letter', 'resume'].includes(item.field)">{{ candidate[item.field] }}</nz-col>
+        <nz-col nzSpan="10" *ngIf="['cover_letter', 'resume'].includes(item.field)">
+          <a class="mr-12 blue" target="_blank" 
+            href="{{ file.url }}" 
+            *ngFor="let file of candidate[item.field]">
+            <i class="iconfont iconfont-pdf mr-6"></i> 
+            {{ file.name }}
+          </a>
+        </nz-col>
       </nz-row>
     </ng-container>
   </div>

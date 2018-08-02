@@ -37,13 +37,13 @@
     <!-- posts -->
     <nz-row [nzGutter]="32" *ngIf="!loading && (results && results.length > 0)">
 
-      <ng-container *ngIf="statusValue !== 'my_referrals'">
+      <ng-container *ngIf="statusValue !== 'my referrals'">
         <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
           <app-cmp-post [post]="post" [statusValue]="statusValue" [curUser]="store.curUser"></app-cmp-post>
         </nz-col>
       </ng-container>
 
-      <ng-container *ngIf="statusValue == 'my_referrals'">
+      <ng-container *ngIf="statusValue == 'my referrals'">
         <ng-container *ngFor="let post of results">
           <ng-container *ngFor="let cid of post.referrals_by_user[store.curUser]">
             <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">

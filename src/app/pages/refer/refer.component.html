@@ -10,9 +10,9 @@
       <!-- step1 -->
       <form *ngIf="!!validateForm && current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> MetaMask Address </nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
-            <nz-form-extra class="red">Important: For payout of the Referral fund if your talent is successful!</nz-form-extra>
+            <nz-form-extra>For payout of the honeypot if your talent is successful!</nz-form-extra>
             <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
           </nz-form-control>
         </nz-form-item>
@@ -34,7 +34,7 @@
         </nz-form-item>
       
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship to the Talent</nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship</nz-form-label>
           <nz-form-control [nzSm]="14" [nzXs]="24">
             <nz-radio-group formControlName="relation" id="relation" class="uppercase">
               <label nz-radio-button nzValue="recruiter">recruiter</label>
@@ -53,17 +53,35 @@
       <!-- step3 -->
       <div class="text-center" *ngIf="current == 2">
         <h4>Application Fee</h4>
-        <h4><strong>{{ post.cost }} CAN</strong></h4>  
+        <h4>
+          <strong>
+            {{ post.cost }} CAN
+            ≈
+            {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
+          </strong>
+        </h4>  
+
+        <p class="text mt-40">This is used to pay into the post’s honeypot and increases the quality of referrals.
+          If you win, you will receive the entire honeypot plus all fees paid by other referrers, including your own. If the job post is cancelled, you will be refunded. If you do not win, your fee will be paid to the winner. There is a 1% payment sent to the CanYaDAO for sustainability on all fees.</p>
+
+        <app-cmp-buycan></app-cmp-buycan>
+
         <button 
           nz-button
           nzType="primary"
           [nzLoading]="doneLoading"
-          class="uppercase mt-40 mb-12" 
+          class="mb-12" 
           (click)="done()"
           >
-          refer talent
+          Refer Talent
         </button>
-        <p *ngIf="store.selectedCurrency.symbol">Total: {{ store.selectedCurrency.symbol }}{{ store.selectedCurrency.rate * post.cost || '...' }} {{ store.selectedCurrency.name }}</p>
+
+        <a target="_blank" 
+          routerLink="/refer/detail/{{ pid }}/{{ cid }}"
+          class="ml-12" *ngIf="pid && cid"> view details </a>
+
+        <p class="text mt-8" *ngIf="current === 2">To complete referring the job post, you must submit TWO metamask pop-up confirmations. Make sure you have enough ETH to cover the transaction fees and check the transation status in Metamask.</p>
+
       </div>
     </div>
     

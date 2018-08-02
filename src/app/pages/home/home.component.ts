@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Store } from "../../store";
 
 @Component({
@@ -16,18 +17,29 @@ export class HomeComponent implements OnInit {
   statusValue = localStorage.getItem('statusValue') || 'all';
   balance: number = 0;
   
-  
   constructor(
-    private ps: PostService,
-    // private cs: ContractsService,
+    private gs: GlobalService,
+    private cs: ContractsService,
   ) { }
 
   ngOnInit() {
     this.getPosts();
   }
 
+  async getAccount() {
+    try {
+      if (!this.store.curUser) {
+        this.loading = true;
+        this.store.curUser = await this.cs.getAccount();
+        this.loading = false;
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  }
+
   getPosts(): void {
-    this.ps.getPosts()
+    this.gs.getPosts()
       .subscribe(posts => {
         this.posts = posts
         this.loading = false;
@@ -35,9 +47,8 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  searchStatus() {
+  async searchStatus() {
     const { posts, statusValue } = this;
-    const { curUser } = this.store;
     let next;
 
     localStorage.setItem('statusValue', statusValue);
@@ -56,20 +67,26 @@ export class HomeComponent implements OnInit {
         .sort((a, b) => b.time - a.time);
         break;
       case 'my posts':
-        next = posts.filter(item => item.status && item.owner_addr === curUser)
+        this.results = [];
+        await this.getAccount();
+        
+        next = posts.filter(item => item.status && item.owner_addr === this.store.curUser)
         .sort((a, b) => b.time - a.time);
         break;
       case 'my referrals':
-        next = posts.filter(item => item.status && item['referrals_by_user'][curUser])
+        this.results = [];
+        await this.getAccount();
+
+        next = posts.filter(item => item.status && item['referrals_by_user'][this.store.curUser])
         .sort((a, b) => b.time - a.time);
         break;
     }
-
+    
     this.results = next;
     this.onHomeSearch(next, posts);
   }
   onHomeSearch(next, posts) {
-    this.ps.change.subscribe((s: string) => {
+    this.gs.change.subscribe((s: string) => {
       if (s) {
         this.results = posts.filter(post => (
           (post.job_title || '').includes(s)

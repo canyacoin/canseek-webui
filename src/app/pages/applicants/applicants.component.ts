@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
 
@@ -11,7 +11,7 @@ import * as moment from 'moment';
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
-  filterStatus: string = localStorage.getItem('filterStatus') || 'all';
+  category: string = localStorage.getItem('category') || 'all';
   loading: boolean = true;
   post: any;
   pid: string;
@@ -27,6 +27,7 @@ export class ApplicantsComponent implements OnInit {
   confirmModal: NzModalRef;
 
   selectedCandidates = [];
+  loadingStatus: boolean = false;
 
   customStyle = {
     'background'   : '#fff',
@@ -38,7 +39,7 @@ export class ApplicantsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private ps: PostService,
+    private gs: GlobalService,
     private modal: NzModalService,
     private message: NzMessageService,
     private router: Router,
@@ -53,18 +54,18 @@ export class ApplicantsComponent implements OnInit {
     const { id } = this.route.snapshot.params;
 
     this.pid = id;
-    this.ps.getCandidates(id)
+    this.gs.getCandidates(id)
       .subscribe(candidates => {
         this.candidates = candidates;
         this.loading = false;
-        this.searchStatus();
+        this.searchCategory();
       });
   }
 
   checkAuth() {
     const { id } = this.route.snapshot.params;
 
-    this.ps.getPost(id)
+    this.gs.getPost(id)
       .subscribe(post => {
         this.post = post;
         this.hasAuth = (post['owner_addr'] === this.store.curUser);
@@ -72,24 +73,24 @@ export class ApplicantsComponent implements OnInit {
       })
   }
 
-  searchStatus() {
-    const { candidates, filterStatus } = this;
+  searchCategory() {
+    const { candidates, category } = this;
     let next;
 
-    localStorage.setItem('filterStatus', filterStatus);
-    switch(filterStatus) {
+    localStorage.setItem('category', category);
+    switch(category) {
       case 'all':
         next = candidates; 
         break;
       case 'unrefined':
         next = candidates
-          .filter(item => item.status != 'shortlist' && item.status != 'rejected')
+          .filter(item => item.category != 'shortlist' && item.category != 'rejected')
           .sort((a, b) => b.time - a.time);
         break;
       case 'shortlist':
       case 'rejected':
         next = candidates
-          .filter(item => item.status == filterStatus)
+          .filter(item => item.category == category)
           .sort((a, b) => b.time - a.time);
         break;
     }
@@ -97,8 +98,8 @@ export class ApplicantsComponent implements OnInit {
     this.results = next;
   }
 
-  changeCandidateStatus(cid, status) {
-    this.ps.changeCandidateStatus(this.pid, cid, status);
+  changeCandidateCat(cid, category) {
+    this.gs.changeCandidateCat(this.pid, cid, category);
   }
 
   selectC(v) {
@@ -119,15 +120,33 @@ export class ApplicantsComponent implements OnInit {
     const item = this.selectedCandidates[0];
     const cid = item.split(' ')[0];
     const candidateId = item.split(' ')[1];
+    this.post['nextStatus'] = 'closed';
 
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Are your sure you want to select this candidate?',
       nzOkText: 'Yes',
       nzCancelText: 'Cancel',
       nzOnOk: () => 
-      this.ps.closePost(this.post, cid, candidateId)
-        .then(() => this.message.create('succ', 'closePost succ!'))
-        .catch(() => this.message.create('error', 'Oops error'))
+      this.gs.closePost(this.post, cid, candidateId)
+        .then(() => this.message.success('closePost succ!'))
+        .catch(err => {
+          console.log(err);
+          this.message.error(err.message);
+        })
     });
+  }
+
+  updatePostStatus(post) {
+    this.loadingStatus = true;
+    this.gs.updatePostStatus(post)
+      .then(() => {
+        this.loadingStatus = false;
+        this.message.success('updated');
+      })
+      .catch(err => {
+        this.loadingStatus = false;
+        this.message.error(err.message);
+        console.log(err);
+      })
   }
 }

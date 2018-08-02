@@ -6,10 +6,11 @@ import {
   Validators
 } from '@angular/forms';
 import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
-import { PostService } from '../../services/post.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-refer',
@@ -28,13 +29,17 @@ export class ReferComponent implements AfterViewInit {
   post: Object = {};
 
   doneLoading: boolean = false;
+
+  pid: string = '';
+  cid: string = '';
   
   constructor(
     private fb: FormBuilder,
-    private ps: PostService,
+    private gs: GlobalService,
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
+    private message: NzMessageService,
   ) {
     this.validateForm = this.fb.group({
       your_name         : [ null, [ Validators.required ] ],
@@ -76,15 +81,19 @@ export class ReferComponent implements AfterViewInit {
     
     if (formData.valid) {
       this.current += 1;
+      window.scroll(0,0);
     }
   }
 
   getPost(): void {
     const { id } = this.route.snapshot.params;
 
-    this.ps.getPost(id)
+    this.gs.getPost(id)
       .subscribe(post => {
         this.post = post;
+        if (post['owner_addr'] === this.store.curUser) {
+          this.router.navigateByUrl('/noauth');
+        }
       });
   }
 
@@ -96,22 +105,21 @@ export class ReferComponent implements AfterViewInit {
     this.doneLoading = true;
 
     const CandidateData = {...this.values, time: Date.now() };
+    const CandidatedData = JSON.parse(JSON.stringify(CandidateData));
 
-    this.ps.addCandidateDb(this.post, CandidateData)
+    this.gs.addCandidateDb(this.post, CandidatedData)
       .then(cid => {
-        return Promise.race([
-          this.cs.recommend(cid, this.post['postId']), 
-          this.ps.timeoutRace({id: cid}, 3000)
-        ])
-        .then((res) => this.ps.addCandidateCb(cid, this.post['id'], res))
-        .then(() => this.redireact(cid))
+        this.cid = cid;
+        CandidatedData.id = cid;
+        this.pid = this.post['id'];
+        return this.cs.recommend(cid, this.post['postId'])
+          .then(candidateId => this.gs.updatePostAndCandidate(this.post, CandidatedData, candidateId))
+          .then(() => this.redireact(cid))
       })
       .catch(err => {
-        if (err.id) {
-          this.redireact(err.id)
-        } else {
-          console.log(err);
-        }
+        this.message.error(err.message)
+        console.log(err);
+
       })
   }
 }

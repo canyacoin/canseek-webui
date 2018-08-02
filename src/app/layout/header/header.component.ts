@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from "../../store";
-import { CurrencyService } from '../../services/global/currency.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
-import { PostService } from '../../services/post.service';
+import { ContractsService } from '../../services/contracts.service';
+import { GlobalService } from '../../services/global.service';
 
 @Component({
   selector: 'app-header',
@@ -16,32 +15,13 @@ export class HeaderComponent implements OnInit {
   searchText: string = '';
 
   constructor(
-    private cs: CurrencyService,
-    private cons: ContractsService,
-    private ps: PostService,
+    private cs: ContractsService,
+    private gs: GlobalService,
   ) { }
 
-  ngOnInit() {
-    const currencyName = localStorage.getItem('currencyName') || 'USD';
+  async ngOnInit() {
+    const currencyName = localStorage.getItem('currencyName') || 'CAN';
     this.setCurrency(this.currency[currencyName]);
-    this.getAccount();
-    this.getBalance();
-  }
-
-  async getAccount() {
-    this.store.curUser = await this.cons.getAccount();
-  }
-
-  getBalance()  {
-    this.cons.getCANBalance()
-      .then(b => this.store.balance = b)
-      .catch(err => console.error(err))
-  }
-  
-  buyCan() {
-    this.cons.buyCAN()
-      .then(delta => this.store.balance += delta)
-      .catch(err => console.error(err));
   }
 
   setCurrency(currency) {
@@ -53,11 +33,11 @@ export class HeaderComponent implements OnInit {
 
     localStorage.setItem('currencyName', name);
     this.store.selectedCurrency = currency;
-    this.cs.changeCurrency(opts)
+    this.gs.changeCurrency(opts)
     .then(res => this.store.selectedCurrency['rate'] = res['CAN'][name]);
   }
 
   onSearch() {
-    this.ps.change.emit(this.searchText);
+    this.gs.change.emit(this.searchText);
   }
 }

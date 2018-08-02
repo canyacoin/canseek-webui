@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Store } from '../../../../store';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { finalize } from 'rxjs/operators';
+import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-cmp-poststep1',
@@ -49,6 +49,7 @@ export class CmpPoststep1Component implements OnInit {
   constructor(
     private fb: FormBuilder,
     private storage: AngularFireStorage,
+    private message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -65,7 +66,7 @@ export class CmpPoststep1Component implements OnInit {
       job_range: [{ value: values['job_range'], disabled }],
       job_attachments: [{ value: values['job_attachments'], disabled }],
       job_level: [ { value: values['job_level'], disabled }, [ Validators.required ] ],
-      screening_questions      : [ { value: values['screening_questions'], disabled }, [ Validators.required ] ],
+      screening_questions      : [ { value: values['screening_questions'], disabled } ],
       screening_questions2      : [ { value: values['screening_questions2'], disabled } ],
       screening_questions3      : [ { value: values['screening_questions3'], disabled } ],
 
@@ -78,6 +79,8 @@ export class CmpPoststep1Component implements OnInit {
       your_email: [ { value: values['your_email'] || this.email, disabled: true }, [ Validators.email, Validators.required ] ],
       owner_addr: [ { value: this.store.curUser, disabled: true } ],
     });
+    this.fileList = values['job_attachments'] || [];
+    this.logo = values['company_logo'] || [];
   }
 
   handleChange(info: any, key: string = 'fileList') {
@@ -92,65 +95,59 @@ export class CmpPoststep1Component implements OnInit {
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
 
-    task.snapshotChanges()
-      .pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe(url => {
-            this.fileList = this.fileList.map(item => {
-              if (item.name == fileName){
-                return {...item, url, thumbUrl: url}
-              }
-              return item
-            })
-            this.handleChange({fileList: this.fileList})
-          })
-        })
-      )
-      .subscribe(snapshot => {
-        if (snapshot.bytesTransferred == snapshot.totalBytes) {
+    task.snapshotChanges().subscribe(snapshot => {
+      if (snapshot.bytesTransferred == snapshot.totalBytes) {
+        fileRef.getDownloadURL().subscribe(url => {
           this.fileList = this.fileList.map(item => {
             if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100 }
+              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
             }
             return item;
           })
           this.handleChange({fileList: this.fileList})
-        }
-      })
+        })
+      }
+    })
   }
 
-  uploadImage= (item: any) => {
+  isImage = (file) => {
+    const isImage = /^image\//.test(file.type);
+    
+    if (!isImage) {
+      this.message.error('You can only upload a Image!');
+    }
+    return isImage;
+  }
+
+  isPdf = (file) => {
+    const isPdf = file.type == 'application/pdf';
+    
+    if (!isPdf) {
+      this.message.error('You can only upload a PDF!');
+    }
+    return isPdf;
+  }
+
+  uploadImage = (item: any) => {
     const file = item.file;
     const fileName = file.name;
     const filePath = `${file.lastModified}-${fileName}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
 
-    task.snapshotChanges()
-      .pipe(
-        finalize(() => {
-          fileRef.getDownloadURL().subscribe(url => {
-            this.logo = this.logo.map(item => {
-              if (item.name == fileName){
-                return {...item, url, thumbUrl: url}
-              }
-              return item
-            })
-            this.handleChange({fileList: this.logo}, 'logo')
-          })
-        })
-      )
-      .subscribe(snapshot => {
-        if (snapshot.bytesTransferred == snapshot.totalBytes) {
+    task.snapshotChanges().subscribe(snapshot => {
+      if (snapshot.bytesTransferred == snapshot.totalBytes) {
+        fileRef.getDownloadURL().subscribe(url => {
           this.logo = this.logo.map(item => {
             if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100 }
+              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
             }
             return item;
-          })
+          });
           this.handleChange({fileList: this.logo}, 'logo')
-        }
-      })
+        })
+      }
+    })
   }
 
   handlePreview = (file: any) => {

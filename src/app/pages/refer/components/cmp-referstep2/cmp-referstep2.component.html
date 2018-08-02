@@ -44,10 +44,11 @@
   <h4 class="my-20">Application Information</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume"> CV/Resume </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-upload
         [nzFileList]="fileList"
+        [nzBeforeUpload]="isPdf"
         [nzCustomRequest]="uploadFile"
         (nzChange)="handleChange($event)"
         >
@@ -55,7 +56,6 @@
           <i class="anticon anticon-upload"></i><span>Upload</span>
         </button>
       </nz-upload>
-      <nz-form-explain class="red" *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please upload your CV/Resume!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
@@ -69,13 +69,14 @@
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers" nzRequired>Screening Questions
-      <br>
-      <span class="text">(The job poster requested)</span>
+      <!-- <br> -->
+      <!-- <span class="text">(The job poster requested)</span> -->
     </nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions }}</nz-form-extra>
-      <textarea formControlName="answers" id="answers" nz-input rows="4" placeholder="write any thing"></textarea>
-      <nz-form-explain *ngIf="validateForm.get('answers').dirty && validateForm.get('answers').errors">Please input Your answer!</nz-form-explain>
+      <textarea formControlName="answers" id="answers" nz-input rows="4" placeholder="write anything"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('answers').dirty && (validateForm.get('answers').errors || {}).required">Please input Your answer!</nz-form-explain>
+      <nz-form-explain *ngIf="validateForm.get('answers').dirty && (validateForm.get('answers').errors || {}).maxlength">Maximum 200 words!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
@@ -83,8 +84,9 @@
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2" nzRequired>Screening Questions</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions2 }}</nz-form-extra>
-      <textarea formControlName="answers2" id="answers2" nz-input rows="4" placeholder="write any thing"></textarea>
-      <nz-form-explain *ngIf="validateForm.get('answers2').dirty && validateForm.get('answers2').errors">Please input Your answer!</nz-form-explain>
+      <textarea formControlName="answers2" id="answers2" nz-input rows="4" placeholder="write anything"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('answers2').dirty && (validateForm.get('answers2').errors || {}).required">Please input Your answer!</nz-form-explain>
+      <nz-form-explain *ngIf="validateForm.get('answers2').dirty && (validateForm.get('answers2').errors || {}).maxlength">Maximum 200 words!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
@@ -92,15 +94,28 @@
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3" nzRequired>Screening Questions</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions3 }}</nz-form-extra>
-      <textarea formControlName="answers3" id="answers3" nz-input rows="4" placeholder="write any thing"></textarea>
-      <nz-form-explain *ngIf="validateForm.get('answers3').dirty && validateForm.get('answers3').errors">Please input Your answer!</nz-form-explain>
+      <textarea formControlName="answers3" id="answers3" nz-input rows="4" placeholder="write anything"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('answers3').dirty && (validateForm.get('answers3').errors || {}).required">Please input Your answer!</nz-form-explain>
+      <nz-form-explain *ngIf="validateForm.get('answers3').dirty && (validateForm.get('answers3').errors || {}).maxlength">Maximum 200 words!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cover_letter">Cover Letter</nz-form-label>
     <nz-form-control [nzSm]="14" [nzXs]="24">
-      <textarea formControlName="cover_letter" id="cover_letter" nz-input rows="4" placeholder="write any thing"></textarea>
+      <nz-upload
+        [nzFileList]="cover_letter"
+        [nzBeforeUpload]="isPdf"
+        [nzCustomRequest]="uploadCoverLetter"
+        (nzChange)="handleChange($event, 'cover_letter')"
+        >
+        <button nz-button disabled *ngIf="cover_letter.length > 0">
+          <i class="anticon anticon-upload"></i><span>Upload</span>
+        </button>
+        <button nz-button *ngIf="cover_letter.length == 0">
+          <i class="anticon anticon-upload"></i><span>Upload</span>
+        </button>
+      </nz-upload>
     </nz-form-control>
   </nz-form-item>
   
