@@ -38,6 +38,7 @@
       </nz-col>
 
       <nz-col *ngIf="canHire">
+          <app-cmp-buycan></app-cmp-buycan>
           <button *ngIf="category == 'rejected' || !selectedCandidates.length" disabled nz-button nzType="primary" class="uppercase">hire</button>
           <button 
             (click)="closePost()"
