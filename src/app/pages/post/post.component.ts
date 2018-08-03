@@ -99,7 +99,7 @@ export class PostComponent implements AfterViewInit {
   initForm(values, disabled): void {
     this.emailForm = this.fb.group({
       your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
-      owner_addr: [ { value: this.store.curUser, disabled: true } ],
+      owner_addr: [ { value: this.store.curUser || values['owner_addr'], disabled: true } ],
     });
 
     this.validateForm = this.fb.group({
@@ -108,18 +108,19 @@ export class PostComponent implements AfterViewInit {
     });
   }
 
-  emailVerify(password:string = '' + new Date) {
+  async emailVerify() {
     if (!this.email) return;
 
     this.verifyLoading = true;
-    return this.afAuth.auth.createUserWithEmailAndPassword(this.email, password)
-      .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
-      .then(() => {
+    
+    this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.store.curUser + new Date)
+    .then(() => this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''}))
+    .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
+    .then(() => {
         this.message.success('please verify your email')
         this.verifyLoading = false;
       })
       .catch(err => {
-        console.log(err)
         this.message.error(err.message)
       });
   }
