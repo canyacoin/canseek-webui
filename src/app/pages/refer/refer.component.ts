@@ -113,7 +113,7 @@ export class ReferComponent implements AfterViewInit {
         CandidatedData.id = cid;
         this.pid = this.post['id'];
         return this.cs.recommend(cid, this.post['postId'])
-          .then(candidateId => this.gs.updatePostAndCandidate(this.post, CandidatedData, candidateId))
+          .then((res) => this.gs.updatePostAndCandidate(this.post, CandidatedData, res))
           .then(() => this.redireact(cid))
       })
       .catch(err => {

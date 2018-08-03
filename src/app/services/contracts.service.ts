@@ -32,9 +32,9 @@ let gasRecommend = '200000';
 // const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xf18d017a9fa77258203d8136948a1ec3910764ce';
-const EscrowAddr = '0xd7e031c67ab13e8709dd817b128fef4fea7c930a';
-const CanHireAddr = '0x02af2976ad3a2bfa1b8e2d1aa18ad11caaa940e2';
+const CanYaCoinAddr = '0x3501fac5fc22dc16b179bec71c063f7bc16bb839';
+const EscrowAddr = '0xaaa3f000c5abd8bb131078d59741d7a276bac483';
+const CanHireAddr = '0xc2aba1df46517b6e1d90ee479cefb01df17e5775';
 
 @Injectable()
 export class ContractsService {
@@ -267,12 +267,14 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend}).then(result => {
         const { candidateId } = result.logs[0].args;
-
-        resolve(Number(candidateId))
+        this.getPostHoneypot(postId)
+        .then(honeypot => {
+          resolve({honeypot, candidateId: Number(candidateId)})
+        })
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<any>;
   }
 
   public async getRecommenders(postId) {
@@ -363,17 +365,15 @@ export class ContractsService {
   public async getRefund(postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
-    const checkContribution = await canHire.checkContribution(postId);
-    console.log(checkContribution.toNumber(), 'checkContribution');
     
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
         const result = refund.logs[0].args.cost.toNumber();
-        resolve(result);
+        resolve(!result);
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<boolean>;
   }
 
 }
