@@ -103,9 +103,13 @@ contract("CanHire", accounts => {
     assert.equal(refund.toNumber(), 100, "wrong escrow refund");
 
     await canHire.cancelPost(1, {from: employer1});
-    let result = await canHire.getRefund(1, {from: recruiter1});
-    result = result.logs[0].args.cost;
-    assert.equal(result.toNumber(), 0, "wrong escrow result");
+    // let result = await canHire.getRefund(1, {from: recruiter1});
+
+    const gas = await canHire.getRefund.estimateGas(1, {from: recruiter1});
+    console.log('gas', gas);
+
+    // result = result.logs[0].args.cost;
+    // assert.equal(result.toNumber(), 0, "wrong escrow result");
   })
 
   // it("should cancel a post and get refunds", async () => {
