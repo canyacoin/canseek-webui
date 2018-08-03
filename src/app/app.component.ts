@@ -20,17 +20,18 @@ export class AppComponent {
   ) { }
   
   // https://stackoverflow.com/questions/48048299/angular-5-scroll-to-top-on-every-route-click
-  onActivate(e) {
+  onActivate() {
     window.scroll(0,0);
 
     // check account
-    const routeName = e.constructor.name;
-    console.log(routeName);
-    if (['PostComponent', 'ReferComponent', 'ApplicantsComponent'].includes(routeName)) {
+    const url = this.router.url;
+    // path regexp: 1. post 2. refer/new/:id 3. applicants/:id
+    if (['/post?type=new'].includes(url) || /^\/refer\/new\//.test(url) || /^\/applicants\//.test(url)) {
+      // console.log('indeed');
       this.checkAccount();
     }
   }
-  
+
   async checkAccount() {
     try {
       if (!this.store.curUser) {

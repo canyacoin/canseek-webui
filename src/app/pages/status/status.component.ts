@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { DOCUMENT } from '@angular/platform-browser';
 import { GlobalService } from '../../services/global.service';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -22,7 +21,6 @@ export class StatusComponent implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
-    private location: Location,
     private gs: GlobalService,
     @Inject(DOCUMENT) private document,
     private message: NzMessageService,
