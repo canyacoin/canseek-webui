@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GlobalService } from '../../../../services/global.service';
 import { Store } from '../../../../store';
 import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cmp-candidate',
@@ -19,6 +20,7 @@ export class CmpCandidateComponent implements OnInit {
   constructor(
     private gs: GlobalService,
     private message: NzMessageService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -28,12 +30,22 @@ export class CmpCandidateComponent implements OnInit {
 
   getCandidate(): void {
     this.gs.getCandidate(this.pid, this.cid)
-      .subscribe(candidate => this.candidate = candidate)
+      .subscribe(candidate => {
+        if (!candidate) {
+          this.router.navigateByUrl(`/pagenotfound`);
+        }
+        this.candidate = candidate;
+      })
   }
 
   getPost(): void {
     this.gs.getPost(this.pid)
-      .subscribe(post => this.post = post);
+      .subscribe(post => {
+        if (!post) {
+          this.router.navigateByUrl(`/pagenotfound`);
+        }
+        this.post = post;
+      });
   }
 
   updateCandidateStatus(post, candidate) {
