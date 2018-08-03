@@ -51,7 +51,7 @@ export class StatusComponent implements OnInit {
       .then(() => this.loading = false)
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);
+        this.message.error(err.message);console.log(err);;
       })
   }
 
@@ -62,7 +62,7 @@ export class StatusComponent implements OnInit {
       .then(() => this.loading = false)
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);
+        this.message.error(err.message);console.log(err);;
       })
   }
 

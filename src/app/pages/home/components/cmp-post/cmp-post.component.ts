@@ -41,7 +41,7 @@ export class CmpPostComponent implements OnInit {
           .then(() => this.gs.cancelPost(post))
           .then(() => this.message.success('Cancel success'))
           .catch(err => {
-            this.message.error(err.message);
+            this.message.error(err.message);console.log(err);;
           })
     });
   }
@@ -59,7 +59,7 @@ export class CmpPostComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);
+        this.message.error(err.message);console.log(err);;
       })
   }
 }

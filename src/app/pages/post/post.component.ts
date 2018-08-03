@@ -30,8 +30,6 @@ export class PostComponent implements AfterViewInit {
   values: Object = {};
 
   id: string; // post id
-  // new edit noAuth
-  type: string = 'new';
 
   email: string = null;
   emailVerified: boolean = false;
@@ -39,6 +37,7 @@ export class PostComponent implements AfterViewInit {
 
   doneLoading: boolean = false;
   pid: string; // type new post id
+  type: string = 'new';
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -89,7 +88,7 @@ export class PostComponent implements AfterViewInit {
       .subscribe(post => {
         this.values = post;
         if (post['owner_addr'] != this.store.curUser) {
-          this.type = 'noAuth';
+          this.router.navigateByUrl(`/noauth`);
         } else {
           this.initForm(this.values, this.type == 'edit');
         }
@@ -122,7 +121,7 @@ export class PostComponent implements AfterViewInit {
       })
       .catch(err => {
         this.verifyLoading = false;
-        this.message.error(err.message);
+        this.message.error(err.message);console.log(err);;
       });
   }
 
@@ -169,29 +168,29 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  done(): void {
+  async done() {
     this.doneLoading = true;
 
     const postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: Number(this.values['reward']), time: Date.now(), owner_addr: this.store.curUser, ...this.values };
     const handledData = JSON.parse(JSON.stringify(postData));
-    const isUpdate = this.type == 'edit' ? true : false;
+    // const isUpdate = this.type == 'edit' ? true : false;
+    const { reward, cost, postId } = handledData;
+    let { id } = handledData;
     
-    if(isUpdate) {
+    if(postId) {// just update db
       this.gs.updatePost(handledData)
         .then(() => this.redireact(handledData['id']));
     } else {
-      const { reward, cost } = handledData;
-
-      this.gs.addPostDb(handledData)
-        .then(id => {
-          this.pid = id;
-          return this.cs.addPost(id, Number(reward), Number(cost))
-            .then(postId => this.gs.addPostCb(id, postId))
-            .then(() => this.redireact(id))
-        })
+      if (!id) {// totally new
+        id = await this.gs.addPostDb(handledData)
+      }
+      this.pid = id;
+      this.cs.addPost(id, Number(reward), Number(cost))
+        .then(postId => this.gs.addPostCb(id, postId))
+        .then(() => this.redireact(id))
         .catch(err => {
           this.doneLoading = false;
-          this.message.error(err.message);
+          this.message.error(err.message);console.log(err);;
         })
     }
   }

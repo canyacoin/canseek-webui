@@ -130,7 +130,7 @@ export class ApplicantsComponent implements OnInit {
       this.gs.closePost(this.post, cid, candidateId)
         .then(() => this.message.success('success!'))
         .catch(err => {
-          this.message.error(err.message);
+          this.message.error(err.message);console.log(err);;
         })
     });
   }
@@ -144,7 +144,7 @@ export class ApplicantsComponent implements OnInit {
       })
       .catch(err => {
         this.loadingStatus = false;
-        this.message.error(err.message);
+        this.message.error(err.message);console.log(err);;
       })
   }
 }

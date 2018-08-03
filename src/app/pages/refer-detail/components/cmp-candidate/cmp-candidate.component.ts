@@ -46,7 +46,7 @@ export class CmpCandidateComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);
+        this.message.error(err.message);console.log(err);;
       })
   }
 

@@ -29,7 +29,7 @@ export class GlobalService {
   async changeCurrency(currency): Promise<any> {
     return await fetch(`${URL.changeCurrency}?${qs.stringify(currency)}`)
       .then(response => response.json())
-      .catch(err => this.message.error(err.message));
+      .catch(err => this.message.error(err.message);console.log(err););
   }
 
   getPosts(): Observable<any[]> {
@@ -150,7 +150,7 @@ export class GlobalService {
           this.message.success('GetRefund success');
         }
       })
-      .catch(err => this.message.error(err.message))
+      .catch(err => this.message.error(err.message);console.log(err);)
   }
 
   updatePostStatus(post) {

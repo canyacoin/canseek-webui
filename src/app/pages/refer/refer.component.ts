@@ -118,7 +118,7 @@ export class ReferComponent implements AfterViewInit {
       })
       .catch(err => {
         this.doneLoading = false;
-        this.message.error(err.message)
+        this.message.error(err.message);console.log(err);
       })
   }
 }
