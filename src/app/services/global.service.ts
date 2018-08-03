@@ -136,7 +136,6 @@ export class GlobalService {
     this.cs.getRefund(postId)
       .then(result => {
         if (result) {
-          debugger
           // update post's referrals_by_user candidates
           delete referrals_by_user[curUser];
           postRef.update({ 
@@ -150,6 +149,7 @@ export class GlobalService {
             postRef.collection('candidates').doc(cid).delete();
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
           })
+          this.message.success('GetRefund success');
         }
       })
       .catch(err => this.message.error(err.message))
