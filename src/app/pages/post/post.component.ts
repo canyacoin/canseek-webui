@@ -189,7 +189,7 @@ export class PostComponent implements AfterViewInit {
             .then(() => this.redireact(id))
         })
         .catch(err => {
-          console.log(err);
+          this.message.error(err.message);
         })
     }
   }

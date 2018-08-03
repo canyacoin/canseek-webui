@@ -22,7 +22,6 @@ export class GlobalService {
     private db: AngularFirestore,
     private cs: ContractsService,
     private message: NzMessageService,
-    private router: Router,
   ) { 
     this.change = new EventEmitter();
   }
@@ -30,7 +29,7 @@ export class GlobalService {
   async changeCurrency(currency): Promise<any> {
     return await fetch(`${URL.changeCurrency}?${qs.stringify(currency)}`)
       .then(response => response.json())
-      .catch(err => console.log('Err, changeCurrency: ', err));
+      .catch(err => this.message.error(err.message));
   }
 
   getPosts(): Observable<any[]> {

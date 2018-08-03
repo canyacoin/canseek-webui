@@ -118,8 +118,6 @@ export class ReferComponent implements AfterViewInit {
       })
       .catch(err => {
         this.message.error(err.message)
-        console.log(err);
-
       })
   }
 }
