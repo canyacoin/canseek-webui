@@ -43,7 +43,7 @@ export class AppComponent {
       if(confirm('Couldn\'t get any accounts!Do you want to install Chrome MetaMask extention?')) {
         this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
       } else {
-        this.router.navigateByUrl(`/noauth`)
+        this.router.navigateByUrl(`/noauth`);
       }
     }
   }
