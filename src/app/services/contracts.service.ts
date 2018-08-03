@@ -74,9 +74,10 @@ export class ContractsService {
         if (this._web3) {
           this._web3.eth.getAccounts((err, accs) => {
             if (err != null || accs.length === 0) {
-              throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+              reject(false);
+            } else {
+              resolve(accs[0]);
             }
-            resolve(accs[0]);
           });
         } else {
           throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');

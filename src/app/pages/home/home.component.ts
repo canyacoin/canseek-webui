@@ -37,8 +37,7 @@ export class HomeComponent implements OnInit {
       }
     } catch (err) {
       this.loading = false;
-      // alert(err.message);
-      if(confirm('Couldn\'t get any accounts!Do you want to install Chrome MetaMask extention?')) {
+      if(confirm('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly. Click OK button if you want to install Chrome MetaMask extention')) {
         this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
       }
     }
@@ -95,9 +94,9 @@ export class HomeComponent implements OnInit {
     this.gs.change.subscribe((s: string) => {
       if (s) {
         this.results = posts.filter(post => (
-          (post.job_title || '').includes(s)
+          (post.job_title || '').toLowerCase().includes(s.toLowerCase())
           ||
-          (post.company_name || '').includes(s)
+          (post.company_name || '').toLowerCase().includes(s.toLowerCase())
         ))
       } else {
         this.results = next;
