@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
         this.loading = false;
       }
     } catch (err) {
+      this.loading = false;
       alert(err.message);
     }
   }
