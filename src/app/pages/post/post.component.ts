@@ -147,7 +147,6 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  // todo, cancel has no data
   pre(): void {
     this.current -= 1;
   }
@@ -178,8 +177,7 @@ export class PostComponent implements AfterViewInit {
     
     if(isUpdate) {
       this.gs.updatePost(handledData)
-      // todo Ceshi 
-      .then(id => this.redireact(id))
+        .then(() => this.redireact(handledData['id']));
     } else {
       const { reward, cost } = handledData;
 

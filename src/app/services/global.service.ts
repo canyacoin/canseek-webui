@@ -54,9 +54,8 @@ export class GlobalService {
 
   updatePost(post: any): Promise<any> {
     const { id } = post;
-    // todo
-    return this.dbRef.doc(id).update(post)
-            .then(() => id)
+
+    return this.dbRef.doc(id).update(post);
   }
 
   cancelPostDb(post: any) {
