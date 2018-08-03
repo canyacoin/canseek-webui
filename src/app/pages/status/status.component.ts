@@ -48,9 +48,10 @@ export class StatusComponent implements OnInit {
     this.loading = true;
 
     this.gs.updatePostStatus(post)
-      .then(status => this.loading = false)
+      .then(() => this.loading = false)
       .catch(err => {
-        this.message.error(err.message)
+        this.loading = false;
+        this.message.error(err.message);
       })
   }
 
@@ -58,9 +59,10 @@ export class StatusComponent implements OnInit {
     this.loading = true;
 
     this.gs.updateCandidateStatus(post, candidate)
-      .then(status => this.loading = false)
+      .then(() => this.loading = false)
       .catch(err => {
-        this.message.error(err.message)
+        this.loading = false;
+        this.message.error(err.message);
       })
   }
 

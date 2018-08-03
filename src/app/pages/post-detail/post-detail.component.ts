@@ -34,7 +34,7 @@ export class PostDetailComponent implements OnInit {
   updatePostStatus(post) {
     this.loading = true;
     this.gs.updatePostStatus(post)
-      .then(status => {
+      .then(() => {
         this.loading = false;
         this.message.success('updated');
       })

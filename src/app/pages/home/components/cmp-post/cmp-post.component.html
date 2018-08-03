@@ -84,8 +84,8 @@
             >
             UPDATE
             <ul nz-menu>
-              <!-- edit: open 创建人 -->
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser">
+              <!-- edit: open 创建人 || pending next open -->
+              <li nz-menu-item class="op-item" *ngIf="(post.status == 'open' || post.status == 'pending' && post.nextStatus == 'open') && post.owner_addr == curUser">
                 <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
               </li>
               <!-- cancel: open 创建人 -->

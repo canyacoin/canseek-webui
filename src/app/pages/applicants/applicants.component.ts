@@ -128,7 +128,7 @@ export class ApplicantsComponent implements OnInit {
       nzCancelText: 'Cancel',
       nzOnOk: () => 
       this.gs.closePost(this.post, cid, candidateId)
-        .then(() => this.message.success('closePost succ!'))
+        .then(() => this.message.success('success!'))
         .catch(err => {
           this.message.error(err.message);
         })
