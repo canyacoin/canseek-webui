@@ -6,7 +6,7 @@
       <a class="topbar-brand mr-40" routerLink="">
         <img class="logo-default" src="assets/img/CanSeek.svg" width="auto" height="36px" alt="logo">
       </a>
-      <nz-input-group nzSuffixIcon="anticon anticon-search">
+      <nz-input-group *ngIf="url && url == '/'" nzSuffixIcon="anticon anticon-search">
         <input type="text" nz-input placeholder="search" [(ngModel)]="searchText" (input)="onSearch()">
       </nz-input-group>
     </div>  
