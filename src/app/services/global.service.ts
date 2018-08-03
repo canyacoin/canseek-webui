@@ -150,7 +150,9 @@ export class GlobalService {
           this.message.success('GetRefund success');
         }
       })
-      .catch(err => this.message.error(err.message);console.log(err);)
+      .catch(err => {
+        this.message.error(err.message);console.log(err);
+      })
   }
 
   updatePostStatus(post) {
