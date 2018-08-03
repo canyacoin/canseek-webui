@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Store } from "../../store";
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ export class HomeComponent implements OnInit {
   constructor(
     private gs: GlobalService,
     private cs: ContractsService,
+    @Inject(DOCUMENT) private document,
   ) { }
 
   ngOnInit() {
@@ -35,7 +37,10 @@ export class HomeComponent implements OnInit {
       }
     } catch (err) {
       this.loading = false;
-      alert(err.message);
+      // alert(err.message);
+      if(confirm('Couldn\'t get any accounts!Do you want to install Chrome MetaMask extention?')) {
+        this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
+      }
     }
   }
 
