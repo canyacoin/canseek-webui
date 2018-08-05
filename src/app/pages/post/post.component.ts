@@ -116,7 +116,7 @@ export class PostComponent implements AfterViewInit {
     .then(() => this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''}))
     .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
     .then(() => {
-        this.message.success('please verify your email')
+        this.message.success('Please check your email to verify your account');
         this.verifyLoading = false;
       })
       .catch(err => {
