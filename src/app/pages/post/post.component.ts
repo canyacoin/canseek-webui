@@ -1,15 +1,15 @@
-import { Component, AfterViewInit, ViewChild  } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, Inject } from '@angular/core';
 import { CmpPoststep1Component } from './components/cmp-poststep1/cmp-poststep1.component';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators
 } from '@angular/forms';
-import { PostService } from '../../services/post.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 
@@ -30,32 +30,32 @@ export class PostComponent implements AfterViewInit {
   values: Object = {};
 
   id: string; // post id
-  // new edit noAuth
-  type: string = 'new';
 
+  verifiedEmail: string = null;
   email: string = null;
   emailVerified: boolean = false;
   verifyLoading: boolean = false;
+  displayName: string = '';
+  confirmModal: NzModalRef;
 
   doneLoading: boolean = false;
   pid: string; // type new post id
+  type: string = 'new';
 
   constructor(
     private afAuth: AngularFireAuth,
     private fb: FormBuilder,
-    private ps: PostService,
+    private gs: GlobalService,
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
     private message: NzMessageService,
+    private modal: NzModalService,
   ) {
     this.afAuth.authState.subscribe((auth) => {
       this.emailVerified = (auth||{})['emailVerified'];
-      this.email = (auth||{})['email']
-
-      if (this.emailVerified) {
-        this.current = 1;
-      }
+      this.email = this.verifiedEmail = (auth||{})['email'];
+      this.displayName = (auth||{})['displayName'];
     });
 
     this.route.queryParams.subscribe(params => {
@@ -66,7 +66,7 @@ export class PostComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.type == 'edit'){
-      this.ps.getPost(this.id)
+      this.gs.getPost(this.id)
       .subscribe(post => {
         // init sub cmp
         this.step1.initForm(post, false);
@@ -85,11 +85,11 @@ export class PostComponent implements AfterViewInit {
   initEdit() {
     // 编辑的时候无需验证邮箱
     this.current = 1;
-    this.ps.getPost(this.id)
+    this.gs.getPost(this.id)
       .subscribe(post => {
         this.values = post;
         if (post['owner_addr'] != this.store.curUser) {
-          this.type = 'noAuth';
+          this.router.navigateByUrl(`/noauth`);
         } else {
           this.initForm(this.values, this.type == 'edit');
         }
@@ -99,7 +99,7 @@ export class PostComponent implements AfterViewInit {
   initForm(values, disabled): void {
     this.emailForm = this.fb.group({
       your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
-      owner_addr: [ { value: this.store.curUser, disabled: true } ],
+      owner_addr: [ { value: this.store.curUser || values['owner_addr'], disabled: true } ],
     });
 
     this.validateForm = this.fb.group({
@@ -108,20 +108,36 @@ export class PostComponent implements AfterViewInit {
     });
   }
 
-  emailVerify(password:string = '' + new Date) {
+  async emailVerify() {
     if (!this.email) return;
 
     this.verifyLoading = true;
-    return this.afAuth.auth.createUserWithEmailAndPassword(this.email, password)
-      .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
-      .then(() => {
-        this.message.success('please verify your email')
+
+    try {
+      await this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.store.curUser);
+      await this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''});
+      await this.afAuth.auth.currentUser.sendEmailVerification();
+      this.showModal('success', 'Please check your email to verify your account');
+      this.verifyLoading = false;
+    } catch(err) {
+      if (err.message == 'The email address is already in use by another account.') {
+        this.loginWithEmail();
+      } else {
         this.verifyLoading = false;
-      })
-      .catch(err => {
-        console.log(err)
-        this.message.error(err.message)
-      });
+        this.showModal('error', err.message);
+      }
+    }
+  }
+
+  async loginWithEmail() {
+    try {
+      await this.afAuth.auth.signInWithEmailAndPassword(this.email, this.store.curUser);
+      this.verifyLoading = false;
+      this.message.success('Verified Success!');
+    } catch(err) {
+      this.message.error(err.message);
+      console.log(err);
+    }
   }
 
   rewardValidator = (control: FormControl) => {
@@ -146,7 +162,6 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  // todo, cancel has no data
   pre(): void {
     this.current -= 1;
   }
@@ -154,7 +169,15 @@ export class PostComponent implements AfterViewInit {
   next(): void {
     let formData;
 
-    if (this.current === 1) {
+    if (this.current === 0) {
+      formData = this.submitEmailForm();
+      const { your_email, owner_addr } = formData.data;
+
+      if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
+        formData.valid = false;
+        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/><br/> If you want containue, please verify your email.');
+      }
+    } else if (this.current === 1) {
       formData = this.step1.submitForm();
       this.values = {...this.values, ...formData.data };
     } else if (this.current === 2) {
@@ -168,30 +191,39 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  done(): void {
+  showModal(type, message): void {
+    this.confirmModal = this.modal[type]({
+      nzTitle: message,
+      nzOkText: type == 'success' ? null : 'OK',
+    });
+  }
+
+  async done() {
     this.doneLoading = true;
 
-    const postData = {referrals_by_user: {}, honeypot: this.values['reward'], time: Date.now(), owner_addr: this.store.curUser, ...this.values };
+    const postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: Number(this.values['reward']), time: Date.now(), owner_addr: this.store.curUser, ...this.values };
     const handledData = JSON.parse(JSON.stringify(postData));
-    const isUpdate = this.type == 'edit' ? true : false;
+    // const isUpdate = this.type == 'edit' ? true : false;
+    const { reward, cost, postId } = handledData;
+    let { id } = handledData;
     
-    if(isUpdate) {
-      this.ps.updatePost(handledData)
-      // todo Ceshi 
-      .then(id => this.redireact(id))
+    if(postId) {// just update db
+      this.gs.updatePost(handledData)
+        .then(() => this.redireact(handledData['id']));
     } else {
-      const { reward, cost } = handledData;
-
-      this.ps.addPostDb(handledData)
-        .then(id => {
-          this.pid = id;
-          return this.cs.addPost(id, Number(reward), Number(cost))
-            .then(postId => this.ps.addPostCb(id, postId))
-            .then(() => this.redireact(id))
-        })
-        .catch(err => {
-          console.log(err);
-        })
+      try {
+        if (!id) {// totally new
+          id = await this.gs.addPostDb(handledData)
+        }
+        this.pid = id;
+        const postId = await this.cs.addPost(id, Number(reward), Number(cost));
+        await this.gs.addPostCb(id, postId);
+        this.store.balance = await this.cs.getCANBalance();
+        this.redireact(id);
+      } catch(err) {
+        this.doneLoading = false;
+        this.message.error(err.message);console.log(err);
+      }
     }
   }
 

@@ -9,15 +9,15 @@ declare let window: any;
 const Web3 = require('web3');
 
 const contract = require('truffle-contract');
-const CanYaCoinArtifacts = require('../../../../build/contracts/CanYaCoin.json');
-const EscrowArtifacts = require('../../../../build/contracts/Escrow.json');
-const CanHireArtifacts = require('../../../../build/contracts/CanHire.json');
+const CanYaCoinArtifacts = require('../../../build/contracts/CanYaCoin.json');
+const EscrowArtifacts = require('../../../build/contracts/Escrow.json');
+const CanHireArtifacts = require('../../../build/contracts/CanHire.json');
 let gasBuy = '50000';
 let gasPrice = '503000000';
 let gasApprove = '45600';
 let gasAddPost = '500000';
 let gasCancelPost = '200000';
-let gasGetRefund = '60000';
+let gasGetRefund = '100000';
 let gasClosePost = '200000';
 let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
@@ -27,15 +27,14 @@ let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 
 // Ropsten contract address
-const CanYaCoinAddr = '0xb90d83be4ffcae44330dc1d9481afe5a4f6fa5a4';
-const EscrowAddr = '0x8b182b83ba4957228d9ce11e6605bfec4976f3c8';
-const CanHireAddr = '0x4f517434fb59fe319c57a8c89933324a58a7efe0';
+// const CanYaCoinAddr = '0x8eaf23325d800c4a58ff4f4d9a26400a540c046a';
+// const EscrowAddr = '0xc63d828561ee63c8f5f39f973844ce1d0dd7230b';
+// const CanHireAddr = '0xa469067ae6bdae7f89f9c76857e6fc62641038e1';
 
 // Ganache contract address
-// const CanYaCoinAddr = '0xd6b8eb16ba6fad23254812ecf2cb280eefed773d';
-// const EscrowAddr = '0x5e6d65e438bc8d0b7ed51d0bf71499f3bd0cc074';
-// const CanHireAddr = '0xbe1f2929ffc8c4756a666637b48b93c19e315ba7';
-
+const CanYaCoinAddr = '0x3501fac5fc22dc16b179bec71c063f7bc16bb839';
+const EscrowAddr = '0xaaa3f000c5abd8bb131078d59741d7a276bac483';
+const CanHireAddr = '0xc2aba1df46517b6e1d90ee479cefb01df17e5775';
 
 @Injectable()
 export class ContractsService {
@@ -52,12 +51,12 @@ export class ContractsService {
       this._web3 = new Web3(window.web3.currentProvider);
       this._web3.eth.net.getId().then(netId => {
         if (netId !== 3) {
-          alert('Please connect to the Ropsten network');
+          // alert('Please connect to the Ropsten network');
           return;
         }
       });
     } else {
-      alert('Please use a DApp browser like mist or MetaMask plugin for chrome');
+      // alert('Please use a DApp browser like mist or MetaMask plugin for chrome');
       return;
     }
     this._web3.eth.getGasPrice().then(price => {
@@ -74,20 +73,14 @@ export class ContractsService {
       this._account = await new Promise((resolve, reject) => {
         if (this._web3) {
           this._web3.eth.getAccounts((err, accs) => {
-            if (err != null) {
-              alert('There was an error fetching your accounts.');
-              return;
+            if (err != null || accs.length === 0) {
+              reject(false);
+            } else {
+              resolve(accs[0]);
             }
-  
-            if (accs.length === 0) {
-              alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-              return;
-            }
-            resolve(accs[0]);
           });
         } else {
-          alert('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
-          return;
+          throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
         }
         
       }) as string;
@@ -275,16 +268,14 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend}).then(result => {
         const { candidateId } = result.logs[0].args;
-
-        this.getPostHoneypot(postId).then(
-          honeypot => {
-            resolve({honeypot, candidateId: Number(candidateId)});
-          }
-        )
+        this.getPostHoneypot(postId)
+        .then(honeypot => {
+          resolve({honeypot, candidateId: Number(candidateId)})
+        })
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<object>;
+    }) as Promise<any>;
   }
 
   public async getRecommenders(postId) {
@@ -375,15 +366,15 @@ export class ContractsService {
   public async getRefund(postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
-
+    
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
-        console.log(refund);
-        resolve(refund.logs[0].args.cost.toNumber());
+        const result = refund.logs[0].args.cost.toNumber();
+        resolve(!result);
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<boolean>;
   }
 
 }

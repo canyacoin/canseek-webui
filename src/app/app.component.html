@@ -1,7 +1,11 @@
-<app-header></app-header>
+<app-header [url]="url" [curUser]="store.curUser" [balance]="store.balance"></app-header>
 
 <nz-content style="min-height: 100vh" class="pt-100">
-    <router-outlet (activate)="onActivate()"></router-outlet>
+    <!-- loading -->
+    <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+        <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+    <router-outlet *ngIf="!loading" (activate)="onActivate()"></router-outlet>
 </nz-content>
 
 <app-footer></app-footer>

@@ -32,14 +32,14 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { environment } from '../environments/environment';
 
-import { ContractsService } from './services/contracts/contracts.service';
-import { CurrencyService } from './services/global/currency.service';
-import { PostService } from './services/post.service';
+import { ContractsService } from './services/contracts.service';
+import { GlobalService } from './services/global.service';
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 import { CmpPostComponent } from './pages/home/components/cmp-post/cmp-post.component';
 import { CmpCandidateComponent } from './pages/refer-detail/components/cmp-candidate/cmp-candidate.component';
 
 import { ClipboardModule } from 'ngx-clipboard';
+import { NoauthComponent } from './pages/noauth/noauth.component';
 
 registerLocaleData(zh);
 
@@ -64,6 +64,7 @@ registerLocaleData(zh);
     ReferDetailComponent,
     CmpPostComponent,
     CmpCandidateComponent,
+    NoauthComponent,
   ],
   imports: [
     BrowserModule,
@@ -83,7 +84,7 @@ registerLocaleData(zh);
 
     ClipboardModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, CurrencyService, PostService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, GlobalService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

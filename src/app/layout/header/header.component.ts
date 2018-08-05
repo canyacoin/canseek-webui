@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { Store } from "../../store";
-import { CurrencyService } from '../../services/global/currency.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,40 +11,52 @@ import { PostService } from '../../services/post.service';
   styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit {
+  @Input() url;
+  @Input() curUser;
+  @Input() balance;
+  loading: boolean = false;
   store = Store;
   currency = Store.currency;
 
   searchText: string = '';
 
   constructor(
-    private cs: CurrencyService,
-    private cons: ContractsService,
-    private ps: PostService,
+    @Inject(DOCUMENT) private document,
+    private gs: GlobalService,
+    private cs: ContractsService,
+    private router: Router,
+
   ) { }
 
-  ngOnInit() {
-    const currencyName = localStorage.getItem('currencyName') || 'USD';
+  async ngOnInit() {
+    const currencyName = localStorage.getItem('currencyName') || 'CAN';
     this.setCurrency(this.currency[currencyName]);
-    this.getAccount();
-    this.getBalance();
   }
 
-  async getAccount() {
-    this.store.curUser = await this.cons.getAccount();
-  }
+  async ngOnChanges({curUser, balance}) {
+    const user = (curUser || {}).currentValue;
+    const b = (balance || {}).currentValue;
 
-  getBalance()  {
-    this.cons.getCANBalance()
-      .then(b => this.store.balance = b)
-      .catch(err => {
-        console.error(err);
-      })
+    if (user) {
+      this.store.balance = await this.cs.getCANBalance();
+    }
+    if (b) {
+      this.balance = b;
+    }
   }
   
-  buyCan() {
-    this.cons.buyCAN()
-      .then(delta => this.store.balance += delta)
-      .catch(err => console.error(err));
+  async buyCan() {
+    try {
+        this.loading = true;
+        this.store.balance += await this.cs.buyCAN();
+        this.loading = false;
+    } catch (err) {
+      if(confirm('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly. Click OK button if you want to install Chrome MetaMask extention')) {
+        this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
+      } else {
+        this.loading = false;
+      }
+    }
   }
 
   setCurrency(currency) {
@@ -55,11 +68,15 @@ export class HeaderComponent implements OnInit {
 
     localStorage.setItem('currencyName', name);
     this.store.selectedCurrency = currency;
-    this.cs.changeCurrency(opts)
+    this.gs.changeCurrency(opts)
     .then(res => this.store.selectedCurrency['rate'] = res['CAN'][name]);
   }
 
   onSearch() {
-    this.ps.change.emit(this.searchText);
+    // setTimeout(() => {
+    //   console.log('search');
+    //   window.scroll(0,500);
+    // }, 300);
+    this.gs.change.emit(this.searchText);
   }
 }

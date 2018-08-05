@@ -10,6 +10,8 @@ import { ReferDetailComponent } from './pages/refer-detail/refer-detail.componen
 import { ApplicantsComponent } from './pages/applicants/applicants.component';
 import { FaqComponent } from './pages/faq/faq.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
+import { NoauthComponent } from './pages/noauth/noauth.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,6 +24,7 @@ const routes: Routes = [
   { path: 'refer/detail/:pid/:cid', component: ReferDetailComponent },
   { path: 'applicants/:id', component: ApplicantsComponent },
   { path: 'faq', component: FaqComponent },
+  { path: 'noauth', component: NoauthComponent },
   { path: 'index.html', component: HomeComponent },
   { path: '**', component: PagenotfoundComponent },
 ];

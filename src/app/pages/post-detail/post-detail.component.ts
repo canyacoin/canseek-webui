@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { PostService } from '../../services/post.service';
+import { GlobalService } from '../../services/global.service';
 import { Store } from "../../store";
 import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post-detail',
@@ -16,8 +17,9 @@ export class PostDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private ps: PostService,
+    private gs: GlobalService,
     private message: NzMessageService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -27,22 +29,25 @@ export class PostDetailComponent implements OnInit {
   getPost(): void {
     const { id } = this.route.snapshot.params;
 
-    this.ps.getPost(id)
-      .subscribe(post => this.post = post);
+    this.gs.getPost(id)
+      .subscribe(post => {
+        if (!post) {
+          this.router.navigateByUrl(`/pagenotfound`);
+        }
+        this.post = post;
+      })
   }
 
   updatePostStatus(post) {
     this.loading = true;
-    this.ps.updatePostStatus(post)
-      .then(status => {
+    this.gs.updatePostStatus(post)
+      .then(() => {
         this.loading = false;
         this.message.success('updated');
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);
-        console.log(err);
-
+        this.message.error(err.message);console.log(err);;
       })
   }
 

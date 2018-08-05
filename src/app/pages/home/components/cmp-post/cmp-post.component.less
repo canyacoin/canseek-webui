@@ -8,11 +8,14 @@
 }
 .title {
     font-size: 18px;
-    color: rgba(0, 0, 0, .85);
+    // color: rgba(0, 0, 0, .85);
+    font-weight: 600;
+    color: #4A4A4A;
+    text-transform: capitalize;
 }
 .card {
     width: 350px;
-    height: 38em;
+    height: 32em;
     margin: auto;
     p {
         margin-bottom: 0;
@@ -23,8 +26,9 @@
     z-index: 0;
     padding-bottom: 0 !important;
     align-items: center;
-    .contrubuted {
+    .contributed {
         .title;
+        font-weight: 800;
     }
     .iconfont-group {
         position: relative;
@@ -40,22 +44,28 @@
     }
     .desc {
         .text;
+        color: #4a4a4a;
     }
 }
 
 
 .card-img-top {
-    height: 8em;
+    // height: 8em;
+    height: auto;
+    max-width: 50%;
+    padding: 15px 0 15px 0;
 }
 .card-text {
     height: 9.6em;
     overflow: auto;
     color: #4a4a4a;
+    font-size: 12px;
+    line-height: 15px;
 }
 .can-coin {
     display: inline-block;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background: url('../../../../../assets/img/can_coin.svg');
     background-size: cover;
     background-repeat: no-repeat;
@@ -71,11 +81,17 @@
     margin-top: 6.5em;
 }
 .location {
-    max-width: 70%;
+    max-width: 72%;
 }
 .op-area {
     position: absolute;
     bottom: 20px;
     left: 20px;
     right: 20px;
+}
+.refer-btn {
+    height: 40px;
+    line-height: 40px;
+    padding-top: 0;
+    padding-bottom: 0;
 }

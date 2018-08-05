@@ -6,8 +6,8 @@ import {
   Validators
 } from '@angular/forms';
 import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
-import { PostService } from '../../services/post.service';
-import { ContractsService } from '../../services/contracts/contracts.service';
+import { GlobalService } from '../../services/global.service';
+import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 import { NzMessageService } from 'ng-zorro-antd';
@@ -35,7 +35,7 @@ export class ReferComponent implements AfterViewInit {
   
   constructor(
     private fb: FormBuilder,
-    private ps: PostService,
+    private gs: GlobalService,
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -88,9 +88,12 @@ export class ReferComponent implements AfterViewInit {
   getPost(): void {
     const { id } = this.route.snapshot.params;
 
-    this.ps.getPost(id)
+    this.gs.getPost(id)
       .subscribe(post => {
         this.post = post;
+        if (post['owner_addr'] === this.store.curUser) {
+          this.router.navigateByUrl('/noauth');
+        }
       });
   }
 
@@ -98,25 +101,23 @@ export class ReferComponent implements AfterViewInit {
     this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`)
   }
 
-  done(): void {
+  async done() {
     this.doneLoading = true;
 
     const CandidateData = {...this.values, time: Date.now() };
     const CandidatedData = JSON.parse(JSON.stringify(CandidateData));
 
-    this.ps.addCandidateDb(this.post, CandidatedData)
-      .then(cid => {
-        this.cid = cid;
-        CandidatedData.id = cid;
-        this.pid = this.post['id'];
-        return this.cs.recommend(cid, this.post['postId'])
-          .then((res) => this.ps.updatePostAndCandidate(this.post, CandidatedData, res))
-          .then(() => this.redireact(cid))
-      })
-      .catch(err => {
-        this.message.error(err.message)
-        console.log(err);
-
-      })
+    try {
+      this.cid = await this.gs.addCandidateDb(this.post, CandidatedData);
+      CandidatedData.id = this.cid;
+      this.pid = this.post['id'];
+      const res = await this.cs.recommend(this.cid, this.post['postId']);
+      await this.gs.updatePostAndCandidate(this.post, CandidatedData, res);
+      this.store.balance = await this.cs.getCANBalance();
+      this.redireact(this.cid);
+    } catch(err) {
+      this.doneLoading = false;
+      this.message.error(err.message);console.log(err);
+    }
   }
 }

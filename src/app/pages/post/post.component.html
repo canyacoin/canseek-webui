@@ -1,20 +1,23 @@
-<nz-row class="mt-30 mb-100" *ngIf="type != 'noAuth'">
-  <nz-col nzType="flex" nzSpan="14" nzOffset="5"> 
+<nz-row class="mt-30 mb-100">
+  <h2 class="text-center my-30">Post A Job</h2>
+
+  <nz-col nzType="flex" nzSpan="16" nzOffset="4"> 
     <nz-steps [nzCurrent]="current" class="steps">
         <nz-step nzTitle="Identity Verify"></nz-step>
-        <nz-step nzTitle="Job Infomation"></nz-step>
+        <nz-step nzTitle="Job Information"></nz-step>
         <nz-step nzTitle="Set Fees and Reward"></nz-step>
       <nz-step nzTitle="Review"></nz-step>
     </nz-steps>
     <div class="steps-content mt-100">
 
       <!-- step0 -->
-      <form *ngIf="type == 'new' && current == 0" nz-form [nzLayout]="vertical" [formGroup]="emailForm" (ngSubmit)="submitEmailForm()">
+      <form *ngIf="current == 0" nz-form [nzLayout]="vertical" [formGroup]="emailForm" (ngSubmit)="submitEmailForm()">
         <nz-form-item>
           <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
-          <nz-col [nzSm]="16" [nzXs]="24">
+          <nz-form-control [nzSm]="16" [nzXs]="24" nzValidateStatus="{{ store.curUser ? '' : 'validating' }}" nzHasFeedback>
+            <nz-form-extra>Make sure your MetaMask address is filled</nz-form-extra>
             <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
-          </nz-col>
+          </nz-form-control>
         </nz-form-item>
       
         <nz-form-item>
@@ -40,11 +43,14 @@
       <!-- step2 -->
       <form *ngIf="current == 2" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label nzFor="reward" nzRequired> Honeypot </nz-form-label>
+          <nz-form-label nzFor="reward" nzRequired> Initial Reward </nz-form-label>
           <nz-form-control>
-            <nz-form-extra>This is your Company’s contribution to the initial honeypot to attract applicants.</nz-form-extra>
+            <nz-form-extra>This is your Company’s contribution to the reward pool, paid to the successful talent.</nz-form-extra>
             <input nz-input formControlName="reward" id="reward" placeholder="Minimum 500 CAN">
-            <nz-form-extra>There is a 1% non-refundable fee sent to the CanYaDAO. You can cancel anytime for a full refund (minus fee). Cancelling will also refund all applicants. All Transactions on CanSeek are made in CAN tokens.</nz-form-extra>
+            <nz-form-extra class="blue" style="font-size: 10px">
+              <span class="fw-600">Recomendation: </span>
+              We recommend an initial reward of 5% of the minimum salary range to attract talent. Eg. $100,000 salary = $5000 initial reward.</nz-form-extra>
+            
             <nz-form-explain *ngIf="validateForm.get('reward').dirty && (validateForm.get('reward').errors || {}).required">Please input Honeypot! </nz-form-explain>
             <nz-form-explain *ngIf="validateForm.get('reward').dirty && (validateForm.get('reward').errors || {}).number">Please input number!</nz-form-explain>
             <nz-form-explain *ngIf="validateForm.get('reward').dirty && (validateForm.get('reward').errors || {}).minimum">Please bigger than 500 CAN!</nz-form-explain>
@@ -52,11 +58,19 @@
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label nzFor="reward" nzRequired> Application Fee </nz-form-label>
+            <nz-form-label nzFor="reward" nzRequired> Talent Application Fee </nz-form-label>
             <nz-form-control>
-              <nz-form-extra>This is the amount needed for talent hunters to join the pool. </nz-form-extra>
+              <nz-form-extra>This is the amount needed for talent hunters to join the pool, which adds to the total reward.</nz-form-extra>
               <input nz-input formControlName="cost" id="cost" placeholder="Please input">
-              <nz-form-extra>There is a 1% non-refundable fee sent to the CanYaDAO. You can cancel anytime for a refund (minus fee).</nz-form-extra>
+              <nz-form-extra class="blue" style="font-size: 10px;">
+                <span class="fw-600">Recomendation: </span>
+                  We recommend an talent applicaton fee of between $10 - $50 USD. Higher fees typically result in less but higher quality applications.</nz-form-extra>
+
+              <nz-form-extra class="my-20">
+                  Note: A non refundable 1% fee is paid to the CanYaDAO.
+                  <br>You can cancel the job post at anytime for a refund.
+                  <br>All payments are held in CAN tokens.
+              </nz-form-extra>
               <nz-form-explain *ngIf="validateForm.get('cost').dirty && validateForm.get('cost').errors">Please input Application Fee! Please input number!</nz-form-explain>
             </nz-form-control>
           </nz-form-item>
@@ -65,12 +79,12 @@
       <!-- step3 -->
       <div *ngIf="current == 3">
         <div *ngFor="let category of store.postForm">
-          <h3>{{ category.label }}:</h3>
+          <h4 class="fw-500">{{ category.label }}:</h4>
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
-              <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
-              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">{{ values[item.field] }}</nz-col>
-              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">
+              <nz-col nzSpan="6" class="bold text-left">{{ item.label }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">:&nbsp;&nbsp;{{ values[item.field] }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">:&nbsp;&nbsp;
                 <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
               </nz-col>
             </nz-row>
@@ -81,7 +95,7 @@
     </div>
     
     <div class="steps-action mt-40 text-right">
-      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 1">
+      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
         <span>Back</span>
       </button>
       <button nz-button 
@@ -96,25 +110,15 @@
         nz-button
         nzType="primary" 
         [nzLoading]="doneLoading"
-        class="ml-20" 
-        *ngIf="current === 3" (click)="done()">Submit</button>
+        class="ml-20 uppercase" 
+        *ngIf="current === 3" (click)="done()">pay & post job</button>
 
         <a target="_blank" 
           routerLink="/post/detail/{{ pid }}"
-          class="ml-12" *ngIf="type == 'new' && pid"> view details </a>  
-        <p class="text mt-8" *ngIf="type == 'new' && current === 3">To complete creating the job post, you must submit TWO metamask pop-up confirmations. Make sure you have enough ETH to cover the transaction fees and check the transation status in Metamask.</p>
+          class="ml-12" *ngIf="pid"> view details </a>  
+        <p class="text mt-8" *ngIf="current === 3">To complete creating the job post, you must submit TWO metamask pop-up confirmations. Make sure you have enough ETH to cover the transaction fees and check the transation status in Metamask.</p>
     </div>
   </nz-col>
 </nz-row>  
 
 <app-cmp-bancor *ngIf="current == 2"></app-cmp-bancor>
-
-<div *ngIf="type == 'noAuth'" class="container d-flex flex-column justify-content-center text-center" style="min-height: 340px">
-    <div class="row">
-    <div class="col-12 d-flex flex-column">
-        <br>
-        <h4 class="fw-400">Permission denied !</h4>
-        <h5 class="fw-300">You don't have the authority</h5>
-    </div>
-    </div>
-</div>

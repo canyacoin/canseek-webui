@@ -1,59 +1,67 @@
 <form *ngIf="!!validateForm" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <h4>Your Information</h4>
+  <h4 class="fw-500">Your Information</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <input nz-input formControlName="your_name" id="your_name" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('your_name').dirty && validateForm.get('your_name').errors">Please input your Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_email" nzRequired> Your Company Email </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_email" nzRequired> Your Company Email </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <input nz-input formControlName="your_email" id="your_email" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input Your Company Email!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
-    <nz-col [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24" nzValidateStatus="{{ store.curUser ? '' : 'validating' }}" nzHasFeedback>
+      <nz-form-extra>Make sure your MetaMask address is filled</nz-form-extra>
       <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
-    </nz-col>
+    </nz-form-control>
   </nz-form-item> 
 
-  <h4>Job Information</h4>
+  <h4 class="fw-500">Create a Job Post</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_title" nzRequired> Job Title </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_title" nzRequired> Job Title </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <input nz-input formControlName="job_title" id="job_title" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('job_title').dirty && validateForm.get('job_title').errors">Please input Job Title!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_desc" nzRequired> Job Description </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
-      <textarea formControlName="job_desc" id="job_desc" nz-input rows="4" placeholder="Please input"></textarea>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_desc" nzRequired> Job Description </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <textarea formControlName="job_desc" id="job_desc" nz-input rows="9" placeholder="A good job description helps jobseekers match their skills and experience to your needs.
+
+Let them know:
+
+- What's great about your business
+- Day-to-day job responsibilities
+- Attractive benefits and perks
+- Top requirements in a candidate"></textarea>
       <nz-form-explain *ngIf="validateForm.get('job_desc').dirty && validateForm.get('job_desc').errors">Please input Job Description!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_location"> Job Location </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_location"> Job Location </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <input nz-input formControlName="job_location" id="job_location" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('job_location').dirty && validateForm.get('job_location').errors">Please input Job Location!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_type" nzRequired>Position Type</nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
-      <nz-radio-group formControlName="job_type" id="job_type" class="uppercase">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_type" nzRequired>Position Type</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <nz-radio-group formControlName="job_type" id="job_type">
         <label nz-radio-button nzValue="full time">full time</label>
         <label nz-radio-button nzValue="part time">part time</label>
         <label nz-radio-button nzValue="contract">contract/temp</label>
@@ -64,23 +72,23 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_remote">Remote</nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_remote">Remote</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <label nz-checkbox formControlName="job_remote">Allow Remote Working</label>
       <nz-form-explain *ngIf="validateForm.get('job_remote').dirty && validateForm.get('job_remote').errors">Please select Allow Remote Working!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_range"> Salary Range </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
-      <input nz-input formControlName="job_range" id="job_range">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_range"> Salary Range </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <input nz-input formControlName="job_range" id="job_range" placeholder="Please input">
     </nz-form-control>
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_attachments"> Attachments </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_attachments"> Attachments </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <nz-upload
         [nzFileList]="fileList"
         [nzBeforeUpload]="isPdf"
@@ -95,8 +103,8 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_level" nzRequired>Experience Level</nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_level" nzRequired>Experience Level</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <nz-radio-group formControlName="job_level" id="job_level" class="uppercase">
         <label nz-radio-button nzValue="entry">entry</label>
         <label nz-radio-button nzValue="mid level">mid level</label>
@@ -108,36 +116,36 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions"> Screening Questions 1 </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="screening_questions"> Screening Questions 1 </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
         <nz-form-extra> Specific questions related to the role. These questions help shortlist qualified candidates.</nz-form-extra>
-        <input nz-input formControlName="screening_questions" id="screening_questions">
+        <input nz-input formControlName="screening_questions" id="screening_questions" placeholder="Please input">
         <nz-form-explain *ngIf="validateForm.get('screening_questions').dirty && validateForm.get('screening_questions').errors">Please input at least 1 Screening Question!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions2"> Screening Questions 2 </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
-        <input nz-input formControlName="screening_questions2" id="screening_questions2">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="screening_questions2"> Screening Questions 2 </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+        <input nz-input formControlName="screening_questions2" id="screening_questions2" placeholder="Please input">
         <nz-form-explain *ngIf="validateForm.get('screening_questions2').dirty && validateForm.get('screening_questions2').errors">Please input Screening Question!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions3"> Screening Questions 3 </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
-        <input nz-input formControlName="screening_questions3" id="screening_questions3">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="screening_questions3"> Screening Questions 3 </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+        <input nz-input formControlName="screening_questions3" id="screening_questions3" placeholder="Please input">
         <nz-form-explain *ngIf="validateForm.get('screening_questions3').dirty && validateForm.get('screening_questions3').errors">Please input Screening Question!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   
-  <h4>Company Information</h4>
+  <h4 class="fw-500">Company Information</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
-    <nz-form-control [nzSm]="14" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <nz-upload
         nzListType="picture"
         [nzBeforeUpload]="isImage"
@@ -157,32 +165,26 @@
   
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_name" nzRequired> Company Name </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_name" nzRequired> Company Name </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <input nz-input formControlName="company_name" id="company_name" placeholder="Please input">
       <nz-form-explain *ngIf="validateForm.get('company_name').dirty && validateForm.get('company_name').errors">Please input your Company Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_website"> Company Website </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_website"> Company Website </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <input nz-input formControlName="company_website" id="company_website" placeholder="Please input">
-      <!-- <nz-form-explain *ngIf="validateForm.get('company_website').dirty && validateForm.get('company_website').errors">Please input your Company Website!</nz-form-explain> -->
+      <nz-form-extra>You can only list jobs for companies from official company email addresses. If you want to add another company, please verify additional company email addresses.</nz-form-extra>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="company_desc" nzRequired> Company Description </nz-form-label>
-    <nz-form-control [nzSm]="16" [nzXs]="24">
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_desc" nzRequired> Company Description </nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
       <textarea formControlName="company_desc" id="company_desc" nz-input rows="4" placeholder="Please input"></textarea>
       <nz-form-explain *ngIf="validateForm.get('company_desc').dirty && validateForm.get('company_desc').errors">Please input your Company Description!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 </form>
-
-<!-- <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
-  <ng-template #modalContent>
-    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
-  </ng-template>
-</nz-modal> -->
