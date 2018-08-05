@@ -172,11 +172,8 @@ export class PostComponent implements AfterViewInit {
     if (this.current === 0) {
       formData = this.submitEmailForm();
       const { your_email, owner_addr } = formData.data;
-      // this.email = your_email;
-      // console.log(this, formData)
 
       if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
-        debugger
         formData.valid = false;
         this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/><br/> If you want containue, please verify your email.');
       }
