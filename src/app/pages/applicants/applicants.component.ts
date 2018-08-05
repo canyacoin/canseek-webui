@@ -11,7 +11,7 @@ import * as moment from 'moment';
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
-  category: string = localStorage.getItem('category') || 'all';
+  category: string = 'all';
   loading: boolean = true;
   post: any;
   pid: string;
@@ -77,7 +77,6 @@ export class ApplicantsComponent implements OnInit {
     const { candidates, category } = this;
     let next;
 
-    localStorage.setItem('category', category);
     switch(category) {
       case 'all':
         next = candidates; 
