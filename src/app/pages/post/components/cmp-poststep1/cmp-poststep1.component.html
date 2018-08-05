@@ -25,7 +25,7 @@
     </nz-form-control>
   </nz-form-item> 
 
-  <h4>Job Information</h4>
+  <h4>Create a Job Post</h4>
 
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_title" nzRequired> Job Title </nz-form-label>
@@ -38,7 +38,14 @@
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_desc" nzRequired> Job Description </nz-form-label>
     <nz-form-control [nzSm]="16" [nzXs]="24">
-      <textarea formControlName="job_desc" id="job_desc" nz-input rows="4" placeholder="Please input"></textarea>
+      <textarea formControlName="job_desc" id="job_desc" nz-input rows="9" placeholder="A good job description helps jobseekers match their skills and experience to your needs.
+
+Let them know:
+
+- What's great about your business
+- Day-to-day job responsibilities
+- Attractive benefits and perks
+- Top requirements in a candidate"></textarea>
       <nz-form-explain *ngIf="validateForm.get('job_desc').dirty && validateForm.get('job_desc').errors">Please input Job Description!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
