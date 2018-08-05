@@ -95,6 +95,7 @@ export class HomeComponent implements OnInit {
   onHomeSearch(next, posts) {
     this.gs.change.subscribe((s: string) => {
       if (s) {
+        this.statusValue = 'all';
         this.results = posts.filter(post => (
           (post.job_title || '').toLowerCase().includes(s.toLowerCase())
           ||
