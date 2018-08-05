@@ -179,36 +179,35 @@
         pointer-events: none;
     }
 }
-// radio group
-.group-btn {
-    font-size: 14px;
+
+// button & radio group
+.ant-btn,
+.ant-radio-button-wrapper {
     color: #9B9B9B;
-    font-weight: 600;
-    letter-spacing: 2px;
     text-transform: uppercase;
-    height: 40px;
-    &.ant-btn-primary {
-        color: #fff;
-    }
-}
-// button
-.btn {
-    line-height: 2;
-    letter-spacing: 2px;
-}
-.ant-btn {
-    text-transform: uppercase;
-    font-size: 11px;
-    line-height: 2;
+    font-size: 11px !important;
+    line-height: 2 !important;
     font-weight: 600;
     margin: 4px 0;
     padding: 7px 26px;
     letter-spacing: 2px;
     height: 40px;
-    &.ant-btn-primary {
-
-    }
 } 
+.ant-btn.ant-btn-primary,
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked {
+    color: #fff;
+}
+.ant-radio-button-wrapper.ant-radio-button-wrapper-checked {
+    background-color: #33CCFF;
+}
+[nz-form] .ant-btn,
+[nz-form] .ant-radio-button-wrapper {
+    line-height: 1.3 !important;
+    height: 32px !important;
+}
+
+
+
 .ant-form-item-label {
     font-weight: 500;
     color: #535353;

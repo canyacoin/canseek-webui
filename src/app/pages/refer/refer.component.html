@@ -11,7 +11,7 @@
       <form *ngIf="!!validateForm && current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> MetaMask Address </nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-form-control [nzSm]="18" [nzXs]="24">
             <nz-form-extra>For payout of the honeypot if your talent is successful!</nz-form-extra>
             <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
           </nz-form-control>
@@ -19,7 +19,7 @@
         
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-form-control [nzSm]="18" [nzXs]="24">
             <input nz-input formControlName="your_name" id="your_name" placeholder="Please input">
             <nz-form-explain *ngIf="validateForm.get('your_name').dirty && validateForm.get('your_name').errors">Please input Your Name!</nz-form-explain>
           </nz-form-control>
@@ -27,7 +27,7 @@
         
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_email" nzRequired>Your E-mail</nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-form-control [nzSm]="18" [nzXs]="24">
             <input nz-input formControlName="your_email" id="your_email" placeholder="Please input">
             <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input Your E-mail!</nz-form-explain>
           </nz-form-control>
@@ -35,7 +35,7 @@
       
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship</nz-form-label>
-          <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-form-control [nzSm]="18" [nzXs]="24">
             <nz-radio-group formControlName="relation" id="relation" class="uppercase">
               <label nz-radio-button nzValue="recruiter">recruiter</label>
               <label nz-radio-button nzValue="associate">associate</label>
