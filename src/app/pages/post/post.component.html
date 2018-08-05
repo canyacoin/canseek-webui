@@ -110,8 +110,8 @@
         nz-button
         nzType="primary" 
         [nzLoading]="doneLoading"
-        class="ml-20 uppercase" 
-        *ngIf="current === 3" (click)="done()">pay & post job</button>
+        class="ml-20" 
+        *ngIf="current === 3" (click)="done()">{{type == 'new' ? 'pay & post job' : 'update job'}}</button>
 
         <a target="_blank" 
           routerLink="/post/detail/{{ pid }}"
