@@ -29,7 +29,7 @@
     <!-- filter & hire btn -->
     <nz-row nzType="flex" nzJustify="space-between">
       <nz-col>
-        <nz-radio-group [(ngModel)]="category" class="uppercase" (ngModelChange)="searchCategory()">
+        <nz-radio-group [(ngModel)]="category" (ngModelChange)="searchCategory()">
           <label nz-radio-button nzValue="all">all</label>
           <label nz-radio-button nzValue="shortlist">shortlist</label>
           <label nz-radio-button nzValue="rejected">rejected</label>
@@ -38,10 +38,10 @@
       </nz-col>
 
       <nz-col *ngIf="canHire">
-          <button *ngIf="category == 'rejected' || !selectedCandidates.length" disabled nz-button nzType="primary" class="uppercase">hire</button>
+          <button *ngIf="category == 'rejected' || !selectedCandidates.length" disabled nz-button nzType="primary">hire</button>
           <button 
             (click)="closePost()"
-            *ngIf="category != 'rejected' && selectedCandidates.length" nz-button nzType="primary" class="uppercase">hire</button>
+            *ngIf="category != 'rejected' && selectedCandidates.length" nz-button nzType="primary">hire</button>
         </nz-col>
     </nz-row>
     
