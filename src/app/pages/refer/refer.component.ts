@@ -101,24 +101,23 @@ export class ReferComponent implements AfterViewInit {
     this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`)
   }
 
-  done(): void {
+  async done() {
     this.doneLoading = true;
 
     const CandidateData = {...this.values, time: Date.now() };
     const CandidatedData = JSON.parse(JSON.stringify(CandidateData));
 
-    this.gs.addCandidateDb(this.post, CandidatedData)
-      .then(cid => {
-        this.cid = cid;
-        CandidatedData.id = cid;
-        this.pid = this.post['id'];
-        return this.cs.recommend(cid, this.post['postId'])
-          .then((res) => this.gs.updatePostAndCandidate(this.post, CandidatedData, res))
-          .then(() => this.redireact(cid))
-      })
-      .catch(err => {
-        this.doneLoading = false;
-        this.message.error(err.message);console.log(err);
-      })
+    try {
+      this.cid = await this.gs.addCandidateDb(this.post, CandidatedData);
+      CandidatedData.id = this.cid;
+      this.pid = this.post['id'];
+      const res = await this.cs.recommend(this.cid, this.post['postId']);
+      await this.gs.updatePostAndCandidate(this.post, CandidatedData, res);
+      this.store.balance = await this.cs.getCANBalance();
+      this.redireact(this.cid);
+    } catch(err) {
+      this.doneLoading = false;
+      this.message.error(err.message);console.log(err);
+    }
   }
 }

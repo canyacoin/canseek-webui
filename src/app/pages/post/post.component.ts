@@ -181,17 +181,19 @@ export class PostComponent implements AfterViewInit {
       this.gs.updatePost(handledData)
         .then(() => this.redireact(handledData['id']));
     } else {
-      if (!id) {// totally new
-        id = await this.gs.addPostDb(handledData)
+      try {
+        if (!id) {// totally new
+          id = await this.gs.addPostDb(handledData)
+        }
+        this.pid = id;
+        const postId = await this.cs.addPost(id, Number(reward), Number(cost));
+        await this.gs.addPostCb(id, postId);
+        this.store.balance = await this.cs.getCANBalance();
+        this.redireact(id);
+      } catch(err) {
+        this.doneLoading = false;
+        this.message.error(err.message);console.log(err);
       }
-      this.pid = id;
-      this.cs.addPost(id, Number(reward), Number(cost))
-        .then(postId => this.gs.addPostCb(id, postId))
-        .then(() => this.redireact(id))
-        .catch(err => {
-          this.doneLoading = false;
-          this.message.error(err.message);console.log(err);;
-        })
     }
   }
 
