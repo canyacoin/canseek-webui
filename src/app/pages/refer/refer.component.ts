@@ -92,6 +92,7 @@ export class ReferComponent implements AfterViewInit {
       .subscribe(post => {
         this.post = post;
         if (post['owner_addr'] === this.store.curUser) {
+          
           this.router.navigateByUrl('/noauth');
         }
       });

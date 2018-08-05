@@ -89,6 +89,7 @@ export class PostComponent implements AfterViewInit {
       .subscribe(post => {
         this.values = post;
         if (post['owner_addr'] != this.store.curUser) {
+          
           this.router.navigateByUrl(`/noauth`);
         } else {
           this.initForm(this.values, this.type == 'edit');
@@ -135,7 +136,12 @@ export class PostComponent implements AfterViewInit {
       this.verifyLoading = false;
       this.message.success('Verified Success!');
     } catch(err) {
-      this.message.error(err.message);
+      this.verifyLoading = false;
+      if (err.message == 'The password is invalid or the user does not have a password.') {
+        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please check it or verify your email.');
+      } else {
+        this.showModal('error', err.message);
+      }
       console.log(err);
     }
   }
@@ -175,7 +181,7 @@ export class PostComponent implements AfterViewInit {
 
       if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
         formData.valid = false;
-        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/><br/> If you want containue, please verify your email.');
+        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please check it or verify your email.');
       }
     } else if (this.current === 1) {
       formData = this.step1.submitForm();
