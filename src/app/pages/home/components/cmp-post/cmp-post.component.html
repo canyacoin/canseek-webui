@@ -16,13 +16,13 @@
           <nz-col>
             <ng-container *ngIf="post.owner_addr != curUser">
               <i class="iconfont iconfont-group blue"></i>
-              <span class="num blue">{{ post.candidateTrend || 0 }}</span>
+              <span class="num blue fw-600">{{ post.candidateTrend || 0 }}</span>
             </ng-container>
             <a 
               *ngIf="post.owner_addr == curUser"
               routerLink="/applicants/{{ post.id }}">
               <i class="iconfont iconfont-group blue"></i>
-              <span class="num blue">{{ post.candidateTrend || 0 }}</span>
+              <span class="num blue fw-600">{{ post.candidateTrend || 0 }}</span>
             </a>
             
           </nz-col>
