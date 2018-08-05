@@ -138,7 +138,7 @@ export class PostComponent implements AfterViewInit {
     } catch(err) {
       this.verifyLoading = false;
       if (err.message == 'The password is invalid or the user does not have a password.') {
-        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please check it or verify your email.');
+        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please verify a new email.');
       } else {
         this.showModal('error', err.message);
       }
@@ -181,7 +181,7 @@ export class PostComponent implements AfterViewInit {
 
       if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
         formData.valid = false;
-        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please check it or verify your email.');
+        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please check it and verify your email.');
       }
     } else if (this.current === 1) {
       formData = this.step1.submitForm();
