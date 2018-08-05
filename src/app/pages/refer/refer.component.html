@@ -57,7 +57,7 @@
           <strong>
             {{ post.cost }} CAN
             ≈
-            {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
+            {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}
           </strong>
         </h4>  
 
