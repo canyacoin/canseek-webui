@@ -48,15 +48,17 @@ export class HomeComponent implements OnInit {
       .subscribe(posts => {
         this.posts = posts
         this.loading = false;
-        this.searchStatus();
+        this.searchStatus(this.statusValue);
       });
   }
 
-  async searchStatus() {
-    const { posts, statusValue } = this;
+  async searchStatus(statusValue) {
+    const { posts } = this;
     let next;
 
+    this.statusValue = statusValue;
     localStorage.setItem('statusValue', statusValue);
+    
     switch(statusValue) {
       case 'all':
         next = next = posts
