@@ -82,7 +82,7 @@ Let them know:
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="job_range"> Salary Range </nz-form-label>
     <nz-form-control [nzSm]="16" [nzXs]="24">
-      <input nz-input formControlName="job_range" id="job_range">
+      <input nz-input formControlName="job_range" id="job_range" placeholder="Please input">
     </nz-form-control>
   </nz-form-item>
   
@@ -119,7 +119,7 @@ Let them know:
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions"> Screening Questions 1 </nz-form-label>
     <nz-form-control [nzSm]="16" [nzXs]="24">
         <nz-form-extra> Specific questions related to the role. These questions help shortlist qualified candidates.</nz-form-extra>
-        <input nz-input formControlName="screening_questions" id="screening_questions">
+        <input nz-input formControlName="screening_questions" id="screening_questions" placeholder="Please input">
         <nz-form-explain *ngIf="validateForm.get('screening_questions').dirty && validateForm.get('screening_questions').errors">Please input at least 1 Screening Question!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
@@ -127,7 +127,7 @@ Let them know:
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions2"> Screening Questions 2 </nz-form-label>
     <nz-form-control [nzSm]="16" [nzXs]="24">
-        <input nz-input formControlName="screening_questions2" id="screening_questions2">
+        <input nz-input formControlName="screening_questions2" id="screening_questions2" placeholder="Please input">
         <nz-form-explain *ngIf="validateForm.get('screening_questions2').dirty && validateForm.get('screening_questions2').errors">Please input Screening Question!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
@@ -135,7 +135,7 @@ Let them know:
   <nz-form-item>
     <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="screening_questions3"> Screening Questions 3 </nz-form-label>
     <nz-form-control [nzSm]="16" [nzXs]="24">
-        <input nz-input formControlName="screening_questions3" id="screening_questions3">
+        <input nz-input formControlName="screening_questions3" id="screening_questions3" placeholder="Please input">
         <nz-form-explain *ngIf="validateForm.get('screening_questions3').dirty && validateForm.get('screening_questions3').errors">Please input Screening Question!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
