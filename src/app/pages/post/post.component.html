@@ -43,11 +43,14 @@
       <!-- step2 -->
       <form *ngIf="current == 2" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label nzFor="reward" nzRequired> Honeypot </nz-form-label>
+          <nz-form-label nzFor="reward" nzRequired> Initial Reward </nz-form-label>
           <nz-form-control>
-            <nz-form-extra>This is your Company’s contribution to the initial honeypot to attract applicants.</nz-form-extra>
+            <nz-form-extra>This is your Company’s contribution to the reward pool, paid to the successful talent.</nz-form-extra>
             <input nz-input formControlName="reward" id="reward" placeholder="Minimum 500 CAN">
-            <nz-form-extra>There is a 1% non-refundable fee sent to the CanYaDAO. You can cancel anytime for a full refund (minus fee). Cancelling will also refund all applicants. All Transactions on CanSeek are made in CAN tokens.</nz-form-extra>
+            <nz-form-extra class="blue" style="font-size: 10px">
+              <span class="fw-600">Recomendation: </span>
+              We recommend an initial reward of 5% of the minimum salary range to attract talent. Eg. $100,000 salary = $5000 initial reward.</nz-form-extra>
+            
             <nz-form-explain *ngIf="validateForm.get('reward').dirty && (validateForm.get('reward').errors || {}).required">Please input Honeypot! </nz-form-explain>
             <nz-form-explain *ngIf="validateForm.get('reward').dirty && (validateForm.get('reward').errors || {}).number">Please input number!</nz-form-explain>
             <nz-form-explain *ngIf="validateForm.get('reward').dirty && (validateForm.get('reward').errors || {}).minimum">Please bigger than 500 CAN!</nz-form-explain>
@@ -55,11 +58,19 @@
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label nzFor="reward" nzRequired> Application Fee </nz-form-label>
+            <nz-form-label nzFor="reward" nzRequired> Talent Application Fee </nz-form-label>
             <nz-form-control>
-              <nz-form-extra>This is the amount needed for talent hunters to join the pool. </nz-form-extra>
+              <nz-form-extra>This is the amount needed for talent hunters to join the pool, which adds to the total reward.</nz-form-extra>
               <input nz-input formControlName="cost" id="cost" placeholder="Please input">
-              <nz-form-extra>There is a 1% non-refundable fee sent to the CanYaDAO. You can cancel anytime for a refund (minus fee).</nz-form-extra>
+              <nz-form-extra class="blue" style="font-size: 10px;">
+                <span class="fw-600">Recomendation: </span>
+                  We recommend an talent applicaton fee of between $10 - $50 USD. Higher fees typically result in less but higher quality applications.</nz-form-extra>
+
+              <nz-form-extra class="my-20">
+                  Note: A non refundable 1% fee is paid to the CanYaDAO.
+                  <br>You can cancel the job post at anytime for a refund.
+                  <br>All payments are held in CAN tokens.
+              </nz-form-extra>
               <nz-form-explain *ngIf="validateForm.get('cost').dirty && validateForm.get('cost').errors">Please input Application Fee! Please input number!</nz-form-explain>
             </nz-form-control>
           </nz-form-item>
