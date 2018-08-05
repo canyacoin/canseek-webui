@@ -3,6 +3,7 @@ import { GlobalService } from '../../../../services/global.service';
 import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { Store } from "../../../../store";
 import * as moment from 'moment';
+import { ContractsService } from '../../../../services/contracts.service';
 
 @Component({
   selector: 'app-cmp-post',
@@ -25,6 +26,7 @@ export class CmpPostComponent implements OnInit {
     private gs: GlobalService,
     private modal: NzModalService,
     private message: NzMessageService,
+    private cs: ContractsService,
   ) { }
 
   ngOnInit() {
@@ -37,17 +39,22 @@ export class CmpPostComponent implements OnInit {
       nzTitle: 'Are your sure you want to cancel this job post?',
       nzOkText: 'OK',
       nzCancelText: 'Cancel',
-      nzOnOk: () => this.gs.cancelPostDb(post)
-          .then(() => this.gs.cancelPost(post))
-          .then(() => this.message.success('Cancel success'))
-          .catch(err => {
-            this.message.error(err.message);console.log(err);;
-          })
+      nzOnOk: async () => {
+        try {
+          await this.gs.cancelPostDb(post);
+          await this.gs.cancelPost(post);
+          this.message.success('Cancel success');
+          this.store.balance = await this.cs.getCANBalance();
+        } catch (err) {
+          this.message.error(err.message);console.log(err);
+        }
+      }
     });
   }
 
-  getRefund(post) {
-    this.gs.getRefund(post, this.curUser);
+  async getRefund(post) {
+    await this.gs.getRefund(post, this.curUser);
+    this.store.balance = await this.cs.getCANBalance();
   }
 
   updatePostStatus(post) {
