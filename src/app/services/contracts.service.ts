@@ -270,7 +270,9 @@ export class ContractsService {
         const { candidateId } = result.logs[0].args;
         this.getPostHoneypot(postId)
         .then(honeypot => {
-          resolve({honeypot, candidateId: Number(candidateId)})
+          setTimeout(() => {
+            resolve({honeypot, candidateId: Number(candidateId)})
+          }, 10);
         })
       }).catch( err => {
         reject(err);
