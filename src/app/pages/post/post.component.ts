@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ViewChild, Inject } from '@angular/core';
 import { CmpPoststep1Component } from './components/cmp-poststep1/cmp-poststep1.component';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import {
   FormBuilder,
   FormControl,
@@ -31,9 +31,12 @@ export class PostComponent implements AfterViewInit {
 
   id: string; // post id
 
+  verifiedEmail: string = null;
   email: string = null;
   emailVerified: boolean = false;
   verifyLoading: boolean = false;
+  displayName: string = '';
+  confirmModal: NzModalRef;
 
   doneLoading: boolean = false;
   pid: string; // type new post id
@@ -47,14 +50,12 @@ export class PostComponent implements AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private message: NzMessageService,
+    private modal: NzModalService,
   ) {
     this.afAuth.authState.subscribe((auth) => {
       this.emailVerified = (auth||{})['emailVerified'];
-      this.email = (auth||{})['email']
-
-      if (this.emailVerified) {
-        this.current = 1;
-      }
+      this.email = this.verifiedEmail = (auth||{})['email'];
+      this.displayName = (auth||{})['displayName'];
     });
 
     this.route.queryParams.subscribe(params => {
@@ -111,18 +112,32 @@ export class PostComponent implements AfterViewInit {
     if (!this.email) return;
 
     this.verifyLoading = true;
-    
-    this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.store.curUser + new Date)
-    .then(() => this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''}))
-    .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
-    .then(() => {
-        this.message.success('Please check your email to verify your account');
+
+    try {
+      await this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.store.curUser);
+      await this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''});
+      await this.afAuth.auth.currentUser.sendEmailVerification();
+      this.showModal('success', 'Please check your email to verify your account');
+      this.verifyLoading = false;
+    } catch(err) {
+      if (err.message == 'The email address is already in use by another account.') {
+        this.loginWithEmail();
+      } else {
         this.verifyLoading = false;
-      })
-      .catch(err => {
-        this.verifyLoading = false;
-        this.message.error(err.message);console.log(err);;
-      });
+        this.showModal('error', err.message);
+      }
+    }
+  }
+
+  async loginWithEmail() {
+    try {
+      await this.afAuth.auth.signInWithEmailAndPassword(this.email, this.store.curUser);
+      this.verifyLoading = false;
+      this.message.success('Verified Success!');
+    } catch(err) {
+      this.message.error(err.message);
+      console.log(err);
+    }
   }
 
   rewardValidator = (control: FormControl) => {
@@ -154,7 +169,18 @@ export class PostComponent implements AfterViewInit {
   next(): void {
     let formData;
 
-    if (this.current === 1) {
+    if (this.current === 0) {
+      formData = this.submitEmailForm();
+      const { your_email, owner_addr } = formData.data;
+      // this.email = your_email;
+      // console.log(this, formData)
+
+      if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
+        debugger
+        formData.valid = false;
+        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/><br/> If you want containue, please verify your email.');
+      }
+    } else if (this.current === 1) {
       formData = this.step1.submitForm();
       this.values = {...this.values, ...formData.data };
     } else if (this.current === 2) {
@@ -166,6 +192,13 @@ export class PostComponent implements AfterViewInit {
       this.current += 1;
       window.scroll(0,0);
     }
+  }
+
+  showModal(type, message): void {
+    this.confirmModal = this.modal[type]({
+      nzTitle: message,
+      nzOkText: type == 'success' ? null : 'OK',
+    });
   }
 
   async done() {
