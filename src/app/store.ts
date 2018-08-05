@@ -30,7 +30,7 @@ export let Store = {
     curUser: '',
     balance: 0,
     postForm: [{
-      label: 'Job Information Preview',
+      label: 'Job Information',
       value: [{
           label: 'Job Title',
           field: 'job_title'
@@ -66,7 +66,7 @@ export let Store = {
           field: 'screening_questions3'
         }]
       },{
-        label: 'Company Information Preview',
+        label: 'Company Information',
         value:  [{
           label: 'Company Logo',
           field: 'company_logo'
@@ -81,7 +81,7 @@ export let Store = {
           field: 'company_desc'
         }]
       },{
-        label: 'Reward Information Preview',
+        label: 'Reward Information',
         value: [{
           label: 'Initial Reward',
           field: 'reward'
@@ -90,7 +90,7 @@ export let Store = {
           field: 'cost'
         }]
       },{
-        label: 'Your Information Preview',
+        label: 'Your Information',
         value: [{
           label: 'Your Name',
           field: 'your_name'

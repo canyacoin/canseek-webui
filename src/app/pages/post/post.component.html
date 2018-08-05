@@ -79,12 +79,12 @@
       <!-- step3 -->
       <div *ngIf="current == 3">
         <div *ngFor="let category of store.postForm">
-          <h3>{{ category.label }}:</h3>
+          <h4 class="fw-500">{{ category.label }}:</h4>
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
-              <nz-col nzSpan="5" nzOffset="1" class="bold text-right">{{ item.label }}:</nz-col>
-              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">{{ values[item.field] }}</nz-col>
-              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">
+              <nz-col nzSpan="6" class="bold text-left">{{ item.label }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">:{{ values[item.field] }}</nz-col>
+              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">:
                 <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
               </nz-col>
             </nz-row>
