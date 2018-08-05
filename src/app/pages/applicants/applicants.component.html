@@ -81,11 +81,13 @@
           <ng-template #candidateHeader>
             <nz-row nzType="flex" nzJustify="space-between" gutter="16">
               <label *ngIf="post && post.status == 'open' && category != rejected" nz-checkbox 
-                nzValue="{{ candidate.id }} {{ candidate.candidateId }}" class="checkbox"></label>
+                nzValue="{{ candidate.id }} {{ candidate.candidateId }}" 
+                [nzDisabled]="candidate.status == 'pending'"
+                class="checkbox"></label>
               
               <nz-col nzSpan="17">
                 <a href="javascript:;" (click)="changeActive(candidate.id)" class="border-bottom pb-10 card-title uppercase">{{ candidate.candidate_name }}
-                  <small class="red" *ngIf="candidate.status == 'selected'" style="font-size: 50%">({{ candidate.status }})</small>
+                  <small [class.red]="candidate.status == 'selected'" style="font-size: 50%">({{ candidate.status }})</small>
                 </a>
                 <nz-row nzType="flex" nzJustify="space-between">
                   <nz-col>
@@ -101,7 +103,7 @@
               </nz-col>
 
               <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
-                <a *ngIf="candidate.category !== 'shortlist'" href="javascript:;" (click)="changeCandidateCat(candidate.id, 'shortlist')" class="uppercase">
+                <a *ngIf="candidate.status !== 'pending' && candidate.category !== 'shortlist'" href="javascript:;" (click)="changeCandidateCat(candidate.id, 'shortlist')" class="uppercase">
                   add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
                 </a>
                 <br>

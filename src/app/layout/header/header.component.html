@@ -6,7 +6,7 @@
       <a class="topbar-brand mr-40" routerLink="">
         <img class="logo-default" src="assets/img/CanSeek.svg" width="auto" height="36px" alt="logo">
       </a>
-      <nz-input-group nzSuffixIcon="anticon anticon-search">
+      <nz-input-group *ngIf="url && url == '/'" nzSuffixIcon="anticon anticon-search">
         <input type="text" nz-input placeholder="search" [(ngModel)]="searchText" (input)="onSearch()">
       </nz-input-group>
     </div>  
@@ -18,27 +18,30 @@
             <img class="logo-default" src="assets/img/CanApps/CanApps .svg" width="auto" height="16px" alt="CanApps" style="vertical-align: -2px">
           </a>
         </li>    
+        <li class="nav-item">
+          <nz-dropdown>
+            <a href="javascript:;" nz-dropdown>
+              {{ store.selectedCurrency['string'] || '$ USD' }}
+              <i class="anticon anticon-down"></i>
+            </a>
+              
+            <ul nz-menu>
+              <li nz-menu-item>
+                <a href="javascript:;" (click)="setCurrency(currency.AUD)">{{currency.AUD.string}}</a>
+              </li>
+              <li nz-menu-item>
+                <a href="javascript:;" (click)="setCurrency(currency.EUR)">{{currency.EUR.string}}</a>
+              </li>
+              <li nz-menu-item>
+                <a href="javascript:;" (click)="setCurrency(currency.USD)">{{currency.USD.string}}</a>
+              </li>
+              <li nz-menu-item>
+                <a href="javascript:;" (click)="setCurrency(currency.CAN)">{{currency.CAN.string}}</a>
+              </li>
+            </ul>
+          </nz-dropdown>
+        </li>
       </ul>     
-      <nz-dropdown>
-        <button nz-button nz-dropdown nzType="primary">
-          {{ store.selectedCurrency['string'] || '$ USD' }}
-          <i class="anticon anticon-down"></i>
-        </button>
-        <ul nz-menu>
-          <li nz-menu-item>
-            <a href="javascript:;" (click)="setCurrency(currency.AUD)">{{currency.AUD.string}}</a>
-          </li>
-          <li nz-menu-item>
-            <a href="javascript:;" (click)="setCurrency(currency.EUR)">{{currency.EUR.string}}</a>
-          </li>
-          <li nz-menu-item>
-            <a href="javascript:;" (click)="setCurrency(currency.USD)">{{currency.USD.string}}</a>
-          </li>
-          <li nz-menu-item>
-            <a href="javascript:;" (click)="setCurrency(currency.CAN)">{{currency.CAN.string}}</a>
-          </li>
-        </ul>
-      </nz-dropdown>
     </div> 
   </div>
 </nav>

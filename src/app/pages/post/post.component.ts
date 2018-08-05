@@ -30,8 +30,6 @@ export class PostComponent implements AfterViewInit {
   values: Object = {};
 
   id: string; // post id
-  // new edit noAuth
-  type: string = 'new';
 
   email: string = null;
   emailVerified: boolean = false;
@@ -39,6 +37,7 @@ export class PostComponent implements AfterViewInit {
 
   doneLoading: boolean = false;
   pid: string; // type new post id
+  type: string = 'new';
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -89,7 +88,7 @@ export class PostComponent implements AfterViewInit {
       .subscribe(post => {
         this.values = post;
         if (post['owner_addr'] != this.store.curUser) {
-          this.type = 'noAuth';
+          this.router.navigateByUrl(`/noauth`);
         } else {
           this.initForm(this.values, this.type == 'edit');
         }
@@ -99,7 +98,7 @@ export class PostComponent implements AfterViewInit {
   initForm(values, disabled): void {
     this.emailForm = this.fb.group({
       your_email: [ { value: values['your_email'], disabled }, [ Validators.email, Validators.required ] ],
-      owner_addr: [ { value: this.store.curUser, disabled: true } ],
+      owner_addr: [ { value: this.store.curUser || values['owner_addr'], disabled: true } ],
     });
 
     this.validateForm = this.fb.group({
@@ -108,19 +107,21 @@ export class PostComponent implements AfterViewInit {
     });
   }
 
-  emailVerify(password:string = '' + new Date) {
+  async emailVerify() {
     if (!this.email) return;
 
     this.verifyLoading = true;
-    return this.afAuth.auth.createUserWithEmailAndPassword(this.email, password)
-      .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
-      .then(() => {
-        this.message.success('please verify your email')
+    
+    this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.store.curUser + new Date)
+    .then(() => this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''}))
+    .then(() => this.afAuth.auth.currentUser.sendEmailVerification())
+    .then(() => {
+        this.message.success('Please check your email to verify your account');
         this.verifyLoading = false;
       })
       .catch(err => {
-        console.log(err)
-        this.message.error(err.message)
+        this.verifyLoading = false;
+        this.message.error(err.message);console.log(err);;
       });
   }
 
@@ -146,7 +147,6 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  // todo, cancel has no data
   pre(): void {
     this.current -= 1;
   }
@@ -168,29 +168,29 @@ export class PostComponent implements AfterViewInit {
     }
   }
 
-  done(): void {
+  async done() {
     this.doneLoading = true;
 
-    const postData = {referrals_by_user: {}, honeypot: Number(this.values['reward']), time: Date.now(), owner_addr: this.store.curUser, ...this.values };
+    const postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: Number(this.values['reward']), time: Date.now(), owner_addr: this.store.curUser, ...this.values };
     const handledData = JSON.parse(JSON.stringify(postData));
-    const isUpdate = this.type == 'edit' ? true : false;
+    // const isUpdate = this.type == 'edit' ? true : false;
+    const { reward, cost, postId } = handledData;
+    let { id } = handledData;
     
-    if(isUpdate) {
+    if(postId) {// just update db
       this.gs.updatePost(handledData)
-      // todo Ceshi 
-      .then(id => this.redireact(id))
+        .then(() => this.redireact(handledData['id']));
     } else {
-      const { reward, cost } = handledData;
-
-      this.gs.addPostDb(handledData)
-        .then(id => {
-          this.pid = id;
-          return this.cs.addPost(id, Number(reward), Number(cost))
-            .then(postId => this.gs.addPostCb(id, postId))
-            .then(() => this.redireact(id))
-        })
+      if (!id) {// totally new
+        id = await this.gs.addPostDb(handledData)
+      }
+      this.pid = id;
+      this.cs.addPost(id, Number(reward), Number(cost))
+        .then(postId => this.gs.addPostCb(id, postId))
+        .then(() => this.redireact(id))
         .catch(err => {
-          console.log(err);
+          this.doneLoading = false;
+          this.message.error(err.message);console.log(err);;
         })
     }
   }

@@ -72,12 +72,12 @@ export class CmpPoststep1Component implements OnInit {
 
       company_logo: [ { value: values['company_logo'], disabled } ],
       company_name: [ { value: values['company_name'], disabled }, [ Validators.required ] ],
-      company_website:       [ { value: values['company_website'], disabled } ],
+      company_website:       [ { value: ((this.email || '').split('@') || [])[1], disabled: true } ],
       company_desc     : [ { value: values['company_desc'], disabled }, [ Validators.required ] ],
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
       your_email: [ { value: values['your_email'] || this.email, disabled: true }, [ Validators.email, Validators.required ] ],
-      owner_addr: [ { value: this.store.curUser, disabled: true } ],
+      owner_addr: [ { value: this.store.curUser || values['owner_addr'], disabled: true } ],
     });
     this.fileList = values['job_attachments'] || [];
     this.logo = values['company_logo'] || [];

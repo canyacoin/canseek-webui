@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Store } from "../../store";
-import { ContractsService } from '../../services/contracts.service';
 import { GlobalService } from '../../services/global.service';
 
 @Component({
@@ -9,13 +8,13 @@ import { GlobalService } from '../../services/global.service';
   styleUrls: ['./header.component.less']
 })
 export class HeaderComponent implements OnInit {
+  @Input() url;
   store = Store;
   currency = Store.currency;
 
   searchText: string = '';
 
   constructor(
-    private cs: ContractsService,
     private gs: GlobalService,
   ) { }
 
@@ -38,6 +37,10 @@ export class HeaderComponent implements OnInit {
   }
 
   onSearch() {
+    // setTimeout(() => {
+    //   console.log('search');
+    //   window.scroll(0,500);
+    // }, 300);
     this.gs.change.emit(this.searchText);
   }
 }

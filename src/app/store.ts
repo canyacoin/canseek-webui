@@ -83,10 +83,10 @@ export let Store = {
       },{
         label: 'Reward Information Preview',
         value: [{
-          label: 'Honeypot',
+          label: 'Initial Reward',
           field: 'reward'
         }, {
-          label: 'Application Fee',
+          label: 'Talent Application Fee',
           field: 'cost'
         }]
       },{

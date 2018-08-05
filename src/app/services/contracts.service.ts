@@ -17,7 +17,7 @@ let gasPrice = '503000000';
 let gasApprove = '45600';
 let gasAddPost = '500000';
 let gasCancelPost = '200000';
-let gasGetRefund = '60000';
+let gasGetRefund = '100000';
 let gasClosePost = '200000';
 let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
@@ -27,14 +27,14 @@ let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 
 // Ropsten contract address
-// const CanYaCoinAddr = '0xf838388d1abe9db5c4d4946407ee74e99f495261';
-// const EscrowAddr = '0x13d202a36b25d82e910e1319a8709e1779746fcc';
-// const CanHireAddr = '0x6634ffed8315ef701db2a7edbae9d23b53481493';
+// const CanYaCoinAddr = '0x8eaf23325d800c4a58ff4f4d9a26400a540c046a';
+// const EscrowAddr = '0xc63d828561ee63c8f5f39f973844ce1d0dd7230b';
+// const CanHireAddr = '0xa469067ae6bdae7f89f9c76857e6fc62641038e1';
 
 // Ganache contract address
-const CanYaCoinAddr = '0xf18d017a9fa77258203d8136948a1ec3910764ce';
-const EscrowAddr = '0xd7e031c67ab13e8709dd817b128fef4fea7c930a';
-const CanHireAddr = '0x02af2976ad3a2bfa1b8e2d1aa18ad11caaa940e2';
+const CanYaCoinAddr = '0x3501fac5fc22dc16b179bec71c063f7bc16bb839';
+const EscrowAddr = '0xaaa3f000c5abd8bb131078d59741d7a276bac483';
+const CanHireAddr = '0xc2aba1df46517b6e1d90ee479cefb01df17e5775';
 
 @Injectable()
 export class ContractsService {
@@ -74,9 +74,10 @@ export class ContractsService {
         if (this._web3) {
           this._web3.eth.getAccounts((err, accs) => {
             if (err != null || accs.length === 0) {
-              throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
+              reject(false);
+            } else {
+              resolve(accs[0]);
             }
-            resolve(accs[0]);
           });
         } else {
           throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
@@ -267,12 +268,14 @@ export class ContractsService {
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend}).then(result => {
         const { candidateId } = result.logs[0].args;
-
-        resolve(Number(candidateId))
+        this.getPostHoneypot(postId)
+        .then(honeypot => {
+          resolve({honeypot, candidateId: Number(candidateId)})
+        })
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<any>;
   }
 
   public async getRecommenders(postId) {
@@ -363,17 +366,15 @@ export class ContractsService {
   public async getRefund(postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
-    const checkContribution = await canHire.checkContribution(postId);
-    console.log(checkContribution.toNumber(), 'checkContribution');
     
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
         const result = refund.logs[0].args.cost.toNumber();
-        resolve(result);
+        resolve(!result);
       }).catch( err => {
         reject(err);
       });
-    }) as Promise<number>;
+    }) as Promise<boolean>;
   }
 
 }

@@ -128,10 +128,9 @@ export class ApplicantsComponent implements OnInit {
       nzCancelText: 'Cancel',
       nzOnOk: () => 
       this.gs.closePost(this.post, cid, candidateId)
-        .then(() => this.message.success('closePost succ!'))
+        .then(() => this.message.success('success!'))
         .catch(err => {
-          console.log(err);
-          this.message.error(err.message);
+          this.message.error(err.message);console.log(err);;
         })
     });
   }
@@ -145,8 +144,7 @@ export class ApplicantsComponent implements OnInit {
       })
       .catch(err => {
         this.loadingStatus = false;
-        this.message.error(err.message);
-        console.log(err);
+        this.message.error(err.message);console.log(err);;
       })
   }
 }

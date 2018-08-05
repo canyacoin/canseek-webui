@@ -14,14 +14,28 @@
               <h3 class="cart-title">{{ post.job_title }}</h3>
               <p class="bold">{{ post.company_name }}</p>
               <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
-              <p class="text my-20">{{ post.job_type }}{{ post.job_range ? ', ' + post.job_range : ''}}{{ post.job_location ? ', ' + post.job_location : '' }}</p>
 
+              <nz-row class="my-16" nzGutter="16">
+                <nz-col span="4" class="bold">Position Type: </nz-col>
+                <nz-col span="20">{{ post.job_type }}</nz-col>
+              </nz-row>
+
+              <nz-row class="my-16" nzGutter="16" *ngIf="post.job_range">
+                <nz-col span="4" class="bold">Salary Range: </nz-col>
+                <nz-col span="20">{{ post.job_range }}</nz-col>
+              </nz-row>
+              
+              <nz-row class="my-16" nzGutter="16" *ngIf="post.job_location">
+                <nz-col span="4" class="bold">Job Location: </nz-col>
+                <nz-col span="20">{{ post.job_location }}</nz-col>
+              </nz-row>
+              
               <section class="my-40">
                 <p class="bold">Job Description</p>
                 <div class="card-text text">{{ post.job_desc }}</div>
               </section>
 
-              <section class="my-40" *ngIf="post.job_attachments">
+              <section class="my-40" *ngIf="post.job_attachments.length">
                 <p class="bold">Attachments</p>
                 <a class="mr-12 blue" target="_blank" 
                   href="{{ file.url }}" 
@@ -104,7 +118,7 @@
               alt="{{ post.company_name }} logo">
 
               <h3 class="card-title mt-24 mb-40">{{ post.company_name }}</h3>
-              <a *ngIf="post.company_website" href="{{ post.company_website }}" target="_blank" class="btn btn-primary btn-outline mb-20">view website</a>
+              <a *ngIf="post.company_website" href="//{{ post.company_website }}" target="_blank" class="btn btn-primary btn-outline mb-20">view website</a>
           </div>
         </div>
       </div>

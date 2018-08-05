@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { GlobalService } from '../../services/global.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Store } from "../../store";
+import { DOCUMENT } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -14,12 +15,13 @@ export class HomeComponent implements OnInit {
   posts: any;
   results: any;
 
-  statusValue = localStorage.getItem('statusValue') || 'all';
+  statusValue = localStorage.getItem('statusValue') || 'open';
   balance: number = 0;
   
   constructor(
     private gs: GlobalService,
     private cs: ContractsService,
+    @Inject(DOCUMENT) private document,
   ) { }
 
   ngOnInit() {
@@ -34,7 +36,10 @@ export class HomeComponent implements OnInit {
         this.loading = false;
       }
     } catch (err) {
-      alert(err.message);
+      this.loading = false;
+      if(confirm('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly. Click OK button if you want to install Chrome MetaMask extention')) {
+        this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
+      }
     }
   }
 
@@ -43,15 +48,17 @@ export class HomeComponent implements OnInit {
       .subscribe(posts => {
         this.posts = posts
         this.loading = false;
-        this.searchStatus();
+        this.searchStatus(this.statusValue);
       });
   }
 
-  async searchStatus() {
-    const { posts, statusValue } = this;
+  async searchStatus(statusValue) {
+    const { posts } = this;
     let next;
 
+    this.statusValue = statusValue;
     localStorage.setItem('statusValue', statusValue);
+    
     switch(statusValue) {
       case 'all':
         next = next = posts
@@ -89,9 +96,9 @@ export class HomeComponent implements OnInit {
     this.gs.change.subscribe((s: string) => {
       if (s) {
         this.results = posts.filter(post => (
-          (post.job_title || '').includes(s)
+          (post.job_title || '').toLowerCase().includes(s.toLowerCase())
           ||
-          (post.company_name || '').includes(s)
+          (post.company_name || '').toLowerCase().includes(s.toLowerCase())
         ))
       } else {
         this.results = next;

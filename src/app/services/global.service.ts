@@ -1,9 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ContractsService } from './contracts.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import qs from 'qs';
 
@@ -22,7 +21,6 @@ export class GlobalService {
     private db: AngularFirestore,
     private cs: ContractsService,
     private message: NzMessageService,
-    private router: Router,
   ) { 
     this.change = new EventEmitter();
   }
@@ -30,7 +28,9 @@ export class GlobalService {
   async changeCurrency(currency): Promise<any> {
     return await fetch(`${URL.changeCurrency}?${qs.stringify(currency)}`)
       .then(response => response.json())
-      .catch(err => console.log('Err, changeCurrency: ', err));
+      .catch(err => {
+        this.message.error(err.message);console.log(err);
+      });
   }
 
   getPosts(): Observable<any[]> {
@@ -54,9 +54,8 @@ export class GlobalService {
 
   updatePost(post: any): Promise<any> {
     const { id } = post;
-    // todo
-    return this.dbRef.doc(id).update(post)
-            .then(() => id)
+
+    return this.dbRef.doc(id).update(post);
   }
 
   cancelPostDb(post: any) {
@@ -101,14 +100,16 @@ export class GlobalService {
       })
   }
 
-  updatePostAndCandidate(post: any, candidtae: any, candidateId: number): Promise<any> {
+  updatePostAndCandidate(post: any, candidtae: any, res: any): Promise<any> {
+    const { honeypot, candidateId } = res;
     if(candidateId) {
-      const { id: pid, cost, reward, candidates = 0, honeypot = reward } = post;
+      const { id: pid, cost, reward } = post;
       const { id: cid, nextStatus = 'open' } = candidtae;
       const postRef = this.dbRef.doc(pid);
       const candidateRef = postRef.collection('candidates').doc(cid);
+      const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
   
-      postRef.update({candidates: Number(candidates) + 1, honeypot: Number(honeypot) + Number(cost) });
+      postRef.update({candidates, honeypot });
       candidateRef.update({candidateId, status: nextStatus});
       
       return Promise.resolve();
@@ -133,7 +134,6 @@ export class GlobalService {
 
     this.cs.getRefund(postId)
       .then(result => {
-        debugger
         if (result) {
           // update post's referrals_by_user candidates
           delete referrals_by_user[curUser];
@@ -148,9 +148,12 @@ export class GlobalService {
             postRef.collection('candidates').doc(cid).delete();
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
           })
+          this.message.success('GetRefund success');
         }
       })
-      .catch(err => this.message.error(err.message))
+      .catch(err => {
+        this.message.error(err.message);console.log(err);
+      })
   }
 
   updatePostStatus(post) {
@@ -188,7 +191,7 @@ export class GlobalService {
     const { id: cid } = candidate;
 
     return this.cs.getCandidateId(cid, postId)
-      .then((candidateId) => this.updatePostAndCandidate(post, candidate, candidateId))
+      .then(({candidateId}) => this.updatePostAndCandidate(post, candidate, candidateId))
       .catch(err => {
         throw err;
       })

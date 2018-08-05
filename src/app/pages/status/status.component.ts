@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { DOCUMENT } from '@angular/platform-browser';
 import { GlobalService } from '../../services/global.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-status',
@@ -22,10 +22,10 @@ export class StatusComponent implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
-    private location: Location,
     private gs: GlobalService,
     @Inject(DOCUMENT) private document,
     private message: NzMessageService,
+    private router: Router,
   ) { 
     this.route.queryParams.subscribe(params => {
       const { type, pid, cid } = params;
@@ -39,10 +39,20 @@ export class StatusComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gs.getPost(this.pid).subscribe(post => this.post = post);
+    this.gs.getPost(this.pid).subscribe(post => {
+      if (!post) {
+        this.router.navigateByUrl(`/pagenotfound`);
+      }
+      this.post = post;
+    });
     
     if (this.cid) {
-      this.gs.getCandidate(this.pid, this.cid).subscribe(candidate => this.candidate = candidate)
+      this.gs.getCandidate(this.pid, this.cid).subscribe(candidate => {
+        if (!candidate) {
+          this.router.navigateByUrl(`/pagenotfound`);
+        }
+        this.candidate = candidate;
+      })
     }
   }
 
@@ -50,10 +60,10 @@ export class StatusComponent implements OnInit {
     this.loading = true;
 
     this.gs.updatePostStatus(post)
-      .then(status => this.loading = false)
+      .then(() => this.loading = false)
       .catch(err => {
-        this.message.error(err.message)
-        console.log(err);
+        this.loading = false;
+        this.message.error(err.message);console.log(err);;
       })
   }
 
@@ -61,10 +71,10 @@ export class StatusComponent implements OnInit {
     this.loading = true;
 
     this.gs.updateCandidateStatus(post, candidate)
-      .then(status => this.loading = false)
+      .then(() => this.loading = false)
       .catch(err => {
-        this.message.error(err.message)
-        console.log(err);
+        this.loading = false;
+        this.message.error(err.message);console.log(err);;
       })
   }
 

@@ -96,15 +96,20 @@ contract("CanHire", accounts => {
     await canHire.recommend("p001c001", 1, {from: recruiter1});
     await canHire.recommend("p001c002", 1, {from: recruiter1});
     await canHire.recommend("p002c001", 2, {from: recruiter1});
+    const post = await canHire.posts(1, {from: recruiter1});
+    assert.equal(post[5].toNumber(), 600, "wrong honeypot");
 
     const refund = await canHire.checkContribution(1, {from: recruiter1});
     assert.equal(refund.toNumber(), 100, "wrong escrow refund");
 
     await canHire.cancelPost(1, {from: employer1});
-    const result = await canHire.getRefund(1, {from: recruiter1});
-    // console result.logs[0].args.cost.toNumber()
-    
-    console.log(result);
+    // let result = await canHire.getRefund(1, {from: recruiter1});
+
+    const gas = await canHire.getRefund.estimateGas(1, {from: recruiter1});
+    console.log('gas', gas);
+
+    // result = result.logs[0].args.cost;
+    // assert.equal(result.toNumber(), 0, "wrong escrow result");
   })
 
   // it("should cancel a post and get refunds", async () => {

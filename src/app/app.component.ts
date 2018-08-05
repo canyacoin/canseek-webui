@@ -12,6 +12,7 @@ import { ContractsService } from './services/contracts.service';
 export class AppComponent {
   loading: boolean = false;
   store = Store;
+  url: string = '';
 
   constructor(
     @Inject(DOCUMENT) private document,
@@ -20,17 +21,17 @@ export class AppComponent {
   ) { }
   
   // https://stackoverflow.com/questions/48048299/angular-5-scroll-to-top-on-every-route-click
-  onActivate(e) {
+  onActivate() {
     window.scroll(0,0);
 
     // check account
-    const routeName = e.constructor.name;
-    console.log(routeName);
-    if (['PostComponent', 'ReferComponent', 'ApplicantsComponent'].includes(routeName)) {
+    this.url = this.router.url;
+    // path regexp: 1. post 2. refer/new/:id 3. applicants/:id
+    if (/^\/post\?type=[new|edit]/.test(this.url) || /^\/refer\/new\//.test(this.url) || /^\/applicants\//.test(this.url)) {
       this.checkAccount();
     }
   }
-  
+
   async checkAccount() {
     try {
       if (!this.store.curUser) {
@@ -39,10 +40,10 @@ export class AppComponent {
         this.loading = false;
       }
     } catch (err) {
-      if(confirm('Couldn\'t get any accounts!Do you want to install Chrome MetaMask extention?')) {
+      if(confirm('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly. Click OK button if you want to install Chrome MetaMask extention')) {
         this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
       } else {
-        this.router.navigateByUrl(`/noauth`)
+        this.router.navigateByUrl(`/noauth`);
       }
     }
   }
