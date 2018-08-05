@@ -7,11 +7,11 @@
       <nz-col>
         <nz-row nzType="flex">
           <nz-col>
-            <span class="contrubuted mr-8">
-              {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.honeypot || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
+            <span class="contributed mr-8">
+              {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.honeypot || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}
             </span>
             <br>
-            <span class="desc">Contrubuted</span>
+            <span class="desc">Contributed</span>
           </nz-col>
           <nz-col>
             <ng-container *ngIf="post.owner_addr != curUser">
@@ -36,7 +36,7 @@
 
     <!-- info -->
     <p class="title clamp1">{{ post.job_title }}</p>
-    <p class="text mb-10 clamp1" style="font-size: 14px">{{ post.company_name }}</p>
+    <p class="text mb-10 clamp1" style="font-size: 14px; font-weight: 300;">{{ post.company_name || 'company name' }}</p>
     <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
       <nz-col class="location clamp2" style="-webkit-box-orient: vertical;">
         <span *ngIf="post.job_remote" class="mr-8"><i class="iconfont iconfont-earth"></i> Remote</span>
@@ -48,13 +48,13 @@
     <hr class="mb-20 mt-2">
     <div *ngIf="statusValue != 'my referrals'">
         <a routerLink="/post/detail/{{ post.id }}">
-          <p class="card-text mb-20">{{ post.job_desc }}</p>
+          <p class="card-text mb-20">{{ post.job_desc || 'Here is the description of the person that we are looking for. This person needs to be sharp as a tack. If you or someone you know is looking for work with a brand that seeks to become the flagbearers ushering in new technology to the world. But no pressure though.' }}</p>
         </a>
         <div class="flex op-area">
           <i class="can-coin mr-8"></i>
     
           <p class="flex1 text">
-            {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-4' }} {{ store.selectedCurrency.name }}
+            <span style="font-weight: 600">{{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}</span>
             <br> Application Fee
           </p>
           <!-- op 按照三种样式划分 -->
@@ -62,8 +62,8 @@
           <!-- refer: open 非创建人 单独按钮 -->
           <a 
             *ngIf="post.status == 'open' && post.owner_addr !== curUser"
-            class="btn btn-primary btn-outline"
-            routerLink="/refer/new/{{post.id}}">refer talent</a>
+            class="btn btn-sm btn-primary btn-outline refer-btn"
+            routerLink="/post/detail/{{ post.id }}">refer talent</a>
 
           <!-- getrefund: cancelled 推荐人 外面 -->
           <button

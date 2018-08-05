@@ -5,8 +5,8 @@
 <section class="bg-grey pt-30 pb-100">
   <div class="container">
     <!-- filter -->
-    <div class="row pb-45">
-      <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()" class="uppercase">
+    <div class="row pb-45 mx-0">
+      <nz-radio-group [(ngModel)]="statusValue" (ngModelChange)="searchStatus()" class="uppercase" [nzSize]="'large'">
         <label nz-radio-button nzValue="all">all</label>
         <label nz-radio-button nzValue="open">open</label>
         <label nz-radio-button nzValue="pending">pending</label>

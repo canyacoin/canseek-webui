@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   posts: any;
   results: any;
 
-  statusValue = localStorage.getItem('statusValue') || 'all';
+  statusValue = localStorage.getItem('statusValue') || 'open';
   balance: number = 0;
   
   constructor(
