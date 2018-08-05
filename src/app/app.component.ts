@@ -28,7 +28,6 @@ export class AppComponent {
     this.url = this.router.url;
     // path regexp: 1. post 2. refer/new/:id 3. applicants/:id
     if (/^\/post\?type=[new|edit]/.test(this.url) || /^\/refer\/new\//.test(this.url) || /^\/applicants\//.test(this.url)) {
-      console.log('checkAccount');
       this.checkAccount();
     }
   }
