@@ -7,7 +7,7 @@ contract CanYaCoin is StandardToken {
     string public constant name = "CanYaCoin"; // solium-disable-line uppercase
     string public constant symbol = "CAN"; // solium-disable-line uppercase
     uint8 public constant decimals = 8; // solium-disable-line uppercase
-    uint256 public constant buyPrice = 700000000000000; // price in wei
+    uint256 public constant buyPrice = 100000000000; // price in wei
     uint256 public constant INITIAL_SUPPLY = 10000 * (10 ** uint256(decimals));
 
     constructor() public
