@@ -15,6 +15,7 @@ import { NzMessageService } from 'ng-zorro-antd';
   styleUrls: ['./cmp-poststep1.component.less']
 })
 export class CmpPoststep1Component implements OnInit {
+  @Input() values;
   @Input() email;
 
   validateForm: FormGroup;
@@ -53,7 +54,7 @@ export class CmpPoststep1Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.initForm({}, false);
+    this.initForm(this.values, false);
   }
   
   initForm(values, disabled): void {

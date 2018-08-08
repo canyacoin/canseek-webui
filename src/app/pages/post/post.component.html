@@ -38,7 +38,7 @@
       </form>
 
       <!-- step1 -->
-      <app-cmp-poststep1 *ngIf="current == 1" [email]="email"></app-cmp-poststep1>
+      <app-cmp-poststep1 *ngIf="current == 1" [email]="email" [values]="values"></app-cmp-poststep1>
 
       <!-- step2 -->
       <form *ngIf="current == 2" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">

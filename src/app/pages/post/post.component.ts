@@ -176,7 +176,7 @@ export class PostComponent implements AfterViewInit {
     let formData;
 
     if (this.current === 0) {
-      formData = this.submitEmailForm();
+      formData = this.submitForm('emailForm');
       const { your_email, owner_addr } = formData.data;
 
       if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
@@ -237,28 +237,15 @@ export class PostComponent implements AfterViewInit {
     this.router.navigateByUrl(`/status?type=post&pid=${id}`)
   }
 
-  submitForm(): any {
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
-      this.values[i] = this.validateForm.controls[ i ].value;
+  submitForm(form = 'validateForm'): any {
+    for (const i in this[form].controls) {
+      this[form].controls[ i ].markAsDirty();
+      this[form].controls[ i ].updateValueAndValidity();
+      this.values[i] = this[form].controls[ i ].value;
     }
     
     return {
-      valid: this.validateForm.valid,
-      data: this.values,
-    }
-  }
-
-  submitEmailForm(): any {
-    for (const i in this.emailForm.controls) {
-      this.emailForm.controls[ i ].markAsDirty();
-      this.emailForm.controls[ i ].updateValueAndValidity();
-      this.values[i] = this.emailForm.controls[ i ].value;
-    }
-    
-    return {
-      valid: this.emailForm.valid,
+      valid: this[form].valid,
       data: this.values,
     }
   }

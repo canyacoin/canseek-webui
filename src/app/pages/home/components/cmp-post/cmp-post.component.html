@@ -39,15 +39,15 @@
     <p class="title clamp1">{{ post.job_title }}</p>
     <p class="text mb-10 clamp1" style="font-size: 14px; font-weight: 300;">{{ post.company_name || 'company name' }}</p>
     <hr class="my-2">
-    <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text">
+    <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text mb-2">
       <nz-col class="location clamp2 mr-8" style="-webkit-box-orient: vertical; text-transform: capitalize">
+        <span>{{ post.job_type }}</span>
+        <br>
         <span *ngIf="post.job_remote" class="mr-8"><i class="iconfont iconfont-earth"></i> Remote</span>
-        <span *ngIf="post.job_location"><i class="iconfont iconfont-location"></i> {{ post.job_location }}</span>
+        <span *ngIf="post.job_location" class="mr-8"><i class="iconfont iconfont-location"></i> {{ post.job_location }}</span>
       </nz-col>
       {{ moment(post.time).fromNow() }}
     </nz-row>
-    <p class="text my-2" style="text-transform: capitalize">{{ post.job_type }}</p>
-
     <div *ngIf="statusValue != 'my referrals'">
         <a routerLink="/post/detail/{{ post.id }}">
           <p class="card-text mb-20">{{ post.job_desc || 'Here is the description of the person that we are looking for. This person needs to be sharp as a tack. If you or someone you know is looking for work with a brand that seeks to become the flagbearers ushering in new technology to the world. But no pressure though.' }}</p>
