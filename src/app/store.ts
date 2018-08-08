@@ -19,9 +19,9 @@ export let Store = {
         value: 0
       },
       CAN: {
-        symbol: '$',
+        symbol: '',
         name: 'CAN',
-        string: '$ CAN',
+        string: 'CAN',
         value: 0
       },
     },
