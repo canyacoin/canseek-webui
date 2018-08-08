@@ -2,18 +2,21 @@
 @gray: #D1D1D1;
 @red: #FF4954;
 @blue: #33CCFF;
+@text-grey: #9b9b9b;
+@title-grey: #4A4A4A;
 .text {
-    color: #9b9b9b;
+    color: @text-grey;
     font-size: 12px;
 }
 .title {
     font-size: 18px;
     // color: rgba(0, 0, 0, .85);
     font-weight: 600;
-    color: #4A4A4A;
+    color: @title-grey;
     text-transform: capitalize;
 }
 .card {
+    border-radius: 5px; 
     width: 350px;
     height: 32em;
     margin: auto;
@@ -28,7 +31,7 @@
     align-items: center;
     .contributed {
         .title;
-        font-weight: 800;
+        font-weight: 600;
     }
     .iconfont-group {
         position: relative;
@@ -47,21 +50,23 @@
         color: #4a4a4a;
     }
 }
+.logo-container{
+    height: 75px;
+    width: auto;
+}
 
-
-.card-img-top {
-    // height: 8em;
-    height: auto;
-    max-width: 50%;
+.card-img-top {  
+    height: auto; 
+    width: auto;
     padding: 15px 0 15px 0;
-    // max-height: 4em;
+    // max-height: 4em; 
+    max-height: 75px;
     max-width: 100px;
-    max-height: 100px;
 }
 .card-text {
-    height: 6.6em;
+    max-height: 6.6em;
     overflow: auto;
-    color: #4a4a4a;
+    color: @title-grey;
     font-size: 12px;
     line-height: 15px;
 }
@@ -97,4 +102,4 @@
     line-height: 40px;
     padding-top: 0;
     padding-bottom: 0;
-}
+} 
