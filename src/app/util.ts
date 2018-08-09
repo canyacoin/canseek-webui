@@ -7,7 +7,7 @@ export function wrapTextarea(i, str) {
                 .map(item => `<p>${item}</p>`)
                 .join('')
     }
-    return;
+    return str;
 }
 export function unwrapTextarea(str = '') {
     return str
