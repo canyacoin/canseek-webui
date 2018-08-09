@@ -132,7 +132,7 @@ export class GlobalService {
     const referNum = cidArr.length;
     const postRef = this.dbRef.doc(id);
 
-    this.cs.getRefund(postId)
+    return this.cs.getRefund(postId)
       .then(result => {
         if (result) {
           // update post's referrals_by_user candidates
@@ -149,6 +149,7 @@ export class GlobalService {
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
           })
           this.message.success('GetRefund success');
+          return Promise.resolve(1);
         }
       })
       .catch(err => {

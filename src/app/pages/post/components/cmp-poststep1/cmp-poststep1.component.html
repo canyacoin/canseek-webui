@@ -72,9 +72,13 @@ Let them know:
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_remote">Remote</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_remote">Allow Remote Working</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <label nz-checkbox formControlName="job_remote">Allow Remote Working</label>
+      <nz-radio-group formControlName="job_remote" id="job_remote">
+        <label nz-radio-button nzValue="1">yes</label>
+        <label nz-radio-button nzValue="0">no</label>
+      </nz-radio-group>
+
       <nz-form-explain *ngIf="validateForm.get('job_remote').dirty && validateForm.get('job_remote').errors">Please select Allow Remote Working!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>

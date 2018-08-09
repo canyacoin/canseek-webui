@@ -21,6 +21,7 @@ export class CmpPostComponent implements OnInit {
   moment = moment;
   confirmModal: NzModalRef;
   loading: boolean = false;
+  refundLoading: boolean = false;
 
   constructor(
     private gs: GlobalService,
@@ -55,7 +56,12 @@ export class CmpPostComponent implements OnInit {
   }
 
   async getRefund(post) {
-    await this.gs.getRefund(post, this.curUser);
+    this.refundLoading = true;
+    this.gs.getRefund(post, this.curUser)
+      .then(() => {
+        this.refundLoading = false;
+      });
+      
     this.store.balance = await this.cs.getCANBalance();
   }
 

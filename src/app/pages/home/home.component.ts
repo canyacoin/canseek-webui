@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
   getPosts(): void {
     this.gs.getPosts()
       .subscribe(posts => {
-        this.posts = posts
+        this.posts = posts || [];
         this.loading = false;
         this.searchStatus(this.statusValue);
       });
