@@ -8,8 +8,8 @@
                   <span>
                       <i class="fa fa-circle fs-9 mr-12" [ngStyle]="{'color': web3Color}"></i> 
                       <span>Ethereum Network : </span>
-                      <span *ngIf="currentNetwork!=0" style="text-transform: capitalize">{{ currentNetwork }}</span>
-                      <span *ngIf="currentNetwork==0" style="text-transform: capitalize">None</span>
+                      <span *ngIf="currentNetwork" style="text-transform: capitalize">{{ currentNetwork }}</span>
+                      <span *ngIf="!currentNetwork" style="text-transform: capitalize">None</span>
                     </span>
                 </li> 
               <li nz-menu-item> 
