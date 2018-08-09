@@ -40,6 +40,7 @@ import { CmpCandidateComponent } from './pages/refer-detail/components/cmp-candi
 
 import { ClipboardModule } from 'ngx-clipboard';
 import { NoauthComponent } from './pages/noauth/noauth.component';
+import { StatusLightComponent } from './layout/header/status-light/status-light.component';
 
 registerLocaleData(zh);
 
@@ -65,6 +66,7 @@ registerLocaleData(zh);
     CmpPostComponent,
     CmpCandidateComponent,
     NoauthComponent,
+    StatusLightComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,30 @@
+
+          <nz-dropdown>
+            <a href="javascript:;" nz-dropdown>
+                <i class="fa fa-circle fs-9" [ngStyle]="{'color': web3Color}"></i>
+            </a> 
+            <ul nz-menu>
+                <li nz-menu-item> 
+                  <span>
+                      <i class="fa fa-circle fs-9 mr-12" [ngStyle]="{'color': web3Color}"></i> 
+                      <span>Ethereum Network : </span>
+                      <span *ngIf="currentNetwork!=0" style="text-transform: capitalize">{{ currentNetwork }}</span>
+                      <span *ngIf="currentNetwork==0" style="text-transform: capitalize">None</span>
+                    </span>
+                </li> 
+              <li nz-menu-item> 
+                <span>
+                  &nbsp;
+                    <span style="margin-left: 10px">{{ web3Message }}</span>
+                  </span>
+              </li> 
+              <li *ngIf="currentNetwork === 'main' && currentUser !== '' " nz-menu-item>  
+                  <span>
+                    <span>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;CAN Balance : {{currentBalance}}</span>
+                  </span>
+              </li>   
+            </ul> 
+          </nz-dropdown>
