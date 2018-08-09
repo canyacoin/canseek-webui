@@ -6,6 +6,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Store } from '../../../../store';
+import { handleTextarea } from '../../../../util';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -33,10 +34,7 @@ export class CmpPoststep1Component implements OnInit {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
       data[i] = this.validateForm.controls[ i ].value;
-      // data.push({
-      //   label: i,
-      //   value: this.validateForm.controls[ i ].value
-      // })
+      data[i] = handleTextarea(i, data[i]);
     }
     data['job_attachments'] = this.fileList;
     data['company_logo'] = this.logo;
