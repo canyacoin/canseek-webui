@@ -50,7 +50,7 @@
     </nz-row>
     <div *ngIf="statusValue != 'my referrals'">
         <a routerLink="/post/detail/{{ post.id }}">
-          <p class="card-text mb-20">{{ post.job_desc || 'Here is the description of the person that we are looking for. This person needs to be sharp as a tack. If you or someone you know is looking for work with a brand that seeks to become the flagbearers ushering in new technology to the world. But no pressure though.' }}</p>
+          <div class="card-text mb-20" [innerHtml]="post.job_desc">{{'Here is the description of the person that we are looking for. This person needs to be sharp as a tack. If you or someone you know is looking for work with a brand that seeks to become the flagbearers ushering in new technology to the world. But no pressure though.' }}</div>
         </a>
         <div class="flex op-area">
           <i class="can-coin mr-8"></i>

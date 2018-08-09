@@ -32,7 +32,7 @@
               
               <section class="my-40">
                 <p class="bold">Job Description</p>
-                <div class="card-text text">{{ post.job_desc }}</div>
+                <div class="card-text text" [innerHtml]="post.job_desc"></div>
               </section>
 
               <section class="my-40" *ngIf="post.job_attachments.length">
@@ -47,7 +47,7 @@
               
               <section class="my-40">
                 <p class="bold">Company Description</p>
-                <div class="card-text text">{{ post.company_desc }}</div>
+                <div class="card-text text" [innerHtml]="post.company_desc"></div>
               </section>
             </div>
         </div>

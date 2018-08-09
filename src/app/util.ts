@@ -1,4 +1,4 @@
-export function handleTextarea(i, str) {
+export function wrapTextarea(i, str) {
     const fields = ['company_desc', 'job_desc', 'reason', 'answer', 'answer2', 'answer3'];
     if (fields.includes(i)) {
         return str
@@ -8,4 +8,11 @@ export function handleTextarea(i, str) {
                 .join('')
     }
     return;
+}
+export function unwrapTextarea(str = '') {
+    return str
+            .trim()
+            .replace(/<(\/)?p>/g, '\n')
+            .replace(/(\n)+/g, '\n')
+            .trim()
 }

@@ -6,7 +6,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Store } from '../../../../store';
-import { handleTextarea } from '../../../../util';
+import { wrapTextarea, unwrapTextarea } from '../../../../util';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { NzMessageService } from 'ng-zorro-antd';
 
@@ -34,7 +34,7 @@ export class CmpPoststep1Component implements OnInit {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
       data[i] = this.validateForm.controls[ i ].value;
-      data[i] = handleTextarea(i, data[i]);
+      data[i] = wrapTextarea(i, data[i]);
     }
     data['job_attachments'] = this.fileList;
     data['company_logo'] = this.logo;
@@ -58,7 +58,7 @@ export class CmpPoststep1Component implements OnInit {
   initForm(values, disabled): void {
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
-      job_desc: [ { value: values['job_desc'], disabled }, [ Validators.required ] ],
+      job_desc: [ { value: unwrapTextarea(values['job_desc']), disabled }, [ Validators.required ] ],
       job_location: [{ value: values['job_location'], disabled }],
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],
       job_remote: [ { value: values['job_remote'], disabled } ],
@@ -72,7 +72,7 @@ export class CmpPoststep1Component implements OnInit {
       company_logo: [ { value: values['company_logo'], disabled } ],
       company_name: [ { value: values['company_name'], disabled }, [ Validators.required ] ],
       company_website:       [ { value: ((this.email || '').split('@') || [])[1], disabled: true } ],
-      company_desc     : [ { value: values['company_desc'], disabled }, [ Validators.required ] ],
+      company_desc     : [ { value: unwrapTextarea(values['company_desc']), disabled }, [ Validators.required ] ],
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
       your_email: [ { value: values['your_email'] || this.email, disabled: true }, [ Validators.email, Validators.required ] ],
