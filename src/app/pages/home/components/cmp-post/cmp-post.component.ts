@@ -30,7 +30,7 @@ export class CmpPostComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.post);
+    // console.log(this.post);
   }
 
   showConfirm(post): void {
