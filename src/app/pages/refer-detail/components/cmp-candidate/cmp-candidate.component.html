@@ -20,16 +20,24 @@
     <h3>{{ category.label }}:</h3>
     <ng-container *ngFor="let item of category.value">
       <nz-row class="my-20" nzGutter="16">
-        <nz-col nzSpan="6" class="bold text-left">{{ item.label }}</nz-col>
-        <nz-col nzSpan="18" *ngIf="!['cover_letter', 'resume'].includes(item.field)">:&nbsp;&nbsp;{{ candidate[item.field] }}</nz-col>
-        <nz-col nzSpan="18" *ngIf="['cover_letter', 'resume'].includes(item.field)">:&nbsp;&nbsp;
-          <a class="mr-12 blue" target="_blank" 
-            href="{{ file.url }}" 
-            *ngFor="let file of candidate[item.field]">
-            <i class="iconfont iconfont-pdf mr-6"></i> 
-            {{ file.name }}
-          </a>
-        </nz-col>
+        <nz-col nzSpan="6" class="bold text-left">{{ item.label }}:</nz-col>
+
+        <!-- format output -->
+        <ng-container [ngSwitch]="item.field">
+          <nz-col nzSpan="18" *ngSwitchCase="'reason'" [innerHtml]="candidate[item.field]"></nz-col>
+          <nz-col nzSpan="18" *ngSwitchCase="'answers'" [innerHtml]="candidate[item.field]"></nz-col>
+          <nz-col nzSpan="18" *ngSwitchCase="'answers2'" [innerHtml]="candidate[item.field]"></nz-col>
+          <nz-col nzSpan="18" *ngSwitchCase="'answers3'" [innerHtml]="candidate[item.field]"></nz-col>
+
+          <nz-col nzSpan="18" *ngSwitchCase="'resume'">
+            <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of candidate[item.field]">{{ file.name }}</a>
+          </nz-col>
+          <nz-col nzSpan="18" *ngSwitchCase="'cover_letter'">
+            <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of candidate[item.field]">{{ file.name }}</a>
+          </nz-col>
+          <nz-col nzSpan="18" *ngSwitchDefault>{{ candidate[item.field] }}</nz-col>
+        </ng-container>
+
       </nz-row>
     </ng-container>
   </div>
