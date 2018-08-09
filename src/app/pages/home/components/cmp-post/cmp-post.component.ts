@@ -37,9 +37,10 @@ export class CmpPostComponent implements OnInit {
     post.nextStatus = 'cancelled'
     
     this.confirmModal = this.modal.confirm({
-      nzTitle: 'Are your sure you want to cancel this job post?',
-      nzOkText: 'OK',
-      nzCancelText: 'Cancel',
+      nzTitle: 'Confirmation required',
+      nzContent: '<p class="text">Are your sure you want to cancel this job post?<br>This action cannot be reversed.</p><p class="">Fees: the initial reward will be refunded to the metamask address used to create the job post,less the 1% administration fee.<br>Any application fees will be refunded to participants.</p>',
+      nzOkText: 'cancel',
+      nzCancelText: 'back',
       nzOnOk: async () => {
         try {
           await this.gs.cancelPostDb(post);
