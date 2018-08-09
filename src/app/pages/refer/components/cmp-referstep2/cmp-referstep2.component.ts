@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { NzMessageService } from 'ng-zorro-antd';
+import { handleTextarea } from '../../../../util';
 
 @Component({
   selector: 'app-cmp-referstep2',
@@ -26,6 +27,7 @@ export class CmpReferstep2Component implements OnInit {
       this.validateForm.controls[ i ].markAsDirty();
       this.validateForm.controls[ i ].updateValueAndValidity();
       data[i] = this.validateForm.controls[ i ].value;
+      data[i] = handleTextarea(i, data[i]);
     }
     data['resume'] = this.fileList;
     data['cover_letter'] = this.cover_letter;
