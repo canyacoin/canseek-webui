@@ -82,11 +82,21 @@
           <h4 class="fw-500">{{ category.label }}:</h4>
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
-              <nz-col nzSpan="6" class="bold text-left">{{ item.label }}</nz-col>
-              <nz-col nzSpan="18" *ngIf="!['job_attachments', 'company_logo'].includes(item.field)">:&nbsp;&nbsp;{{ values[item.field] }}</nz-col>
-              <nz-col nzSpan="18" *ngIf="['job_attachments', 'company_logo'].includes(item.field)">:&nbsp;&nbsp;
-                <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
-              </nz-col>
+              <nz-col nzSpan="6" class="bold text-left">{{ item.label }}:</nz-col>
+              
+              <!-- format output -->
+              <ng-container [ngSwitch]="item.field">
+                <nz-col nzSpan="18" *ngSwitchCase="'job_desc'" [innerHtml]="values[item.field]"></nz-col>
+                <nz-col nzSpan="18" *ngSwitchCase="'company_desc'" [innerHtml]="values[item.field]"></nz-col>
+                <nz-col nzSpan="18" *ngSwitchCase="'company_logo'">
+                  <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
+                </nz-col>
+                <nz-col nzSpan="18" *ngSwitchCase="'job_attachments'">
+                  <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
+                </nz-col>
+                <nz-col nzSpan="18" *ngSwitchDefault>{{ values[item.field] }}</nz-col>
+              </ng-container>
+              
             </nz-row>
           </ng-container>
         </div>
