@@ -207,11 +207,12 @@ export class PostComponent implements AfterViewInit {
   async done() {
     this.doneLoading = true;
 
-    const postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: Number(this.values['reward']), owner_addr: this.store.curUser, ...this.values, time: Date.now() };
+    const postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: Number(this.values['reward']), ...this.values, time: Date.now(), owner_addr: this.store.curUser };
     const handledData = JSON.parse(JSON.stringify(postData));
     // const isUpdate = this.type == 'edit' ? true : false;
     const { reward, cost, postId } = handledData;
     let { id } = handledData;
+    // console.log('post', handledData);
     
     if(postId) {// just update db
       this.gs.updatePost(handledData)
