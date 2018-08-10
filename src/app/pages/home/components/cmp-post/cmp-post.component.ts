@@ -39,7 +39,7 @@ export class CmpPostComponent implements OnInit {
     
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Confirmation required',
-      nzContent: '<p class="text">Are your sure you want to cancel this job post?<br>This action cannot be reversed.</p><p class="">Fees: the initial reward will be refunded to the metamask address used to create the job post,less the 1% administration fee.<br>Any application fees will be refunded to participants.</p>',
+      nzContent: '<p class="text">Are your sure you want to cancel this job post?<br>This action cannot be reversed.</p><p>Fees: The Initial Reward will be refunded to the metamask address used to create the job post, less the 1% fee. <br/> Any Application Fees will be refunded to participants.</p>',
       nzOkText: 'cancel',
       nzCancelText: 'back',
       nzOnOk: async () => {
