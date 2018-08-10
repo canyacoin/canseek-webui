@@ -56,7 +56,10 @@ export class ApplicantsComponent implements OnInit {
     this.pid = id;
     this.gs.getCandidates(id)
       .subscribe(candidates => {
-        this.candidates = candidates || [];
+        this.candidates = (candidates || [])
+          .filter(item => item.status !== 'pending')
+          .sort((a, b) => b.time - a.time);
+
         this.loading = false;
         this.searchCategory();
       });
