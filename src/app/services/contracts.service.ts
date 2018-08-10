@@ -27,14 +27,26 @@ let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 
 // Ropsten contract address
-const CanYaCoinAddr = '0x1e7df0798b3cf411c954b1355f0889dc58a20d92';
-const EscrowAddr = '0x180140cf37a7ad694e2a54f037ad1e4cd8bc4b9b';
-const CanHireAddr = '0xea4088ca8948de6aa8e8c49130dee94336de3dd1';
+// const CanYaCoinAddr = '0x1e7df0798b3cf411c954b1355f0889dc58a20d92';
+// const EscrowAddr = '0x180140cf37a7ad694e2a54f037ad1e4cd8bc4b9b';
+// const CanHireAddr = '0xea4088ca8948de6aa8e8c49130dee94336de3dd1';
 
 // Ganache contract address
-// const CanYaCoinAddr = '0xd72e3876df8abdb1224440d569f4890117edffb5';
-// const EscrowAddr = '0x0ad634df3cc983bf74861b8526e9a4e052277635';
-// const CanHireAddr = '0xd174f4c67da0a0b1855f43c33e19bd3f7113b1c6';
+const CanYaCoinAddr = '0x0606207a9a71081090b7a611264e0fa925965c3a';
+const EscrowAddr = '0xa3f36fccab3461d4d0d73aa5b1775fb1e4390cef';
+const CanHireAddr = '0xc8552ab60a7a0275a1f6880a2287f4b5e1d31645';
+
+// (0) 8f5c40f1ad8b0ab5786fdfefda7726107800350dc1cec541cfb9cba694947f04
+// (1) 61f7b49fa99892afddc74d4c1607270b3b49b7fb468703c66e152aa65805387c
+// (2) 0fcebee91744f7d9fe849cccbd5012bacabc860bfbf6714cf4c28f141bbc263d
+// (3) 023a6d213a9ff3238cda54e4522b218ff28abaad122e56b2f8226df36fc96041
+// (4) e6b607b7482be3f2093e2898ba401897bcb3524bf37416405a13cdbadd24b58d
+// (5) efa8b9b3984d8cacc40949c70aef04e1a21981607339a9d172ab3b36b26530f7
+// (6) e31f93b2216edf7dfe25eaeec704cd50c3cc1da808adb521c33144827de3db74
+// (7) 00292650bde8210e00826d68d73daa75ec225d03d384c30b7381a3dd2d95b144
+// (8) 66c6882f3d06bd2ee9ae2a846406ad18aea59751df13a412dd8926f3a2fadcf2
+// (9) 996099c796573dce6a866bb645dbe405e2be67d2c2a635f1b3d3f3d623f88cc9
+
 
 @Injectable()
 export class ContractsService {

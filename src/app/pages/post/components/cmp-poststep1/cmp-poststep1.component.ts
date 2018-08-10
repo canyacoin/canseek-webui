@@ -28,7 +28,7 @@ export class CmpPoststep1Component implements OnInit {
   previewVisible = false;
 
   submitForm(): any {
-    const data = [];
+    const data = {};
 
     for (const i in this.validateForm.controls) {
       this.validateForm.controls[ i ].markAsDirty();
@@ -36,9 +36,11 @@ export class CmpPoststep1Component implements OnInit {
       data[i] = this.validateForm.controls[ i ].value;
       data[i] = wrapTextarea(i, data[i]);
     }
+
+    data['job_range'] = data['salary_min'] ? `${data['salary_currency']}: ${data['salary_min']} ~ ${data['salary_max']} ${data['salary_cycle']}` : '';
     data['job_attachments'] = this.fileList;
     data['company_logo'] = this.logo;
-    // console.log('step1', data);
+
     return {
       valid: this.validateForm.valid,
       data
@@ -62,7 +64,13 @@ export class CmpPoststep1Component implements OnInit {
       job_location: [{ value: values['job_location'], disabled }],
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],
       job_remote: [ { value: values['job_remote'], disabled } ],
+
       job_range: [{ value: values['job_range'], disabled }],
+      salary_currency: [{ value: this.store.selectedCurrency['string'] || '$ USD', disabled: true }],
+      salary_min: [{ value: values['salary_min'], disabled }],
+      salary_max: [{ value: values['salary_max'], disabled }],
+      salary_cycle: [{ value: values['salary_cycle'] || '/ Annum', disabled }],
+      
       job_attachments: [{ value: values['job_attachments'], disabled }],
       job_level: [ { value: values['job_level'], disabled }, [ Validators.required ] ],
       screening_questions      : [ { value: values['screening_questions'], disabled } ],

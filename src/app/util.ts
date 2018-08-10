@@ -1,6 +1,6 @@
-export function wrapTextarea(i, str) {
+export function wrapTextarea(i, str = '') {
     const fields = ['company_desc', 'job_desc', 'reason', 'answer', 'answer2', 'answer3'];
-    if (fields.includes(i)) {
+    if (fields.includes(i) && str.length) {
         return str
                 .trim()
                 .split('\n')

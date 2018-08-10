@@ -84,10 +84,22 @@ Let them know:
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_range"> Salary Range </nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="job_range" id="job_range" placeholder="100,000 - 150,000">
-    </nz-form-control>
+    <nz-form-label [nzSm]="6" [nzXs]="24"> Salary Range </nz-form-label>
+    <nz-col [nzSm]="18" [nzXs]="24">
+      <nz-input-group nzCompact>
+        <nz-select [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
+          <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
+        </nz-select>
+        
+        <input type="text" nz-input formControlName="salary_min" id="salary_min"  placeholder="Minimum" style="width:160px; text-align: center;">
+        <input type="text" disabled nz-input placeholder="~" style="width: 30px; border-left: 0px; pointer-events: none; background-color: rgb(255, 255, 255);">
+        <input type="text" nz-input formControlName="salary_max" id="salary_max"  placeholder="Maximum" style="width: 160px; text-align: center; border-left: 0px;">
+
+        <nz-select style="width: 120px;" formControlName="salary_cycle">
+          <nz-option *ngFor="let cycle of store.salary_cycles" [nzLabel]="cycle" [nzValue]="cycle"></nz-option>
+        </nz-select>
+      </nz-input-group>
+    </nz-col>
   </nz-form-item>
   
   <nz-form-item>

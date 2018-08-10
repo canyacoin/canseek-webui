@@ -1,4 +1,6 @@
 export let Store = {
+    salary_cycles: ['/ Annum', '/ Month', '/ Week', '/ Day', '/ Hour'],
+    currencyArr: ['$ AUD', '$ USD', '€ EUR', 'CAN'],
     currency: {
       AUD: {
         symbol: '$',
