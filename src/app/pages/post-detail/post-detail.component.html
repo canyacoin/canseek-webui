@@ -76,16 +76,16 @@
             
             <div class="flex bold mt-20">
               <p class="flex1">Company Contributions:</p>
-              ${{ post.reward }} USD
+              {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.reward || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}
             </div>
             <div class="flex bold">
               <p class="flex1">Referral  Contributions:</p>
-              ${{ post.cost }} USD
+              {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}
             </div>
             <div class="flex bold">
               <p class="flex1"></p>
               <p>
-                ${{ post.honeypot || post.reward }} USD
+                {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.honeypot || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}
                 <br>
                 <span class="desc">Total Reward</span>
               </p>

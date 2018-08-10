@@ -104,8 +104,9 @@ export class PostComponent implements AfterViewInit {
     });
 
     this.validateForm = this.fb.group({
-      reward: [ { value: values['reward'], disabled }, [ Validators.required, this.rewardValidator ] ],
-      cost: [ { value: values['cost'], disabled }, [ Validators.required, this.costValidator ] ],
+      reward_fee: [ { value: values['reward_fee'], disabled }, [ Validators.required, this.rewardValidator ] ],
+      cost_fee: [ { value: values['cost_fee'] || 10, disabled }, [ Validators.required, this.costValidator ] ],
+      salary_currency: [{ value: this.store.selectedCurrency['string'] || '$ USD', disabled: true }],
     });
   }
 
@@ -186,6 +187,14 @@ export class PostComponent implements AfterViewInit {
     } else if (this.current === 1) {
       formData = this.step1.submitForm();
       this.values = {...this.values, ...formData.data };
+
+      // init reward by salary_min when type = new
+      const salary_min = formData.data['salary_min'];
+      if (salary_min && this.type == 'new') {
+        this.values['reward_fee'] = salary_min * 0.05;
+        this.initForm(this.values, false);
+      }
+      
     } else if (this.current === 2) {
       // pass directly when edit,because reward info can't edit
       formData = this.type == 'edit' ? { ...this.submitForm(), valid: true } : this.submitForm();
@@ -207,10 +216,20 @@ export class PostComponent implements AfterViewInit {
   async done() {
     this.doneLoading = true;
 
-    const postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: Number(this.values['reward']), ...this.values, time: Date.now(), owner_addr: this.store.curUser };
-    const handledData = JSON.parse(JSON.stringify(postData));
+    const reward = Number(this.values['reward']);
+    const cost = Number(this.values['cost']);
+    let postData = this.values;
+    let handledData;
+
+    if (this.type == 'new') {
+      postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: reward, reward, cost, ...this.values, time: Date.now(), owner_addr: this.store.curUser };
+    } else {
+      postData = {...postData, time: Date.now()};
+    }
+    
+    handledData = JSON.parse(JSON.stringify(postData));
     // const isUpdate = this.type == 'edit' ? true : false;
-    const { reward, cost, postId } = handledData;
+    const { postId } = handledData;
     let { id } = handledData;
     // console.log('post', handledData);
     
@@ -223,7 +242,7 @@ export class PostComponent implements AfterViewInit {
           id = await this.gs.addPostDb(handledData)
         }
         this.pid = id;
-        const postId = await this.cs.addPost(id, Number(reward), Number(cost));
+        const postId = await this.cs.addPost(id, reward, cost);
         await this.gs.addPostCb(id, postId);
         this.store.balance = await this.cs.getCANBalance();
         this.redireact(id);
@@ -243,6 +262,18 @@ export class PostComponent implements AfterViewInit {
       this[form].controls[ i ].markAsDirty();
       this[form].controls[ i ].updateValueAndValidity();
       this.values[i] = this[form].controls[ i ].value;
+    }
+
+    // handle reward & cost
+    if (this.type == 'new') {
+      const reward_fee = Number(this.values['reward_fee']);
+      const cost_fee = Number(this.values['cost_fee']);
+      const currency = Number(this.store.selectedCurrency['rate'] || 1);
+  
+      this.values['reward_string'] = `${this.values['salary_currency']}: ${reward_fee}`;
+      this.values['cost_string'] = `${this.values['salary_currency']}: ${cost_fee}`;
+      this.values['reward'] = Math.floor(reward_fee / currency);
+      this.values['cost'] = Math.floor(cost_fee / currency);
     }
     
     return {

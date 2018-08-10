@@ -86,10 +86,10 @@ export let Store = {
         label: 'Reward Information',
         value: [{
           label: 'Initial Reward',
-          field: 'reward'
+          field: 'reward_string'
         }, {
           label: 'Talent Application Fee',
-          field: 'cost'
+          field: 'cost_string'
         }]
       },{
         label: 'Your Information',
