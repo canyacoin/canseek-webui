@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { NzMessageService } from 'ng-zorro-antd';
-import { wrapTextarea } from '../../../../util';
+import { wrapTextarea, unwrapTextarea } from '../../../../util';
 
 @Component({
   selector: 'app-cmp-referstep2',
@@ -16,6 +16,7 @@ import { wrapTextarea } from '../../../../util';
 })
 export class CmpReferstep2Component implements OnInit {
   @Input() post: any;
+  @Input() values: any;
   fileList = [];
   cover_letter = [];
   validateForm: FormGroup;
@@ -45,20 +46,24 @@ export class CmpReferstep2Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const isMe = this.values['relation'] == 'the talent';
+
     this.validateForm = this.fb.group({
-      candidate_name         : [ null, [ Validators.required ] ],
-      candidate_phone         : [ null ],
-      candidate_email        : [ null, [ Validators.required, Validators.email ] ],
-      candidate_website: [null],
-      candidate_linkedin: [ null ],
+      candidate_name: [ isMe ? this.values['your_name'] : this.values['candidate_name'], [ Validators.required ] ],
+      candidate_phone: [ this.values['candidate_phone'] ],
+      candidate_email: [ isMe ? this.values['your_email'] : this.values['candidate_email'], [ Validators.required, Validators.email ] ],
+      candidate_website: [this.values['candidate_website']],
+      candidate_linkedin: [ this.values['candidate_linkedin'] ],
       
-      resume      : [ null ],
-      reason     : [ null, [ Validators.required ] ],
-      answers      : [ null/*, [ Validators.required, this.answerValidator ]*/ ],
-      answers2      : [ null ],
-      answers3      : [ null ],
-      cover_letter: [null],
+      resume: [ this.values['resume'] ],
+      reason: [ unwrapTextarea(this.values['reason']), [ Validators.required ] ],
+      answers: [ unwrapTextarea(this.values['answers'])/*, [ Validators.required, this.answerValidator ]*/ ],
+      answers2: [ unwrapTextarea(this.values['answers2']) ],
+      answers3: [ unwrapTextarea(this.values['answers3']) ],
+      cover_letter: [ this.values['cover_letter'] ],
     });
+    this.fileList = this.values['resume'] || [];
+    this.cover_letter = this.values['cover_letter'] || [];
   }
 
   answerValidator = (control: FormControl) => {

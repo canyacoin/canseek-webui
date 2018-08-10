@@ -48,7 +48,7 @@
       </form>
 
       <!-- step2 -->
-      <app-cmp-referstep2 *ngIf="current == 1" [post]="post"></app-cmp-referstep2>
+      <app-cmp-referstep2 [values]="values" *ngIf="current == 1" [post]="post"></app-cmp-referstep2>
       
       <!-- step3 -->
       <div class="text-center" *ngIf="current == 2">
@@ -84,8 +84,8 @@
     </div>
     
     <div class="steps-action mt-40 text-right">
-      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0 && current != 2">
-        <span>Cancel</span>
+      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
+        <span>Back</span>
       </button>
       <button nz-button nzType="primary" (click)="next()" *ngIf="current < 2" class="ml-20">
         <span>Next</span>
