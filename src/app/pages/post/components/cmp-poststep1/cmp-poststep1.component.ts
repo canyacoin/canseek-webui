@@ -67,8 +67,8 @@ export class CmpPoststep1Component implements OnInit {
 
       job_range: [{ value: values['job_range'], disabled }],
       salary_currency: [{ value: this.store.selectedCurrency['string'] || '$ USD', disabled: true }],
-      salary_min: [{ value: values['salary_min'], disabled }],
-      salary_max: [{ value: values['salary_max'], disabled }],
+      salary_min: [{ value: values['salary_min'], disabled }, [ this.numberValidator ]],
+      salary_max: [{ value: values['salary_max'], disabled }, [ this.numberValidator ]],
       salary_cycle: [{ value: values['salary_cycle'] || '/ Annum', disabled }],
       
       job_attachments: [{ value: values['job_attachments'], disabled }],
@@ -93,6 +93,14 @@ export class CmpPoststep1Component implements OnInit {
   handleChange(info: any, key: string = 'fileList') {
     // console.log('handleChange', info);
     this[key] = info.fileList;
+  }
+
+  numberValidator = (control: FormControl) => {
+    if (control.value && !/^\d+$/.test(control.value)) {
+      return { number: true };
+    } else {
+      return null;
+    }
   }
 
   uploadFile = (item: any) => {
