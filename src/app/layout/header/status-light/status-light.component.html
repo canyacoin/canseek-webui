@@ -1,8 +1,7 @@
 
-<nz-dropdown>
+<nz-dropdown [nzPlacement]="'bottomCenter'">
   <a href="javascript:;" nz-dropdown class="wrapper">
-    <img src="/assets/img/metamask-fox.svg" width="30px" alt="MetaMask" [class.offline]="currentUser == ''">
-    <sup><i class="fa fa-circle fs-9" [ngStyle]="{'color': web3Color}"></i></sup> 
+    <i class="fa fa-circle fs-9" [ngStyle]="{'color': web3Color}"></i>
   </a> 
   <ul nz-menu>
       <li nz-menu-item> 
@@ -27,8 +26,5 @@
               &nbsp;CAN Balance : {{currentBalance}}</span>
         </span>
     </li>   
-    <li nz-menu-item *ngIf="currentUser !== ''"> 
-      <app-profile-modal [curUser]="currentUser"></app-profile-modal>
-    </li>
   </ul> 
 </nz-dropdown>
