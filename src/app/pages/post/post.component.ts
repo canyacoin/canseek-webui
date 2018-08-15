@@ -216,6 +216,7 @@ export class PostComponent implements AfterViewInit {
       try {
         if (!id) {// totally new
           id = await this.gs.addPostDb(handledData)
+          this.values['id'] = id;
         }
         this.pid = id;
         const postId = await this.cs.addPost(id, reward, cost);
