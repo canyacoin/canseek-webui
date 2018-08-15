@@ -28,7 +28,7 @@
         </span>
     </li>   
     <li nz-menu-item *ngIf="currentUser !== ''"> 
-      <app-profile-modal></app-profile-modal>
+      <app-profile-modal [curUser]="currentUser"></app-profile-modal>
     </li>
   </ul> 
 </nz-dropdown>

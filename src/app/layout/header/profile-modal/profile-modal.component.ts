@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ProfileService } from '../../../services/profile.service';
 // import { AngularFireAuth } from 'angularfire2/auth';
 import {
@@ -6,7 +6,6 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { Store } from '../../../store';
 import { Profile } from '../../../models/profile';
 
 @Component({
@@ -15,13 +14,12 @@ import { Profile } from '../../../models/profile';
   styleUrls: ['./profile-modal.component.less']
 })
 export class ProfileModalComponent implements OnInit {
+  @Input() curUser;
   visible: boolean = false;
   loading: boolean = false;
 
   formData = {};
   form: FormGroup;
-
-  store = Store;
 
   constructor(
     private ps: ProfileService,
@@ -33,7 +31,7 @@ export class ProfileModalComponent implements OnInit {
 
     console.log(this.formData);
     this.form = this.fb.group({
-      mm: [ this.formData['mm'] || this.store.curUser, [ Validators.required ] ],
+      mm: [ this.formData['mm'] || this.curUser, [ Validators.required ] ],
       your_email: [ this.formData['your_email'], [ Validators.email, Validators.required ] ],
       your_name: [ this.formData['your_name'], [ Validators.required ] ],
       company_name: [ this.formData['company_name'], [ Validators.required ] ],
@@ -51,13 +49,9 @@ export class ProfileModalComponent implements OnInit {
       this.ps.setProfile(data);
 
       this.loading = true;
-      
-      await this.ps.verify(data['your_email'], this.store.curUser);
-
+      await this.ps.verify(data['your_email'], this.curUser);
       this.loading = false;
-
       this.visible = false;
-      
     } else {
       return;
     }
