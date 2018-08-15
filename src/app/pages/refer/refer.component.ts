@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
 import { GlobalService } from '../../services/global.service';
+import { ProfileService } from '../../services/profile.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
@@ -36,16 +37,18 @@ export class ReferComponent implements AfterViewInit {
   constructor(
     private fb: FormBuilder,
     private gs: GlobalService,
+    private ps: ProfileService,
     private cs: ContractsService,
     private router: Router,
     private route: ActivatedRoute,
     private message: NzMessageService,
   ) {
+    this.values = this.ps.getProfile();
     this.validateForm = this.fb.group({
-      your_name         : [ null, [ Validators.required ] ],
-      your_email        : [ null, [ Validators.required, Validators.email ] ],
-      relation     : [ null, [ Validators.required ] ],
-      owner_addr      : [ { value: this.store.curUser, disabled: true } ],
+      your_name: [ this.values['your_name'], [ Validators.required ] ],
+      your_email: [ this.values['your_email'], [ Validators.required, Validators.email ] ],
+      relation: [ null, [ Validators.required ] ],
+      owner_addr: [ { value: this.store.curUser, disabled: true } ],
     });
     this.getPost();
   }
@@ -74,6 +77,7 @@ export class ReferComponent implements AfterViewInit {
 
     if (this.current === 0) {
       formData = this.submitForm();
+      this.ps.setProfile(formData.data);
     } else if (this.current === 1) {
       formData = this.step2.submitForm();
       this.values = {...this.values, ...formData.data};
@@ -91,8 +95,8 @@ export class ReferComponent implements AfterViewInit {
     this.gs.getPost(id)
       .subscribe(post => {
         this.post = post;
+        // identify
         if (post['owner_addr'] === this.store.curUser) {
-          
           this.router.navigateByUrl('/noauth');
         }
       });
