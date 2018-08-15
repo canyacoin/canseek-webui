@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '../models/profile';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
+import { AngularFireAuth } from 'angularfire2/auth';
 
-const MsgVerifyEmail = 'Please check your email to verify your account';
+const MsgVerifyEmail = 'Please check your email to verify your account, then reload this page or open in a new tab';
 const MsgAlreadyLogin = 'The email address is already in use by another account.';
 
 @Injectable({
@@ -10,40 +11,89 @@ const MsgAlreadyLogin = 'The email address is already in use by another account.
 })
 export class ProfileService {
   confirmModal: NzModalRef;
+  authState: any = {};
 
   constructor(
     private modal: NzModalService,
     private message: NzMessageService,
-  ) { }
-
-  async getProfile(): Promise<Profile> {
-    return Promise.resolve({
-      mm: [],
-      your_email: '',
-      emailVerified: false,
-      your_name: '',
-      company_name: '',
-      owner_addr: '',
-    })
+    private afAuth: AngularFireAuth,
+  ) { 
+    this.afAuth.authState.subscribe((auth) => {
+      this.authState = auth;
+    });
   }
 
-  async setProfile(Profile) {
+  getProfile(): Profile {
+    const mm = localStorage.getItem('mm') ? localStorage.getItem('mm').split(',') : undefined;
+    const your_email = localStorage.getItem('your_email');
+    const your_name = localStorage.getItem('your_name');
+    const company_name = localStorage.getItem('company_name');
     
+    return {
+      mm,
+      your_email,
+      your_name,
+      company_name,
+    }
   }
 
-  signinWithEmail(your_email: string, owner_addr: string) {
+  setProfile(profile: Profile) {
+    const { mm, your_email, your_name, company_name } = profile;
+    const nextMM = mm.join(',');
 
+    localStorage.setItem('mm', nextMM);
+    localStorage.setItem('your_email', your_email);
+    localStorage.setItem('your_name', your_name);
+    localStorage.setItem('company_name', company_name);
   }
 
-  loginWithEmail(your_email: string) {
+  async verify(email: string, displayName: string) {
+    const isVerified = this.authState['email'] == email && this.authState['emailVerified']
 
+    if (isVerified) {
+      this.message.success('Verified Success!');
+      return Promise.resolve(1);
+    }
+    if (this.authState['email'] == email && !this.authState['emailVerified']) {
+      this.msgModal('error', MsgVerifyEmail);
+      return Promise.resolve(1);
+    }
+
+    try {
+      await this.signinWithEmail(email, displayName);
+    } catch(err) {
+      if (err.message == MsgAlreadyLogin) {
+        await this.loginWithEmail(email);
+      } else {
+        this.msgModal('error', err.message);
+      }
+    }
+  }
+
+  async signinWithEmail(email: string, displayName: string) {
+    try {
+      await this.afAuth.auth.createUserWithEmailAndPassword(email, email);
+      await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL: ''});
+      await this.afAuth.auth.currentUser.sendEmailVerification();
+      this.msgModal('success', MsgVerifyEmail);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async loginWithEmail(email: string) {
+    try {
+      await this.afAuth.auth.signInWithEmailAndPassword(email, email);
+      this.message.success('Login Success!');
+    } catch(err) {
+      this.msgModal('error', err.message);
+    }
   }
 
   msgModal(type, message): void {
     this.confirmModal = this.modal[type]({
       nzTitle: message,
-      nzOkText: type == 'success' ? null : 'OK',
+      nzOkText: 'OK',
     });
   }
-
 }
