@@ -12,6 +12,7 @@ import { GlobalService } from '../../services/global.service';
 import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-post',
@@ -31,11 +32,8 @@ export class PostComponent implements AfterViewInit {
 
   id: string; // post id
 
-  verifiedEmail: string = null;
-  email: string = null;
-  emailVerified: boolean = false;
-  verifyLoading: boolean = false;
-  displayName: string = '';
+  authState: any = {};
+  loading: boolean = false;
   confirmModal: NzModalRef;
 
   doneLoading: boolean = false;
@@ -51,11 +49,12 @@ export class PostComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private message: NzMessageService,
     private modal: NzModalService,
+    private ps: ProfileService,
   ) {
+    this.values = this.ps.getProfile();
     this.afAuth.authState.subscribe((auth) => {
-      this.emailVerified = (auth||{})['emailVerified'];
-      this.email = this.verifiedEmail = (auth||{})['email'];
-      this.displayName = (auth||{})['displayName'];
+      this.authState = auth || {};
+      console.log(auth)
     });
 
     this.route.queryParams.subscribe(params => {
@@ -87,9 +86,10 @@ export class PostComponent implements AfterViewInit {
     this.current = 1;
     this.gs.getPost(this.id)
       .subscribe(post => {
+        // TODO: should update email by localStorage?
         this.values = post;
+        // identify
         if (post['owner_addr'] != this.store.curUser) {
-          
           this.router.navigateByUrl(`/noauth`);
         } else {
           this.initForm(this.values, this.type == 'edit');
@@ -111,40 +111,13 @@ export class PostComponent implements AfterViewInit {
   }
 
   async emailVerify() {
-    if (!this.email) return;
+    const your_email = this.emailForm.controls['your_email'].value;
+    
+    if (!your_email) return;
 
-    this.verifyLoading = true;
-
-    try {
-      await this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.store.curUser);
-      await this.afAuth.auth.currentUser.updateProfile({displayName: this.store.curUser, photoURL: ''});
-      await this.afAuth.auth.currentUser.sendEmailVerification();
-      this.showModal('success', 'Please check your email to verify your account');
-      this.verifyLoading = false;
-    } catch(err) {
-      if (err.message == 'The email address is already in use by another account.') {
-        this.loginWithEmail();
-      } else {
-        this.verifyLoading = false;
-        this.showModal('error', err.message);
-      }
-    }
-  }
-
-  async loginWithEmail() {
-    try {
-      await this.afAuth.auth.signInWithEmailAndPassword(this.email, this.store.curUser);
-      this.verifyLoading = false;
-      this.message.success('Verified Success!');
-    } catch(err) {
-      this.verifyLoading = false;
-      if (err.message == 'The password is invalid or the user does not have a password.') {
-        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please verify a new email.');
-      } else {
-        this.showModal('error', err.message);
-      }
-      console.log(err);
-    }
+    this.loading = true;
+    await this.ps.verify(your_email, this.store.curUser);
+    this.loading = false;
   }
 
   rewardValidator = (control: FormControl) => {
@@ -178,11 +151,13 @@ export class PostComponent implements AfterViewInit {
 
     if (this.current === 0) {
       formData = this.submitForm('emailForm');
-      const { your_email, owner_addr } = formData.data;
+      const isVerified = (this.authState['email'] == formData.data['your_email']) && this.authState['emailVerified'];
 
-      if ((your_email !== this.verifiedEmail) || (owner_addr !== this.displayName)) {
+      if (!isVerified) {
         formData.valid = false;
-        this.showModal('error', 'The email address doesn\'t match your MetaMask address!<br/> Please check it and verify your email.');
+        this.showModal('error', 'Please verify your email first!');
+      } else {
+        this.ps.setProfile(formData.data);
       }
     } else if (this.current === 1) {
       formData = this.step1.submitForm();
@@ -194,7 +169,7 @@ export class PostComponent implements AfterViewInit {
         this.values['reward_fee'] = salary_min * 0.05;
         this.initForm(this.values, false);
       }
-      
+      this.ps.setProfile(formData.data);
     } else if (this.current === 2) {
       // pass directly when edit,because reward info can't edit
       formData = this.type == 'edit' ? { ...this.submitForm(), valid: true } : this.submitForm();
@@ -228,6 +203,7 @@ export class PostComponent implements AfterViewInit {
     }
     
     handledData = JSON.parse(JSON.stringify(postData));
+    this.ps.setProfile(handledData);
     // const isUpdate = this.type == 'edit' ? true : false;
     const { postId } = handledData;
     let { id } = handledData;

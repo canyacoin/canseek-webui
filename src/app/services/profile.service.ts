@@ -19,7 +19,8 @@ export class ProfileService {
     private afAuth: AngularFireAuth,
   ) { 
     this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth;
+      this.authState = auth || {};
+      console.log(auth)
     });
   }
 
@@ -39,7 +40,7 @@ export class ProfileService {
 
   setProfile(profile: Profile) {
     const { mm, your_email, your_name, company_name } = profile;
-    const nextMM = mm.join(',');
+    const nextMM = mm ? mm.join(',') : profile['owner_addr'];
 
     localStorage.setItem('mm', nextMM);
     localStorage.setItem('your_email', your_email);
@@ -48,15 +49,14 @@ export class ProfileService {
   }
 
   async verify(email: string, displayName: string) {
-    const isVerified = this.authState['email'] == email && this.authState['emailVerified']
+    const isVerified = (this.authState['email'] == email) && this.authState['emailVerified'];
 
     if (isVerified) {
-      this.message.success('Verified Success!');
-      return Promise.resolve(1);
+      return;
     }
     if (this.authState['email'] == email && !this.authState['emailVerified']) {
       this.msgModal('error', MsgVerifyEmail);
-      return Promise.resolve(1);
+      return;
     }
 
     try {

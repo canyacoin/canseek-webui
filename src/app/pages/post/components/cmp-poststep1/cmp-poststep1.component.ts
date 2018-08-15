@@ -17,7 +17,6 @@ import { NzMessageService } from 'ng-zorro-antd';
 })
 export class CmpPoststep1Component implements OnInit {
   @Input() values;
-  @Input() email;
 
   validateForm: FormGroup;
   store = Store;
@@ -58,6 +57,9 @@ export class CmpPoststep1Component implements OnInit {
   }
   
   initForm(values, disabled): void {
+    const email = values['your_email'];
+    // console.log('init email', email);
+    
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
       job_desc: [ { value: unwrapTextarea(values['job_desc']), disabled }, [ Validators.required ] ],
@@ -79,11 +81,11 @@ export class CmpPoststep1Component implements OnInit {
 
       company_logo: [ { value: values['company_logo'], disabled } ],
       company_name: [ { value: values['company_name'], disabled }, [ Validators.required ] ],
-      company_website:       [ { value: ((this.email || '').split('@') || [])[1], disabled: true } ],
+      company_website:       [ { value: ((email || '').split('@') || [])[1], disabled: true } ],
       company_desc     : [ { value: unwrapTextarea(values['company_desc']), disabled }, [ Validators.required ] ],
 
       your_name: [ { value: values['your_name'], disabled }, [ Validators.required ] ],
-      your_email: [ { value: values['your_email'] || this.email, disabled: true }, [ Validators.email, Validators.required ] ],
+      your_email: [ { value: email, disabled: true }, [ Validators.email, Validators.required ] ],
       owner_addr: [ { value: this.store.curUser || values['owner_addr'], disabled: true } ],
     });
     this.fileList = values['job_attachments'] || [];

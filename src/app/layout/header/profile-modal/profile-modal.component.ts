@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ProfileService } from '../../../services/profile.service';
-// import { AngularFireAuth } from 'angularfire2/auth';
+import { NzMessageService } from 'ng-zorro-antd';
 import {
   FormBuilder,
   FormGroup,
@@ -24,9 +24,14 @@ export class ProfileModalComponent implements OnInit {
   constructor(
     private ps: ProfileService,
     private fb: FormBuilder,
+    private message: NzMessageService,
   ) { }
 
   ngOnInit() {
+    this.initForm();
+  }
+
+  initForm() {
     this.formData = this.ps.getProfile();
 
     console.log(this.formData);
@@ -39,6 +44,7 @@ export class ProfileModalComponent implements OnInit {
   }
 
   showModal(): void {
+    this.initForm();
     this.visible = true;
   }
 
@@ -47,6 +53,7 @@ export class ProfileModalComponent implements OnInit {
     
     if (valid) {
       this.ps.setProfile(data);
+      this.message.success('Save success!');
 
       this.loading = true;
       await this.ps.verify(data['your_email'], this.curUser);
