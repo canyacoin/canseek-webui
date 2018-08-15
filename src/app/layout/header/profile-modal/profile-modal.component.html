@@ -1,0 +1,61 @@
+
+<span (click)="showModal()">
+  &nbsp;
+  <span style="margin-left: 10px">User profile</span>
+</span>
+
+<nz-modal [(nzVisible)]="visible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
+  <ng-template #modalTitle>
+    User Profile details
+  </ng-template>
+
+  <ng-template #modalContent>
+    <form nz-form [nzLayout]="vertical" [formGroup]="form" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-label> MetaMask address: </nz-form-label>
+        <nz-form-control>
+          <nz-select nzMode="tags" nzPlaceHolder="input or search" formControlName="mm" id="mm">
+            <nz-option *ngFor="let option of formData.mm" [nzLabel]="option" [nzValue]="option">
+            </nz-option>
+          </nz-select>
+          <nz-form-extra>Current Address: {{ store.curUser }}</nz-form-extra>
+        </nz-form-control>
+        
+      </nz-form-item>
+      
+      <nz-form-item>
+        <nz-form-label nzFor="your_name" nzRequired> Your Name </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="your_name" id="your_name" placeholder="First Name, Last Name">
+          <nz-form-explain *ngIf="form.get('your_name').dirty && form.get('your_name').errors">Please input Your Name!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="your_email" nzRequired> Your Email </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="your_email" id="your_email" placeholder="name@example.com">
+          <nz-form-explain *ngIf="form.get('your_email').dirty && form.get('your_email').errors">Please input Your Email!</nz-form-explain>
+          <nz-form-extra>To help us verify your account and job posts, this email domain must match your company’s website domain. 
+              eg. support@canya.com matches canya.com</nz-form-extra>
+        </nz-form-control>
+      </nz-form-item>
+
+      <nz-form-item>
+        <nz-form-label nzFor="company_name" nzRequired> Company Name </nz-form-label>
+        <nz-form-control>
+          <input nz-input formControlName="company_name" id="company_name" placeholder="Company Name">
+          <nz-form-explain *ngIf="form.get('company_name').dirty && form.get('company_name').errors">Please input Your Company Name!</nz-form-explain>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+
+    <p class="fw-600 text-center">We will send you an email to verify this address. 
+    <br>Once verified, login  with MetaMask to get started.</p>
+  </ng-template>
+
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
+    <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="loading" style="text-transform: capitalize">Verify & save</button>
+  </ng-template>
+</nz-modal>
