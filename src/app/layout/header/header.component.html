@@ -12,7 +12,7 @@
     </div>  
     <div class="topbar-right" id="top-nav">
         
-      <ul class="topbar-nav nav"> 
+      <ul class="topbar-nav nav lh-2"> 
         <li class="nav-item mr-24"><a routerLink="">HOME</a></li> 
         <li class="nav-item mr-24">
           <a href="https://www.canwork.io/tools" target="_blank">
@@ -45,6 +45,17 @@
             </ul>
           </nz-dropdown>
         </li>
+
+        <li class="nav-item">
+
+          <!-- 如果没有登录 email,且没有登录 metamask 显示这个,点击显示弹窗 -->
+          <a href="javascript:;" class="nav-link">
+            <button class="btn btn-join btn-sm text-white" (click)="showModal()">Join</button>
+          </a>
+          <!-- 如果没有登录 email, 但是登录 metamask 显示 gravatar 但是是灰色 -->
+          <!-- 下拉显示 sign in, 登录后显示user profile, balance, buy can -->
+        </li>
+        <app-profile-modal [curUser]="curUser"></app-profile-modal>
       </ul>     
     </div> 
   </div>
