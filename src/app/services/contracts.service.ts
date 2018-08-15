@@ -32,9 +32,9 @@ let gasRecommend = '200000';
 // const CanHireAddr = '0xea4088ca8948de6aa8e8c49130dee94336de3dd1';
 
 // Ganache contract address
-const CanYaCoinAddr = '0x0606207a9a71081090b7a611264e0fa925965c3a';
-const EscrowAddr = '0xa3f36fccab3461d4d0d73aa5b1775fb1e4390cef';
-const CanHireAddr = '0xc8552ab60a7a0275a1f6880a2287f4b5e1d31645';
+const CanYaCoinAddr = '0x3314e3c39e2bae4fd0a8fe5dd6a8bb9be8906599';
+const EscrowAddr = '0x3c38e7156ab6499ca7b66b7cf6f04fc627838c83';
+const CanHireAddr = '0xc2f5720e8b07680b2350453c62df9910674f96c3';
 
 // (0) 8f5c40f1ad8b0ab5786fdfefda7726107800350dc1cec541cfb9cba694947f04
 // (1) 61f7b49fa99892afddc74d4c1607270b3b49b7fb468703c66e152aa65805387c

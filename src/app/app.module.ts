@@ -34,6 +34,8 @@ import { environment } from '../environments/environment';
 
 import { ContractsService } from './services/contracts.service';
 import { GlobalService } from './services/global.service';
+import { ProfileService } from './services/profile.service';
+
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 import { CmpPostComponent } from './pages/home/components/cmp-post/cmp-post.component';
 import { CmpCandidateComponent } from './pages/refer-detail/components/cmp-candidate/cmp-candidate.component';
@@ -86,7 +88,7 @@ registerLocaleData(zh);
 
     ClipboardModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, GlobalService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, ProfileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
