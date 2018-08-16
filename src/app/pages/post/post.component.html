@@ -124,7 +124,7 @@
       <!-- step3 -->
       <div *ngIf="current == 3">
         <div *ngFor="let category of store.postForm">
-          <h4 class="fw-500">{{ category.label }}:</h4>
+          <h4 class="fw-500 my-30">{{ category.label }}:</h4>
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
               <nz-col nzSpan="6" class="bold text-left">{{ item.label }}:</nz-col>

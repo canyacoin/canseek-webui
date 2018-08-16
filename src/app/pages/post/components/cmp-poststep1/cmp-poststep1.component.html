@@ -1,5 +1,5 @@
 <form *ngIf="!!validateForm" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <h4 class="fw-500">Your Information</h4>
+  <h4 class="fw-500 my-30">Your Information</h4>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
@@ -25,7 +25,7 @@
     </nz-form-control>
   </nz-form-item> 
 
-  <h4 class="fw-500">Create a Job Post</h4>
+  <h4 class="fw-500 my-30">Create a Job Post</h4>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_title" nzRequired> Job Title </nz-form-label>
@@ -62,10 +62,10 @@ Let them know:
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_type" nzRequired>Position Type</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
       <nz-radio-group formControlName="job_type" id="job_type">
-        <label nz-radio-button nzValue="full time">full time</label>
-        <label nz-radio-button nzValue="part time">part time</label>
-        <label nz-radio-button nzValue="contract">contract/temp</label>
-        <label nz-radio-button nzValue="casual">casual</label>
+        <label nz-radio-button nzValue="Full Time">Full Time</label>
+        <label nz-radio-button nzValue="Part Time">Part Time</label>
+        <label nz-radio-button nzValue="Contract">contract/temp</label>
+        <label nz-radio-button nzValue="Casual">casual</label>
       </nz-radio-group>
       <nz-form-explain *ngIf="validateForm.get('job_type').dirty && validateForm.get('job_type').errors">Please select Position Type!</nz-form-explain>
     </nz-form-control>
@@ -159,7 +159,7 @@ Let them know:
   </nz-form-item>
 
   
-  <h4 class="fw-500">Company Information</h4>
+  <h4 class="fw-500 my-30">Company Information</h4>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
