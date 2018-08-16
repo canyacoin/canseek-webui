@@ -36,6 +36,7 @@ export class ProfileModalComponent implements OnInit {
   async ngOnInit() {
     this.initForm();
     this.store.curUser = await this.cs.getAccount();
+    this.store.balance = await this.cs.getCANBalance();
   }
 
   async buyCan() {
