@@ -4,7 +4,9 @@ import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
 import { Store } from '../store';
-const MsgVerifyEmail = 'Please check your email to verify your account, then reload this page or open in a new tab';
+const MsgAlreadyVerified = 'You\'ve verified';
+const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
+const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';
 const MsgAlreadyLogin = 'The email address is already in use by another account.';
 
 @Injectable({
@@ -53,10 +55,11 @@ export class ProfileService {
     const isVerified = (this.store.authState['email'] == email) && this.store.authState['emailVerified'];
 
     if (isVerified) {
+      this.msgModal('success', MsgAlreadyVerified);
       return;
     }
     if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
-      this.msgModal('error', MsgVerifyEmail);
+      this.msgModal('info', MsgVerifyRequired);
       return;
     }
 
@@ -79,7 +82,7 @@ export class ProfileService {
       await this.afAuth.auth.createUserWithEmailAndPassword(email, email);
       await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
       await this.afAuth.auth.currentUser.sendEmailVerification();
-      this.msgModal('success', MsgVerifyEmail);
+      this.msgModal('success', MsgVerifyEmailSent);
     } catch (err) {
       throw err;
     }
@@ -88,7 +91,7 @@ export class ProfileService {
   async loginWithEmail(email: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, email);
-      this.message.success('Login Success!');
+      this.msgModal('success', 'Login Success!');
     } catch(err) {
       this.msgModal('error', err.message);
       console.log(err);
