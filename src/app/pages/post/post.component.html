@@ -43,13 +43,18 @@
       <!-- step2 -->
       <form *ngIf="current == 2" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label nzFor="reward_fee" nzRequired> Initial Reward </nz-form-label>
+          <nz-form-label nzFor="reward_fee" nzRequired> Initial Reward 
+            <span 
+              nz-popover 
+              [nzContent]="rewardTemplate" 
+            >
+              <i class="anticon anticon-question-circle-o text fs-16"></i>
+            </span>
+          </nz-form-label>
           <nz-form-control>
-            <nz-form-extra>This is your Company’s contribution to the reward pool, paid to the successful talent.</nz-form-extra>
-
             <nz-input-group nzCompact>
                 <nz-select [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
-                    <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
+                  <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
                 </nz-select>
             
                 <input 
@@ -57,34 +62,35 @@
                     formControlName="reward_fee" 
                     id="reward_fee" 
                     class="flex1"
-                    placeholder="Minimum 500 CAN" 
+                    placeholder="<5% of minimum salary range> or enter your contribution to the reward pool here" 
                     style="width: 600px; width: calc(100% - 120px)"
                 >
             </nz-input-group>
             
             <nz-row>
               <nz-col nzSpan="18">
-                <nz-form-extra class="blue" style="font-size: 10px">
-                  <span class="fw-600">Recommendation: </span>
-                  We recommend an initial reward of 5% of the minimum salary range to attract talent. Eg. $100,000 salary = $5000 initial reward.
-                </nz-form-extra>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).required">Please input reward! </nz-form-explain>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).number">Please input number!</nz-form-explain>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).minimum">Please bigger than 500!</nz-form-explain>
               </nz-col>
               <nz-col nzSpan="6" class="text-right">
                 ≈{{ (validateForm.get('reward_fee').value / (store.selectedCurrency.rate || 1)) | number:'1.0-0' }}CAN
               </nz-col>
             </nz-row>
             
-            <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).required">Please input Honeypot! </nz-form-explain>
-            <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).number">Please input number!</nz-form-explain>
-            <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).minimum">Please bigger than 500!</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-            <nz-form-label nzFor="cost_fee" nzRequired> Talent Application Fee </nz-form-label>
+            <nz-form-label nzFor="cost_fee" nzRequired> Talent Application Fee 
+              <span 
+                nz-popover 
+                [nzContent]="costTemplate" 
+              >
+                <i class="anticon anticon-question-circle-o text fs-16"></i>
+              </span>
+            </nz-form-label>
             <nz-form-control>
-              <nz-form-extra>This is the amount needed for talent hunters to join the pool, which adds to the total reward.</nz-form-extra>
-
               <nz-input-group nzCompact>
                   <nz-select [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
                       <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
@@ -93,6 +99,7 @@
                   <input 
                       nz-input 
                       formControlName="cost_fee" 
+                      placeholder="<10 CAN> or enter the talent application fee here"
                       id="cost_fee" 
                       style="width: 600px; width: calc(100% - 120px)"
                   >
@@ -100,23 +107,13 @@
 
               <nz-row>
                 <nz-col nzSpan="18">
-                  <nz-form-extra class="blue" style="font-size: 10px;">
-                    <span class="fw-600">Recommendation: </span>
-                      We recommend a talent applicaton fee of between $10 - $50 USD. Higher fees typically result in less but higher quality applications.
-                  </nz-form-extra>
+                  <nz-form-explain *ngIf="validateForm.get('cost_fee').dirty && validateForm.get('cost_fee').errors">Please input Application Fee! Please input number!</nz-form-explain>
                 </nz-col>
                 <nz-col nzSpan="6" class="text-right">
                   ≈{{ (validateForm.get('cost_fee').value / (store.selectedCurrency.rate || 1)) | number:'1.0-0' }}CAN
                 </nz-col>
               </nz-row>
-              
 
-              <nz-form-extra class="my-20">
-                  Note: There is a non-refundable 1% fee. 
-                  <br>You can cancel the job post at anytime for a refund.
-                  <br>All payments are held in CAN tokens.
-              </nz-form-extra>
-              <nz-form-explain *ngIf="validateForm.get('cost_fee').dirty && validateForm.get('cost_fee').errors">Please input Application Fee! Please input number!</nz-form-explain>
             </nz-form-control>
           </nz-form-item>
       </form>
@@ -177,3 +174,21 @@
 </nz-row>  
 
 <app-cmp-bancor *ngIf="current == 2"></app-cmp-bancor>
+
+<ng-template #rewardTemplate>
+  <div class="blue fs-12">
+      <p class="fw-600">This is your Company’s contribution to the reward pool, paid to the successful talent.</p> 
+      <span class="fw-600">Recommendation:</span> We recommend an initial reward of 5% of the minimum salary range to attract talent.
+      <br>
+      Eg. $100,000 salary = $5000 initial reward.
+  </div>
+</ng-template>
+
+<ng-template #costTemplate>
+  <div class="blue">
+      <p class="fw-600">This is the amount needed for talent hunters to join the pool, which adds to the total reward.</p>
+      <span class="fw-600">Recommendation:</span> We recommend a talent application fee of between $10 - $50 USD.
+      <br>
+      Higher fees typically result in less but higher quality applications.
+  </div>
+</ng-template>
