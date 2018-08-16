@@ -1,47 +1,47 @@
 <form *ngIf="!!validateForm" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
-  <h4 class="my-20">Talent’s Information</h4>
+  <h4 class="my-20">Talent Contact Details</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_name" nzRequired> Talent’s Name </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_name" nzRequired> Contact Name </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="candidate_name" id="candidate_name" placeholder="Please input">
+      <input nz-input formControlName="candidate_name" id="candidate_name" placeholder="First name, Last name">
       <nz-form-explain *ngIf="validateForm.get('candidate_name').dirty && validateForm.get('candidate_name').errors">Please input Talent’s Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_phone">Talent’s Phone</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_email" nzRequired>Contact Phone or Email</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="candidate_phone" id="candidate_phone" placeholder="Please input">
-      <nz-form-explain *ngIf="validateForm.get('candidate_phone').dirty && validateForm.get('candidate_phone').errors">Please input Talent’s Phone!</nz-form-explain>
-    </nz-form-control>
-  </nz-form-item>
-  
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_email" nzRequired>Talent’s Email</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="candidate_email" id="candidate_email" placeholder="Please input">
+      <input nz-input formControlName="candidate_email" id="candidate_email" placeholder="user@email.com">
       <nz-form-explain *ngIf="validateForm.get('candidate_email').dirty && validateForm.get('candidate_email').errors">Please input Talent’s Email!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_website">Talent’s Website</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_website"> Website</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="candidate_website" id="candidate_website" placeholder="Please input">
+      <input nz-input formControlName="candidate_website" id="candidate_website" placeholder="myportfolio.com">
       <nz-form-explain *ngIf="validateForm.get('candidate_website').dirty && validateForm.get('candidate_website').errors">Please input Talent’s Website!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_linkedin">Talent’s LinkedIn</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_linkedin">LinkedIn Profile</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="candidate_linkedin" id="candidate_linkedin" placeholder="Please input">
+      <input nz-input formControlName="candidate_linkedin" id="candidate_linkedin" placeholder="https://www.linkedin.com/in/user">
       <nz-form-explain *ngIf="validateForm.get('candidate_linkedin').dirty && validateForm.get('candidate_linkedin').errors">Please input Talent’s LinkedIn!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
-  <h4 class="my-20">Application Information</h4>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired style="white-space: normal;" class="pr-10">Why are you referring this talent?(max 100 words)</nz-form-label>
+    <nz-form-control [nzSm]="18" [nzXs]="24">
+      <textarea formControlName="reason" id="reason" nz-input rows="7" placeholder="Let the job poster know why you think this talent is a great hire!"></textarea>
+      <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons!</nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <h4 class="my-20">Application</h4>
 
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume"> CV/Resume </nz-form-label>
@@ -60,41 +60,33 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Referring Reasons</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
-      <textarea formControlName="reason" id="reason" nz-input rows="4" placeholder="Please input"></textarea>
-      <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons!</nz-form-explain>
-    </nz-form-control>
-  </nz-form-item>
-
-  <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers">Screening Question 1
-      <!-- <br> -->
-      <!-- <span class="text">(The job poster requested)</span> -->
-    </nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers">Screening Question 1</nz-form-label> -->
+    <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions }}</nz-form-extra>
-      <textarea formControlName="answers" id="answers" nz-input rows="4" placeholder="write anything"></textarea>
+      <textarea formControlName="answers" id="answers" nz-input rows="5" placeholder="Write your answer to the job poster's question above"></textarea>
+      <nz-form-extra class="fs-12 text-right">Maximum 200 words</nz-form-extra>
       <nz-form-explain *ngIf="validateForm.get('answers').dirty && (validateForm.get('answers').errors || {}).required">Please input Your answer!</nz-form-explain>
       <nz-form-explain *ngIf="validateForm.get('answers').dirty && (validateForm.get('answers').errors || {}).maxlength">Maximum 200 words!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions2">
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2">Screening Question 2</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2">Screening Question 2</nz-form-label> -->
+    <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions2 }}</nz-form-extra>
-      <textarea formControlName="answers2" id="answers2" nz-input rows="4" placeholder="write anything"></textarea>
+      <textarea formControlName="answers2" id="answers2" nz-input rows="5" placeholder="Write your answer to the job poster's question above"></textarea>
+      <nz-form-extra class="fs-12 text-right">Maximum 200 words</nz-form-extra>
       <nz-form-explain *ngIf="validateForm.get('answers2').dirty && (validateForm.get('answers2').errors || {}).required">Please input Your answer!</nz-form-explain>
       <nz-form-explain *ngIf="validateForm.get('answers2').dirty && (validateForm.get('answers2').errors || {}).maxlength">Maximum 200 words!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions3">
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3">Screening Question 3</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3">Screening Question 3</nz-form-label> -->
+    <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions3 }}</nz-form-extra>
-      <textarea formControlName="answers3" id="answers3" nz-input rows="4" placeholder="write anything"></textarea>
+      <textarea formControlName="answers3" id="answers3" nz-input rows="5" placeholder="Write your answer to the job poster's question above"></textarea>
+      <nz-form-extra class="fs-12 text-right">Maximum 200 words</nz-form-extra>
       <nz-form-explain *ngIf="validateForm.get('answers3').dirty && (validateForm.get('answers3').errors || {}).required">Please input Your answer!</nz-form-explain>
       <nz-form-explain *ngIf="validateForm.get('answers3').dirty && (validateForm.get('answers3').errors || {}).maxlength">Maximum 200 words!</nz-form-explain>
     </nz-form-control>

@@ -107,12 +107,12 @@ export let Store = {
       }
     ],
     referForm: [{
-      label: 'Referrer Information',
+      label: 'Your contact details',
       value: [{
-        label: 'Your Name',
+        label: 'Name',
         field: 'your_name'
       }, {
-        label: 'Your E-mail',
+        label: 'Email',
         field: 'your_email'
       }, {
         label: 'Your relationship to the Talent',
@@ -122,25 +122,25 @@ export let Store = {
         field: 'owner_addr'
       }]
     }, {
-      label: 'Talent’s Information',
+      label: 'Talent Contact Details',
       value: [{
-        label: 'Talent’s Name',
+        label: 'Contact Name',
         field: 'candidate_name'
+      // }, {
+      //   label: 'Talent’s Phone',
+      //   field: 'candidate_phone'
       }, {
-        label: 'Talent’s Phone',
-        field: 'candidate_phone'
-      }, {
-        label: 'Talent’s Email',
+        label: 'Contact Phone or Email',
         field: 'candidate_email'
       }, {
-        label: 'Talent’s Website',
+        label: 'Website',
         field: 'candidate_website'
       }, {
-        label: 'Talent’s LinkedIn',
+        label: 'LinkedIn Profile',
         field: 'candidate_linkedin'
       }]
     }, {
-      label: 'Application Information',
+      label: 'Application',
       value: [{
         label: 'CV/Resume',
         field: 'resume'
@@ -148,8 +148,14 @@ export let Store = {
         label: 'Referring Reasons',
         field: 'reason'
       }, {
-        label: 'Screening Questions',
+        label: 'Screening Question 1',
         field: 'answers'
+      }, {
+        label: 'Screening Question 2',
+        field: 'answers2'
+      }, {
+        label: 'Screening Question 3',
+        field: 'answers3'
       }, {
         label: 'Cover Letter',
         field: 'cover_letter'

@@ -50,8 +50,8 @@ export class CmpReferstep2Component implements OnInit {
 
     this.validateForm = this.fb.group({
       candidate_name: [ isMe ? this.values['your_name'] : this.values['candidate_name'], [ Validators.required ] ],
-      candidate_phone: [ this.values['candidate_phone'] ],
-      candidate_email: [ isMe ? this.values['your_email'] : this.values['candidate_email'], [ Validators.required, Validators.email ] ],
+      // candidate_phone: [ this.values['candidate_phone'] ],
+      candidate_email: [ isMe ? this.values['your_email'] : this.values['candidate_email'], [ Validators.required ] ],
       candidate_website: [this.values['candidate_website']],
       candidate_linkedin: [ this.values['candidate_linkedin'] ],
       

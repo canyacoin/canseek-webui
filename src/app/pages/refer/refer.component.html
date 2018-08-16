@@ -9,32 +9,27 @@
     <div class="steps-content mt-100">
       <!-- step1 -->
       <form *ngIf="!!validateForm && current == 0" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+        <h4 class="my-20">Your Contact Details</h4>
+
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> MetaMask Address </nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Name </nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
-            <nz-form-extra>For payout of the honeypot if your talent is successful!</nz-form-extra>
-            <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
-          </nz-form-control>
-        </nz-form-item>
-        
-        <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
-          <nz-form-control [nzSm]="18" [nzXs]="24">
-            <input nz-input formControlName="your_name" id="your_name" placeholder="Please input">
+            <input nz-input formControlName="your_name" id="your_name" placeholder="First name, Last name">
             <nz-form-explain *ngIf="validateForm.get('your_name').dirty && validateForm.get('your_name').errors">Please input Your Name!</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
         
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_email" nzRequired>Your E-mail</nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_email" nzRequired>Email</nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
-            <input nz-input formControlName="your_email" id="your_email" placeholder="Please input">
+            <input nz-input formControlName="your_email" id="your_email" placeholder="user@email.com">
             <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input Your E-mail!</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
       
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship</nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship to the talent</nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
             <nz-radio-group formControlName="relation" id="relation">
               <label nz-radio-button nzValue="recruiter">recruiter</label>
@@ -42,7 +37,14 @@
               <label nz-radio-button nzValue="the talent">i'm the talent</label>
             </nz-radio-group>
             <nz-form-explain *ngIf="validateForm.get('relation').dirty && validateForm.get('relation').errors">Please select your relationship!</nz-form-explain>
+          </nz-form-control>
+        </nz-form-item>
 
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+          <nz-form-control [nzSm]="18" [nzXs]="24">
+            <nz-form-extra>For payout of the total reward if your talent is the successful candidate</nz-form-extra>
+            <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
           </nz-form-control>
         </nz-form-item>
       </form>
@@ -52,17 +54,17 @@
       
       <!-- step3 -->
       <div class="text-center" *ngIf="current == 2">
-        <h4>Application Fee</h4>
-        <h4>
-          <strong>
-            {{ post.cost }} CAN
-            ≈
-            {{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}
-          </strong>
-        </h4>  
-
-        <p class="text mt-40">This is used to pay into the post’s honeypot and increases the quality of referrals.
-          If you win, you will receive the entire honeypot plus all fees paid by other referrers, including your own. If the job post is cancelled, you will be refunded. If you do not win, your fee will be paid to the winner. There is a 1% payment sent to the CanYaDAO for sustainability on all fees.</p>
+        <h4>Application Fee 
+          <sup 
+            nz-popover 
+            [nzTitle]="titleTemplate" 
+            [nzContent]="contentTemplate" 
+            nzPlacement="rightTop"
+          >
+            <i class="anticon anticon-question-circle-o text fs-17"></i>
+          </sup> 
+        </h4>
+        <p class="fs-18 fw-400">{{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}</p> 
 
         <button 
           nz-button
@@ -71,20 +73,18 @@
           class="mb-12" 
           (click)="done()"
           >
-          Refer Talent
+          Refer Talent & Pay
         </button>
 
         <a target="_blank" 
           routerLink="/refer/detail/{{ pid }}/{{ cid }}"
           class="ml-12" *ngIf="pid && cid"> view details </a>
 
-        <p class="text mt-8" *ngIf="current === 2">To complete referring the job post, you must submit TWO metamask pop-up confirmations. Make sure you have enough ETH to cover the transaction fees and check the transation status in Metamask.</p>
-
       </div>
     </div>
     
     <div class="steps-action mt-40 text-right">
-      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0">
+      <button nz-button nzType="default" (click)="pre()" *ngIf="current > 0 && current != 2">
         <span>Back</span>
       </button>
       <button nz-button nzType="primary" (click)="next()" *ngIf="current < 2" class="ml-20">
@@ -94,3 +94,20 @@
 
   </nz-col>
 </nz-row>
+
+
+<ng-template #titleTemplate>
+  <span class="fw-400 fs-16 blue">What is this fee?</span>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <div class="blue">
+    <p>The Application Fee is added to the total reward pool and incentivises quality referrals. </p>
+    <p>If your talent is the successful candidate, you will be paid out the total reward, which includes the Company's initial reward and all talent application fees made by referrers, including your own. </p>
+    <p>If the job post is cancelled, you will be refunded. </p>
+    <p>If you do not win, your fee will be paid to the winner. </p>
+    There is a 1% payment sent to the CanYaDAO for sustainability on all fees.
+  </div>
+</ng-template>
+
+<app-cmp-bancor *ngIf="current == 2"></app-cmp-bancor>

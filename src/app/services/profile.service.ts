@@ -57,7 +57,6 @@ export class ProfileService {
     }
     if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
       this.msgModal('error', MsgVerifyEmail);
-      console.log(err);
       return;
     }
 
