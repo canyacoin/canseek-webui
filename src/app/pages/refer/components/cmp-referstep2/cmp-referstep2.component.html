@@ -68,7 +68,7 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers">Screening Questions1
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers">Screening Question 1
       <!-- <br> -->
       <!-- <span class="text">(The job poster requested)</span> -->
     </nz-form-label>
@@ -81,7 +81,7 @@
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions2">
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2">Screening Questions2</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2">Screening Question 2</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions2 }}</nz-form-extra>
       <textarea formControlName="answers2" id="answers2" nz-input rows="4" placeholder="write anything"></textarea>
@@ -91,7 +91,7 @@
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions3">
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3">Screening Questions3</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3">Screening Question 3</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions3 }}</nz-form-extra>
       <textarea formControlName="answers3" id="answers3" nz-input rows="4" placeholder="write anything"></textarea>
