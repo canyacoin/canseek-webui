@@ -59,7 +59,7 @@
     </nz-form-control>
   </nz-form-item>
 
-  <nz-form-item>
+  <nz-form-item *ngIf="post.screening_questions">
     <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers">Screening Question 1</nz-form-label> -->
     <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions }}</nz-form-extra>

@@ -27,15 +27,15 @@ let gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 
 // mainnet contract address
-// const CanYaCoinAddr = '0xc0b3c2394c62a6d6437a189444c46d556cf1339d';
-// const EscrowAddr = '0x1b17a3bed2c7f638faee11e785f8c6d2ad78d78c';
-// const CanHireAddr = '0xb2a0def4d812b144c5146972e69d1d5432d812ad';
+const CanYaCoinAddr = '0xc0b3c2394c62a6d6437a189444c46d556cf1339d';
+const EscrowAddr = '0x1b17a3bed2c7f638faee11e785f8c6d2ad78d78c';
+const CanHireAddr = '0xb2a0def4d812b144c5146972e69d1d5432d812ad';
 
 
 // Ropsten contract address
-const CanYaCoinAddr = '0x1e7df0798b3cf411c954b1355f0889dc58a20d92';
-const EscrowAddr = '0x180140cf37a7ad694e2a54f037ad1e4cd8bc4b9b';
-const CanHireAddr = '0xea4088ca8948de6aa8e8c49130dee94336de3dd1';
+// const CanYaCoinAddr = '0x1e7df0798b3cf411c954b1355f0889dc58a20d92';
+// const EscrowAddr = '0x180140cf37a7ad694e2a54f037ad1e4cd8bc4b9b';
+// const CanHireAddr = '0xea4088ca8948de6aa8e8c49130dee94336de3dd1';
 
 // Ganache contract address
 // const CanYaCoinAddr = '0x3314e3c39e2bae4fd0a8fe5dd6a8bb9be8906599';
