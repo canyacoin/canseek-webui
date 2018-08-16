@@ -201,7 +201,7 @@ Let them know:
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_desc" nzRequired> Company Description </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <textarea formControlName="company_desc" id="company_desc" nz-input rows="4" placeholder="A brief but compelling company description helps jobseekers understand and talent recruiters understand what's great about your business."></textarea>
+      <textarea formControlName="company_desc" id="company_desc" nz-input rows="7" placeholder="A brief but compelling company description helps jobseekers understand and talent recruiters understand what's great about your business."></textarea>
       <nz-form-explain *ngIf="validateForm.get('company_desc').dirty && validateForm.get('company_desc').errors">Please input your Company Description!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
