@@ -18,9 +18,9 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr" nzRequired> Your MetaMask Address </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24" nzValidateStatus="{{ store.curUser ? '' : 'validating' }}" nzHasFeedback>
-      <nz-form-extra>Make sure your MetaMask address is filled</nz-form-extra>
+      <nz-form-extra *ngIf="!store.curUser">Sign in to MetaMask to connect your wallet address to CanSeek</nz-form-extra>
       <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
     </nz-form-control>
   </nz-form-item> 

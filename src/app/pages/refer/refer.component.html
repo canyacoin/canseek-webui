@@ -29,7 +29,7 @@
         </nz-form-item>
       
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired style="white-space: normal;" class="pr-10">Your relationship to the talent</nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="relation" nzRequired>Your relationship to the talent</nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
             <nz-radio-group formControlName="relation" id="relation">
               <label nz-radio-button nzValue="recruiter">recruiter</label>
@@ -41,7 +41,7 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr"> Your MetaMask Address </nz-form-label>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="owner_addr" nzRequired> Your MetaMask Address </nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
             <nz-form-extra>For payout of the total reward if your talent is the successful candidate</nz-form-extra>
             <input nz-input formControlName="owner_addr" id="owner_addr" [(ngModel)]="store.curUser">
