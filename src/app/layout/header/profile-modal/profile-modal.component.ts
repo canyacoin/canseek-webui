@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ProfileService } from '../../../services/profile.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ContractsService } from '../../../services/contracts.service';
-
 import {
   FormBuilder,
   FormGroup,
@@ -24,7 +23,7 @@ export class ProfileModalComponent implements OnInit {
 
   formData = {};
   form: FormGroup;
-  
+
   constructor(
     private ps: ProfileService,
     private fb: FormBuilder,
@@ -66,15 +65,18 @@ export class ProfileModalComponent implements OnInit {
   async handleOk() {
     const { valid, data } = this.submitForm();
     
-    console.log(data);
     if (valid) {
       this.ps.setProfile(data);
       this.message.success('Save success!');
 
       this.loading = true;
-      await this.ps.verify(data['your_email'], this.store.curUser);
+      try {
+        await this.ps.verify(data['your_email'], this.store.curUser);
+        this.visible = false;
+      } catch(err) {
+        console.log(err);
+      }
       this.loading = false;
-      this.visible = false;
     } else {
       return;
     }

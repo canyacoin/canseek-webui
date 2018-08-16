@@ -8,7 +8,9 @@
   [nzTrigger]="'click'"
   >
   <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
-    profile <i class="anticon anticon-down"></i>
+    <img class="avatar mr-12" *ngIf="store.authState.photoURL" alt="CanYa" src="{{ store.authState.photoURL }}">
+
+    <i class="anticon anticon-down"></i>
   </a>
   <ul nz-menu>
     <li nz-menu-item *ngIf="!store.authState.emailVerified">

@@ -23,6 +23,7 @@
     "angularfire2": "5.0.0-rc.9",
     "core-js": "^2.5.4",
     "firebase": "5.0.2",
+    "gravatar": "^1.6.0",
     "less": "^2.7.3",
     "moment": "^2.22.2",
     "ng-zorro-antd": "^1.2.0",

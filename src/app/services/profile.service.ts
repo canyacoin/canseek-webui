@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Profile } from '../models/profile';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
+import * as gravatar from 'gravatar';
 import { Store } from '../store';
 const MsgVerifyEmail = 'Please check your email to verify your account, then reload this page or open in a new tab';
 const MsgAlreadyLogin = 'The email address is already in use by another account.';
@@ -56,6 +57,7 @@ export class ProfileService {
     }
     if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
       this.msgModal('error', MsgVerifyEmail);
+      console.log(err);
       return;
     }
 
@@ -66,14 +68,17 @@ export class ProfileService {
         await this.loginWithEmail(email);
       } else {
         this.msgModal('error', err.message);
+        console.log(err);
       }
     }
   }
 
   async signinWithEmail(email: string, displayName: string) {
+    const photoURL = await gravatar.url(email);
+
     try {
       await this.afAuth.auth.createUserWithEmailAndPassword(email, email);
-      await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL: ''});
+      await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
       await this.afAuth.auth.currentUser.sendEmailVerification();
       this.msgModal('success', MsgVerifyEmail);
     } catch (err) {
@@ -87,6 +92,7 @@ export class ProfileService {
       this.message.success('Login Success!');
     } catch(err) {
       this.msgModal('error', err.message);
+      console.log(err);
     }
   }
 
