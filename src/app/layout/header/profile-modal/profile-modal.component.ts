@@ -24,6 +24,8 @@ export class ProfileModalComponent implements OnInit {
   formData = {};
   form: FormGroup;
 
+  MsgNotLogIn = 'Please active and config your MetaMask correctly';
+
   constructor(
     private ps: ProfileService,
     private fb: FormBuilder,
@@ -37,13 +39,13 @@ export class ProfileModalComponent implements OnInit {
   }
 
   async buyCan() {
+    this.loading = true;
     try {
-        this.loading = true;
-        this.store.balance += await this.cs.buyCAN();
-        this.loading = false;
+      this.store.balance += await this.cs.buyCAN();
     } catch (err) {
-      this.message.error(err.message);
+      this.message.error(this.MsgNotLogIn);console.log(err);
     }
+    this.loading = false;
   }
 
   initForm() {

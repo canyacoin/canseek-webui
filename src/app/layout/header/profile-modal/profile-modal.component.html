@@ -5,7 +5,6 @@
 <nz-dropdown 
   [nzPlacement]="'bottomCenter'"  
   *ngIf="store.authState.email"
-  [nzTrigger]="'click'"
   >
   <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
     <img class="avatar mr-12" *ngIf="store.authState.photoURL" alt="CanYa" src="{{ store.authState.photoURL }}">
@@ -13,12 +12,12 @@
     <i class="anticon anticon-down"></i>
   </a>
   <ul nz-menu>
-    <li nz-menu-item *ngIf="!store.authState.emailVerified">
-      <span (click)="showModal()">Sign In</span>
+    <li nz-menu-item *ngIf="!store.authState.emailVerified" class="border-bottom">
+      <span>Please verify your email</span>
     </li>
     <li nz-menu-item *ngIf="store.authState.emailVerified">
-        <span (click)="showModal()">User Profile</span>
-      </li>
+      <span (click)="showModal()">User Profile</span>
+    </li>
     <li nz-menu-item>
       <a>Balance {{ store.balance }}<i class="can-media-coin ml-12"></i></a>
     </li>
@@ -42,7 +41,7 @@
             <nz-option *ngFor="let option of formData.mm" [nzLabel]="option" [nzValue]="option">
             </nz-option>
           </nz-select>
-          <nz-form-extra>Current Address: {{ store.curUser }}</nz-form-extra>
+          <nz-form-extra>Current Address: {{ store.curUser || MsgNotLogIn }}</nz-form-extra>
         </nz-form-control>
         
       </nz-form-item>
