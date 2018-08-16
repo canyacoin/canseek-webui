@@ -1,12 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ProfileService } from '../../../services/profile.service';
 import { NzMessageService } from 'ng-zorro-antd';
+import { ContractsService } from '../../../services/contracts.service';
+
 import {
   FormBuilder,
   FormGroup,
   Validators
 } from '@angular/forms';
 import { Profile } from '../../../models/profile';
+import { Store } from '../../../store';
 
 @Component({
   selector: 'app-profile-modal',
@@ -14,29 +17,41 @@ import { Profile } from '../../../models/profile';
   styleUrls: ['./profile-modal.component.less']
 })
 export class ProfileModalComponent implements OnInit {
-  @Input() curUser;
+  store = Store;
+
   visible: boolean = false;
   loading: boolean = false;
 
   formData = {};
   form: FormGroup;
-
+  
   constructor(
     private ps: ProfileService,
     private fb: FormBuilder,
     private message: NzMessageService,
-  ) { }
+    private cs: ContractsService,
+  ) { 
+  }
 
   ngOnInit() {
     this.initForm();
   }
 
+  async buyCan() {
+    try {
+        this.loading = true;
+        this.store.balance += await this.cs.buyCAN();
+        this.loading = false;
+    } catch (err) {
+      this.message.error(err.message);
+    }
+  }
+
   initForm() {
     this.formData = this.ps.getProfile();
 
-    console.log(this.formData);
     this.form = this.fb.group({
-      mm: [ this.formData['mm'] || this.curUser, [ Validators.required ] ],
+      mm: [ this.formData['mm'] || this.store.curUser, [ Validators.required ] ],
       your_email: [ this.formData['your_email'], [ Validators.email, Validators.required ] ],
       your_name: [ this.formData['your_name'], [ Validators.required ] ],
       company_name: [ this.formData['company_name'], [ Validators.required ] ],
@@ -56,7 +71,7 @@ export class ProfileModalComponent implements OnInit {
       this.message.success('Save success!');
 
       this.loading = true;
-      await this.ps.verify(data['your_email'], this.curUser);
+      await this.ps.verify(data['your_email'], this.store.curUser);
       this.loading = false;
       this.visible = false;
     } else {
@@ -82,5 +97,4 @@ export class ProfileModalComponent implements OnInit {
   handleCancel(): void {
     this.visible = false;
   }
-
 }

@@ -1,6 +1,5 @@
 import { Component, AfterViewInit, ViewChild, Inject } from '@angular/core';
 import { CmpPoststep1Component } from './components/cmp-poststep1/cmp-poststep1.component';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import {
   FormBuilder,
@@ -41,7 +40,6 @@ export class PostComponent implements AfterViewInit {
   type: string = 'new';
 
   constructor(
-    private afAuth: AngularFireAuth,
     private fb: FormBuilder,
     private gs: GlobalService,
     private cs: ContractsService,
@@ -52,11 +50,7 @@ export class PostComponent implements AfterViewInit {
     private ps: ProfileService,
   ) {
     this.values = this.ps.getProfile();
-    this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth || {};
-      console.log(auth)
-    });
-
+    
     this.route.queryParams.subscribe(params => {
       this.id = params.id;
       this.type = params.type;
@@ -151,7 +145,7 @@ export class PostComponent implements AfterViewInit {
 
     if (this.current === 0) {
       formData = this.submitForm('emailForm');
-      const isVerified = (this.authState['email'] == formData.data['your_email']) && this.authState['emailVerified'];
+      const isVerified = (this.store.authState['email'] == formData.data['your_email']) && this.store.authState['emailVerified'];
 
       if (!isVerified) {
         formData.valid = false;

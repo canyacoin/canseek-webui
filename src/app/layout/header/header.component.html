@@ -18,12 +18,9 @@
           <a href="https://www.canwork.io/tools" target="_blank">
             <img class="logo-default" src="assets/img/CanApps/CanApps .svg" width="auto" height="16px" alt="CanApps" style="vertical-align: -2px">
           </a>
-        </li>  
-        <li class="nav-item mr-24">
-          <app-status-light></app-status-light>
-        </li>   
+        </li>    
         
-        <li class="nav-item">
+        <li class="nav-item mr-24">
           <nz-dropdown>
             <a href="javascript:;" nz-dropdown>
               {{ store.selectedCurrency['string'] || '$ USD' }}
@@ -46,16 +43,14 @@
           </nz-dropdown>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item mr-24">
+          <app-status-light></app-status-light>
+        </li> 
 
-          <!-- 如果没有登录 email,且没有登录 metamask 显示这个,点击显示弹窗 -->
-          <a href="javascript:;" class="nav-link">
-            <button class="btn btn-join btn-sm text-white" (click)="showModal()">Join</button>
-          </a>
-          <!-- 如果没有登录 email, 但是登录 metamask 显示 gravatar 但是是灰色 -->
-          <!-- 下拉显示 sign in, 登录后显示user profile, balance, buy can -->
+        <li class="nav-item">
+          <app-profile-modal></app-profile-modal>
         </li>
-        <app-profile-modal [curUser]="curUser"></app-profile-modal>
+          
       </ul>     
     </div> 
   </div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Profile } from '../models/profile';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
-
+import { Store } from '../store';
 const MsgVerifyEmail = 'Please check your email to verify your account, then reload this page or open in a new tab';
 const MsgAlreadyLogin = 'The email address is already in use by another account.';
 
@@ -10,8 +10,8 @@ const MsgAlreadyLogin = 'The email address is already in use by another account.
   providedIn: 'root'
 })
 export class ProfileService {
+  store = Store;
   confirmModal: NzModalRef;
-  authState: any = {};
 
   constructor(
     private modal: NzModalService,
@@ -19,7 +19,7 @@ export class ProfileService {
     private afAuth: AngularFireAuth,
   ) { 
     this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth || {};
+      this.store.authState = auth || {};
       console.log(auth)
     });
   }
@@ -49,12 +49,12 @@ export class ProfileService {
   }
 
   async verify(email: string, displayName: string) {
-    const isVerified = (this.authState['email'] == email) && this.authState['emailVerified'];
+    const isVerified = (this.store.authState['email'] == email) && this.store.authState['emailVerified'];
 
     if (isVerified) {
       return;
     }
-    if (this.authState['email'] == email && !this.authState['emailVerified']) {
+    if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
       this.msgModal('error', MsgVerifyEmail);
       return;
     }

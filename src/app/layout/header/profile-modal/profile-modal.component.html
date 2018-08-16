@@ -1,8 +1,30 @@
+<a href="javascript:;" class="nav-link" *ngIf="!store.authState.email">
+  <button class="btn btn-join btn-sm text-white" (click)="showModal()">Join</button>
+</a>
 
-<span (click)="showModal()">
-  &nbsp;
-  <span style="margin-left: 10px">User profile</span>
-</span>
+<nz-dropdown 
+  [nzPlacement]="'bottomCenter'"  
+  *ngIf="store.authState.email"
+  [nzTrigger]="'click'"
+  >
+  <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
+    profile <i class="anticon anticon-down"></i>
+  </a>
+  <ul nz-menu>
+    <li nz-menu-item *ngIf="!store.authState.emailVerified">
+      <span (click)="showModal()">Sign In</span>
+    </li>
+    <li nz-menu-item *ngIf="store.authState.emailVerified">
+        <span (click)="showModal()">User Profile</span>
+      </li>
+    <li nz-menu-item>
+      <a>Balance {{ store.balance }}<i class="can-media-coin ml-12"></i></a>
+    </li>
+    <li nz-menu-item>
+      <button class="buycan" nz-button nzType="primary" [nzLoading]="loading" (click)="buyCan()">buy can</button>
+    </li>
+  </ul>
+</nz-dropdown>
 
 <nz-modal [(nzVisible)]="visible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
   <ng-template #modalTitle>
@@ -18,7 +40,7 @@
             <nz-option *ngFor="let option of formData.mm" [nzLabel]="option" [nzValue]="option">
             </nz-option>
           </nz-select>
-          <nz-form-extra>Current Address: {{ curUser }}</nz-form-extra>
+          <nz-form-extra>Current Address: {{ store.curUser }}</nz-form-extra>
         </nz-form-control>
         
       </nz-form-item>

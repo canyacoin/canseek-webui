@@ -1,4 +1,5 @@
 export let Store = {
+    authState: {},
     salary_cycles: ['/ Annum', '/ Month', '/ Week', '/ Day', '/ Hour'],
     currencyArr: ['$ AUD', '$ USD', '€ EUR', 'CAN'],
     currency: {
