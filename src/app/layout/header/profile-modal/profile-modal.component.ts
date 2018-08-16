@@ -30,11 +30,11 @@ export class ProfileModalComponent implements OnInit {
     private fb: FormBuilder,
     private message: NzMessageService,
     private cs: ContractsService,
-  ) { 
-  }
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initForm();
+    this.store.curUser = await this.cs.getAccount();
   }
 
   async buyCan() {
@@ -66,6 +66,7 @@ export class ProfileModalComponent implements OnInit {
   async handleOk() {
     const { valid, data } = this.submitForm();
     
+    console.log(data);
     if (valid) {
       this.ps.setProfile(data);
       this.message.success('Save success!');
