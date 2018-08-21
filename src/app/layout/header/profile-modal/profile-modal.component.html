@@ -21,13 +21,13 @@
   </ul>
 </nz-dropdown>
 
-<nz-modal *ngIf="visible" [(nzVisible)]="visible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
+<nz-modal [(nzVisible)]="visible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
   <ng-template #modalTitle>
     User Profile details
   </ng-template>
 
   <ng-template #modalContent>
-    <form nz-form [nzLayout]="vertical" [formGroup]="form" (ngSubmit)="submitForm()">
+    <form *ngIf="visible" nz-form [nzLayout]="vertical" [formGroup]="form" (ngSubmit)="submitForm()">
       <nz-form-item>
         <nz-form-label> MetaMask address: </nz-form-label>
         <nz-form-control>
