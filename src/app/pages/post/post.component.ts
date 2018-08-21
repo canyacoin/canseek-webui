@@ -12,6 +12,8 @@ import { ContractsService } from '../../services/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 import { ProfileService } from '../../services/profile.service';
+import { environment } from '../../../environments/environment';
+import { Operation, setProcessResult, ProcessAction, CanPay, CanPayData, CanPayService } from '@canyaio/canpay-lib';
 
 @Component({
   selector: 'app-post',
@@ -39,6 +41,25 @@ export class PostComponent implements AfterViewInit {
   pid: string; // type new post id
   type: string = 'new';
 
+  canPay: CanPay = {
+    // properties
+    dAppName: 'CanSeek',
+    operation: Operation.auth, // Authorise or Pay, Default is: Authorise
+    recepient: environment.contracts.CanHireAddr,
+    amount: 0, // allow the user to enter amount through an input box
+    minAmount: 500, // Default is 1
+    maxAmount: 50000, // Default is 'No Maximum'
+
+    // Actions
+    complete: this.completeCanPayUserActivation.bind(this),
+    cancel: this.cancelCanPayUserActivation.bind(this),
+
+    // Post Authorisation
+    // postAuthorisationProcessName: 'User Activation',
+    // startPostAuthorisationProcess: this.startCanPayUserActivation.bind(this),
+    // postAuthorisationProcessResults: null
+  };
+
   constructor(
     private fb: FormBuilder,
     private gs: GlobalService,
@@ -48,6 +69,7 @@ export class PostComponent implements AfterViewInit {
     private message: NzMessageService,
     private modal: NzModalService,
     private ps: ProfileService,
+    private canPayService:CanPayService,
   ) {
     this.values = this.ps.getProfile();
     
@@ -251,5 +273,19 @@ export class PostComponent implements AfterViewInit {
       valid: this[form].valid,
       data: this.values,
     }
+  }
+
+  completeCanPayUserActivation(canPayData: CanPayData) {
+    console.log(canPayData);
+    // this.isVisible = false;
+  }
+
+  cancelCanPayUserActivation(canPayData: CanPayData) {
+    console.log(canPayData);
+    // this.isVisible = false;
+  }
+  
+  modalCanPay(){ 
+    this.canPayService.open(this.canPay);
   }
 }
