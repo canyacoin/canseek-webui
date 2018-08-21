@@ -18,16 +18,10 @@
     <li nz-menu-item *ngIf="store.authState.emailVerified">
       <span (click)="showModal()">User Profile</span>
     </li>
-    <li nz-menu-item>
-      <a>Balance {{ store.balance }}<i class="can-media-coin ml-12"></i></a>
-    </li>
-    <li nz-menu-item>
-      <button class="buycan" nz-button nzType="primary" [nzLoading]="loading" (click)="buyCan()">buy can</button>
-    </li>
   </ul>
 </nz-dropdown>
 
-<nz-modal [(nzVisible)]="visible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
+<nz-modal *ngIf="visible" [(nzVisible)]="visible" [nzTitle]="modalTitle" [nzContent]="modalContent" [nzFooter]="modalFooter" (nzOnCancel)="handleCancel()">
   <ng-template #modalTitle>
     User Profile details
   </ng-template>
@@ -41,7 +35,7 @@
             <nz-option *ngFor="let option of formData.mm" [nzLabel]="option" [nzValue]="option">
             </nz-option>
           </nz-select>
-          <nz-form-extra>Current Address: {{ store.curUser || MsgNotLogIn }}</nz-form-extra>
+          <nz-form-extra>Current Address: {{ store.curUser }}</nz-form-extra>
         </nz-form-control>
         
       </nz-form-item>

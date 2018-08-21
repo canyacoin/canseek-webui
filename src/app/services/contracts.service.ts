@@ -1,5 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
+import { Operation, setProcessResult, ProcessAction, CanPay, CanPayData, CanPayService } from '@canyaio/canpay-lib';
+import { async } from '@angular/core/testing';
 
 declare let require: any;
 declare let window: any;
@@ -37,7 +39,9 @@ export class ContractsService {
   Escrow = contract(EscrowArtifacts);
   CanHire = contract(CanHireArtifacts);
 
-  constructor() {
+  constructor(
+    private canPayService:CanPayService,
+  ) {
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
       this._web3 = new Web3(window.web3.currentProvider);
@@ -88,7 +92,8 @@ export class ContractsService {
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
     return new Promise((resolve, reject) => {
       canYaCoin.balanceOf.call(account, { from: account }).then(result => {
-        resolve(result.toNumber());
+        const number = Math.floor(result.toNumber() / 1000000);
+        resolve(number);
       })
         .catch(err => {
           reject(err);
@@ -108,20 +113,20 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  public async buyCAN(amountInEther = '1') {
-    const account = await this.getAccount();
-    const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
-    const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
+  // public async buyCAN(amountInEther = '1') {
+  //   const account = await this.getAccount();
+  //   const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
+  //   const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
 
-    return new Promise((resolve, reject) => {
-      canYaCoin.buy({ from: account, value: amountInWei, gasPrice: gasPrice, gas: gasBuy }).then(result => {
-        resolve(result.logs[0].args.value.toNumber());
-      })
-        .catch(err => {
-          reject(err);
-        });
-    }) as Promise<number>;
-  }
+  //   return new Promise((resolve, reject) => {
+  //     canYaCoin.buy({ from: account, value: amountInWei, gasPrice: gasPrice, gas: gasBuy }).then(result => {
+  //       resolve(result.logs[0].args.value.toNumber());
+  //     })
+  //       .catch(err => {
+  //         reject(err);
+  //       });
+  //   }) as Promise<number>;
+  // }
 
   public async getNumPosts() {
     const canHire = await this.CanHire.at(CanHireAddr);
@@ -204,10 +209,11 @@ export class ContractsService {
 
   public async addPost(id, bounty, cost) {
     const account = await this.getAccount();
-    const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
-    const escrow = await this.Escrow.at(EscrowAddr);
+    // const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
+    // const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
-    await canYaCoin.approve(escrow.address, bounty, { from: account, gasPrice: gasPrice, gas: gasApprove });
+    // await canYaCoin.approve(escrow.address, bounty, { from: account, gasPrice: gasPrice, gas: gasApprove });
+    await this.canpayModal(bounty);
 
     return new Promise((resolve, reject) => {
       canHire.addPost(id, bounty, cost, { from: account, gasPrice: gasPrice, gas: gasAddPost }).then(result => {
@@ -249,13 +255,45 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  async canpayModal(amount: number) {
+    const canPayOptions: CanPay = {
+      // properties
+      dAppName: 'CanSeek',
+      operation: Operation.auth, // Authorise or Pay, Default is: Authorise
+      recepient: environment.contracts.EscrowAddr,
+      amount, // allow the user to enter amount through an input box
+      minAmount: 500, // Default is 1
+      maxAmount: 50000, // Default is 'No Maximum'
+  
+      // Actions
+      complete: async(canPayData: CanPayData) => {
+        console.log('complete', canPayData);
+        this.canPayService.close();
+      },
+      // this.onComplete.bind(this),
+      cancel: async(canPayData: CanPayData) => {
+        this.canPayService.close();
+        console.log('cancel', canPayData);
+        throw new Error('cancel');
+      }
+      // this.onCancel.bind(this),
+  
+      // Post Authorisation
+      // postAuthorisationProcessName: 'User Activation',
+      // startPostAuthorisationProcess: this.startCanPayUserActivation.bind(this),
+      // postAuthorisationProcessResults: null
+    };
+    this.canPayService.open(canPayOptions);
+  }
+
   public async recommend(candidateUniqueId, postId) {
     const account = await this.getAccount();
-    const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
-    const escrow = await this.Escrow.at(EscrowAddr);
+    // const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
+    // const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
     const cost = await this.getPostCost(postId);
-    await canYaCoin.approve(escrow.address, cost, {from: account, gasPrice: gasPrice, gas: gasApprove});
+    // await canYaCoin.approve(escrow.address, cost, {from: account, gasPrice: gasPrice, gas: gasApprove});
+    await this.canpayModal(cost);
 
     return new Promise((resolve, reject) => {
       canHire.recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend}).then(result => {

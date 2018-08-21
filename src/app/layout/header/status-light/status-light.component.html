@@ -8,23 +8,34 @@
         <span>
             <i class="fa fa-circle fs-9 mr-12" [ngStyle]="{'color': web3Color}"></i> 
             <span>Ethereum Network : </span>
-            <span *ngIf="currentNetwork" style="text-transform: capitalize">{{ currentNetwork }}</span>
-            <span *ngIf="!currentNetwork" style="text-transform: capitalize">None</span>
+            <span *ngIf="store.curNet" style="text-transform: capitalize">{{ store.curNet }}</span>
+            <span *ngIf="!store.curNet" style="text-transform: capitalize">None</span>
           </span>
       </li> 
     <li nz-menu-item> 
       <span>
         &nbsp;
-          <span style="margin-left: 10px">{{ web3Message }}</span>
-        </span>
+        &nbsp;
+        &nbsp;
+        {{ web3Message }}
+      </span>
     </li> 
-    <li *ngIf="currentNetwork === 'main' && currentUser !== '' " nz-menu-item>  
-        <span>
-          <span>
-              &nbsp;
-              &nbsp;
-              &nbsp;CAN Balance : {{currentBalance}}</span>
-        </span>
+    <li *ngIf="store.curUser !== '' " nz-menu-item>  
+      <span>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        CAN Balance : {{store.balance}}
+        <i class="can-media-coin ml-12"></i>
+      </span>
+    </li> 
+    <li *ngIf="store.curNet === 'main' && store.curUser !== '' " nz-menu-item>  
+      <span>
+        &nbsp;
+        &nbsp;
+        &nbsp;
+        <button class="buycan" nz-button nzType="primary" routerLink="/buycan">buy can</button>
+      </span>
     </li>   
   </ul> 
 </nz-dropdown>

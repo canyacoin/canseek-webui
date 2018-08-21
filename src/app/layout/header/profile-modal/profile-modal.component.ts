@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ProfileService } from '../../../services/profile.service';
 import { NzMessageService } from 'ng-zorro-antd';
-import { ContractsService } from '../../../services/contracts.service';
 import {
   FormBuilder,
   FormGroup,
@@ -24,29 +23,13 @@ export class ProfileModalComponent implements OnInit {
   formData = {};
   form: FormGroup;
 
-  MsgNotLogIn = 'Please active and config your MetaMask correctly';
-
   constructor(
     private ps: ProfileService,
     private fb: FormBuilder,
     private message: NzMessageService,
-    private cs: ContractsService,
   ) { }
 
-  async ngOnInit() {
-    this.initForm();
-    this.store.curUser = await this.cs.getAccount();
-    this.store.balance = await this.cs.getCANBalance();
-  }
-
-  async buyCan() {
-    this.loading = true;
-    try {
-      this.store.balance += await this.cs.buyCAN();
-    } catch (err) {
-      this.message.error(this.MsgNotLogIn);console.log(err);
-    }
-    this.loading = false;
+  ngOnInit() {
   }
 
   initForm() {

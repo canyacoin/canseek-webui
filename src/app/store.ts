@@ -31,6 +31,7 @@ export let Store = {
     selectedCurrency: {},
 
     curUser: '',
+    curNet: '',
     balance: 0,
     postForm: [{
       label: 'Job Information',

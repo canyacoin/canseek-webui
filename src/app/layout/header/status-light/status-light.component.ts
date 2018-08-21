@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ContractsService } from '../../../services/contracts.service';
+import { Store } from '../../../store';
 
 declare let require: any;
 declare let window: any;
@@ -10,10 +11,9 @@ const Web3 = require('web3');
   styleUrls: ['./status-light.component.less']
 })
 export class StatusLightComponent implements OnInit, AfterViewInit {
+  store = Store;
   private _web3;
-  currentUser = '';
-  currentNetwork = '';
-  currentBalance:number;
+  
   canYaMainContract = '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0';
   constructor(private contractService: ContractsService) {
     if (typeof window.web3 !== 'undefined') {
@@ -26,8 +26,8 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.getCurrentNetwork().then(network => {
-      this.currentNetwork = network;
-      console.log(this.currentNetwork);
+      this.store.curNet = network;
+      console.log(this.store.curNet);
     }); 
     this.contractService.getAccount().then(user=>{
       /**
@@ -37,8 +37,8 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
        *  this means etherscan's API had to be used.
        *  
       */
-      this.currentUser = user;  //get the current user's address
-      this.currentBalance = this.getTokenBalanceAtAddress(this.currentUser, this.canYaMainContract, 6); 
+      this.store.curUser = user;  //get the current user's address
+      this.store.balance = this.getTokenBalanceAtAddress(this.store.curUser, this.canYaMainContract, 6); 
     })
   }
   /**
@@ -81,12 +81,12 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
       return 'No wallet detected!';
     }
     else {
-      switch (this.currentNetwork !== '') {
-        case this.currentNetwork !== 'main' && this.currentNetwork !== 'null':
+      switch (this.store.curNet !== '') {
+        case this.store.curNet !== 'main' && this.store.curNet !== 'null':
           return 'Please connect to mainnet.';
-        case this.currentNetwork === 'main' && this.currentUser === '':
+        case this.store.curNet === 'main' && this.store.curUser === '':
           return 'Please unlock your wallet and refresh.';
-        case this.currentNetwork === 'main' && this.currentUser !== '':
+        case this.store.curNet === 'main' && this.store.curUser !== '':
           return 'Connected to mainnet.';
       }
     }
@@ -96,12 +96,12 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
       return '#ff4954';
     }
     else {
-      switch (this.currentNetwork !== '') {
-        case this.currentNetwork !== 'main':
+      switch (this.store.curNet !== '') {
+        case this.store.curNet !== 'main':
           return '#b7bbbd';
-        case this.currentNetwork === 'main' && this.currentUser === '':
+        case this.store.curNet === 'main' && this.store.curUser === '':
           return '#ff4954';
-        case this.currentNetwork === 'main' && this.currentUser !== '':
+        case this.store.curNet === 'main' && this.store.curUser !== '':
           return '#30D7A9';
         default:
           return 'ff4954';
