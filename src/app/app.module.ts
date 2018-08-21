@@ -48,6 +48,7 @@ import { ProfileModalComponent } from './layout/header/profile-modal/profile-mod
 
 import { HttpModule } from '@angular/http';
 import { CanpayModule } from '@canyaio/canpay-lib';
+import { BuycanComponent } from './pages/buycan/buycan.component';
 
 registerLocaleData(zh);
 
@@ -75,6 +76,7 @@ registerLocaleData(zh);
     NoauthComponent,
     StatusLightComponent,
     ProfileModalComponent,
+    BuycanComponent,
   ],
   imports: [
     BrowserModule,

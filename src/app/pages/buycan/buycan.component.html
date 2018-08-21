@@ -1,0 +1,12 @@
+<div class="text-center">
+  <ng-container *ngIf="store.curUser != ''">
+    <h4 class="fw-300 my-0 py-0">Wallet Balance</h4>
+    <h1 class="fw-300 my-0 py-0 mb-30">
+      <i class="can-media-coin"></i>
+  
+      {{ store.balance | currency:' ':'symbol':'1.2-3':'en-US' }}
+    </h1>
+  </ng-container>
+
+  <app-cmp-bancor></app-cmp-bancor>
+</div>

@@ -9,6 +9,7 @@ import { ReferComponent } from './pages/refer/refer.component';
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 import { ApplicantsComponent } from './pages/applicants/applicants.component';
 import { FaqComponent } from './pages/faq/faq.component';
+import { BuycanComponent } from './pages/buycan/buycan.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { NoauthComponent } from './pages/noauth/noauth.component';
 
@@ -16,6 +17,7 @@ import { NoauthComponent } from './pages/noauth/noauth.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'buycan', component: BuycanComponent },
   // params: {type: ['new', 'edit'], id}
   { path: 'post', component: PostComponent },
   { path: 'post/detail/:id', component: PostDetailComponent },
