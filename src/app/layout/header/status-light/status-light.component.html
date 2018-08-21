@@ -1,7 +1,8 @@
 
 <nz-dropdown [nzPlacement]="'bottomCenter'">
   <a href="javascript:;" nz-dropdown class="wrapper">
-    <i class="fa fa-circle fs-9" [ngStyle]="{'color': web3Color}"></i>
+    <i class="fa fa-circle fs-9 mr-8" [ngStyle]="{'color': web3Color}"></i>
+    <i class="anticon anticon-down"></i>
   </a> 
   <ul nz-menu>
       <li nz-menu-item> 
@@ -12,6 +13,7 @@
             <span *ngIf="!store.curNet" style="text-transform: capitalize">None</span>
           </span>
       </li> 
+    <li nz-menu-divider></li>
     <li nz-menu-item> 
       <span>
         &nbsp;
@@ -20,6 +22,7 @@
         {{ web3Message }}
       </span>
     </li> 
+    <li nz-menu-divider *ngIf="store.curUser !== '' "></li>
     <li *ngIf="store.curUser !== '' " nz-menu-item>  
       <span>
         &nbsp;
