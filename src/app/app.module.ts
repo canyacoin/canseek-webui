@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -45,6 +46,9 @@ import { NoauthComponent } from './pages/noauth/noauth.component';
 import { StatusLightComponent } from './layout/header/status-light/status-light.component';
 import { ProfileModalComponent } from './layout/header/profile-modal/profile-modal.component';
 
+import { HttpModule } from '@angular/http';
+import { CanpayModule } from '@canyaio/canpay-lib';
+
 registerLocaleData(zh);
 
 @NgModule({
@@ -89,6 +93,9 @@ registerLocaleData(zh);
     AngularFireStorageModule,
 
     ClipboardModule,
+
+    HttpModule,
+    CanpayModule.forRoot(environment.canpay),
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, ProfileService],
   bootstrap: [AppComponent]
