@@ -119,7 +119,7 @@ export class PostComponent implements AfterViewInit {
       return { required: true };
     } else if (!/^\d+$/.test(control.value)) {
       return { number: true };
-    } else if (Number(control.value) < 500) {
+    } else if (Number(control.value) / (this.store.selectedCurrency['rate'] || 1) < 500) {
       return { minimum: true };
     } else {
       return null;
