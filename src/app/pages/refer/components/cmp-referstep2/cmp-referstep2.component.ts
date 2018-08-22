@@ -118,7 +118,7 @@ export class CmpReferstep2Component implements OnInit {
             }
             return item;
           });
-          this.handleChange({ fileList: this.cover_letter })
+          this.handleChange({ fileList: this.cover_letter }, 'cover_letter');
         })
       }
     })

@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
         // update pending post, include: status postId
         this.posts
           .filter(p => p.status == 'pending')
-          .map(p => this.gs.updatePendingPost(p))
+          .map(p => this.gs.updatePendingPost(p).catch(err => console.log(err)))
       });
   }
 
