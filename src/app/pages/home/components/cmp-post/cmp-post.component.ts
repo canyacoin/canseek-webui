@@ -67,7 +67,7 @@ export class CmpPostComponent implements OnInit {
 
   updatePostStatus(post) {
     this.loading = true;
-    this.gs.updatePostStatus(post)
+    this.gs.updatePendingPost(post)
       .then(status => {
         this.loading = false;
         this.message.success('updated');

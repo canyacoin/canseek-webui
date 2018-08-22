@@ -144,7 +144,7 @@ export class ApplicantsComponent implements OnInit {
 
   updatePostStatus(post) {
     this.loadingStatus = true;
-    this.gs.updatePostStatus(post)
+    this.gs.updatePendingPost(post)
       .then(() => {
         this.loadingStatus = false;
         this.message.success('updated');

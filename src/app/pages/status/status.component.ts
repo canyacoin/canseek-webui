@@ -59,7 +59,7 @@ export class StatusComponent implements OnInit {
   updateStatus(post) {
     this.loading = true;
 
-    this.gs.updatePostStatus(post)
+    this.gs.updatePendingPost(post)
       .then(() => this.loading = false)
       .catch(err => {
         this.loading = false;

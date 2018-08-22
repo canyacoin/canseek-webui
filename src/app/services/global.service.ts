@@ -170,7 +170,7 @@ export class GlobalService {
       })
   }
 
-  updatePostStatus(post) {
+  updatePendingPost(post) {
     const { postId, id } = post;
     const postRef = this.dbRef.doc(id);
     
