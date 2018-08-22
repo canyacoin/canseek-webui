@@ -23,6 +23,7 @@ export class GlobalService {
     private message: NzMessageService,
   ) { 
     this.change = new EventEmitter();
+    // this.delPending();
   }
 
   async changeCurrency(currency): Promise<any> {
@@ -38,6 +39,15 @@ export class GlobalService {
   }
   getPost(id): Observable<any[]> {
     return this.dbRef.doc(id).valueChanges();
+  }
+  
+  delPending() {
+    this.getPosts()
+      .subscribe(posts => {
+        posts
+          .filter(post => post.status === 'pending')
+          .map(post => this.dbRef.doc(post.id).delete())
+      })
   }
   
   addPostDb(post: any): Promise<any> {
