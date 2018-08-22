@@ -45,9 +45,9 @@ export class ApplicantsComponent implements OnInit {
     private router: Router,
   ) { }
 
-  ngOnInit() {
-    this.getCandidates();
-    this.checkAuth();
+  async ngOnInit() {
+    await this.checkAuth();
+    await this.getCandidates();
   }
 
   getCandidates() {
@@ -67,6 +67,10 @@ export class ApplicantsComponent implements OnInit {
 
         this.loading = false;
         this.searchCategory();
+        // update pending candidate
+        this.candidates
+          .filter(c => c.status == 'pending')
+          .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
       });
   }
 
