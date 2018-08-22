@@ -218,21 +218,17 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
 
     return new Promise((resolve, reject) => {
-      this.canpayModal(bounty, () => {
-        const bounty$ = this.ethService.amountToCANTokens(bounty);
-        const cost$ = this.ethService.amountToCANTokens(cost);
-        canHire
-          .addPost(id, bounty$, cost$, { from: account, gasPrice: gasPrice, gas: gasAddPost })
-          .then(result => {
-            resolve(result.logs[0].args.postId.toNumber());
-          })
-          .catch(err => {
-            reject(err);
-          });
-      }, () => {
-        reject();
-      })
-        
+      const bounty$ = this.ethService.amountToCANTokens(bounty);
+      const cost$ = this.ethService.amountToCANTokens(cost);
+
+      canHire
+        .addPost(id, bounty$, cost$, { from: account, gasPrice: gasPrice, gas: gasAddPost })
+        .then(result => {
+          resolve(result.logs[0].args.postId.toNumber());
+        })
+        .catch(err => {
+          reject(err);
+        });
     }) as Promise<number>;
   }
 
@@ -300,27 +296,6 @@ export class ContractsService {
     };
 
     this.canPayService.open(instance);
-  }
-
-  canpayModal(amount: number, onComplete: any, onCancel: any) {
-    const canPayOptions: CanPay = {
-      dAppName: 'CanSeek',
-      operation: Operation.auth, // Authorise or Pay, Default is: Authorise
-      recepient: environment.contracts.EscrowAddr,
-      amount, // allow the user to enter amount through an input box
-      minAmount: 500, // Default is 1
-      maxAmount: 50000, // Default is 'No Maximum'
-  
-      complete: (canPayData: CanPayData) => {
-        this.canPayService.close();
-        // onComplete();
-      },
-      cancel: () => {
-        this.canPayService.close();
-        // onCancel();
-      }
-    };
-    this.canPayService.open(canPayOptions);
   }
 
   public async recommend(candidateUniqueId, postId) {

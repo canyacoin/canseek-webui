@@ -127,7 +127,7 @@ export class ReferComponent implements AfterViewInit {
         this.post['cost'], 
         this.onComplete.bind(this),
         null,
-        'Application Fee',
+        'Application Fees',
         this.recommend.bind(this)
       )
       this.doneLoading = false;

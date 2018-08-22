@@ -25,7 +25,7 @@ export class PostComponent implements AfterViewInit {
   emailForm: FormGroup;
   validateForm: FormGroup;
 
-  current = 0;
+  current = 2;
 
   values: Object = {};
 
@@ -205,25 +205,40 @@ export class PostComponent implements AfterViewInit {
     
     if(postId) {// just update db
       this.gs.updatePost(postData)
-        .then(() => this.redireact(postData['id']));
+        .then(() => this.redireact(id));
     } else {
       try {
         if (!id) {// totally new
-          this.pid = await this.gs.addPostDb(postData)
-          this.values['id'] = this.pid;
+          this.values['id'] = this.pid = await this.gs.addPostDb(postData);
         } else {
           this.pid = id;
         }
         
-        const postId = await this.cs.addPost(id, reward, cost);
-        await this.gs.addPostCb(id, postId);
-        this.store.balance = await this.cs.getCANBalance();
-        this.redireact(id);
+        this.cs.canpayInstance(
+          reward, 
+          this.onComplete.bind(this),
+          null,
+          'Set Reward',
+          this.addPost.bind(this)
+        )
+        this.doneLoading = false;
       } catch(err) {
         this.doneLoading = false;
         this.message.error(err.message);console.log(err);
       }
     }
+  }
+
+  onComplete() {
+    this.redireact(this.pid);
+  }
+
+  async addPost() {
+    const data = this.genPostData();
+    const { id, reward, cost } = data;
+    const postId = await this.cs.addPost(id, reward, cost);
+    await this.gs.addPostCb(id, postId);
+    this.store.balance = await this.cs.getCANBalance();
   }
 
   redireact(id) {
