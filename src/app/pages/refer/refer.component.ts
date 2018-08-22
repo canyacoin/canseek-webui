@@ -28,8 +28,6 @@ export class ReferComponent implements AfterViewInit {
   store = Store;
   post: Object = {};
 
-  doneLoading: boolean = false;
-
   pid: string = '';
   cid: string = '';
   
@@ -112,8 +110,6 @@ export class ReferComponent implements AfterViewInit {
   }
 
   async done() {
-    this.doneLoading = true;
-
     const candidateData = this.genCandidateData();
     const { id } = candidateData;
 
@@ -131,7 +127,6 @@ export class ReferComponent implements AfterViewInit {
         this.recommend.bind(this)
       )
     } catch(err) {
-      this.doneLoading = false;
       this.message.error(err.message);console.log(err);
     }
   }
