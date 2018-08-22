@@ -182,13 +182,10 @@ export class PostComponent implements AfterViewInit {
     });
   }
 
-  async done() {
-    this.doneLoading = true;
-
+  genPostData() {
     const reward = Number(this.values['reward']);
     const cost = Number(this.values['cost']);
     let postData = this.values;
-    let handledData;
 
     if (this.type == 'new') {
       postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: reward, reward, cost, ...this.values, time: Date.now(), owner_addr: this.store.curUser };
@@ -196,23 +193,28 @@ export class PostComponent implements AfterViewInit {
       postData = {...postData, time: Date.now()};
     }
     
-    handledData = JSON.parse(JSON.stringify(postData));
-    this.ps.setProfile(handledData);
-    // const isUpdate = this.type == 'edit' ? true : false;
-    const { postId } = handledData;
-    let { id } = handledData;
-    // console.log('post', handledData);
+    return JSON.parse(JSON.stringify(postData));
+  }
+
+  async done() {
+    this.doneLoading = true;
+
+    const postData = this.genPostData();
+    this.ps.setProfile(postData);
+    const { postId, id, reward, cost } = postData;
     
     if(postId) {// just update db
-      this.gs.updatePost(handledData)
-        .then(() => this.redireact(handledData['id']));
+      this.gs.updatePost(postData)
+        .then(() => this.redireact(postData['id']));
     } else {
       try {
         if (!id) {// totally new
-          id = await this.gs.addPostDb(handledData)
-          this.values['id'] = id;
+          this.pid = await this.gs.addPostDb(postData)
+          this.values['id'] = this.pid;
+        } else {
+          this.pid = id;
         }
-        this.pid = id;
+        
         const postId = await this.cs.addPost(id, reward, cost);
         await this.gs.addPostCb(id, postId);
         this.store.balance = await this.cs.getCANBalance();
