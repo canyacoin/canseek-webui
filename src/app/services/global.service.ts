@@ -135,6 +135,9 @@ export class GlobalService {
   getCandidate(pid: string, cid: string) {
     return this.dbRef.doc(pid).collection('candidates').doc(cid).valueChanges();
   }
+  delCandidatePending(pid: string, cid: string) {
+    this.dbRef.doc(pid).collection('candidates').doc(cid).delete();
+  }
 
   getRefund(post: any, curUser: string) {
     const { id, postId, referrals_by_user, candidates, honeypot, cost } = post;

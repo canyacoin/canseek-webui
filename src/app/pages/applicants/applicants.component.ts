@@ -56,6 +56,11 @@ export class ApplicantsComponent implements OnInit {
     this.pid = id;
     this.gs.getCandidates(id)
       .subscribe(candidates => {
+        // candidates
+        //   .filter(item => item.status == 'pending')
+        //   .map(c => {
+        //     this.gs.delCandidatePending(id, c.id)
+        //   })
         this.candidates = (candidates || [])
           .filter(item => item.status !== 'pending')
           .sort((a, b) => b.time - a.time);
