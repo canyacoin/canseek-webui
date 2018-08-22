@@ -35,7 +35,7 @@
                 <div class="card-text text" [innerHtml]="post.job_desc"></div>
               </section>
 
-              <section class="my-40" *ngIf="post.job_attachments.length">
+              <section class="my-40" *ngIf="(post.job_attachments || []).length">
                 <p class="bold">Attachments</p>
                 <a class="mr-12 blue" target="_blank" 
                   href="{{ file.url }}" 
