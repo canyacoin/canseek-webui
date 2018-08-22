@@ -93,8 +93,7 @@ export class GlobalService {
   }
 
   addCandidateDb(post: any, candidate: any): Promise<any> {
-    const { id, candidateTrend = 0, referrals_by_user } = post;
-    const { owner_addr: curUser } = candidate;
+    const { id, candidateTrend = 0 } = post;
     const postRef = this.dbRef.doc(id);
 
     return postRef.collection('candidates').add(candidate)
@@ -103,23 +102,24 @@ export class GlobalService {
 
         docRef.update({ id: cid, status: 'pending' })
 
-        referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
-        postRef.update({ candidateTrend: candidateTrend + 1, referrals_by_user })
+        postRef.update({ candidateTrend: candidateTrend + 1 })
 
         return Promise.resolve(cid);
       })
   }
 
-  updatePostAndCandidate(post: any, candidtae: any, res: any): Promise<any> {
+  updatePostAndCandidate(post: any, curUser: string, candidtae: any, res: any): Promise<any> {
     const { honeypot, candidateId } = res;
+
     if(candidateId) {
-      const { id: pid, cost, reward } = post;
+      const { id: pid, cost, reward, referrals_by_user } = post;
       const { id: cid, nextStatus = 'open' } = candidtae;
       const postRef = this.dbRef.doc(pid);
       const candidateRef = postRef.collection('candidates').doc(cid);
       const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
   
-      postRef.update({candidates, honeypot });
+      referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
+      postRef.update({candidates, honeypot, referrals_by_user });
       candidateRef.update({candidateId, status: nextStatus});
       
       return Promise.resolve();
@@ -202,10 +202,10 @@ export class GlobalService {
   // include callback after status updated
   updateCandidateStatus(post, candidate) {
     const { postId } = post;
-    const { id: cid } = candidate;
+    const { id: cid, owner_addr: curUser } = candidate;
 
     return this.cs.getCandidateId(cid, postId)
-      .then(({candidateId}) => this.updatePostAndCandidate(post, candidate, candidateId))
+      .then(({candidateId}) => this.updatePostAndCandidate(post, curUser, candidate, candidateId))
       .catch(err => {
         throw err;
       })
