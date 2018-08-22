@@ -36,7 +36,9 @@
     </a>
 
     <!-- info -->
-    <p class="title clamp1">{{ post.job_title }}</p>
+    <p class="title clamp1">
+      <a routerLink="/post/detail/{{ post.id }}" style="color: inherit;">{{ post.job_title }}</a>
+    </p>
     <p class="text mb-10 clamp1" style="font-size: 14px; font-weight: 300;">{{ post.company_name || 'company name' }}</p>
     <hr class="my-2">
     <nz-row nzType="flex" nzJustify="space-between" nzAlign="middle" class="text mb-2">
