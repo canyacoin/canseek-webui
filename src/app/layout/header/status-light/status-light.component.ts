@@ -13,8 +13,6 @@ const Web3 = require('web3');
 export class StatusLightComponent implements OnInit, AfterViewInit {
   store = Store;
   private _web3;
-  
-  canYaMainContract = '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0';
   constructor(
     private cs: ContractsService
   ) {
