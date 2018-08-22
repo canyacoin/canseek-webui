@@ -1,7 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Operation, setProcessResult, ProcessAction, CanPay, CanPayData, CanPayService } from '@canyaio/canpay-lib';
-import { async } from '@angular/core/testing';
+import { Operation, setProcessResult, ProcessAction, CanPay, CanPayData, CanPayService, EthService } from '@canyaio/canpay-lib';
 
 declare let require: any;
 declare let window: any;
@@ -40,7 +39,8 @@ export class ContractsService {
   CanHire = contract(CanHireArtifacts);
 
   constructor(
-    private canPayService:CanPayService,
+    private canPayService: CanPayService,
+    private ethService: EthService,
   ) {
     if (typeof window.web3 !== 'undefined') {
       // Use Mist/MetaMask's provider
@@ -209,19 +209,24 @@ export class ContractsService {
 
   public async addPost(id, bounty, cost) {
     const account = await this.getAccount();
-    // const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
-    // const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
-    // await canYaCoin.approve(escrow.address, bounty, { from: account, gasPrice: gasPrice, gas: gasApprove });
-    await this.canpayModal(bounty);
 
     return new Promise((resolve, reject) => {
-      canHire.addPost(id, bounty, cost, { from: account, gasPrice: gasPrice, gas: gasAddPost }).then(result => {
-        resolve(result.logs[0].args.postId.toNumber());
+      this.canpayModal(bounty, () => {
+        const bounty$ = this.ethService.amountToCANTokens(bounty);
+        const cost$ = this.ethService.amountToCANTokens(cost);
+        canHire
+          .addPost(id, bounty$, cost$, { from: account, gasPrice: gasPrice, gas: gasAddPost })
+          .then(result => {
+            resolve(result.logs[0].args.postId.toNumber());
+          })
+          .catch(err => {
+            reject(err);
+          });
+      }, () => {
+        reject();
       })
-        .catch(err => {
-          reject(err);
-        });
+        
     }) as Promise<number>;
   }
 
@@ -255,9 +260,8 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  async canpayModal(amount: number) {
+  canpayModal(amount: number, onComplete: any, onCancel: any) {
     const canPayOptions: CanPay = {
-      // properties
       dAppName: 'CanSeek',
       operation: Operation.auth, // Authorise or Pay, Default is: Authorise
       recepient: environment.contracts.EscrowAddr,
@@ -265,47 +269,42 @@ export class ContractsService {
       minAmount: 500, // Default is 1
       maxAmount: 50000, // Default is 'No Maximum'
   
-      // Actions
-      complete: async(canPayData: CanPayData) => {
-        console.log('complete', canPayData);
+      complete: (canPayData: CanPayData) => {
         this.canPayService.close();
+        onComplete();
       },
-      // this.onComplete.bind(this),
-      cancel: async(canPayData: CanPayData) => {
+      cancel: () => {
         this.canPayService.close();
-        console.log('cancel', canPayData);
-        throw new Error('cancel');
+        onCancel();
       }
-      // this.onCancel.bind(this),
-  
-      // Post Authorisation
-      // postAuthorisationProcessName: 'User Activation',
-      // startPostAuthorisationProcess: this.startCanPayUserActivation.bind(this),
-      // postAuthorisationProcessResults: null
+      
     };
     this.canPayService.open(canPayOptions);
   }
 
   public async recommend(candidateUniqueId, postId) {
     const account = await this.getAccount();
-    // const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
-    // const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
     const cost = await this.getPostCost(postId);
-    // await canYaCoin.approve(escrow.address, cost, {from: account, gasPrice: gasPrice, gas: gasApprove});
-    await this.canpayModal(cost);
 
     return new Promise((resolve, reject) => {
-      canHire.recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend}).then(result => {
-        const { candidateId } = result.logs[0].args;
-        this.getPostHoneypot(postId)
-        .then(honeypot => {
-          setTimeout(() => {
-            resolve({honeypot, candidateId: Number(candidateId)})
-          }, 10);
+      this.canpayModal(cost, () => {
+        canHire
+        .recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend})
+        .then(result => {
+          const { candidateId } = result.logs[0].args;
+          this.getPostHoneypot(postId)
+          .then(honeypot => {
+            setTimeout(() => {
+              resolve({honeypot, candidateId: Number(candidateId)})
+            }, 10);
+          })
         })
-      }).catch( err => {
-        reject(err);
+        .catch( err => {
+          reject(err);
+        });
+      }, () => {
+        reject(0);
       });
     }) as Promise<any>;
   }
