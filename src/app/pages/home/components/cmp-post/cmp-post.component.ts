@@ -45,6 +45,7 @@ export class CmpPostComponent implements OnInit {
       nzOnOk: async () => {
         try {
           await this.gs.cancelPostDb(post);
+          await this.gs.cancelPostPre(post);
           await this.gs.cancelPost(post);
           this.message.success('Cancel success');
           this.store.balance = await this.cs.getCANBalance();

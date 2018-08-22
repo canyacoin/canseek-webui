@@ -92,6 +92,24 @@ export class GlobalService {
       })
   }
 
+  // update post's pending candidates before cancel post
+  cancelPostPre(post) {
+    return new Promise((resolve, reject) => {
+      this.dbRef
+        .doc(post['id'])
+        .collection('candidates')
+        .valueChanges()
+        .subscribe(candidates => {
+          candidates
+            .filter(c => c.status == 'pending')
+            .map(c => this.updatePendingCandidate(post, c))
+
+            resolve(1);
+        })
+    });
+    
+  }
+
   addCandidateDb(post: any, candidate: any): Promise<any> {
     const { id, candidateTrend = 0 } = post;
     const postRef = this.dbRef.doc(id);
