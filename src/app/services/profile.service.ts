@@ -23,7 +23,6 @@ export class ProfileService {
   ) { 
     this.afAuth.authState.subscribe((auth) => {
       this.store.authState = auth || {};
-      console.log(auth)
     });
   }
 

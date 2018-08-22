@@ -172,7 +172,7 @@ export class GlobalService {
             candidates: Number(candidates) - referNum, 
             honeypot: Number(honeypot) - Number(cost) * referNum, 
             referrals_by_user 
-          })
+          });
 
           // update candidatesRef
           cidArr.map(cid => {
