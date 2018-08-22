@@ -46,7 +46,7 @@
       <ng-container *ngIf="statusValue == 'my referrals'">
         <ng-container *ngFor="let post of results">
           <ng-container *ngFor="let cid of post.referrals_by_user[store.curUser]">
-            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24" *ngFor="let post of results">
+            <nz-col class="gutter-row mb-30" [nzXl]="8" [nzLg]="12" [nzXs]="24">
               <app-cmp-post [post]="post" [statusValue]="statusValue" [curUser]="store.curUser" [cid]="cid"></app-cmp-post>
             </nz-col>
           </ng-container>
