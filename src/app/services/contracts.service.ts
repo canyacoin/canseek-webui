@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Operation, setProcessResult, ProcessAction, CanPay, CanPayData, CanPayService, EthService } from '@canyaio/canpay-lib';
+import { Operation, CanPay, ProcessAction, CanPayData, CanPayService, EthService } from '@canyaio/canpay-lib';
 
 declare let require: any;
 declare let window: any;
@@ -92,8 +92,8 @@ export class ContractsService {
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
     return new Promise((resolve, reject) => {
       canYaCoin.balanceOf.call(account, { from: account }).then(result => {
-        const number = Math.floor(result.toNumber() / 1000000);
-        resolve(number);
+        const balance = this.CANTokensToAmount(result.toNumber());
+        resolve(balance);
       })
         .catch(err => {
           reject(err);
@@ -187,7 +187,8 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.posts(postId).then(result => {
-        resolve(result[4].toNumber());
+        const cost = result[4].toNumber()
+        resolve(this.CANTokensToAmount(cost));
       })
       .catch(err => {
         reject(err);
@@ -199,7 +200,8 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.posts(postId).then(result => {
-        resolve(result[5].toNumber());
+        const honeypot = result[5].toNumber();
+        resolve(this.CANTokensToAmount(honeypot));
       })
       .catch(err => {
         reject(err);
@@ -207,6 +209,10 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  CANTokensToAmount(number) {
+    return Math.floor(Number(number) / 1000000);
+  }
+  
   public async addPost(id, bounty, cost) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
@@ -232,8 +238,6 @@ export class ContractsService {
 
   public async cancelPost(postId) {
     const account = await this.getAccount();
-    const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
-    const escrow = await this.Escrow.at(EscrowAddr);
     const canHire = await this.CanHire.at(CanHireAddr);
 
     return new Promise((resolve, reject) => {
@@ -271,13 +275,12 @@ export class ContractsService {
   
       complete: (canPayData: CanPayData) => {
         this.canPayService.close();
-        onComplete();
+        // onComplete();
       },
       cancel: () => {
         this.canPayService.close();
-        onCancel();
+        // onCancel();
       }
-      
     };
     this.canPayService.open(canPayOptions);
   }
@@ -285,11 +288,9 @@ export class ContractsService {
   public async recommend(candidateUniqueId, postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
-    const cost = await this.getPostCost(postId);
 
     return new Promise((resolve, reject) => {
-      this.canpayModal(cost, () => {
-        canHire
+      canHire
         .recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend})
         .then(result => {
           const { candidateId } = result.logs[0].args;
@@ -303,9 +304,6 @@ export class ContractsService {
         .catch( err => {
           reject(err);
         });
-      }, () => {
-        reject(0);
-      });
     }) as Promise<any>;
   }
 
@@ -331,9 +329,9 @@ export class ContractsService {
         const postInfo = {'id': post[0].toNumber(),
                         'owner': post[1].toString(),
                         'status': status,
-                        'bounty': post[3].toNumber(),
-                        'cost': post[4].toNumber(),
-                        'honeypot': post[5].toNumber(),
+                        'bounty': this.CANTokensToAmount(post[3].toNumber()),
+                        'cost': this.CANTokensToAmount(post[4].toNumber()),
+                        'honeypot': this.CANTokensToAmount(post[5].toNumber()),
                         'candidateSelected': post[6].toNumber(),
                         'recommenders': recommenders
                       };
