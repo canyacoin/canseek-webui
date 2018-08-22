@@ -51,7 +51,7 @@ export class CmpCandidateComponent implements OnInit {
   updateCandidateStatus(post, candidate) {
     this.loading = true;
 
-    this.gs.updateCandidateStatus(post, candidate)
+    this.gs.updatePendingCandidate(post, candidate)
       .then(() => {
         this.loading = false;
         this.message.success('updated');

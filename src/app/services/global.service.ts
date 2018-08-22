@@ -200,12 +200,12 @@ export class GlobalService {
   }
 
   // include callback after status updated
-  updateCandidateStatus(post, candidate) {
+  updatePendingCandidate(post, candidate) {
     const { postId } = post;
     const { id: cid, owner_addr: curUser } = candidate;
 
     return this.cs.getCandidateId(cid, postId)
-      .then(({candidateId}) => this.updatePostAndCandidate(post, curUser, candidate, candidateId))
+      .then((res) => {this.updatePostAndCandidate(post, curUser, candidate,res)})
       .catch(err => {
         throw err;
       })
