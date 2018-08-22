@@ -130,6 +130,7 @@ export class ReferComponent implements AfterViewInit {
         'Application Fee',
         this.recommend.bind(this)
       )
+      this.doneLoading = false;
     } catch(err) {
       this.doneLoading = false;
       this.message.error(err.message);console.log(err);
