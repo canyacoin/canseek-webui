@@ -1,7 +1,6 @@
 import { Component, AfterViewInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators
 } from '@angular/forms';
@@ -106,23 +105,45 @@ export class ReferComponent implements AfterViewInit {
     this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`)
   }
 
+  genCandidateData() {
+    const CandidateData = {...this.values, time: Date.now() };
+  
+    return JSON.parse(JSON.stringify(CandidateData));
+  }
+
   async done() {
     this.doneLoading = true;
 
-    const CandidateData = {...this.values, time: Date.now() };
-    const CandidatedData = JSON.parse(JSON.stringify(CandidateData));
+    const candidateData = this.genCandidateData();
+    const { id } = candidateData;
 
     try {
-      this.cid = await this.gs.addCandidateDb(this.post, CandidatedData);
-      CandidatedData.id = this.cid;
+      if (!id) {
+        this.values['id'] = candidateData['id'] = this.cid = await this.gs.addCandidateDb(this.post, candidateData);
+      }
       this.pid = this.post['id'];
-      const res = await this.cs.recommend(this.cid, this.post['postId']);
-      await this.gs.updatePostAndCandidate(this.post, CandidatedData, res);
-      this.store.balance = await this.cs.getCANBalance();
-      this.redireact(this.cid);
+
+      this.cs.canpayInstance(
+        this.post['cost'], 
+        this.onComplete.bind(this),
+        null,
+        'Application Fee',
+        this.recommend.bind(this)
+      )
     } catch(err) {
       this.doneLoading = false;
       this.message.error(err.message);console.log(err);
     }
+  }
+
+  onComplete() {
+    this.redireact(this.cid);
+  }
+
+  async recommend() {
+    const data = this.genCandidateData();
+    const res = await this.cs.recommend(this.cid, this.post['postId']);
+    await this.gs.updatePostAndCandidate(this.post, this.store.curUser, data, res);
+    this.store.balance = await this.cs.getCANBalance();
   }
 }

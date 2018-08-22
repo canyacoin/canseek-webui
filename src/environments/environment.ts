@@ -7,6 +7,7 @@ export const environment = {
   URL: {
     changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti'
   },
+  appname: 'CanSeek',
   contracts: {
     // local
     // CanYaCoin: '0x4b58913752c6cbae283f99caf80330b1e5dd93b0',

@@ -264,6 +264,44 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
+  canpayInstance(amount: number, onComplete: any, onCancel: any = null, taskName: string = null, task: any = null) {
+    const instance: CanPay = {
+      dAppName: environment.appname,
+      operation: Operation.auth, // Authorise or Pay, Default is: Authorise
+      recepient: environment.contracts.EscrowAddr,
+      amount, // allow the user to enter amount through an input box
+
+      complete: () => {
+        this.canPayService.close();
+        onComplete && onComplete();
+      },
+      cancel: () => {
+        this.canPayService.close();
+        onCancel && onCancel();
+      },
+
+      // Post Authorisation
+      postAuthorisationProcessName: taskName,
+      startPostAuthorisationProcess: !task ? null : async() => {
+        try {
+          await task();
+          instance.postAuthorisationProcessResults = {
+            type: ProcessAction.success,
+            msg: null
+          }
+        } catch (err) {
+          instance.postAuthorisationProcessResults = {
+            type: ProcessAction.error,
+            msg: 'Transaction Failed'
+          }
+        }
+      },
+      postAuthorisationProcessResults: null 
+    };
+
+    this.canPayService.open(instance);
+  }
+
   canpayModal(amount: number, onComplete: any, onCancel: any) {
     const canPayOptions: CanPay = {
       dAppName: 'CanSeek',
