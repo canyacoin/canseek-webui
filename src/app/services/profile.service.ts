@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '../models/profile';
-import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
+import { NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
 import { Store } from '../store';
-const MsgAlreadyVerified = 'You\'ve verified';
+// const MsgAlreadyVerified = 'You\'ve verified';
 const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
 const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';
 const MsgAlreadyLogin = 'The email address is already in use by another account.';
@@ -18,7 +18,7 @@ export class ProfileService {
 
   constructor(
     private modal: NzModalService,
-    private message: NzMessageService,
+    // private message: NzMessageService,
     private afAuth: AngularFireAuth,
   ) { 
     this.afAuth.authState.subscribe((auth) => {
@@ -41,19 +41,21 @@ export class ProfileService {
   }
 
   setProfile(profile: Profile) {
-    const { mm = [profile['owner_addr']], your_email, your_name, company_name } = profile;
+    // incremental update
+    const _profile = this.getProfile();
+    const { mm, your_email, your_name, company_name } = profile;
 
-    localStorage.setItem('mm', mm.join(','));
-    localStorage.setItem('your_email', your_email);
-    localStorage.setItem('your_name', your_name);
-    localStorage.setItem('company_name', company_name);
+    localStorage.setItem('mm', (mm || _profile['mm']).join(','));
+    localStorage.setItem('your_email', your_email || _profile['your_email']);
+    localStorage.setItem('your_name', your_name || _profile['your_name']);
+    localStorage.setItem('company_name', company_name || _profile['company_name']);
   }
 
   async verify(email: string, displayName: string) {
     const isVerified = (this.store.authState['email'] == email) && this.store.authState['emailVerified'];
 
     if (isVerified) {
-      this.msgModal('success', MsgAlreadyVerified);
+      // this.msgModal('success', MsgAlreadyVerified);
       return;
     }
     if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
