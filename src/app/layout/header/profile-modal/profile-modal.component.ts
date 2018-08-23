@@ -30,6 +30,8 @@ export class ProfileModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // console.log('--------------init store.profile-------------');
+    this.store.profile = this.ps.getProfile();
   }
 
   initForm() {

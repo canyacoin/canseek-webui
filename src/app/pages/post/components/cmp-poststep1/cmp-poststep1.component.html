@@ -4,7 +4,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Your Name </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="your_name" id="your_name" placeholder="First Name, Last Name">
+      <input [(ngModel)]="store.profile.your_name" nz-input formControlName="your_name" id="your_name" placeholder="First Name, Last Name">
       <nz-form-explain *ngIf="validateForm.get('your_name').dirty && validateForm.get('your_name').errors">Please input your Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
@@ -185,7 +185,7 @@ Let them know:
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_name" nzRequired> Company Name </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="company_name" id="company_name" placeholder="Company Name">
+      <input [(ngModel)]="store.profile.company_name" nz-input formControlName="company_name" id="company_name" placeholder="Company Name">
       <nz-form-explain *ngIf="validateForm.get('company_name').dirty && validateForm.get('company_name').errors">Please input your Company Name!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>

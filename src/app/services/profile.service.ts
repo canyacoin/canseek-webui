@@ -42,13 +42,15 @@ export class ProfileService {
 
   setProfile(profile: Profile) {
     // incremental update
-    const _profile = this.getProfile();
-    const { mm, your_email, your_name, company_name } = profile;
+    const _profile = { ...this.getProfile(), ...JSON.parse(JSON.stringify(profile)) };
+    
+    localStorage.setItem('mm', _profile['mm']);
+    localStorage.setItem('your_email', _profile['your_email']);
+    localStorage.setItem('your_name', _profile['your_name']);
+    localStorage.setItem('company_name', _profile['company_name']);
 
-    localStorage.setItem('mm', (mm || _profile['mm']).join(','));
-    localStorage.setItem('your_email', your_email || _profile['your_email']);
-    localStorage.setItem('your_name', your_name || _profile['your_name']);
-    localStorage.setItem('company_name', company_name || _profile['company_name']);
+    // update store
+    this.store.profile = _profile;
   }
 
   async verify(email: string, displayName: string) {

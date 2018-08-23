@@ -49,7 +49,7 @@ export class PostComponent implements AfterViewInit {
     private modal: NzModalService,
     private ps: ProfileService,
   ) {
-    this.values = this.ps.getProfile();
+    // this.values = this.ps.getProfile();
     
     this.route.queryParams.subscribe(params => {
       this.id = params.id;
