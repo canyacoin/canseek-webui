@@ -11,11 +11,12 @@ import * as moment from 'moment';
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
+  loadingStatus: boolean = false;
+
   category: string = 'all';
-  loading: boolean = true;
+
   post: any;
   pid: string;
-  canHire: boolean = false;
 
   candidates: any;
   results: any;
@@ -24,9 +25,6 @@ export class ApplicantsComponent implements OnInit {
   
   moment = moment;
   confirmModal: NzModalRef;
-
-  selectedCandidates = [];
-  loadingStatus: boolean = false;
 
   customStyle = {
     'background'   : '#fff',
@@ -45,46 +43,47 @@ export class ApplicantsComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    await this.checkAuth();
-    await this.getCandidates();
-  }
-
-  getCandidates() {
     const { id } = this.route.snapshot.params;
 
     this.pid = id;
-    this.gs.getCandidates(id)
-      .subscribe(candidates => {
-        // candidates
-        //   .filter(item => item.status == 'pending')
-        //   .map(c => {
-        //     this.gs.delCandidatePending(id, c.id)
-        //   })
-        this.candidates = (candidates || [])
-          .filter(item => item.status !== 'pending')
-          .sort((a, b) => b.time - a.time);
-
-        this.loading = false;
-        this.searchCategory();
-        // update pending candidate
-        this.candidates
-          .filter(c => c.status == 'pending')
-          .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
-      });
+    await this.getPost();
+    await this.getCandidates();
+    this.updatePendingCandidates();
   }
 
-  checkAuth() {
-    const { id } = this.route.snapshot.params;
+  getPost() {
+    return new Promise((resolve, reject) => {
+      this.gs.getPost(this.pid)
+        .subscribe(post => {
+          // check auth
+          if (post['owner_addr'] !== this.store.curUser) {
+            this.router.navigateByUrl(`/noauth`);
+          }
+          this.post = post;
+          resolve(1);
+        });
+    });
+  }
 
-    this.gs.getPost(id)
-      .subscribe(post => {
-        if (post['owner_addr'] !== this.store.curUser) {
-          this.router.navigateByUrl(`/noauth`);
-        }
-        
-        this.post = post;
-        this.canHire = post['status'] == 'open';
-      })
+  getCandidates() {
+    return new Promise((resolve, reject) => {
+      this.gs.getCandidates(this.pid)
+        .subscribe(candidates => {
+          candidates = (candidates || [])
+            .filter(c => c.status !== 'pending')
+            .sort((a, b) => b.time - a.time);
+
+          this.candidates = candidates;
+          this.searchCategory();
+          resolve(1);
+        });
+    });
+  }
+
+  updatePendingCandidates() {
+    this.candidates
+      .filter(c => c.status == 'pending')
+      .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
   }
 
   searchCategory() {
@@ -111,12 +110,9 @@ export class ApplicantsComponent implements OnInit {
     this.results = next;
   }
 
-  changeCandidateCat(cid, category) {
+  changeCandidateCat(candidate, category) {
+    const { id: cid } = candidate;
     this.gs.changeCandidateCat(this.pid, cid, category);
-  }
-
-  selectC(v) {
-    this.selectedCandidates = v;
   }
 
   changeActive(cid) {
@@ -129,10 +125,9 @@ export class ApplicantsComponent implements OnInit {
     })
   }
 
-  closePost() {
-    const item = this.selectedCandidates[0];
-    const cid = item.split(' ')[0];
-    const candidateId = item.split(' ')[1];
+  closePost(candidate) {
+    const { id: cid, candidateId } = candidate;
+    
     this.post['nextStatus'] = 'closed';
 
     this.confirmModal = this.modal.confirm({
