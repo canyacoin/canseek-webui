@@ -12,7 +12,7 @@
     <i class="anticon anticon-down"></i>
   </a>
   <ul nz-menu>
-    <li nz-menu-item *ngIf="!store.authState.emailVerified" class="border-bottom">
+    <li nz-menu-item *ngIf="!store.authState.emailVerified">
       <span>Please verify your email</span>
     </li>
     <li nz-menu-item *ngIf="store.authState.emailVerified">
