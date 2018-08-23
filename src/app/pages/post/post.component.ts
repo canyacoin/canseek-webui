@@ -99,7 +99,7 @@ export class PostComponent implements AfterViewInit {
 
     this.validateForm = this.fb.group({
       reward_fee: [ { value: values['reward_fee'], disabled }, [ Validators.required, this.rewardValidator ] ],
-      cost_fee: [ { value: values['cost_fee'] || 10, disabled }, [ Validators.required, this.costValidator ] ],
+      cost_fee: [ { value: values['cost_fee'], disabled }, [ Validators.required, this.costValidator ] ],
       salary_currency: [{ value: this.store.selectedCurrency['string'] || '$ USD', disabled: true }],
     });
   }
@@ -159,13 +159,15 @@ export class PostComponent implements AfterViewInit {
 
       // init reward by salary_min when type = new
       const salary_min = formData.data['salary_min'];
+      const currencyRate = Number(this.store.selectedCurrency['rate'] || 1);
+      this.values['cost_fee'] = Math.ceil(currencyRate * 10);
+
       if (salary_min && this.type == 'new') {
-        const currencyRate = Number(this.store.selectedCurrency['rate'] || 1);
         const init_reward_in_currency = salary_min * 0.05 / currencyRate < 500 ? 500 * currencyRate : salary_min * 0.05;
 
         this.values['reward_fee'] = Math.ceil(init_reward_in_currency);
-        this.initForm(this.values, false);
       }
+      this.initForm(this.values, false);
       this.ps.setProfile(formData.data);
     } else if (this.current === 2) {
       // pass directly when edit,because reward info can't edit
