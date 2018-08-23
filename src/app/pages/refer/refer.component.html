@@ -67,11 +67,15 @@
         <!-- <p class="fs-18 fw-400">{{ store.selectedCurrency.symbol }}{{ (store.selectedCurrency.rate * post.cost || 0) | number:'1.0-0' }} {{ store.selectedCurrency.name }}</p>  -->
         <p class="fs-18 fw-400">{{ post.cost }} CAN</p> 
 
+        <button nz-button nzType="default" (click)="pre()">
+          <span>Back</span>
+        </button>
+
         <button 
           nz-button
           nzType="primary"
           [nzLoading]="doneLoading"
-          class="mb-12" 
+          class="mb-12 ml-24" 
           (click)="done()"
           >
           Refer Talent & Pay
