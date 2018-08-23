@@ -15,7 +15,6 @@ export class ApplicantsComponent implements OnInit {
   loading: boolean = true;
   post: any;
   pid: string;
-  hasAuth: boolean = true;
   canHire: boolean = false;
 
   candidates: any;
@@ -79,8 +78,11 @@ export class ApplicantsComponent implements OnInit {
 
     this.gs.getPost(id)
       .subscribe(post => {
+        if (post['owner_addr'] !== this.store.curUser) {
+          this.router.navigateByUrl(`/noauth`);
+        }
+        
         this.post = post;
-        this.hasAuth = (post['owner_addr'] === this.store.curUser);
         this.canHire = post['status'] == 'open';
       })
   }
