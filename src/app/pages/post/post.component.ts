@@ -193,7 +193,7 @@ export class PostComponent implements AfterViewInit {
     let postData = this.values;
 
     if (this.type == 'new') {
-      postData = {referrals_by_user: {}, nextStatus: 'open', honeypot: reward, reward, cost, ...this.values, time: Date.now(), owner_addr: this.store.curUser };
+      postData = {referrals_by_user: {}, status: 'pending', nextStatus: 'open', honeypot: reward, reward, cost, ...this.values, time: Date.now(), owner_addr: this.store.curUser };
     } else {
       postData = {...postData, time: Date.now()};
     }

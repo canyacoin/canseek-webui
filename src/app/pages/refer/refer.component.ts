@@ -106,7 +106,7 @@ export class ReferComponent implements AfterViewInit {
   }
 
   genCandidateData() {
-    const CandidateData = {...this.values, time: Date.now() };
+    const CandidateData = {...this.values, status: 'pending', nextStatus: 'open', time: Date.now() };
   
     return JSON.parse(JSON.stringify(CandidateData));
   }
