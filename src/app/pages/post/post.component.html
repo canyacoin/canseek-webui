@@ -71,7 +71,7 @@
               <nz-col nzSpan="18">
                 <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).required">Please input reward! </nz-form-explain>
                 <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).number">Please input number!</nz-form-explain>
-                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).minimum">Please bigger than 500 CAN!</nz-form-explain>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).minimum">Initial reward should be more than 500 CAN!</nz-form-explain>
               </nz-col>
               <nz-col nzSpan="6" class="text-right">
                 ≈{{ (validateForm.get('reward_fee').value / (store.selectedCurrency.rate || 1)) | number:'1.0-0' }}CAN

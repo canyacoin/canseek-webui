@@ -160,7 +160,9 @@ export class PostComponent implements AfterViewInit {
       // init reward by salary_min when type = new
       const salary_min = formData.data['salary_min'];
       if (salary_min && this.type == 'new') {
-        this.values['reward_fee'] = salary_min * 0.05;
+        const currency = Number(this.store.selectedCurrency['rate'] || 1);
+
+        this.values['reward_fee'] = salary_min * 0.05 / currency < 500 ? 500 : salary_min * 0.05;
         this.initForm(this.values, false);
       }
       this.ps.setProfile(formData.data);
