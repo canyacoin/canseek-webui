@@ -36,7 +36,7 @@ export class ProfileModalComponent implements OnInit {
     this.formData = this.ps.getProfile();
 
     this.form = this.fb.group({
-      mm: [ this.formData['mm'] || this.store.curUser, [ Validators.required ] ],
+      mm: [ this.formData['mm'] || [this.store.curUser], [ Validators.required ] ],
       your_email: [ this.formData['your_email'], [ Validators.email, Validators.required ] ],
       your_name: [ this.formData['your_name'], [ Validators.required ] ],
       company_name: [ this.formData['company_name'], [ Validators.required ] ],
