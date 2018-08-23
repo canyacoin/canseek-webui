@@ -41,7 +41,7 @@ export class ProfileService {
   }
 
   setProfile(profile: Profile) {
-    const { mm, your_email, your_name, company_name } = profile;
+    const { mm = [profile['owner_addr']], your_email, your_name, company_name } = profile;
 
     localStorage.setItem('mm', mm.join(','));
     localStorage.setItem('your_email', your_email);
