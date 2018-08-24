@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
 import { GlobalService } from '../../services/global.service';
-import { ContractsService } from '../../services/contracts.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
 
@@ -25,6 +24,7 @@ export class ApplicantsComponent implements OnInit {
   store = Store;
   
   moment = moment;
+  confirmModal: NzModalRef;
 
   customStyle = {
     'background'   : '#fff',
@@ -37,9 +37,9 @@ export class ApplicantsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private gs: GlobalService,
+    private modal: NzModalService,
     private message: NzMessageService,
     private router: Router,
-    private cs: ContractsService,
   ) { }
 
   async ngOnInit() {
@@ -125,31 +125,22 @@ export class ApplicantsComponent implements OnInit {
     })
   }
 
-  closePost(candidate) {    
+  closePost(candidate) {
+    const { id: cid, candidateId } = candidate;
+    
     this.post['nextStatus'] = 'closed';
 
-    this.cs.canpayInstance(
-      {
-        dAppName: 'Selected Candidate',
-        amount: this.post['honeypot'],// TODO 502+25=527 rate
-        recepient: candidate['owner_addr'],
-      },
-      this.hire.bind(this),
-      this.onComplete.bind(this)
-    );
-  }
-  onComplete() {
-    debugger//TODO redirect    
-  }
-
-  async hire(candidate) {
-    try {
-      const { id: cid, candidateId } = candidate;
-      await this.gs.closePost(this.post, cid, candidateId);
-      return Promise.resolve({status: 1});
-    } catch(err) {
-      return Promise.reject(err)
-    }
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Are your sure you want to select this candidate?',
+      nzOkText: 'Yes',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => 
+      this.gs.closePost(this.post, cid, candidateId)
+        .then(() => this.message.success('success!'))
+        .catch(err => {
+          this.message.error(err.message);console.log(err);
+        })
+    });
   }
 
   updatePostStatus(post) {

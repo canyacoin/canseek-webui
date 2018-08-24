@@ -52,12 +52,10 @@
 <ng-template #candidateHeader>
   <nz-row nzType="flex" nzJustify="space-between" nzGutter="16">
     <button
-      nz-button
-      nzType="primary"
-      nzSize="small"
-      [disabled]="!(post.status == 'open' && category != 'rejected' && candidate.category != 'rejected' && candidate.status == 'open')"
       (click)="closePost(candidate)"
-      class="hire-btn"
+      *ngIf="post.status == 'open' && category != 'rejected' && candidate.category != 'rejected' && candidate.status == 'open'" 
+      class="btn btn-primary btn-outline btn-sm "
+      style="margin-left: -24px"
       >
       hire
     </button>
