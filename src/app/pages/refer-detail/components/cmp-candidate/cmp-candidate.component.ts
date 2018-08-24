@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 export class CmpCandidateComponent implements OnInit {
   @Input() pid: string;
   @Input() cid: string;
+  @Input() list: boolean;
   store = Store;
   candidate: any;
   post: any;

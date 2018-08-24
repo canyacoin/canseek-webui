@@ -1,6 +1,7 @@
 <nz-row class="bg-gray py-60" style="min-height: 90vh">
   <nz-col nzType="flex" nzSpan="18" nzOffset="3"> 
-    <h4 *ngIf="post">{{ post.job_title }} <small>(
+    <h4 *ngIf="post">{{ post.job_title }} 
+      <small *ngIf="post.status != 'open'">(
       {{ post.status }}
       <span nz-tooltip nzTitle="update status">
         <i class="anticon anticon-loading-3-quarters blue" 
@@ -47,50 +48,76 @@
         [nzShowArrow]="false"
         nzDisabled
         [nzActive]="candidate.active"
+        class="card card-bordered card-hover-shadow"
         >
 
-<ng-template #candidateHeader>
-  <nz-row nzType="flex" nzJustify="space-between" nzGutter="16">
-    <button
-      nz-button 
-      nzType="primary"
-      (click)="closePost(candidate)"
-      [disabled]="!(post.status == 'open' && category != 'rejected' && candidate.category != 'rejected' && candidate.status == 'open')" 
-      class="hire-btn"
-      >
-      hire
-    </button>
-    
-    <nz-col nzSpan="15">
-      <a href="javascript:;" (click)="changeActive(candidate.id)" class="border-bottom pb-10 card-title uppercase">{{ candidate.candidate_name }}
-        <small [class.red]="candidate.status == 'selected'" style="font-size: 50%">({{ candidate.status }})</small>
+<ng-template #candidateHeader class="p-0">
+  <h4 style="text-transform: capitalize">
+    {{ candidate.candidate_name }}
+    <small *ngIf="'selected' == candidate.status" [class.red]="candidate.status == 'selected'" style="font-size: 50%">({{ candidate.status }})</small>
+  </h4>
+  <div class="flex text">
+    <div class="flex1">Contact Phone or Email: 
+      <a href="mailto:{{ candidate.candidate_email }}">
+        <i class="iconfont iconfont-envelope ml-8"></i> {{ candidate.candidate_email }} 
       </a>
-      <nz-row nzType="flex" nzJustify="space-between">
-        <nz-col>
-          <a href="mailto:{{ candidate.candidate_email }}">
-            <i class="iconfont iconfont-envelope mr-10" style="font-size: 20px"></i> {{ candidate.candidate_email }} 
-          </a>
-        </nz-col>
-        
-        <nz-col class="text">
-          {{ moment(candidate.time).fromNow() }}
-        </nz-col>
-      </nz-row>
-    </nz-col>
+    </div>
+    {{ moment(candidate.time).fromNow() }}
+  </div>
 
-    <nz-col nzSpan="5" style="line-height: 1.6" class="text-right mr-20">
-      <a *ngIf="candidate.status !== 'pending' && candidate.category !== 'shortlist'" href="javascript:;" (click)="changeCandidateCat(candidate, 'shortlist')" class="uppercase">
-        add to shortlist <i class="iconfont iconfont-plus-o ml-10" style="font-size: 24px"></i>
+  <hr class="my-2">
+
+  <p class="text my-12" *ngIf="candidate.candidate_website || candidate.candidate_linkedin">Website or LinkedIn Profile: {{ candidate.candidate_website || candidate.candidate_linkedin }}</p>
+  <p class="text my-12" *ngIf="candidate.resume.length">
+    <i class="iconfont iconfont-eye-o fs-18"></i> CV/Resume: 
+    <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of candidate.resume">{{ file.name }}</a>
+  </p>
+
+  <!-- op buttons -->
+  <div class="flex mt-12">
+    <div class="flex1">
+      <a href="javascript:;"
+        class="btn btn-sm btn-primary"
+        *ngIf="candidate.status !== 'pending' && candidate.category !== 'shortlist'"
+        (click)="changeCandidateCat(candidate, 'shortlist')"
+        >
+        <i class="anticon anticon-plus-circle-o mr-8"></i>
+        shortlist
       </a>
-      <br>
-      <a *ngIf="candidate.category !== 'rejected'" href="javascript:;" (click)="changeCandidateCat(candidate, 'rejected')" class="uppercase">
-        reject candidate <i class="iconfont iconfont-close-o ml-10" style="font-size: 24px"></i>
+      <a href="javascript:;"
+        class="btn btn-sm btn-primary btn-outline"
+        *ngIf="candidate.category !== 'rejected'"  
+        (click)="changeCandidateCat(candidate, 'rejected')"
+        >
+        <i class="anticon anticon-minus-circle-o mr-8"></i>
+        reject
       </a>
-    </nz-col>
-  </nz-row>  
+    </div>
+
+    <a href="javascript:;"
+      (click)="changeActive(candidate.id)"
+      class="uppercase text fs-16"
+      >
+      View full application
+      <i class="anticon {{ candidate.active ? 'anticon-down' : 'anticon-right' }} ml-8"></i>
+    </a>
+
+    <a href="javascript:;"
+      (click)="closePost(candidate)"
+      *ngIf="post.status == 'open' && category != 'rejected' && candidate.category != 'rejected' && candidate.status == 'open'" 
+      class="btn btn-sm btn-primary hire-btn"
+      >
+      hire 
+      <i class="anticon anticon-check-circle-o"></i>
+    </a>
+  </div>
+  
+
 </ng-template>
+
+
         <div class="p-20">
-          <app-cmp-candidate [pid]="pid" [cid]="candidate.id"></app-cmp-candidate>
+          <app-cmp-candidate [pid]="pid" [cid]="candidate.id" [list]="true"></app-cmp-candidate>
         </div>
       </nz-collapse-panel>
     </nz-collapse>

@@ -28,10 +28,10 @@ export class ApplicantsComponent implements OnInit {
 
   customStyle = {
     'background'   : '#fff',
-    'border-radius': '4px',
+    'border-radius': '5px',
     'margin-bottom': '24px',
     'border'       : '0px',
-    'padding'      : '10px 20px 18px 40px'
+    'padding'      : '20px'
   };
 
   constructor(
@@ -106,7 +106,6 @@ export class ApplicantsComponent implements OnInit {
           .sort((a, b) => b.time - a.time);
         break;
     }
-
     this.results = next;
   }
 
