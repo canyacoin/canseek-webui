@@ -124,12 +124,13 @@ export class ReferComponent implements AfterViewInit {
       this.pid = this.post['id'];
 
       this.cs.canpayInstance(
-        this.post['cost'], 
+        {
+          amount: this.post['cost'],
+          postAuthorisationProcessName: 'Application Fees',
+        },
+        this.recommend.bind(this),
         this.onComplete.bind(this),
-        null,
-        'Application Fees',
-        this.recommend.bind(this)
-      )
+      );
       this.doneLoading = false;
     } catch(err) {
       this.doneLoading = false;
@@ -142,9 +143,14 @@ export class ReferComponent implements AfterViewInit {
   }
 
   async recommend() {
-    const data = this.genCandidateData();
-    const res = await this.cs.recommend(this.cid, this.post['postId']);
-    await this.gs.updatePostAndCandidate(this.post, this.store.curUser, data, res);
-    this.store.balance = await this.cs.getCANBalance();
+    try {
+      const data = this.genCandidateData();
+      const res = await this.cs.recommend(this.cid, this.post['postId']);
+      await this.gs.updatePostAndCandidate(this.post, this.store.curUser, data, res);
+      this.store.balance = await this.cs.getCANBalance();
+      return Promise.resolve({status: 1});
+    } catch(err) {
+      return Promise.reject(err);
+    }
   }
 }

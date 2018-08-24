@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Operation, CanPay, ProcessAction, CanPayData, CanPayService, EthService } from '@canyaio/canpay-lib';
+import { Operation, CanPay, setProcessResult, CanPayService, EthService } from '@canyaio/canpay-lib';
 
 declare let require: any;
 declare let window: any;
@@ -260,12 +260,22 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  canpayInstance(amount: number, onComplete: any, onCancel: any = null, taskName: string = null, task: any = null) {
+  canpayInstance(
+    args: any = {},
+    onTask: any = null,
+    onComplete: any = null, 
+    onCancel: any = null,
+    ) {
     const instance: CanPay = {
       dAppName: environment.appname,
       operation: Operation.auth, // Authorise or Pay, Default is: Authorise
       recepient: environment.contracts.EscrowAddr,
-      amount, // allow the user to enter amount through an input box
+      amount: 0, // allow the user to enter amount through an input box
+      minAmount: 1000, // Default is 1, if amount is set, this will be amount
+      maxAmount: 50000, // Default is 'No Maximum', if amount is set, this will be amount
+      postAuthorisationProcessName: null,
+      postAuthorisationProcessResults: null,
+      ...args,
 
       complete: () => {
         this.canPayService.close();
@@ -275,24 +285,11 @@ export class ContractsService {
         this.canPayService.close();
         onCancel && onCancel();
       },
-
-      // Post Authorisation
-      postAuthorisationProcessName: taskName,
-      startPostAuthorisationProcess: !task ? null : async() => {
-        try {
-          await task();
-          instance.postAuthorisationProcessResults = {
-            type: ProcessAction.success,
-            msg: null
-          }
-        } catch (err) {
-          instance.postAuthorisationProcessResults = {
-            type: ProcessAction.error,
-            msg: 'Transaction Failed'
-          }
-        }
-      },
-      postAuthorisationProcessResults: null 
+      startPostAuthorisationProcess: !onTask ? null : () => {
+        onTask()
+          .then(setProcessResult.bind(instance))
+          .catch(setProcessResult.bind(instance))
+      }
     };
 
     this.canPayService.open(instance);

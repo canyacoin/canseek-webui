@@ -220,12 +220,13 @@ export class PostComponent implements AfterViewInit {
         }
         
         this.cs.canpayInstance(
-          reward, 
-          this.onComplete.bind(this),
-          null,
-          'Set Reward',
-          this.addPost.bind(this)
-        )
+          {
+            amount: reward,
+            postAuthorisationProcessName: 'Set Reward',
+          },
+          this.addPost.bind(this),
+          this.onComplete.bind(this)
+        );
         this.doneLoading = false;
       } catch(err) {
         this.doneLoading = false;
@@ -239,11 +240,16 @@ export class PostComponent implements AfterViewInit {
   }
 
   async addPost() {
-    const data = this.genPostData();
-    const { id, reward, cost } = data;
-    const postId = await this.cs.addPost(id, reward, cost);
-    await this.gs.addPostCb(id, postId);
-    this.store.balance = await this.cs.getCANBalance();
+    try {
+      const data = this.genPostData();
+      const { id, reward, cost } = data;
+      const postId = await this.cs.addPost(id, reward, cost);
+      await this.gs.addPostCb(id, postId);
+      this.store.balance = await this.cs.getCANBalance();
+      return Promise.resolve({status: 1});
+    } catch(err) {
+      return Promise.reject(err);
+    }
   }
 
   redireact(id) {
