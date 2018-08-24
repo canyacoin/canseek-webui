@@ -55,7 +55,7 @@
       nz-button 
       nzType="primary"
       (click)="closePost(candidate)"
-      [disabled]="post.status == 'open' && category != 'rejected' && candidate.category != 'rejected' && candidate.status == 'open'" 
+      [disabled]="!(post.status == 'open' && category != 'rejected' && candidate.category != 'rejected' && candidate.status == 'open')" 
       class="hire-btn"
       >
       hire
