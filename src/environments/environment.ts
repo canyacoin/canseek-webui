@@ -7,7 +7,7 @@ export const environment = {
   URL: {
     changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti'
   },
-  appname: 'CanSeek',
+  appname: 'CanSeek Escrow',
   contracts: {
     // local
     // CanYaCoin: '0x4b58913752c6cbae283f99caf80330b1e5dd93b0',
@@ -15,31 +15,31 @@ export const environment = {
     // CanHire: '0x5c15bd7834756ae2151fc1b33d57d5035f122b7f'
 
     // // ropsten
-    // CanYaCoinAddr: '0xee9154ab6366416e80a1eb718954abe2ae406274',
-    // EscrowAddr: '0x021224710e96181acf84a5eeb5114652e3e622c9',
-    // CanHireAddr: '0x43461f82584da6e714d4745470a97ee745629ba2',
+    CanYaCoinAddr: '0xee9154ab6366416e80a1eb718954abe2ae406274',
+    EscrowAddr: '0x021224710e96181acf84a5eeb5114652e3e622c9',
+    CanHireAddr: '0x43461f82584da6e714d4745470a97ee745629ba2',
 
     // // main
-    CanYaCoinAddr: '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0',
-    EscrowAddr: '0x4c540ae83ebe431ea17493bec3805f607085a5a9',
-    CanHireAddr: '0xfd6fa39c22412de6bbc3684b130fb4cab89bebae',
+    // CanYaCoinAddr: '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0',
+    // EscrowAddr: '0x4c540ae83ebe431ea17493bec3805f607085a5a9',
+    // CanHireAddr: '0xfd6fa39c22412de6bbc3684b130fb4cab89bebae',
   },
   canpay: {
-    useTestNet: false,
+    useTestNet: true,
     contracts: {
-      // canyaCoinAddress: '0xee9154ab6366416e80a1eb718954abe2ae406274',
-      canyaCoinAddress: '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0',
+      canyaCoinAddress: '0xee9154ab6366416e80a1eb718954abe2ae406274',
+      // canyaCoinAddress: '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0',
       // canyaAbi: <CanYaCoin_ABI> // optional, default is set the prod CanYaCoin ABI
     }
   },
   firebase: {
     // local
-    // apiKey: "AIzaSyCN8yqwRhPKwIZ1v__RYIyJRbKTWFstKns",
-    // authDomain: "canseek-local.firebaseapp.com",
-    // databaseURL: "https://canseek-local.firebaseio.com",
-    // projectId: "canseek-local",
-    // storageBucket: "canseek-local.appspot.com",
-    // messagingSenderId: "287939724872"
+    apiKey: "AIzaSyCN8yqwRhPKwIZ1v__RYIyJRbKTWFstKns",
+    authDomain: "canseek-local.firebaseapp.com",
+    databaseURL: "https://canseek-local.firebaseio.com",
+    projectId: "canseek-local",
+    storageBucket: "canseek-local.appspot.com",
+    messagingSenderId: "287939724872"
     
     // // dev
     // apiKey: "AIzaSyCxRQdQyKjdTyMbHt1F4gl7V2EGwqgekJU",
@@ -50,12 +50,12 @@ export const environment = {
     // messagingSenderId: "694155772067"
     
     // // prod
-    apiKey: "AIzaSyDPlWlXthuAqDN04pTNGrppPsgO8tFn940",
-    authDomain: "canseek-prod.firebaseapp.com",
-    databaseURL: "https://canseek-prod.firebaseio.com",
-    projectId: "canseek-prod",
-    storageBucket: "canseek-prod.appspot.com",
-    messagingSenderId: "162748170723"
+    // apiKey: "AIzaSyDPlWlXthuAqDN04pTNGrppPsgO8tFn940",
+    // authDomain: "canseek-prod.firebaseapp.com",
+    // databaseURL: "https://canseek-prod.firebaseio.com",
+    // projectId: "canseek-prod",
+    // storageBucket: "canseek-prod.appspot.com",
+    // messagingSenderId: "162748170723"
   }
 };
 
