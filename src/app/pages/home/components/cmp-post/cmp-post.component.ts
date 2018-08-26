@@ -37,13 +37,14 @@ export class CmpPostComponent implements OnInit {
       await this.gs.cancelPostDb(post);
       await this.gs.cancelPostPre(post);
       await this.gs.cancelPost(post);
+      return Promise.resolve({status: 1});
     } catch(err) {
-      this.message.error(err.message);console.log(err);
+      return Promise.reject(err);
     }
   }
 
   async onComplete() {
-    this.message.success('Cancel success');
+    this.message.success('Success');
     this.store.balance = await this.cs.getCANBalance();
   }
 
@@ -60,14 +61,29 @@ export class CmpPostComponent implements OnInit {
     );
   }
 
-  async getRefund(post) {
+  getRefund(post) {
     this.refundLoading = true;
-    this.gs.getRefund(post, this.curUser)
-      .then(() => {
-        this.refundLoading = false;
-      });
-      
-    this.store.balance = await this.cs.getCANBalance();
+    const referNum = (post.referrals_by_user[this.curUser] || []).length;
+
+    this.cs.canpayInstance(
+      {
+        dAppName: 'Yourself',
+        amount: Math.ceil(post['cost'] * referNum),
+        postAuthorisationProcessName: 'Getting Refund',
+      },
+      this.refund.bind(this, post),
+      this.onComplete.bind(this),
+    );
+    this.refundLoading = false;
+  }
+
+  async refund(post) {
+    try {
+      await this.gs.getRefund(post, this.curUser);
+      return Promise.resolve({status: 1});
+    } catch(err) {
+      return Promise.reject(err);
+    }
   }
 
   updatePostStatus(post) {

@@ -147,7 +147,7 @@ export class ApplicantsComponent implements OnInit {
       await this.gs.closePost(this.post, cid, candidateId);
       return Promise.resolve({status: 1});
     } catch(err) {
-      return Promise.reject(err)
+      return Promise.reject(err);
     }
   }
 
