@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GlobalService } from '../../../../services/global.service';
-import { NzModalRef, NzModalService, NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd';
 import { Store } from "../../../../store";
 import * as moment from 'moment';
 import { ContractsService } from '../../../../services/contracts.service';
@@ -19,13 +19,11 @@ export class CmpPostComponent implements OnInit {
   store = Store;
   
   moment = moment;
-  confirmModal: NzModalRef;
   loading: boolean = false;
   refundLoading: boolean = false;
 
   constructor(
     private gs: GlobalService,
-    private modal: NzModalService,
     private message: NzMessageService,
     private cs: ContractsService,
   ) { }
@@ -34,26 +32,32 @@ export class CmpPostComponent implements OnInit {
     // console.log(this.post);
   }
 
-  showConfirm(post): void {
-    post.nextStatus = 'cancelled'
-    
-    this.confirmModal = this.modal.confirm({
-      nzTitle: 'Confirmation required',
-      nzContent: '<p class="text">Are your sure you want to cancel this job post?<br>This action cannot be reversed.</p><p>Fees: The Initial Reward will be refunded to the metamask address used to create the job post, less the 1% fee. <br/> Any Application Fees will be refunded to participants.</p>',
-      nzOkText: 'cancel',
-      nzCancelText: 'back',
-      nzOnOk: async () => {
-        try {
-          await this.gs.cancelPostDb(post);
-          await this.gs.cancelPostPre(post);
-          await this.gs.cancelPost(post);
-          this.message.success('Cancel success');
-          this.store.balance = await this.cs.getCANBalance();
-        } catch (err) {
-          this.message.error(err.message);console.log(err);
-        }
-      }
-    });
+  async cancel(post) {
+    try {
+      await this.gs.cancelPostDb(post);
+      await this.gs.cancelPostPre(post);
+      await this.gs.cancelPost(post);
+    } catch(err) {
+      this.message.error(err.message);console.log(err);
+    }
+  }
+
+  async onComplete() {
+    this.message.success('Cancel success');
+    this.store.balance = await this.cs.getCANBalance();
+  }
+
+  cancelPost(post): void {
+    post.nextStatus = 'cancelled';
+
+    this.cs.canpayInstance(
+      {
+        amount: Math.ceil(post['reward'] * .1),
+        postAuthorisationProcessName: 'Cancelling Post',
+      },
+      this.cancel.bind(this, post),
+      this.onComplete.bind(this),
+    );
   }
 
   async getRefund(post) {

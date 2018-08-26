@@ -93,7 +93,7 @@
                 <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
               </li>
               <!-- cancel: open 创建人 -->
-              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
+              <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="cancelPost(post)">cancel</li>
               <!-- applicants: 创建人 -->
               <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
                 <a routerLink="/applicants/{{ post.id }}">view applicants</a>
@@ -114,7 +114,7 @@
                 <a routerLink="/post" [queryParams]="{ type: 'edit', id: post.id }">edit</a>
                 </li>
                 <!-- cancel: open 创建人 -->
-                <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="showConfirm(post)">cancel</li>
+                <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="cancelPost(post)">cancel</li>
                 <!-- applicants: 创建人 -->
                 <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
                 <a routerLink="/applicants/{{ post.id }}">view applicants</a>
