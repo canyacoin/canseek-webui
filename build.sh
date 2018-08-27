@@ -1,1 +1,0 @@
-rm -rf build && truffle migrate --reset --compile

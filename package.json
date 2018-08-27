@@ -30,15 +30,11 @@
     "ng-zorro-antd": "^1.2.0",
     "ngx-clipboard": "^11.1.1",
     "rxjs": "^6.0.0",
-    "tn-truffle-test-utils": "^1.0.4",
-    "truffle-hdwallet-provider": "0.0.5",
-    "web3": "1.0.0-beta.34",
-    "zeppelin-solidity": "^1.9.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@angular/compiler-cli": "^6.0.3",
-    "@angular-devkit/build-angular": "git+https://github.com/thetadotonline/angular-devkit-build-angular-builds.git#v1.0.0",
+    "@angular-devkit/build-angular": "git+https://github.com/Xinjie-canya/angular-devkit-build-angular-builds.git#v1.0.0",
     "typescript": "~2.7.2",
     "@angular/cli": "~6.0.8",
     "@angular/language-service": "^6.0.3",

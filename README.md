@@ -1,27 +1,19 @@
-# CanHire
-CanHire is a decentralized recruitment smart contract which allows employers and recruiters to interact freely.
+# CanSeek
+CanSeek - Refer High Quality Talent Earn Rewards
 
-### To compile, install truffle and zepplin-solidity
+### Install
 ```
-npm install
-truffle compile
-```
-
-### To deploy on local EVM
-```
-npm install -g ganache-cli
-ganache-cli
-truffle migrate
+npm install -g @angular/cli
+npm install -g yarn
+yarn
 ```
 
-### To run the test, install Tom Nash's test module
+### Run locally
 ```
-npm install --save tn-truffle-test-utils
-truffle test
+npm start
 ```
 
-### To deploy on Firebase
+### Build
 ```
-ng build --prod --aot
-firebase deploy --only hosting
+npm build
 ```
