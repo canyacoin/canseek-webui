@@ -113,20 +113,21 @@ export class ContractsService {
     }) as Promise<number>;
   }
 
-  // public async buyCAN(amountInEther = '1') {
-  //   const account = await this.getAccount();
-  //   const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
-  //   const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
+  public async buyCAN(amountInEther = '1') {
+    const account = await this.getAccount();
+    const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
+    const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
 
-  //   return new Promise((resolve, reject) => {
-  //     canYaCoin.buy({ from: account, value: amountInWei, gasPrice: gasPrice, gas: gasBuy }).then(result => {
-  //       resolve(result.logs[0].args.value.toNumber());
-  //     })
-  //       .catch(err => {
-  //         reject(err);
-  //       });
-  //   }) as Promise<number>;
-  // }
+    return new Promise((resolve, reject) => {
+      canYaCoin.buy({ from: account, value: amountInWei, gasPrice: gasPrice, gas: gasBuy }).then(result => {
+        const amount = this.CANTokensToAmount(result.logs[0].args.value.toNumber());
+        resolve(amount);
+      })
+        .catch(err => {
+          reject(err);
+        });
+    }) as Promise<number>;
+  }
 
   public async getNumPosts() {
     const canHire = await this.CanHire.at(CanHireAddr);
