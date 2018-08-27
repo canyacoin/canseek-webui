@@ -221,7 +221,7 @@ export class PostComponent implements AfterViewInit {
         this.cs.canpayInstance(
           {
             amount: reward,
-            postAuthorisationProcessName: 'Set Reward',
+            postAuthorisationProcessName: 'Setting Reward',
           },
           this.addPost.bind(this),
           this.onComplete.bind(this)
