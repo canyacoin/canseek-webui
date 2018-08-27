@@ -80,7 +80,6 @@ export class PostComponent implements AfterViewInit {
     this.current = 1;
     this.gs.getPost(this.id)
       .subscribe(post => {
-        // TODO: should update email by localStorage?
         this.values = post;
         // identify
         if (post['owner_addr'] != this.store.curUser) {

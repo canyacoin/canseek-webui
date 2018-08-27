@@ -22,7 +22,9 @@ export class ProfileService {
     private afAuth: AngularFireAuth,
   ) { 
     this.afAuth.authState.subscribe((auth) => {
-      this.store.authState = auth || {};
+      if (auth) {
+        this.store.authState = auth;
+      }
     });
   }
 

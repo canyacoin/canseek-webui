@@ -15,7 +15,7 @@
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_name" nzRequired> Name </nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
-            <input nz-input formControlName="your_name" id="your_name" placeholder="First name, Last name">
+            <input nz-input [(ngModel)]="store.profile.your_name" formControlName="your_name" id="your_name" placeholder="First name, Last name">
             <nz-form-explain *ngIf="validateForm.get('your_name').dirty && validateForm.get('your_name').errors">Please input Your Name!</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
@@ -23,7 +23,7 @@
         <nz-form-item>
           <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="your_email" nzRequired>Email</nz-form-label>
           <nz-form-control [nzSm]="18" [nzXs]="24">
-            <input nz-input formControlName="your_email" id="your_email" placeholder="user@email.com">
+            <input nz-input [(ngModel)]="store.profile.your_email" formControlName="your_email" id="your_email" placeholder="user@email.com">
             <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input Your E-mail!</nz-form-explain>
           </nz-form-control>
         </nz-form-item>

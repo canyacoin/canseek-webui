@@ -1,5 +1,7 @@
+import { Authstate } from '../app/models/authstate';
+
 export let Store = {
-    authState: {},
+    authState: new Authstate,
     profile: {},
     salary_cycles: ['/ Annum', '/ Month', '/ Week', '/ Day', '/ Hour'],
     currencyArr: ['$ AUD', '$ USD', '€ EUR', 'CAN'],
