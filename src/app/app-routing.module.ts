@@ -13,7 +13,6 @@ import { BuycanComponent } from './pages/buycan/buycan.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { NoauthComponent } from './pages/noauth/noauth.component';
 
-
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'home', component: HomeComponent },

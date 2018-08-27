@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgZorroAntdModule, NZ_I18N, zh_CN } from 'ng-zorro-antd';
 import { registerLocaleData } from '@angular/common';
 import zh from '@angular/common/locales/zh';
-import { AppRoutingModule } from './/app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { HomeComponent } from './pages/home/home.component';
 import { CmpHeaderComponent } from './pages/home/components/cmp-header/cmp-header.component';
