@@ -59,6 +59,7 @@ export class HomeComponent implements OnInit {
 
   async searchStatus(statusValue) {
     const { posts } = this;
+    if (!posts) return;
     let next;
 
     this.statusValue = statusValue;

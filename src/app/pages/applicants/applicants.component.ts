@@ -88,6 +88,7 @@ export class ApplicantsComponent implements OnInit {
 
   searchCategory() {
     const { candidates, category } = this;
+    if (!candidates) return;
     let next;
 
     switch(category) {
