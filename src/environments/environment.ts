@@ -10,9 +10,9 @@ export const environment = {
   appname: 'CanSeek Escrow',
   contracts: {
     // local
-    CanYaCoinAddr: '0xa5D8C774311a0D0F71A68200DFeDB7eF5221dC24',
-    EscrowAddr: '0x53feB0639E3870d6d2E6D720Acc9A224a15c2BD7',
-    CanHireAddr: '0x29963417f0b3581681bB81BEf63cDbd92e0f3919'
+    CanYaCoinAddr: '0x08D27Ec0a849b31b4f6f32557d4C541CEF1826EE',
+    EscrowAddr: '0x4FC7479F551ee759900f3c574c3954DF721F772c',
+    CanHireAddr: '0x373075E72eD44C05595a2FEEecB6a418972c46BF'
 
     // // ropsten
     // CanYaCoinAddr: '0xee9154ab6366416e80a1eb718954abe2ae406274',
@@ -27,7 +27,7 @@ export const environment = {
   canpay: {
     useTestNet: true,
     contracts: {
-      canyaCoinAddress: '0xa5D8C774311a0D0F71A68200DFeDB7eF5221dC24',
+      canyaCoinAddress: '0x08D27Ec0a849b31b4f6f32557d4C541CEF1826EE',
       // canyaCoinAddress: '0xee9154ab6366416e80a1eb718954abe2ae406274',
       // canyaCoinAddress: '0x1d462414fe14cf489c7a21cac78509f4bf8cd7c0',
       // canyaAbi: <CanYaCoin_ABI> // optional, default is set the prod CanYaCoin ABI
