@@ -55,7 +55,7 @@ export class ProfileModalComponent implements OnInit {
     
     if (valid) {
       this.ps.setProfile(data);
-      this.message.success('Save success!');
+      this.message.success('Save Successfully !');
 
       this.loading = true;
       try {

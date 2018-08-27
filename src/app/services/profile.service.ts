@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '../models/profile';
-import { NzModalService, NzModalRef } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
 import { Store } from '../store';
-// const MsgAlreadyVerified = 'You\'ve verified';
+const MsgAlreadyVerified = 'Verify Successfully !';
 const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
 const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';
 const MsgAlreadyLogin = 'The email address is already in use by another account.';
@@ -18,7 +18,7 @@ export class ProfileService {
 
   constructor(
     private modal: NzModalService,
-    // private message: NzMessageService,
+    private message: NzMessageService,
     private afAuth: AngularFireAuth,
   ) { 
     this.afAuth.authState.subscribe((auth) => {
@@ -55,11 +55,11 @@ export class ProfileService {
     this.store.profile = _profile;
   }
 
-  async verify(email: string, displayName: string) {
+  async verify(email: string, displayName: string, needFeedback: boolean = false) {
     const isVerified = (this.store.authState['email'] == email) && this.store.authState['emailVerified'];
 
     if (isVerified) {
-      // this.msgModal('success', MsgAlreadyVerified);
+      needFeedback && this.message.success(MsgAlreadyVerified);
       return;
     }
     if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
