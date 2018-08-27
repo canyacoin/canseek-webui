@@ -30,7 +30,7 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
       console.log(this.store.curNet);
     }); 
     this.store.curUser = await this.cs.getAccount();
-    await this.cs.buyCAN();
+    // await this.cs.buyCAN();
     this.store.balance = await this.cs.getCANBalance();
   }
   
