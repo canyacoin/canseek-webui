@@ -47,3 +47,5 @@ Thumbs.db
 
 dist-dev/
 dist-prod/
+dist-dev.zip
+dist-prod.zip
