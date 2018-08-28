@@ -179,7 +179,7 @@ export class GlobalService {
             postRef.collection('candidates').doc(cid).delete();
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
           })
-          this.message.success('GetRefund success');
+          // this.message.success('GetRefund success');
           return Promise.resolve(1);
         }
       })

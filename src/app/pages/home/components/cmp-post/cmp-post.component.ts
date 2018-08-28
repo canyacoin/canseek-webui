@@ -44,7 +44,6 @@ export class CmpPostComponent implements OnInit {
   }
 
   async onComplete() {
-    this.message.success('Success');
     this.store.balance = await this.cs.getCANBalance();
   }
 
@@ -53,7 +52,7 @@ export class CmpPostComponent implements OnInit {
 
     this.cs.canpayInstance(
       {
-        amount: Math.ceil(post['reward'] * .1),
+        amount: Math.ceil(post['reward'] * .01),
         postAuthorisationProcessName: 'Cancelling Post',
       },
       this.cancel.bind(this, post),
