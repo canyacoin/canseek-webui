@@ -105,8 +105,20 @@ export class ReferComponent implements AfterViewInit {
     this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`)
   }
 
+  clearFile(list) {
+    if (!list || !list.length) return;
+
+    return list.map(li => {
+      const { name, status, uid, response: { url } } = li;
+      return { name, status, uid, url };
+    })
+  }
+
   genCandidateData() {
     const CandidateData = {...this.values, status: 'pending', nextStatus: 'open', time: Date.now() };
+
+    CandidateData['resume'] = this.clearFile(CandidateData['resume']);
+    CandidateData['cover_letter'] = this.clearFile(CandidateData['cover_letter'])
   
     return JSON.parse(JSON.stringify(CandidateData));
   }

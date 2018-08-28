@@ -49,6 +49,7 @@ import { ProfileModalComponent } from './layout/header/profile-modal/profile-mod
 import { HttpModule } from '@angular/http';
 import { CanpayModule } from '@canyaio/canpay-lib';
 import { BuycanComponent } from './pages/buycan/buycan.component';
+import { CmpUploadComponent } from './components/cmp-upload/cmp-upload.component';
 
 registerLocaleData(zh);
 
@@ -77,6 +78,7 @@ registerLocaleData(zh);
     StatusLightComponent,
     ProfileModalComponent,
     BuycanComponent,
+    CmpUploadComponent,
   ],
   imports: [
     BrowserModule,

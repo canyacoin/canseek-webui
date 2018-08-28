@@ -1,0 +1,10 @@
+<nz-upload
+  [nzFileList]="fileList"
+  [nzBeforeUpload]="beforeUpload"
+  [nzCustomRequest]="customRequest"
+  (nzChange)="handleChange($event)"
+  >
+  <button nz-button>
+    <i class="anticon anticon-upload"></i><span>Upload</span>
+  </button>
+</nz-upload>

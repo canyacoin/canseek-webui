@@ -46,16 +46,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume"> CV/Resume </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <nz-upload
-        [nzFileList]="fileList"
-        [nzBeforeUpload]="isPdf"
-        [nzCustomRequest]="uploadFile"
-        (nzChange)="handleChange($event)"
-        >
-        <button nz-button>
-          <i class="anticon anticon-upload"></i><span>Upload</span>
-        </button>
-      </nz-upload>
+      <app-cmp-upload [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
     </nz-form-control>
   </nz-form-item>
 
@@ -95,19 +86,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cover_letter">Cover Letter</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <nz-upload
-        [nzFileList]="cover_letter"
-        [nzBeforeUpload]="isPdf"
-        [nzCustomRequest]="uploadCoverLetter"
-        (nzChange)="handleChange($event, 'cover_letter')"
-        >
-        <button nz-button disabled *ngIf="cover_letter.length > 0">
-          <i class="anticon anticon-upload"></i><span>Upload</span>
-        </button>
-        <button nz-button *ngIf="cover_letter.length == 0">
-          <i class="anticon anticon-upload"></i><span>Upload</span>
-        </button>
-      </nz-upload>
+      <app-cmp-upload [catogery]="post.id" [fileList]="cover_letter"></app-cmp-upload>
     </nz-form-control>
   </nz-form-item>
   

@@ -5,8 +5,6 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { AngularFireStorage } from 'angularfire2/storage';
-import { NzMessageService } from 'ng-zorro-antd';
 import { wrapTextarea, unwrapTextarea } from '../../../../util';
 
 @Component({
@@ -41,8 +39,6 @@ export class CmpReferstep2Component implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private storage: AngularFireStorage,
-    private message: NzMessageService,
   ) {}
 
   ngOnInit(): void {
@@ -74,62 +70,5 @@ export class CmpReferstep2Component implements OnInit {
     } else {
       return null;
     }
-  }
-
-  handleChange(info: any, key: string = 'fileList') {
-    this[key] = info.fileList;
-  }
-
-  uploadFile = (item: any) => {
-    const file = item.file;
-    const fileName = file.name;
-    const filePath = `${file.lastModified}-${fileName}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-
-    task.snapshotChanges().subscribe(snapshot => {
-      if (snapshot.bytesTransferred == snapshot.totalBytes) {
-        fileRef.getDownloadURL().subscribe(url => {
-          this.fileList = this.fileList.map(item => {
-            if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
-            }
-            return item;
-          })
-          this.handleChange({fileList: this.fileList})
-        })
-      }
-    })
-  }
-
-  uploadCoverLetter = (item: any) => {
-    const file = item.file;
-    const fileName = file.name;
-    const filePath = `${file.lastModified}-${fileName}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-
-    task.snapshotChanges().subscribe(snapshot => {
-      if (snapshot.bytesTransferred == snapshot.totalBytes) {
-        fileRef.getDownloadURL().subscribe(url => {
-          this.cover_letter  = this.cover_letter .map(item => {
-            if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
-            }
-            return item;
-          });
-          this.handleChange({ fileList: this.cover_letter }, 'cover_letter');
-        })
-      }
-    })
-  }
-
-  isPdf = (file) => {
-    const isPdf = file.type == 'application/pdf';
-    
-    if (!isPdf) {
-      this.message.error('You can only upload a PDF!');
-    }
-    return isPdf;
   }
 }
