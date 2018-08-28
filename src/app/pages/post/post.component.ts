@@ -157,13 +157,12 @@ export class PostComponent implements AfterViewInit {
       this.values = {...this.values, ...formData.data };
 
       // init reward by salary_min when type = new
-      const salary_min = formData.data['salary_min'];
+      const salary_min = formData.data['salary_min'] || 0;
       const currencyRate = Number(this.store.selectedCurrency['rate'] || 1);
       this.values['cost_fee'] = Math.ceil(currencyRate * 10);
 
-      if (salary_min && this.type == 'new') {
+      if (this.type == 'new') {
         const init_reward_in_currency = salary_min * 0.05 / currencyRate < 500 ? 500 * currencyRate : salary_min * 0.05;
-
         this.values['reward_fee'] = Math.ceil(init_reward_in_currency);
       }
       this.initForm(this.values, false);
@@ -186,6 +185,15 @@ export class PostComponent implements AfterViewInit {
     });
   }
 
+  clearFile(list) {
+    if (!list || !list.length) return;
+
+    return list.map(li => {
+      const { name, status, uid, response = {} } = li;
+      return { name, status, uid, url: response.url };
+    })
+  }
+
   genPostData() {
     const reward = Number(this.values['reward']);
     const cost = Number(this.values['cost']);
@@ -196,7 +204,10 @@ export class PostComponent implements AfterViewInit {
     } else {
       postData = {...postData, time: Date.now()};
     }
-    
+
+    postData['company_logo'] = this.clearFile(postData['company_logo']);
+    postData['job_attachments'] = this.clearFile(postData['job_attachments'])
+  
     return JSON.parse(JSON.stringify(postData));
   }
 
