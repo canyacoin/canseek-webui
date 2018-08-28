@@ -28,7 +28,13 @@
                 <input [(ngModel)]="store.profile.your_email" nz-input formControlName="your_email" id="your_email" placeholder="Please input">
               </nz-col>
               <nz-col [nzSpan]="8">
-                <button nz-button [nzLoading]="loading" (click)="emailVerify()">Verify</button>
+                <button nz-button 
+                *ngIf="emailForm.get('your_email').value !== store.authState.email || store.authState.emailVerified !== true"
+                [nzLoading]="loading" (click)="emailVerify()">Verify</button>
+                <button nz-button disabled
+                  *ngIf="(emailForm.get('your_email').value == store.authState.email) && store.authState.emailVerified == true"
+                  >Verified</button>
+                
               </nz-col>
             </nz-row >
             <nz-form-explain *ngIf="emailForm.get('your_email').dirty && emailForm.get('your_email').errors">Please input Your Company Email!</nz-form-explain>
