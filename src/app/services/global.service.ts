@@ -45,7 +45,7 @@ export class GlobalService {
     this.getPosts()
       .subscribe(posts => {
         posts
-          .filter(post => post.status === 'pending')
+          .filter(post => post.id && post.status === 'pending')
           .map(post => this.dbRef.doc(post.id).delete())
       })
   }
@@ -190,6 +190,9 @@ export class GlobalService {
 
   updatePendingPost(post) {
     const { postId, id } = post;
+    
+    if (!id) return Promise.reject(0);;
+
     const postRef = this.dbRef.doc(id);
     
     if (postId) {
