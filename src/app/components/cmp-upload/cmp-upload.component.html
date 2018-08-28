@@ -1,4 +1,5 @@
 <nz-upload
+  *ngIf="!nzListType"
   [nzFileList]="fileList"
   [nzBeforeUpload]="beforeUpload"
   [nzCustomRequest]="customRequest"
@@ -7,4 +8,17 @@
   <button nz-button>
     <i class="anticon anticon-upload"></i><span>Upload</span>
   </button>
+</nz-upload>
+
+<nz-upload
+  *ngIf="nzListType"
+  [nzBeforeUpload]="beforeUploadImg"
+  [nzFileList]="fileList"
+  [nzCustomRequest]="customRequest"
+  (nzChange)="handleChange($event)"
+  nzType="drag"
+  >
+  <div class="canseek-cover" *ngIf="!((fileList[0] || {}).response || {}).url"></div>
+  <img *ngIf="((fileList[0] || {}).response || {}).url" src="{{ fileList[0].response.url }}" alt="company logo" style="height: 180px;">
+  <p class="ant-upload-text mt-12">Click or drag file to this area to upload</p>
 </nz-upload>

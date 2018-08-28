@@ -107,16 +107,7 @@ Let them know:
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_attachments"> Attachments </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <nz-upload
-        [nzFileList]="fileList"
-        [nzBeforeUpload]="isPdf"
-        [nzCustomRequest]="uploadFile"
-        (nzChange)="handleChange($event)"
-        nzMultiple>
-        <button nz-button>
-          <i class="anticon anticon-upload"></i><span>Upload</span>
-        </button>
-      </nz-upload>
+      <app-cmp-upload (onChange)="onChange($event, 'job_attachments')" [catogery]="store.curUser" [fileList]="fileList"></app-cmp-upload>
     </nz-form-control>
   </nz-form-item>
 
@@ -162,22 +153,10 @@ Let them know:
   <h4 class="fw-500 my-30">Company Information</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_logo"> Company Logo </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="company_logo" nzRequired> Company Logo </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <nz-upload
-        nzListType="picture"
-        [nzBeforeUpload]="isImage"
-        [nzFileList]="logo"
-        [nzCustomRequest]="uploadImage"
-        (nzChange)="handleChange($event, 'logo')"
-        [nzShowButton]="logo.length < 1"
-        [nzPreview]="handlePreview"
-        >
-        <div class="wrappr border text-center">
-          <i class="anticon anticon-plus mt-8"></i>
-          <div class="ant-upload-text">Upload</div>
-        </div>
-      </nz-upload>
+      <app-cmp-upload nzListType="picture" (onChange)="onChange($event, 'company_logo')" [catogery]="store.curUser" [fileList]="logo"></app-cmp-upload>
+      <nz-form-explain *ngIf="validateForm.get('company_logo').dirty && validateForm.get('company_logo').errors">Please upload Company Logo!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   

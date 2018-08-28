@@ -23,9 +23,6 @@ export class CmpPoststep1Component implements OnInit {
   fileList = [];
   logo = [];
 
-  previewImage = '';
-  previewVisible = false;
-
   submitForm(): any {
     const data = {};
 
@@ -37,8 +34,6 @@ export class CmpPoststep1Component implements OnInit {
     }
 
     data['job_range'] = data['salary_min'] ? `${data['salary_currency']}: ${data['salary_min']} ~ ${data['salary_max']} ${data['salary_cycle']}` : '';
-    data['job_attachments'] = this.fileList;
-    data['company_logo'] = this.logo;
 
     return {
       valid: this.validateForm.valid,
@@ -58,7 +53,6 @@ export class CmpPoststep1Component implements OnInit {
   
   initForm(values, disabled): void {
     const email = values['your_email'];
-    // console.log('init email', email);
     
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
@@ -79,7 +73,7 @@ export class CmpPoststep1Component implements OnInit {
       screening_questions2      : [ { value: values['screening_questions2'], disabled } ],
       screening_questions3      : [ { value: values['screening_questions3'], disabled } ],
 
-      company_logo: [ { value: values['company_logo'], disabled } ],
+      company_logo: [ { value: values['company_logo'], disabled }, [ Validators.required ] ],
       company_name: [ { value: values['company_name'], disabled }, [ Validators.required ] ],
       company_website:       [ { value: ((email || '').split('@') || [])[1], disabled: true } ],
       company_desc     : [ { value: unwrapTextarea(values['company_desc']), disabled }, [ Validators.required ] ],
@@ -92,11 +86,6 @@ export class CmpPoststep1Component implements OnInit {
     this.logo = values['company_logo'] || [];
   }
 
-  handleChange(info: any, key: string = 'fileList') {
-    // console.log('handleChange', info);
-    this[key] = info.fileList;
-  }
-
   numberValidator = (control: FormControl) => {
     if (control.value && !/^\d+$/.test(control.value)) {
       return { number: true };
@@ -105,70 +94,8 @@ export class CmpPoststep1Component implements OnInit {
     }
   }
 
-  uploadFile = (item: any) => {
-    const file = item.file;
-    const fileName = file.name;
-    const filePath = `${file.lastModified}-${fileName}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-
-    task.snapshotChanges().subscribe(snapshot => {
-      if (snapshot.bytesTransferred == snapshot.totalBytes) {
-        fileRef.getDownloadURL().subscribe(url => {
-          this.fileList = this.fileList.map(item => {
-            if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
-            }
-            return item;
-          })
-          this.handleChange({fileList: this.fileList})
-        })
-      }
-    })
-  }
-
-  isImage = (file) => {
-    const isImage = /^image\//.test(file.type);
-    
-    if (!isImage) {
-      this.message.error('You can only upload a Image!');
-    }
-    return isImage;
-  }
-
-  isPdf = (file) => {
-    const isPdf = file.type == 'application/pdf';
-    
-    if (!isPdf) {
-      this.message.error('You can only upload a PDF!');
-    }
-    return isPdf;
-  }
-
-  uploadImage = (item: any) => {
-    const file = item.file;
-    const fileName = file.name;
-    const filePath = `${file.lastModified}-${fileName}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-
-    task.snapshotChanges().subscribe(snapshot => {
-      if (snapshot.bytesTransferred == snapshot.totalBytes) {
-        fileRef.getDownloadURL().subscribe(url => {
-          this.logo = this.logo.map(item => {
-            if (item.name == fileName) {
-              return { ...item, status: 'done', percent: 100, url, thumbUrl: url }
-            }
-            return item;
-          });
-          this.handleChange({fileList: this.logo}, 'logo')
-        })
-      }
-    })
-  }
-
-  handlePreview = (file: any) => {
-    this.previewImage = file.url || file.thumbUrl;
-    this.previewVisible = true;
+  onChange(value, key) {
+    this.validateForm.controls[key].setValue(value);
+    this.validateForm.controls[key].setErrors(value.length ? null : {required: true});
   }
 }

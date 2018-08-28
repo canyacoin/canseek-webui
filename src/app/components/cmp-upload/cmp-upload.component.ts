@@ -10,6 +10,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 })
 export class CmpUploadComponent implements OnInit, OnDestroy {
   @Input() catogery: string;
+  @Input() nzListType: string;
   @Input() fileList: Array<Object> = [{}];
   @Output() onChange:EventEmitter<Array<Object>> = new EventEmitter();
 
@@ -65,5 +66,19 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
       this.message.error('You can only upload PDF files!');
     }
     return isPdf;
+  }
+
+
+  beforeUploadImg = (file) => {
+    const isImage = /^image\//.test(file.type);
+    const length = this.fileList.length;
+    
+    if (!isImage) {
+      this.message.error('You can only upload image file!');
+    }
+    if (length) {
+      this.message.error('You can only upload one Image!');
+    }
+    return isImage && !length;
   }
 }
