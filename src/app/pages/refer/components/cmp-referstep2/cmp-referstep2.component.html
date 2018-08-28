@@ -46,7 +46,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume"> CV/Resume </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <app-cmp-upload [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
+      <app-cmp-upload (onChange)="onChange($event, 'fileList')" [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
     </nz-form-control>
   </nz-form-item>
 
@@ -86,7 +86,7 @@
   <nz-form-item>
     <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cover_letter">Cover Letter</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <app-cmp-upload [catogery]="post.id" [fileList]="cover_letter"></app-cmp-upload>
+      <app-cmp-upload (onChange)="onChange($event, 'cover_letter')" [catogery]="post.id" [fileList]="cover_letter"></app-cmp-upload>
     </nz-form-control>
   </nz-form-item>
   

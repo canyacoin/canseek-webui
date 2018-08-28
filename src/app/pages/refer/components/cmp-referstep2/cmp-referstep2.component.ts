@@ -71,4 +71,8 @@ export class CmpReferstep2Component implements OnInit {
       return null;
     }
   }
+
+  onChange(value, key) {
+    this[key] = value;
+  }
 }

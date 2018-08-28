@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Subscription } from 'rxjs/Subscription';
 import { NzMessageService } from 'ng-zorro-antd';
@@ -11,6 +11,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 export class CmpUploadComponent implements OnInit, OnDestroy {
   @Input() catogery: string;
   @Input() fileList: Array<Object> = [{}];
+  @Output() onChange:EventEmitter<Array<Object>> = new EventEmitter();
 
   subscription: Subscription = new Subscription();
 
@@ -28,6 +29,7 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
 
   handleChange(info: any) {
     this.fileList = info.fileList;
+    this.onChange.emit(this.fileList);
     console.log(this.fileList);
   }
 
