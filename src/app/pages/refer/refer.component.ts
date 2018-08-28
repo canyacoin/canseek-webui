@@ -109,8 +109,8 @@ export class ReferComponent implements AfterViewInit {
     if (!list || !list.length) return;
 
     return list.map(li => {
-      const { name, status, uid, response: { url } } = li;
-      return { name, status, uid, url };
+      const { name, status, uid, response = {} } = li;
+      return { name, status, uid, url: response.url };
     })
   }
 

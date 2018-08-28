@@ -28,6 +28,7 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
 
   handleChange(info: any) {
     this.fileList = info.fileList;
+    console.log(this.fileList);
   }
 
   customRequest = (req: any) => {
