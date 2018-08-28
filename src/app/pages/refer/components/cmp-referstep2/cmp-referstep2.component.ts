@@ -19,24 +19,6 @@ export class CmpReferstep2Component implements OnInit {
   cover_letter = [];
   validateForm: FormGroup;
 
-  submitForm(): any {
-    let data = [];
-
-    for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
-      data[i] = this.validateForm.controls[ i ].value;
-      data[i] = wrapTextarea(i, data[i]);
-    }
-    data['resume'] = this.fileList;
-    data['cover_letter'] = this.cover_letter;
-
-    return {
-      valid: this.validateForm.valid,
-      data
-    }
-  }
-
   constructor(
     private fb: FormBuilder,
   ) {}
@@ -51,7 +33,7 @@ export class CmpReferstep2Component implements OnInit {
       candidate_website: [this.values['candidate_website']],
       candidate_linkedin: [ this.values['candidate_linkedin'] ],
       
-      resume: [ this.values['resume'] ],
+      resume: [ this.values['resume'], [ Validators.required ] ],
       reason: [ unwrapTextarea(this.values['reason']), [ Validators.required ] ],
       answers: [ unwrapTextarea(this.values['answers'])/*, [ Validators.required, this.answerValidator ]*/ ],
       answers2: [ unwrapTextarea(this.values['answers2']) ],
@@ -60,6 +42,24 @@ export class CmpReferstep2Component implements OnInit {
     });
     this.fileList = this.values['resume'] || [];
     this.cover_letter = this.values['cover_letter'] || [];
+  }
+
+  submitForm(): any {
+    let data = [];
+
+    for (const i in this.validateForm.controls) {
+      this.validateForm.controls[ i ].markAsDirty();
+      this.validateForm.controls[ i ].updateValueAndValidity();
+      data[i] = this.validateForm.controls[ i ].value;
+      data[i] = wrapTextarea(i, data[i]);
+    }
+    // data['resume'] = this.fileList;
+    // data['cover_letter'] = this.cover_letter;
+    console.log(data);
+    return {
+      valid: this.validateForm.valid,
+      data
+    }
   }
 
   answerValidator = (control: FormControl) => {
@@ -73,6 +73,7 @@ export class CmpReferstep2Component implements OnInit {
   }
 
   onChange(value, key) {
-    this[key] = value;
+    this.validateForm.controls[key].setValue(value);
+    this.validateForm.controls[key].setErrors(value.length ? null : {required: true});
   }
 }

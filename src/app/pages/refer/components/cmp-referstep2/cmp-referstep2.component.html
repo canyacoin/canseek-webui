@@ -44,9 +44,10 @@
   <h4 class="my-20">Application</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume"> CV/Resume </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <app-cmp-upload (onChange)="onChange($event, 'fileList')" [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
+      <app-cmp-upload (onChange)="onChange($event, 'resume')" [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
+      <nz-form-explain *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please upload CV/Resume!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
