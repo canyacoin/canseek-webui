@@ -50,6 +50,7 @@ import { HttpModule } from '@angular/http';
 import { CanpayModule } from '@canyaio/canpay-lib';
 import { BuycanComponent } from './pages/buycan/buycan.component';
 import { CmpUploadComponent } from './components/cmp-upload/cmp-upload.component';
+import { CmpNotifyComponent } from './components/cmp-notify/cmp-notify.component';
 
 registerLocaleData(zh);
 
@@ -79,6 +80,7 @@ registerLocaleData(zh);
     ProfileModalComponent,
     BuycanComponent,
     CmpUploadComponent,
+    CmpNotifyComponent,
   ],
   imports: [
     BrowserModule,
