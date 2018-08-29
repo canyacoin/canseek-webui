@@ -190,7 +190,7 @@ export class PostComponent implements AfterViewInit {
 
     return list.map(li => {
       const { name, status, uid, response = {} } = li;
-      return { name, status, uid, url: response.url };
+      return { name, status, uid, url: response.url, response };
     })
   }
 
