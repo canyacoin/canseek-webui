@@ -30,7 +30,7 @@
     </nz-row>
     <a routerLink="/post/detail/{{ post.id }}">
       <div class="logo-container"> 
-      <img class="card-img-top" onerror="this.src='assets/img/logo.svg'" src="{{ ((post.company_logo || [])[0] || {}).url }}"
+      <img class="card-img-top" [class.disable]="post.status != 'open'" onerror="this.src='assets/img/logo.svg'" src="{{ ((post.company_logo || [])[0] || {}).url }}"
       alt="{{ post.company_name }} logo">
       </div>
     </a>
