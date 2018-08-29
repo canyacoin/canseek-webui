@@ -23,3 +23,27 @@
     height: @size;
     border-radius: 50%;
 }
+@gray: rgb(183, 187, 189);
+.notify {
+    position: absolute;
+    opacity: .75;
+    color: @gray;
+}
+.notify-bell {
+    .notify;
+    top: -10px;
+    right: 12px;
+}
+.notify-dot {
+    position: relative;
+}
+.notify-dot::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    .notify;
+    top: 4px;
+    right: 6px;
+    background-color: @gray;
+    border-radius: 50%;
+}

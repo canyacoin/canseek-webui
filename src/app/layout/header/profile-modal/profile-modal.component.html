@@ -3,6 +3,7 @@
 </a>
 
 <nz-dropdown 
+  nzTrigger="click"
   [nzPlacement]="'bottomCenter'"  
   *ngIf="store.authState.email"
   >
@@ -10,6 +11,7 @@
     <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='/assets/img/bot-hover.svg'">
 
     <i class="anticon anticon-down"></i>
+    <i class="iconfont iconfont-notifications notify-bell" *ngIf="hasNotify"></i>
   </a>
   <ul nz-menu>
     <li nz-menu-item *ngIf="!store.authState.emailVerified">
@@ -20,7 +22,7 @@
     </li>
     <li nz-menu-divider></li>
     <li nz-menu-item>
-      <a routerLink="/notifications">Notifications</a>
+      <a routerLink="/notifications" class="{{ hasNotify ? 'notify-dot' : ''}}">Notifications</a>
     </li>
   </ul>
 </nz-dropdown>
