@@ -253,12 +253,14 @@ export class ContractsService {
 
     return new Promise((resolve, reject) => {
       canHire.closePost(postId, candidateId, { from: account, gasPrice: gasPrice, gas: gasClosePost }).then(result => {
-        resolve(result.toString());
+        const { tx, logs } = result;
+
+        resolve({ tx, status: logs[0].args.status.toNumber() });
       })
         .catch(err => {
           reject(err);
         });
-    }) as Promise<number>;
+    }) as Promise<Object>;
   }
 
   canpayInstance(

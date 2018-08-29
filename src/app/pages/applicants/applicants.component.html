@@ -1,6 +1,7 @@
 <nz-row class="bg-gray py-60" style="min-height: 90vh">
   <nz-col nzType="flex" nzSpan="18" nzOffset="3"> 
-    <h4 *ngIf="post">{{ post.job_title }} 
+    <h4 *ngIf="post">
+      <a routerLink="/post/detail/{{ post.id }}">{{ post.job_title }}</a> 
       <small *ngIf="post.status != 'open'">(
       {{ post.status }}
       <span nz-tooltip nzTitle="update status">

@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 import { GlobalService } from '@service/global.service';
 import { ContractsService } from '@service/contracts.service';
+import { Notify} from '@class/notify';
+import { NotifyService } from '@service/notify.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
 
@@ -26,6 +28,8 @@ export class ApplicantsComponent implements OnInit {
   
   moment = moment;
 
+  txHash: string;
+
   customStyle = {
     'background'   : '#fff',
     'border-radius': '5px',
@@ -40,6 +44,7 @@ export class ApplicantsComponent implements OnInit {
     private message: NzMessageService,
     private router: Router,
     private cs: ContractsService,
+    private ns: NotifyService,
   ) { }
 
   async ngOnInit() {
@@ -135,17 +140,30 @@ export class ApplicantsComponent implements OnInit {
         postAuthorisationProcessName: 'Winning Reward',
       },
       this.hire.bind(this, candidate),
-      // this.onComplete.bind(this)
+      this.onComplete.bind(this, candidate)
     );
   }
-  onComplete() {
-    debugger//TODO redirect    
+  onComplete(candidate) {
+    const notify: Notify = {
+      id: '',
+      pid: this.post['id'],
+      cid: candidate['id'],
+      hash: this.txHash,
+      is_read: false,
+      payment_type: 'in',
+      action_type:'close',
+      time: + new Date,
+      user: candidate['owner_addr'].toLowerCase(),
+    };
+    this.ns.notify(notify);
+    this.message.success('The reward has sent to the winning candidate successfully!');
   }
 
   async hire(candidate) {
     try {
       const { id: cid, candidateId } = candidate;
-      await this.gs.closePost(this.post, cid, candidateId);
+      const result = await this.gs.closePost(this.post, cid, candidateId);
+      this.txHash = result.result['tx'];
       return Promise.resolve({status: 1});
     } catch(err) {
       return Promise.reject(err);
