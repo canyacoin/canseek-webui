@@ -13,7 +13,7 @@
           <div class="p-40">
               <h3 class="cart-title">{{ post.job_title }}</h3>
               <p class="bold">{{ post.company_name }}</p>
-              <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-envelope"></i> : {{ post.your_email }}</a>
+              <a *ngIf="post.referrals_by_user[store.curUser]" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-email"></i> : {{ post.your_email }}</a>
 
               <nz-row class="my-16" nzGutter="16">
                 <nz-col span="4" class="bold">Position Type: </nz-col>

@@ -59,7 +59,7 @@
   <div class="flex text">
     <div class="flex1">Contact Phone or Email: 
       <a href="mailto:{{ candidate.candidate_email }}">
-        <i class="iconfont iconfont-envelope ml-8"></i> {{ candidate.candidate_email }} 
+        <i class="iconfont iconfont-email ml-8"></i> {{ candidate.candidate_email }} 
       </a>
     </div>
     {{ moment(candidate.time).fromNow() }}
@@ -69,7 +69,7 @@
 
   <p class="text my-12" *ngIf="candidate.candidate_website || candidate.candidate_linkedin">Website or LinkedIn Profile: {{ candidate.candidate_website || candidate.candidate_linkedin }}</p>
   <p class="text my-12" *ngIf="candidate.resume && candidate.resume.length">
-    <i class="iconfont iconfont-eye-o fs-18"></i> CV/Resume: 
+    <i class="iconfont iconfont-eye fs-18"></i> CV/Resume: 
     <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of candidate.resume">{{ file.name }}</a>
   </p>
 
