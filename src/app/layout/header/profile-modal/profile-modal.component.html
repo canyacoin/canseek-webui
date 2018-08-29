@@ -18,6 +18,10 @@
     <li nz-menu-item *ngIf="store.authState.emailVerified">
       <span (click)="showModal()">User Profile</span>
     </li>
+    <li nz-menu-divider></li>
+    <li nz-menu-item>
+      <a routerLink="/notifications">Notifications</a>
+    </li>
   </ul>
 </nz-dropdown>
 

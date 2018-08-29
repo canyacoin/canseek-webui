@@ -1,3 +1,22 @@
-<p>
-  cmp-notify works!
-</p>
+<!-- loading -->
+<div *ngIf="!notifications" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>
+
+<!-- empty -->
+<div *ngIf="notifications && !notifications.length" class="container d-flex flex-column justify-content-center text-center"
+  style="min-height: 340px">
+  <div class="row">
+    <div class="col-12 d-flex flex-column">
+      <br>
+      <h4 class="fw-400">Uh, oh!</h4>
+      <h5 class="fw-300">We couldn't find what you were looking for.</h5>
+    </div>
+  </div>
+</div>
+
+<ul style="min-height: 90vh">
+  <li *ngFor="let n of notifications">
+    {{ n | json }}
+  </li>
+</ul>

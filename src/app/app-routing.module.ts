@@ -12,6 +12,8 @@ import { FaqComponent } from './pages/faq/faq.component';
 import { BuycanComponent } from './pages/buycan/buycan.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { NoauthComponent } from './pages/noauth/noauth.component';
+import { CmpNotifyComponent } from './components/cmp-notify/cmp-notify.component';
+import { CmpNotifyDetailComponent } from './components/cmp-notify-detail/cmp-notify-detail.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,6 +28,8 @@ const routes: Routes = [
   { path: 'applicants/:id', component: ApplicantsComponent },
   { path: 'faq', component: FaqComponent },
   { path: 'noauth', component: NoauthComponent },
+  { path: 'notifications', component: CmpNotifyComponent },
+  { path: 'notifications/:id', component: CmpNotifyDetailComponent },
   { path: 'index.html', component: HomeComponent },
   { path: '**', component: PagenotfoundComponent },
 ];

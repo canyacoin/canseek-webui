@@ -51,6 +51,7 @@ import { CanpayModule } from '@canyaio/canpay-lib';
 import { BuycanComponent } from './pages/buycan/buycan.component';
 import { CmpUploadComponent } from './components/cmp-upload/cmp-upload.component';
 import { CmpNotifyComponent } from './components/cmp-notify/cmp-notify.component';
+import { CmpNotifyDetailComponent } from './components/cmp-notify-detail/cmp-notify-detail.component';
 
 registerLocaleData(zh);
 
@@ -81,6 +82,7 @@ registerLocaleData(zh);
     BuycanComponent,
     CmpUploadComponent,
     CmpNotifyComponent,
+    CmpNotifyDetailComponent,
   ],
   imports: [
     BrowserModule,
