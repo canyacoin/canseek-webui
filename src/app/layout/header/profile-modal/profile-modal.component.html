@@ -7,7 +7,7 @@
   *ngIf="store.authState.email"
   >
   <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
-    <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='//www.gravatar.com/avatar/eaaa8ea794f4d8d9272a04bf4989686f'">
+    <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='/assets/img/bot-hover.svg'">
 
     <i class="anticon anticon-down"></i>
   </a>
