@@ -26,7 +26,7 @@ export class CmpNotifyComponent implements OnInit {
 
   getNotifications() {
     this.ns
-      .getNotifications(this.store.curUser)
+      .getUnreadNotifications(this.store.curUser)
       .subscribe(list => {
         this.notifications = (list || []);
       });

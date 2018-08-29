@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class NotifyService {
-
+  dbRef = this.db.collection<Notify>('notifications');
   constructor(
     private db: AngularFirestore,
   ) { }
@@ -24,23 +24,31 @@ export class NotifyService {
 
   getNotification(id: string): Observable<Notify> {
     return this.db
-      .collection('notifications')
+      .collection<Notify>('notifications')
       .doc<Notify>(id)
       .valueChanges()
   }
 
   async notify(notification: Notify): Promise<boolean> {
-    const docRef = await this.db.collection('notifications').add(notification);
+    const docRef = await this.dbRef.add(notification);
     docRef.update({id: docRef.id});
     return Promise.resolve(!!docRef.id);
   }
 
-  hasUnreadNotify(user_addr): Observable<Notify[]> {
+  getUnreadNotifications(user_addr): Observable<Notify[]> {
     return this.db
       .collection<Notify>('notifications', 
         ref => ref
+          .where('user', '==', user_addr.toLowerCase())
           .where('is_read', '==', false)
       )
       .valueChanges();
+  }
+
+  readAll(user_addr) {
+    this.getNotifications(user_addr)
+      .subscribe(
+        list => list.map(li => this.dbRef.doc<Notify>(li.id).update({is_read: true}))
+      )
   }
 }

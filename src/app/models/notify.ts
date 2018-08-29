@@ -1,4 +1,5 @@
 export class Notify {
+    id: string = '';
     pid: string = '';
     cid: string = '';
     hash: string;
