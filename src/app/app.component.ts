@@ -27,7 +27,7 @@ export class AppComponent {
     // check account
     this.url = this.router.url;
     // path regexp: 1. post 2. refer/new/:id 3. applicants/:id
-    if (/^\/post\?type=[new|edit]/.test(this.url) || /^\/refer\/new\//.test(this.url) || /^\/applicants\//.test(this.url)) {
+    if (/^\/post\?type=[new|edit]/.test(this.url) || /^\/refer\/new\//.test(this.url) || /^\/applicants\//.test(this.url) || /\/notifications/.test(this.url)) {
       this.checkAccount();
     }
   }

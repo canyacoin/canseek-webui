@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { environment } from '../../../environments/environment';
-import { ContractsService } from '../../services/contracts.service';
 import { Notify } from '../../models/notify';
 import { Store } from '../../store';
 
@@ -18,28 +17,23 @@ export class CmpNotifyComponent implements OnInit {
 
   constructor(
     private db: AngularFirestore,
-    private router: Router,
-    private cs: ContractsService,
   ) { 
   }
 
   ngOnInit() {
-    this.getLits();
+    this.getNotifications();
   }
 
-  async getLits() {
-    try {
-      this.store.curUser = await this.cs.getAccount();
-      this.db.collection<Notify>('notifications', 
-        ref => ref.where('user', '==', this.store.curUser.toLowerCase())
-        .orderBy('time', 'desc')
+  async getNotifications() {
+    this.db
+      .collection<Notify>('notifications', 
+        ref => ref
+          .where('user', '==', this.store.curUser.toLowerCase())
+          .orderBy('time', 'desc')
       )
       .valueChanges()
       .subscribe(list => {
         this.notifications = (list || []);
       });
-    } catch(err) {
-      this.router.navigateByUrl(`/noauth`);
-    }
   }
 }

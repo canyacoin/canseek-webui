@@ -1,3 +1,6 @@
-<p>
-  cmp-notify-detail works!
-</p>
+<!-- loading -->
+<div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+  <img src="assets/img/loader.svg" height="36px" alt="Loader">
+</div>
+  
+{{ notification | json }}

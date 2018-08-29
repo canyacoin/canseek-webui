@@ -18,5 +18,6 @@
 <ul style="min-height: 90vh">
   <li *ngFor="let n of notifications">
     {{ n | json }}
+    <a routerLink="/notifications/{{ n.id }}">link</a>
   </li>
 </ul>
