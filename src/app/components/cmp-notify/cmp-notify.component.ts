@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { environment } from '../../../environments/environment';
+// import { Router } from '@angular/router';
+// import { AngularFirestore } from 'angularfire2/firestore';
+// import { environment } from '../../../environments/environment';
+import { NotifyService } from '../../services/notify.service';
 import { Notify } from '../../models/notify';
 import { Store } from '../../store';
 
@@ -12,26 +13,20 @@ import { Store } from '../../store';
 })
 export class CmpNotifyComponent implements OnInit {
   notifications: Notify[];
-  etherscanBaseUrl = environment.etherscanBaseUrl;
+  // etherscanBaseUrl = environment.etherscanBaseUrl;
   store = Store;
 
   constructor(
-    private db: AngularFirestore,
-  ) { 
-  }
+    private ns: NotifyService,
+  ) { }
 
   ngOnInit() {
     this.getNotifications();
   }
 
-  async getNotifications() {
-    this.db
-      .collection<Notify>('notifications', 
-        ref => ref
-          .where('user', '==', this.store.curUser.toLowerCase())
-          .orderBy('time', 'desc')
-      )
-      .valueChanges()
+  getNotifications() {
+    this.ns
+      .getNotifications(this.store.curUser)
       .subscribe(list => {
         this.notifications = (list || []);
       });

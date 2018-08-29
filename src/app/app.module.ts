@@ -36,6 +36,7 @@ import { environment } from '../environments/environment';
 import { ContractsService } from './services/contracts.service';
 import { GlobalService } from './services/global.service';
 import { ProfileService } from './services/profile.service';
+import { NotifyService } from './services/notify.service';
 
 import { ReferDetailComponent } from './pages/refer-detail/refer-detail.component';
 import { CmpPostComponent } from './pages/home/components/cmp-post/cmp-post.component';
@@ -105,7 +106,7 @@ registerLocaleData(zh);
     HttpModule,
     CanpayModule.forRoot(environment.canpay),
   ],
-  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, ProfileService],
+  providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, ProfileService, NotifyService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

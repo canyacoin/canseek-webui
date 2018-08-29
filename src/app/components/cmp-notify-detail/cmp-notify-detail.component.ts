@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { environment } from '../../../environments/environment';
 import { Notify } from '../../models/notify';
+import { NotifyService } from '../../services/notify.service';
 
 @Component({
   selector: 'app-cmp-notify-detail',
@@ -15,7 +15,7 @@ export class CmpNotifyDetailComponent implements OnInit {
   etherscanBaseUrl = environment.etherscanBaseUrl;
 
   constructor(
-    private db: AngularFirestore,
+    private ns: NotifyService,
     private router: Router,
     private route: ActivatedRoute,
   ) { }
@@ -27,12 +27,10 @@ export class CmpNotifyDetailComponent implements OnInit {
   async getNotification() {
     const { id } = this.route.snapshot.params;
 
-    this.db
-      .collection('notifications')
-      .doc<Notify>(id)
-      .valueChanges()
+    this.ns.getNotification(id)
       .subscribe(notification => {
         if (!notification) this.router.navigateByUrl(`/pagenotfound`);
+        
         this.notification = notification;
         this.loading = false;
       });
