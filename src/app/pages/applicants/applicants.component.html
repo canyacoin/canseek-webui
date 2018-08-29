@@ -55,7 +55,7 @@
 <ng-template #candidateHeader class="p-0">
   <h4 style="text-transform: capitalize">
     {{ candidate.candidate_name }}
-    <small *ngIf="'selected' == candidate.status" [class.red]="candidate.status == 'selected'" style="font-size: 50%">({{ candidate.status }})</small>
+    <small *ngIf="'selected' == candidate.status" [class.red]="candidate.status == 'selected'" style="font-size: 50%">(winner)</small>
   </h4>
   <div class="flex text">
     <div class="flex1">Contact Phone or Email: 
