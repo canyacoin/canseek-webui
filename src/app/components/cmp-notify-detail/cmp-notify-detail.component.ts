@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { environment } from '../../../environments/environment';
-import { Notify } from '../../models/notify';
-import { NotifyService } from '../../services/notify.service';
+import { environment } from '@env/environment';
+import { Notify } from '@class/notify';
+import { NotifyService } from '@service/notify.service';
 
 @Component({
   selector: 'app-cmp-notify-detail',

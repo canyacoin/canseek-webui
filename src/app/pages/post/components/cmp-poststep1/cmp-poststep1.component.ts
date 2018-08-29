@@ -5,8 +5,8 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { Store } from '../../../../store';
-import { wrapTextarea, unwrapTextarea } from '../../../../util';
+import { Store } from '@store';
+import { wrapTextarea, unwrapTextarea } from '@util';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { NzMessageService } from 'ng-zorro-antd';
 

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
-import { GlobalService } from '../../services/global.service';
-import { ContractsService } from '../../services/contracts.service';
+import { GlobalService } from '@service/global.service';
+import { ContractsService } from '@service/contracts.service';
 import { Store } from "../../store";
 import * as moment from 'moment';
 

@@ -1,4 +1,4 @@
-import { Authstate } from '../app/models/authstate';
+import { Authstate } from '@class/authstate';
 
 export let Store = {
     authState: new Authstate,

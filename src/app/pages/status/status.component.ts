@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
-import { GlobalService } from '../../services/global.service';
+import { GlobalService } from '@service/global.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 

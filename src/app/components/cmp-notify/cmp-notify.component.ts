@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 // import { Router } from '@angular/router';
 // import { AngularFirestore } from 'angularfire2/firestore';
-// import { environment } from '../../../environments/environment';
-import { NotifyService } from '../../services/notify.service';
-import { Notify } from '../../models/notify';
-import { Store } from '../../store';
+// import { environment } from '@env/environment';
+import { NotifyService } from '@service/notify.service';
+import { Notify } from '@class/notify';
+import { Store } from '@store';
 
 @Component({
   selector: 'app-cmp-notify',

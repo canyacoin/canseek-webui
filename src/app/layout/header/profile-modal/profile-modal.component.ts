@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
-import { ProfileService } from '../../../services/profile.service';
-import { NotifyService } from '../../../services/notify.service';
+import { ProfileService } from '@service/profile.service';
+import { NotifyService } from '@service/notify.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import {
   FormBuilder,
   FormGroup,
   Validators
 } from '@angular/forms';
-import { Profile } from '../../../models/profile';
-import { Store } from '../../../store';
+import { Profile } from '@class/profile';
+import { Store } from '@store';
 
 @Component({
   selector: 'app-profile-modal',

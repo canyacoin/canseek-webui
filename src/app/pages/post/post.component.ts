@@ -7,11 +7,11 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { GlobalService } from '../../services/global.service';
-import { ContractsService } from '../../services/contracts.service';
+import { GlobalService } from '@service/global.service';
+import { ContractsService } from '@service/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
-import { ProfileService } from '../../services/profile.service';
+import { ProfileService } from '@service/profile.service';
 
 @Component({
   selector: 'app-post',

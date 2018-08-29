@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
-import { wrapTextarea, unwrapTextarea } from '../../../../util';
+import { wrapTextarea, unwrapTextarea } from '@util';
 
 @Component({
   selector: 'app-cmp-referstep2',

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GlobalService } from '../../../../services/global.service';
-import { Store } from '../../../../store';
+import { GlobalService } from '@service/global.service';
+import { Store } from '@store';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 

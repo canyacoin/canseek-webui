@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { GlobalService } from '../../services/global.service';
-import { ContractsService } from '../../services/contracts.service';
+import { GlobalService } from '@service/global.service';
+import { ContractsService } from '@service/contracts.service';
 import { Store } from "../../store";
 import { DOCUMENT } from '@angular/platform-browser';
 

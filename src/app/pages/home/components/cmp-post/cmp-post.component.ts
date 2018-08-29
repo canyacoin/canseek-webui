@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GlobalService } from '../../../../services/global.service';
+import { GlobalService } from '@service/global.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Store } from "../../../../store";
 import * as moment from 'moment';
-import { ContractsService } from '../../../../services/contracts.service';
+import { ContractsService } from '@service/contracts.service';
 
 @Component({
   selector: 'app-cmp-post',

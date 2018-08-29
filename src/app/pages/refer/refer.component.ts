@@ -5,9 +5,9 @@ import {
   Validators
 } from '@angular/forms';
 import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
-import { GlobalService } from '../../services/global.service';
-import { ProfileService } from '../../services/profile.service';
-import { ContractsService } from '../../services/contracts.service';
+import { GlobalService } from '@service/global.service';
+import { ProfileService } from '@service/profile.service';
+import { ContractsService } from '@service/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
 import { NzMessageService } from 'ng-zorro-antd';

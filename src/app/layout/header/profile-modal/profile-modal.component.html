@@ -3,7 +3,6 @@
 </a>
 
 <nz-dropdown 
-  nzTrigger="click"
   [nzPlacement]="'bottomCenter'"  
   *ngIf="store.authState.email"
   >
@@ -20,10 +19,12 @@
     <li nz-menu-item *ngIf="store.authState.emailVerified">
       <span (click)="showModal()">User Profile</span>
     </li>
-    <li nz-menu-divider></li>
-    <li nz-menu-item>
-      <a routerLink="/notifications" class="{{ hasNotify ? 'notify-dot' : ''}}">Notifications</a>
-    </li>
+    <ng-container *ngIf="hasNotify">
+      <li nz-menu-divider></li>
+      <li nz-menu-item>
+        <a routerLink="/notifications" class="notify-dot">Notifications</a>
+      </li>
+    </ng-container>
   </ul>
 </nz-dropdown>
 

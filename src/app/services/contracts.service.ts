@@ -1,5 +1,5 @@
 import { Injectable, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '@env/environment';
 import { Operation, CanPay, setProcessResult, CanPayService, EthService } from '@canyaio/canpay-lib';
 
 declare let require: any;

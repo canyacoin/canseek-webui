@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Profile } from '../models/profile';
+import { Profile } from '@class/profile';
 import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
-import { Store } from '../store';
+import { Store } from '@store';
 const MsgAlreadyVerified = 'Verify Successfully !';
 const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
 const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';

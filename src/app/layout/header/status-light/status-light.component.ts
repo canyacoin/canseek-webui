@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ContractsService } from '../../../services/contracts.service';
-import { Store } from '../../../store';
+import { ContractsService } from '@service/contracts.service';
+import { Store } from '@store';
 
 declare let require: any;
 declare let window: any;

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from "../../store";
-import { GlobalService } from '../../services/global.service';
+import { GlobalService } from '@service/global.service';
 
 @Component({
   selector: 'app-header',
