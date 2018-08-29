@@ -55,7 +55,10 @@
 <ng-template #candidateHeader class="p-0">
   <h4 style="text-transform: capitalize">
     {{ candidate.candidate_name }}
-    <small *ngIf="'selected' == candidate.status" [class.red]="candidate.status == 'selected'" style="font-size: 50%">(winner)</small>
+    <ng-container *ngIf="'selected' == candidate.status || post.winner == candidate.id">
+        <small class="red" style="font-size: 50%">(winner)</small>
+    </ng-container>
+    
   </h4>
   <div class="flex text">
     <div class="flex1">Contact Phone or Email: 
@@ -77,23 +80,25 @@
   <!-- op buttons -->
   <div class="flex mt-12">
     <div class="flex1">
-      <a href="javascript:;"
-        class="btn btn-sm btn-primary mr-12"
-        *ngIf="candidate.status !== 'pending' && candidate.category !== 'shortlist'"
-        (click)="changeCandidateCat(candidate, 'shortlist')"
-        >
-        <i class="anticon anticon-plus-circle-o mr-8"></i>
-        shortlist
-      </a>
-      
-      <a href="javascript:;"
-        class="btn btn-sm btn-primary btn-outline"
-        *ngIf="candidate.category !== 'rejected'"  
-        (click)="changeCandidateCat(candidate, 'rejected')"
-        >
-        <i class="anticon anticon-minus-circle-o mr-8"></i>
-        reject
-      </a>
+      <ng-container *ngIf="post.status == 'open'">
+        <a href="javascript:;"
+          class="btn btn-sm btn-primary mr-12"
+          *ngIf="candidate.status !== 'pending' && candidate.category !== 'shortlist'"
+          (click)="changeCandidateCat(candidate, 'shortlist')"
+          >
+          <i class="anticon anticon-plus-circle-o mr-8"></i>
+          shortlist
+        </a>
+        
+        <a href="javascript:;"
+          class="btn btn-sm btn-primary btn-outline"
+          *ngIf="candidate.category !== 'rejected'"  
+          (click)="changeCandidateCat(candidate, 'rejected')"
+          >
+          <i class="anticon anticon-minus-circle-o mr-8"></i>
+          reject
+        </a>
+      </ng-container>
     </div>
 
     <a href="javascript:;"

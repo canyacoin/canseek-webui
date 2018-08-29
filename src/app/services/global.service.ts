@@ -189,7 +189,7 @@ export class GlobalService {
   }
 
   updatePendingPost(post) {
-    const { postId, id } = post;
+    const { postId, id, nextWinner } = post;
     
     if (!id) return Promise.reject(0);;
 
@@ -198,7 +198,7 @@ export class GlobalService {
     if (postId) {
       return this.cs.getPostStatus(postId) 
         .then(status => {
-          postRef.update({ status })
+          postRef.update({ status, winner: status == 'closed' ? nextWinner : '' })
           Promise.resolve(status);
         })
     } else {
@@ -236,6 +236,17 @@ export class GlobalService {
     this.dbRef.doc(pid).collection('candidates').doc(cid).update({category});
   }
 
+  closePostDb(pid: string, cid: string) {
+    return this.dbRef.doc(pid).update({
+      status: 'pending',
+      nextStatus: 'closed',
+      nextWinner: cid,
+    })
+    .then(() => {
+      Promise.resolve()
+    })
+  }
+
   closePost(post: any, cid: string, candidateId: number) {
     const { id, postId, nextStatus } = post;
     const postRef = this.dbRef.doc(id);
@@ -245,11 +256,10 @@ export class GlobalService {
       .then(result => {
         postRef.update({
           status: result ? nextStatus : 'pending',
-          nextStatus
+          winner: result ? cid : '',
         });
         candidateRef.update({
-          status: result ? 'selected' : 'pending',
-          nextStatus: 'selected'
+          status: result ? 'selected' : 'open',
         })
         return Promise.resolve({result});
       })

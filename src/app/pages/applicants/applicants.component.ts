@@ -162,6 +162,7 @@ export class ApplicantsComponent implements OnInit {
   async hire(candidate) {
     try {
       const { id: cid, candidateId } = candidate;
+      await this.gs.closePostDb(this.post['id'], cid);
       const result = await this.gs.closePost(this.post, cid, candidateId);
       this.txHash = result.result['tx'];
       return Promise.resolve({status: 1});
