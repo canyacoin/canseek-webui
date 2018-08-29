@@ -37,7 +37,7 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
   customRequest = (req: any) => {
     const { file } = req;
     const fileName = file.name;
-    const filePath = `/${this.catogery}/${fileName}`;
+    const filePath = `/${this.catogery}/${file.lastModified}_${fileName}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
     const subscription = task.snapshotChanges().subscribe(
@@ -61,24 +61,34 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
 
   beforeUpload = (file) => {
     const isPdf = file.type == 'application/pdf';
+    const isLt512M = file.size / 1024 / 1024 < 512;
 
     if (!isPdf) {
       this.message.error('You can only upload PDF files!');
     }
-    return isPdf;
+    if (!isLt512M) {
+      this.message.error('File must smaller than 512 MB');
+    }
+
+    return isPdf && isLt512M;
   }
 
 
   beforeUploadImg = (file) => {
     const isImage = /^image\//.test(file.type);
-    const length = this.fileList.length;
+    const isMultiple = this.fileList.length;
+    const isLt512M = file.size / 1024 / 1024 < 512;
     
     if (!isImage) {
       this.message.error('You can only upload image file!');
     }
-    if (length) {
+    if (isMultiple) {
       this.message.error('You can only upload one Image!');
     }
-    return isImage && !length;
+    if (!isLt512M) {
+      this.message.error('File must smaller than 512 MB');
+    }
+
+    return isImage && !isMultiple && isLt512M;
   }
 }
