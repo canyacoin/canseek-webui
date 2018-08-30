@@ -51,4 +51,8 @@ export class NotifyService {
         list => list.map(li => this.dbRef.doc<Notify>(li.id).update({is_read: true}))
       )
   }
+  
+  read(nid: string) {
+    this.dbRef.doc(nid).update({is_read: true});
+  }
 }

@@ -1,6 +1,34 @@
-<!-- loading -->
-<div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
-  <img src="assets/img/loader.svg" height="36px" alt="Loader">
-</div>
+<nz-row class="mt-30 mb-100">
+  <nz-col nzType="flex" nzSpan="14" nzOffset="5" class="text-center"> 
+
+    <!-- loading -->
+    <div *ngIf="loading" class="container d-flex h-100 flex-column justify-content-center" style="min-height: 340px">
+      <img src="assets/img/loader.svg" height="36px" alt="Loader">
+    </div>
+
+
+    <ng-container *ngIf="!loading" [ngSwitch]="notification.action_type">
+
+      <!-- close -->
+      <ng-container *ngSwitchCase="'close'">
+        <h2 class="mb-50"> Congratulations ! </h2>
+
+        <p class="fs-22">Thank you for participating in CanSeek, you have won the reward for </p>
+        <p *ngIf="post" class="fs-22 fw-600">“{{ post.job_title }} @ {{ post.company_name }}”</p>
+        <p class="fs-22">The reward has been transferred to your Metamask.</p>
+
+        <p class="mt-30 fs-14" style="letter-spacing: 1px"><span class="fs-12 fw-600">TX#</span> {{ notification.hash }}</p>
+
+        <a href="{{ etherscanBaseUrl }}/{{ notification.hash }}" target="_blank" class="text-uppercase fs-14 fw-600">VIEW ON ETHERSCAN</a>
+        <br>
+        <a routerLink="/" class="btn btn-primary mt-20">RETURN HOME</a>
+      </ng-container>
+
+    </ng-container>
+
+  </nz-col>
+</nz-row>
+
+
+
   
-{{ notification | json }}
