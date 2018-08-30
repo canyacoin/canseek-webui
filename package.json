@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "^6.0.3",
     "@angular/router": "^6.0.3",
     "@canyaio/canpay-lib": "^0.1.15",
+    "ng2-bootstrap-modal": "https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2",
     "angularfire2": "5.0.0-rc.9",
     "core-js": "^2.5.4",
     "firebase": "5.0.2",
