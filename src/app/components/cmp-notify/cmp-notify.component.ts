@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-// import { Router } from '@angular/router';
-// import { AngularFirestore } from 'angularfire2/firestore';
-// import { environment } from '@env/environment';
 import { NotifyService } from '@service/notify.service';
 import { Notify } from '@class/notify';
 import { Store } from '@store';
@@ -13,7 +10,6 @@ import { Store } from '@store';
 })
 export class CmpNotifyComponent implements OnInit {
   notifications: Notify[];
-  // etherscanBaseUrl = environment.etherscanBaseUrl;
   store = Store;
 
   constructor(
@@ -30,5 +26,9 @@ export class CmpNotifyComponent implements OnInit {
       .subscribe(list => {
         this.notifications = (list || []);
       });
+  }
+
+  readAll() {
+    this.ns.readAll(this.store.curUser);
   }
 }
