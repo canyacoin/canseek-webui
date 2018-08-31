@@ -36,7 +36,7 @@
   <ng-template #modalContent>
     <form *ngIf="visible" nz-form [nzLayout]="vertical" [formGroup]="form" (ngSubmit)="submitForm()">
       <nz-form-item>
-        <nz-form-label> MetaMask address: </nz-form-label>
+        <nz-form-label> MetaMask address </nz-form-label>
         <nz-form-control>
           <nz-select nzMode="tags" nzPlaceHolder="input or search" formControlName="mm" id="mm">
             <nz-option *ngFor="let option of formData.mm" [nzLabel]="option" [nzValue]="option">

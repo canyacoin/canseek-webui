@@ -34,7 +34,7 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Why are you referring this talent?(max 100 words)</nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Why are you referring this talent?</nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
       <textarea formControlName="reason" id="reason" nz-input rows="7" placeholder="Let the job poster know why you think this talent is a great hire!"></textarea>
       <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons</nz-form-explain>
