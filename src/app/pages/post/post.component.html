@@ -37,7 +37,7 @@
                 
               </nz-col>
             </nz-row >
-            <nz-form-explain *ngIf="emailForm.get('your_email').dirty && emailForm.get('your_email').errors">Please input Your Company Email!</nz-form-explain>
+            <nz-form-explain *ngIf="emailForm.get('your_email').dirty && emailForm.get('your_email').errors">Please input Your Company Email</nz-form-explain>
           </nz-form-control>
         </nz-form-item>
 
@@ -75,9 +75,9 @@
             
             <nz-row>
               <nz-col nzSpan="18">
-                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).required">Please input reward! </nz-form-explain>
-                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).number">Please input number!</nz-form-explain>
-                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).minimum">Initial reward should be more than 500 CAN!</nz-form-explain>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).required">Please input reward</nz-form-explain>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).number">Please input number</nz-form-explain>
+                <nz-form-explain *ngIf="validateForm.get('reward_fee').dirty && (validateForm.get('reward_fee').errors || {}).minimum">Initial reward should be more than 500 CAN</nz-form-explain>
               </nz-col>
               <nz-col nzSpan="6" class="text-right">
                 ≈{{ (validateForm.get('reward_fee').value / (store.selectedCurrency.rate || 1)) | number:'1.0-0' }}CAN
@@ -113,7 +113,8 @@
 
               <nz-row>
                 <nz-col nzSpan="18">
-                  <nz-form-explain *ngIf="validateForm.get('cost_fee').dirty && validateForm.get('cost_fee').errors">Please input Application Fee! Please input number!</nz-form-explain>
+                  <nz-form-explain *ngIf="validateForm.get('cost_fee').dirty && (validateForm.get('cost_fee').errors || {}).required">Please input Application Fee</nz-form-explain>
+                  <nz-form-explain *ngIf="validateForm.get('cost_fee').dirty && (validateForm.get('cost_fee').errors || {}).number">Please input number</nz-form-explain>
                 </nz-col>
                 <nz-col nzSpan="6" class="text-right">
                   ≈{{ (validateForm.get('cost_fee').value / (store.selectedCurrency.rate || 1)) | number:'1.0-0' }}CAN

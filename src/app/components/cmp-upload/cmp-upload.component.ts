@@ -64,7 +64,7 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
     const isLt512M = file.size / 1024 / 1024 < 512;
 
     if (!isPdf) {
-      this.message.error('You can only upload PDF files!');
+      this.message.error('You can only upload PDF files');
     }
     if (!isLt512M) {
       this.message.error('File must smaller than 512 MB');
@@ -80,10 +80,10 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
     const isLt512M = file.size / 1024 / 1024 < 512;
     
     if (!isImage) {
-      this.message.error('You can only upload image file!');
+      this.message.error('You can only upload image file');
     }
     if (isMultiple) {
-      this.message.error('You can only upload one Image!');
+      this.message.error('You can only upload one Image');
     }
     if (!isLt512M) {
       this.message.error('File must smaller than 512 MB');
