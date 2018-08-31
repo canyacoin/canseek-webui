@@ -41,6 +41,7 @@ export class NotifyService {
         ref => ref
           .where('user', '==', user_addr.toLowerCase())
           .where('is_read', '==', false)
+          .orderBy('time', 'desc')
       )
       .valueChanges();
   }

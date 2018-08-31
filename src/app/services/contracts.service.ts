@@ -306,11 +306,12 @@ export class ContractsService {
       canHire
         .recommend(candidateUniqueId, postId, {from: account, gasPrice: gasPrice, gas: gasRecommend})
         .then(result => {
-          const { candidateId } = result.logs[0].args;
+          const { tx, logs } = result;
+          const { candidateId } = logs[0].args;
           this.getPostHoneypot(postId)
           .then(honeypot => {
             setTimeout(() => {
-              resolve({honeypot, candidateId: Number(candidateId)})
+              resolve({tx, honeypot, candidateId: Number(candidateId)})
             }, 10);
           })
         })

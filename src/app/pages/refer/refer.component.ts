@@ -7,6 +7,8 @@ import {
 import { CmpReferstep2Component } from './components/cmp-referstep2/cmp-referstep2.component';
 import { GlobalService } from '@service/global.service';
 import { ProfileService } from '@service/profile.service';
+import { Notify} from '@class/notify';
+import { NotifyService } from '@service/notify.service';
 import { ContractsService } from '@service/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
@@ -32,6 +34,8 @@ export class ReferComponent implements AfterViewInit {
 
   pid: string = '';
   cid: string = '';
+
+  txHash: string = '';
   
   constructor(
     private fb: FormBuilder,
@@ -41,6 +45,7 @@ export class ReferComponent implements AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private message: NzMessageService,
+    private ns: NotifyService,
   ) {
     this.values = this.ps.getProfile();
     this.validateForm = this.fb.group({
@@ -151,6 +156,18 @@ export class ReferComponent implements AfterViewInit {
   }
 
   onComplete() {
+    const notify: Notify = {
+      id: '',
+      pid: this.pid,
+      cid: this.cid,
+      hash: this.txHash,
+      is_read: false,
+      payment_type: '',
+      action_type:'refer',
+      time: + new Date,
+      user: this.post['owner_addr'].toLowerCase(),
+    };
+    this.ns.notify(notify);
     this.redireact(this.cid);
   }
 
@@ -158,6 +175,7 @@ export class ReferComponent implements AfterViewInit {
     try {
       const data = this.genCandidateData();
       const res = await this.cs.recommend(this.cid, this.post['postId']);
+      this.txHash = res.tx;
       await this.gs.updatePostAndCandidate(this.post, this.store.curUser, data, res);
       this.store.balance = await this.cs.getCANBalance();
       return Promise.resolve({status: 1});

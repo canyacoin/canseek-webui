@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotifyService } from '@service/notify.service';
 import { Notify } from '@class/notify';
 import { Store } from '@store';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-cmp-notify',
@@ -11,6 +12,7 @@ import { Store } from '@store';
 export class CmpNotifyComponent implements OnInit {
   notifications: Notify[];
   store = Store;
+  moment = moment;
 
   constructor(
     private ns: NotifyService,

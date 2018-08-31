@@ -27,6 +27,24 @@
         <a routerLink="/" class="btn btn-primary mt-50">RETURN HOME</a>
       </ng-container>
 
+      <!-- refer -->
+      <ng-container *ngSwitchCase="'refer'">
+        <img src="/assets/img/CanSeek.svg" alt="canseek" style="height: 64px;">
+        <h2 class="my-60"> Congratulations ! </h2>
+
+        <p class="fs-22">Your post
+          <br>
+          <ng-container *ngIf="post">“{{ post.job_title }} @ {{ post.company_name }}”</ng-container>
+        </p>
+        <p class="fs-22">has received a new applicant.</p>
+
+        <div class="mt-50">
+          <a routerLink="/refer/detail/{{ notification.pid }}/{{ notification.cid }}" class="btn  btn-primary btn-outline">View Details</a>
+          <a routerLink="/" class="btn btn-primary ml-20">RETURN HOME</a>
+        </div>
+        
+      </ng-container>
+
     </ng-container>
 
   </nz-col>

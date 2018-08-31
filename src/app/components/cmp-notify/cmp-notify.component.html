@@ -23,17 +23,35 @@
 
       <a href="javascript:;" (click)="readAll()" class="fs-14 uppercase">Mark All As Read</a>
 
-      <div class="card card-bordered card-hover-shadow card-body my-20" *ngFor="let n of notifications">
+      <a routerLink="/notifications/{{ n.id }}" class="card card-bordered card-hover-shadow card-body my-20" *ngFor="let n of notifications">
         <ng-container [ngSwitch]="n.action_type">
           <!-- close -->
           <ng-container *ngSwitchCase="'close'">
             <p class="card-title clamp2">
-              <i class="iconfont iconfont-down mr-12 text-success"></i> <a routerLink="/notifications/{{ n.id }}">Congratulations you win the job !</a>
+              <i class="iconfont iconfont-down mr-12 text-success"></i> <span class="blue">Congratulations you win the job !</span>
             </p>
-            Thank you for participating in CanSeek, you have won the reward for ... ... The reward has been transferred to your Metamask.
+            <div class="flex">
+              <p class="flex1 mr-12 mb-0 text">
+                Thank you for participating in CanSeek, you have won the reward for ... ... The reward has been transferred to your Metamask.
+              </p>
+              <span class="fs-12 text-secondary">{{ moment(n.time).fromNow() }}</span>
+            </div>
           </ng-container>
+
+          <ng-container *ngSwitchCase="'refer'">
+            <p class="card-title clamp2">
+              <span class="blue">Congratulations you got a new candidate !</span>
+            </p>
+            <div class="flex">
+              <p class="flex1 mr-12 mb-0 text">
+                View details...
+              </p>
+              <span class="fs-12 text-secondary">{{ moment(n.time).fromNow() }}</span>
+            </div>
+          </ng-container>
+
         </ng-container>
-      </div>
+      </a>
     </ng-container>
 
   </nz-col>

@@ -20,7 +20,7 @@
       </h4>
   
       <p>Your talent has been sent to the job poster. </p>
-      <a *ngIf="post" href="mailto:{{ post.your_email }}"><i class="iconfont iconfont-email"></i> : {{ post.your_email }}</a>
+      <a *ngIf="post" href="mailto:{{ post.your_email }}"><span class="text">Contact the job poster: </span><i class="iconfont iconfont-email"></i> {{ post.your_email }}</a>
 
   
       <div class="btns mt-60">
