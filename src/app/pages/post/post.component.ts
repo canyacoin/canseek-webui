@@ -25,7 +25,7 @@ export class PostComponent implements AfterViewInit {
   emailForm: FormGroup;
   validateForm: FormGroup;
 
-  current = 0;
+  current = 2;
 
   values: Object = {};
 
