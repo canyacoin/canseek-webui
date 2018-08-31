@@ -9,6 +9,15 @@ import { Store } from '@store';
 import { wrapTextarea, unwrapTextarea } from '@util';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { NzMessageService } from 'ng-zorro-antd';
+import * as moment from 'moment-timezone';
+import { Observable, of } from 'rxjs';
+const zones = moment.tz.names();
+const utcs = Array.from(new Array(25), (x,i) => {
+  let number = i - 12;
+  let symbol = ((number > 0) && number != 0 ? '+' : '-');
+  let format = ('0' + Math.abs(number)).slice(-2);
+  return `UTC ${symbol}${format}:00`;
+});
 
 @Component({
   selector: 'app-cmp-poststep1',
@@ -22,6 +31,9 @@ export class CmpPoststep1Component implements OnInit {
   store = Store;
   fileList = [];
   logo = [];
+
+  moment = moment;
+  optionList = [];
 
   submitForm(): any {
     const data = {};
@@ -57,7 +69,10 @@ export class CmpPoststep1Component implements OnInit {
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
       job_desc: [ { value: unwrapTextarea(values['job_desc']), disabled }, [ Validators.required ] ],
-      job_location: [{ value: values['job_location'], disabled }],
+
+      job_location: [{ value: values['job_location'], disabled }, [ Validators.required ]],
+      only_show_timezone: [{ value: values['only_show_timezone'], disabled }],
+
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],
       job_remote: [ { value: values['job_remote'], disabled } ],
 
@@ -96,6 +111,21 @@ export class CmpPoststep1Component implements OnInit {
 
   onChange(value, key) {
     this.validateForm.controls[key].setValue(value);
-    this.validateForm.controls[key].setErrors(value.length ? null : {required: true});
+    this.validateForm.controls[key].setErrors(value && value.length ? null : {required: true});
+  }
+
+  onOpenChange() {
+    if (this.optionList.length == 0) {
+      this.optionList = zones;
+    }
+  }
+  
+  onUseUTC(v) {
+    this.onChange(null, 'job_location');
+    if (v) {
+      this.optionList = utcs;
+    } else {
+      this.optionList = zones;
+    }
   }
 }

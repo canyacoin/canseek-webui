@@ -51,10 +51,29 @@ Let them know:
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_location"> Job Location </nz-form-label>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="job_location" nzRequired> Job Location </nz-form-label>
     <nz-form-control [nzSm]="18" [nzXs]="24">
-      <input nz-input formControlName="job_location" id="job_location" placeholder="Location, Country or Timezone UTC">
-      <nz-form-explain *ngIf="validateForm.get('job_location').dirty && validateForm.get('job_location').errors">Please input Job Location!</nz-form-explain>
+      <nz-row [nzGutter]="32">
+        <nz-col [nzSpan]="16">
+          <nz-select 
+            formControlName="job_location" 
+            nzPlaceHolder="Location, Country or Timezone UTC" 
+            nzAllowClear 
+            nzShowSearch 
+            (nzOpenChange)="onOpenChange()"
+            nzNotFoundContent="No such data"
+            >
+            <ng-container *ngFor="let o of optionList">
+              <nz-option [nzValue]="o" [nzLabel]="o"></nz-option>
+            </ng-container>
+          </nz-select>
+        </nz-col>
+        <nz-col [nzSpan]="8">
+          <label nz-checkbox (ngModelChange)="onUseUTC($event)" formControlName="only_show_timezone">Only show time zone</label>
+        </nz-col>
+      </nz-row>
+      
+      <nz-form-explain *ngIf="validateForm.get('job_location').dirty && validateForm.get('job_location').errors">Please select Job Location!</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
