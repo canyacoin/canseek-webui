@@ -39,7 +39,7 @@
         <p class="fs-22">has received a new applicant.</p>
 
         <div class="mt-50">
-          <a routerLink="/refer/detail/{{ notification.pid }}/{{ notification.cid }}" class="btn  btn-primary btn-outline">View Details</a>
+          <a routerLink="/applicants/{{ notification.pid }}" [queryParams]="{ cid: notification.cid }" class="btn  btn-primary btn-outline">View Details</a>
           <a routerLink="/" class="btn btn-primary ml-20">RETURN HOME</a>
         </div>
         

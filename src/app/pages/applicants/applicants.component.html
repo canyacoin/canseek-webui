@@ -27,7 +27,7 @@
     </div>
 
     <!-- empty -->
-    <div *ngIf="!candidates || (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
+    <div *ngIf="candidates && (results && results.length < 1)" class="container d-flex flex-column justify-content-center text-center"
       style="min-height: 340px">
       <div class="row">
         <div class="col-12 d-flex flex-column">

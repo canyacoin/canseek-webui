@@ -20,6 +20,7 @@ export class ApplicantsComponent implements OnInit {
 
   post: any;
   pid: string;
+  cid: string;
 
   candidates: any;
   results: any;
@@ -45,12 +46,16 @@ export class ApplicantsComponent implements OnInit {
     private router: Router,
     private cs: ContractsService,
     private ns: NotifyService,
-  ) { }
+  ) { 
+    this.route.queryParams.subscribe(params => {
+      this.cid = params.cid;
+    });
+  }
 
   async ngOnInit() {
     const { id } = this.route.snapshot.params;
-
     this.pid = id;
+
     await this.getPost();
     await this.getCandidates();
     this.updatePendingCandidates();
@@ -111,6 +116,9 @@ export class ApplicantsComponent implements OnInit {
           .filter(item => item.category == category)
           .sort((a, b) => b.time - a.time);
         break;
+    }
+    if (this.cid) {
+      next = next.map(n => n.id.toLowerCase() == this.cid.toLowerCase() ? {...n, active: true}: n);
     }
     this.results = next;
   }
