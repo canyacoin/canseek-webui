@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build:prod": "ng build --prod",
-    "build:dev": "ng build --configuration=dev --output-path=dist-dev/canseek",
+    "build:prod": "ng build --prod --build-optimizer",
+    "build:dev": "ng build --configuration=dev --build-optimizer --output-path=dist-dev/canseek",
     "zip:prod": "zip dist-prod.zip dist-prod/*",
     "zip:dev": "zip dist-dev.zip dist-dev/*",
     "upload:prod": "scp -i ../aliyun2.pem dist-prod.zip root@47.94.194.126:/root",
