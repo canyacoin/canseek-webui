@@ -198,12 +198,12 @@
   dependencies:
     tslib "^1.9.0"
 
-"@canyaio/canpay-lib@^0.1.15":
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.1.16.tgz#b8e714452f407264b69754ba24c3308cf357ee49"
+"@canyaio/canpay-lib@^0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.1.17.tgz#8687553a631d56ac530d3b179c00b1647daa88a0"
   dependencies:
     lodash.merge "^4.6.1"
-    ng2-bootstrap-modal "^1.0.1"
+    ng2-bootstrap-modal "https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2"
     tslib "^1.9.0"
     web3 "^1.0.0-beta.34"
 
@@ -4169,10 +4169,6 @@ ng-zorro-antd@^1.4.0:
   dependencies:
     "@angular/cdk" "^6.0.0"
     date-fns "^1.29.0"
-
-ng2-bootstrap-modal@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ng2-bootstrap-modal/-/ng2-bootstrap-modal-1.0.1.tgz#f3166fca63fd3b3aeacb29b8d5e3b872ab6ab1e4"
 
 "ng2-bootstrap-modal@https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2":
   version "1.0.2"
