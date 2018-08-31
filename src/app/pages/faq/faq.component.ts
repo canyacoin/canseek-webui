@@ -66,6 +66,7 @@ export class FaqComponent implements OnInit {
   ];
 
   onSearch() {
-    this.panels = this.panels.filter(p => p.name.indexOf(this.searchText) != -1)
+    const v = this.searchText;
+    this.panels = this.panels.filter(p => p.name.indexOf(v) != -1)
   }
 }
