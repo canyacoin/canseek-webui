@@ -198,9 +198,9 @@
   dependencies:
     tslib "^1.9.0"
 
-"@canyaio/canpay-lib@^0.1.17":
-  version "0.1.17"
-  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.1.17.tgz#8687553a631d56ac530d3b179c00b1647daa88a0"
+"@canyaio/canpay-lib@0.1.20":
+  version "0.1.20"
+  resolved "https://registry.yarnpkg.com/@canyaio/canpay-lib/-/canpay-lib-0.1.20.tgz#b8f3406e220c14aa6c3a8c06e1cf38183231c275"
   dependencies:
     lodash.merge "^4.6.1"
     ng2-bootstrap-modal "https://github.com/Sky4CE/ng2-bootstrap-modal/tarball/v.1.0.2"
