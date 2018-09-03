@@ -55,6 +55,7 @@ export class CmpPostComponent implements OnInit {
       {
         amount: Math.ceil(post['reward'] * .01),
         postAuthorisationProcessName: 'Cancelling Fees',
+        successText: 'Your job has been cancelled!',
       },
       this.cancel.bind(this, post),
       this.onComplete.bind(this),
