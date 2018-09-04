@@ -1,26 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Profile } from '@class/profile';
-import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
 import { Store } from '@store';
 import { clearEmpty } from '@util';
 import { Authstate } from '@class/authstate';
-const MsgAlreadyVerified = 'Verify Successfully !';
 const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
-const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';
-const MsgAlreadyLogin = 'The email address is already in use by another account.';
+const MsgVerifyRequired = 'Verification email sent, please verify your email or refresh to update your login status';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfileService {
   store = Store;
-  confirmModal: NzModalRef;
 
   constructor(
     private modal: NzModalService,
-    private message: NzMessageService,
     private afAuth: AngularFireAuth,
   ) { 
     this.afAuth.authState.subscribe((auth) => {
@@ -58,47 +54,50 @@ export class ProfileService {
     this.store.profile = _profile;
   }
 
-  async verify(email: string, displayName: string, needFeedback: boolean = false) {
+  async verify(email: string, displayName: string) {
     const isVerified = (this.store.authState['email'] == email) && this.store.authState['emailVerified'];
 
     if (isVerified) {
-      needFeedback && this.message.success(MsgAlreadyVerified);
       return;
     }
+
+    // login but not verified
     if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
-      this.msgModal('info', MsgVerifyRequired);
+      this.modal.confirm({
+        nzTitle: 'Confirm',
+        nzContent: MsgVerifyRequired,
+        nzOkText: 'OK',
+        nzCancelText: 'Resend',
+        nzOnCancel: async() => {
+          await this.sendEmail(email, clearEmpty(displayName));
+        }
+      });
       return;
     }
 
     try {
-      await this.signinWithEmail(email, displayName);
+      await this.create(email, displayName);
     } catch(err) {
-      if (err.message == MsgAlreadyLogin) {
-        await this.loginWithEmail(email);
-      } else {
-        this.msgModal('error', err.message);
-        console.log(err);
-      }
+      await this.login(email);
     }
   }
 
-  async signinWithEmail(email: string, displayName: string) {
+  async sendEmail(email: string, displayName: string = 'Jane Doe') {
     const photoURL = await gravatar.url(email);
 
-    try {
-      await this.afAuth.auth.createUserWithEmailAndPassword(email, email);
-      await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
-      await this.afAuth.auth.currentUser.sendEmailVerification();
-      this.msgModal('success', MsgVerifyEmailSent);
-    } catch (err) {
-      throw err;
-    }
+    await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
+    await this.afAuth.auth.currentUser.sendEmailVerification();
+    this.msgModal('success', MsgVerifyEmailSent);
   }
 
-  async loginWithEmail(email: string) {
+  async create(email: string, displayName: string) {
+    await this.afAuth.auth.createUserWithEmailAndPassword(email, email);
+    await this.sendEmail(email, clearEmpty(displayName));
+  }
+
+  async login(email: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, email);
-      this.message.success('Login Success!');
     } catch(err) {
       this.msgModal('error', err.message);
       console.log(err);
@@ -106,7 +105,7 @@ export class ProfileService {
   }
 
   msgModal(type, message): void {
-    this.confirmModal = this.modal[type]({
+    this.modal[type]({
       nzTitle: message,
       nzOkText: 'OK',
     });

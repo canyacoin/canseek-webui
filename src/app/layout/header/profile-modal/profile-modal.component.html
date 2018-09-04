@@ -13,12 +13,13 @@
     <i class="iconfont iconfont-notifications notify-bell animated infinite swing" *ngIf="hasNotify"></i>
   </a>
   <ul nz-menu>
-    <li nz-menu-item *ngIf="!store.authState.emailVerified">
-      <span>Please verify your email</span>
-    </li>
+    <ng-container *ngIf="!store.authState.emailVerified">
+      <li nz-menu-item *ngIf="!store.authState.emailVerified">Please verify your email</li>
+      <li nz-menu-divider></li>
+    </ng-container>
 
+    <li nz-menu-item (click)="showModal()">User Profile</li>
     <ng-container *ngIf="store.authState.emailVerified">
-      <li nz-menu-item (click)="showModal()">User Profile</li>
       <li nz-menu-divider></li>
       <li nz-menu-item (click)="logout()">Logout</li>
     </ng-container>
@@ -63,7 +64,22 @@
       <nz-form-item>
         <nz-form-label nzFor="your_email" nzRequired> Your Email </nz-form-label>
         <nz-form-control>
-          <input nz-input formControlName="your_email" id="your_email" placeholder="user@email.com">
+          <nz-row class="flex">
+            <nz-col class="flex1">
+              <input nz-input formControlName="your_email" id="your_email" placeholder="user@email.com">
+            </nz-col>
+            <nz-col class="ml-12">
+              <button nz-button 
+              class="my-0"
+              *ngIf="form.get('your_email').value !== store.authState.email || store.authState.emailVerified !== true"
+              [nzLoading]="loading" (click)="emailVerify()">Verify</button>
+              <button nz-button disabled
+                class="my-0"
+                *ngIf="(form.get('your_email').value == store.authState.email) && store.authState.emailVerified == true"
+                >Verified</button>
+            </nz-col>
+          </nz-row>
+
           <nz-form-explain *ngIf="form.get('your_email').dirty && form.get('your_email').errors">Please input Your Email</nz-form-explain>
           <nz-form-extra>To help us verify your account and job posts, this email domain must match your company’s website domain. 
               eg. support@canya.com matches canya.com</nz-form-extra>
@@ -85,6 +101,6 @@
 
   <ng-template #modalFooter>
     <button nz-button nzType="default" (click)="handleCancel()">Cancel</button>
-    <button nz-button nzType="primary" (click)="handleOk()" [nzLoading]="loading">Verify & save</button>
+    <button nz-button nzType="primary" (click)="handleOk()">Save</button>
   </ng-template>
 </nz-modal>

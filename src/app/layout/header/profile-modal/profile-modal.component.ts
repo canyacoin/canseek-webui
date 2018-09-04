@@ -62,16 +62,7 @@ export class ProfileModalComponent implements OnInit {
     if (valid) {
       this.ps.setProfile(data);
       this.message.success('Save Successfully !');
-
-      this.loading = true;
-      try {
-        // TODO
-        await this.ps.verify(data['your_email'], this.store.curUser);
-        this.visible = false;
-      } catch(err) {
-        console.log(err);
-      }
-      this.loading = false;
+      this.visible = false;
     } else {
       return;
     }
@@ -104,5 +95,15 @@ export class ProfileModalComponent implements OnInit {
       nzCancelText: 'No',
       nzOnOk: () => this.ps.logout()
     });
+  }
+
+  async emailVerify() {
+    const your_email = this.form.controls['your_email'].value;
+    
+    if (!your_email) return;
+
+    this.loading = true;
+    await this.ps.verify(your_email, this.store.curUser);
+    this.loading = false;
   }
 }
