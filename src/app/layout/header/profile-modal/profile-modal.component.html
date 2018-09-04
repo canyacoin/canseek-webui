@@ -16,9 +16,13 @@
     <li nz-menu-item *ngIf="!store.authState.emailVerified">
       <span>Please verify your email</span>
     </li>
-    <li nz-menu-item *ngIf="store.authState.emailVerified">
-      <span (click)="showModal()">User Profile</span>
-    </li>
+
+    <ng-container *ngIf="store.authState.emailVerified">
+      <li nz-menu-item (click)="showModal()">User Profile</li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="logout()">Logout</li>
+    </ng-container>
+
     <ng-container *ngIf="hasNotify">
       <li nz-menu-divider></li>
       <li nz-menu-item>

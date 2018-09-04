@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ProfileService } from '@service/profile.service';
 import { NotifyService } from '@service/notify.service';
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import {
   FormBuilder,
   FormGroup,
@@ -30,6 +30,7 @@ export class ProfileModalComponent implements OnInit {
     private fb: FormBuilder,
     private message: NzMessageService,
     private ns: NotifyService,
+    private modal: NzModalService,
   ) { }
 
   ngOnInit() {
@@ -93,5 +94,15 @@ export class ProfileModalComponent implements OnInit {
 
   handleCancel(): void {
     this.visible = false;
+  }
+
+  logout() {
+    this.modal.confirm({
+      nzTitle: 'Sign out',
+      nzContent: 'Are you sure you want to sign out of your account ?',
+      nzOkText: 'Yes',
+      nzCancelText: 'No',
+      nzOnOk: () => this.ps.logout()
+    });
   }
 }

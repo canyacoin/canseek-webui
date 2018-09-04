@@ -5,6 +5,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
 import { Store } from '@store';
 import { clearEmpty } from '@util';
+import { Authstate } from '@class/authstate';
 const MsgAlreadyVerified = 'Verify Successfully !';
 const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
 const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';
@@ -109,5 +110,10 @@ export class ProfileService {
       nzTitle: message,
       nzOkText: 'OK',
     });
+  }
+
+  logout() {
+    this.afAuth.auth.signOut();
+    this.store.authState = new Authstate;
   }
 }
