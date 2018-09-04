@@ -6,7 +6,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Store } from '@store';
-import { wrapTextarea, unwrapTextarea } from '@util';
+import { wrapTextarea, unwrapTextarea, formatLocation } from '@util';
 import * as moment from 'moment-timezone';
 
 @Component({
@@ -53,12 +53,13 @@ export class CmpPoststep1Component implements OnInit {
   
   initForm(values, disabled): void {
     const email = values['your_email'];
+    const initLocation = formatLocation(moment.tz.guess());
     
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
       job_desc: [ { value: unwrapTextarea(values['job_desc']), disabled }, [ Validators.required ] ],
 
-      job_location: [{ value: values['job_location'], disabled }, [ Validators.required ]],
+      job_location: [{ value: values['job_location'] || initLocation, disabled }, [ Validators.required ]],
       only_show_timezone: [{ value: values['only_show_timezone'], disabled }],
 
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],
