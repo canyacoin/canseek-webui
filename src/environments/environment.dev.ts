@@ -2,7 +2,8 @@ export const environment = {
   production: true,
   etherscanBaseUrl: 'https://ropsten.etherscan.io/tx/',
   URL: {
-    changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti'
+    changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti',
+    timezone: 'http://momentjs.com/data/moment-timezone-meta.json',
   },
   appname: 'CanSeek Escrow',
   contracts: {

@@ -1,3 +1,39 @@
-<p>
-  cmp-timezone works!
-</p>
+<nz-row [nzGutter]="32">
+
+  <nz-col [nzSpan]="16">
+    <!-- UTC only -->
+    <ng-container *ngIf="type">
+      <nz-select 
+        nzPlaceHolder="Location, Country or Timezone UTC" 
+        nzAllowClear 
+        nzShowSearch 
+        nzNotFoundContent="No such place"
+        [(ngModel)]="innerLocation"
+        (ngModelChange)="onLocationChange($event)"
+        >
+        <nz-option [nzValue]="utc" [nzLabel]="utc" *ngFor="let utc of UTCs"></nz-option>
+      </nz-select>
+    </ng-container>
+
+    <!-- timezone -->
+    <ng-container *ngIf="!type">
+      <nz-select 
+        nzPlaceHolder="Location, Country or Timezone UTC" 
+        nzAllowClear 
+        nzShowSearch 
+        nzNotFoundContent="No such place"
+        [(ngModel)]="innerLocation"
+        (ngModelChange)="onLocationChange($event)"
+        >
+        <nz-option-group [nzLabel]="c.country" *ngFor="let c of timezones">
+          <nz-option [nzValue]="tz" [nzLabel]="tz" *ngFor="let tz of c.zones"></nz-option>
+        </nz-option-group>
+      </nz-select>
+    </ng-container>
+  </nz-col>
+
+  <nz-col [nzSpan]="8">
+    <label nz-checkbox [(ngModel)]="type"(ngModelChange)="onTypeChange($event)">Only show time zone</label>
+  </nz-col>
+
+</nz-row>

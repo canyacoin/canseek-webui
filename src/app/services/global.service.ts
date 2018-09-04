@@ -34,6 +34,14 @@ export class GlobalService {
       });
   }
 
+  async getTimeZone(): Promise<any> {
+    return await fetch(`${URL.timezone}`)
+      .then(response => response.json())
+      .catch(err => {
+        this.message.error(err.message);console.log(err);
+      });
+  }
+
   getPosts(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
