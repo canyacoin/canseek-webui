@@ -22,7 +22,7 @@
         
         <li class="nav-item mr-24">
           <nz-dropdown>
-            <a href="javascript:;" nz-dropdown>
+            <a href="javascript:;" nz-dropdown style="padding: 10px 0">
               {{ store.selectedCurrency['string'] || '$ USD' }}
               <i class="anticon anticon-down"></i>
             </a> 
@@ -37,7 +37,7 @@
                 <a href="javascript:;" (click)="setCurrency(currency.USD)">{{currency.USD.string}}</a>
               </li>
               <li nz-menu-item>
-                <a href="javascript:;" (click)="setCurrency(currency.CAN)">{{currency.CAN.string}}</a>
+                <a href="javascript:;" (click)="setCurrency(currency.CAN)">&nbsp;&nbsp;&nbsp;{{currency.CAN.string}}</a>
               </li>
             </ul>
           </nz-dropdown>
