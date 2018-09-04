@@ -7,7 +7,7 @@
   *ngIf="store.authState.email"
   >
   <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
-    <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='/assets/img/defaultPhoto.png'">
+    <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='/assets/img/defaultAvatar.png'">
 
     <i class="anticon anticon-down"></i>
     <i class="iconfont iconfont-notifications notify-bell animated infinite swing" *ngIf="hasNotify"></i>
