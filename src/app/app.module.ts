@@ -53,6 +53,7 @@ import { BuycanComponent } from './pages/buycan/buycan.component';
 import { CmpUploadComponent } from './components/cmp-upload/cmp-upload.component';
 import { CmpNotifyComponent } from './components/cmp-notify/cmp-notify.component';
 import { CmpNotifyDetailComponent } from './components/cmp-notify-detail/cmp-notify-detail.component';
+import { CmpTimezoneComponent } from './components/cmp-timezone/cmp-timezone.component';
 
 registerLocaleData(zh);
 
@@ -84,6 +85,7 @@ registerLocaleData(zh);
     CmpUploadComponent,
     CmpNotifyComponent,
     CmpNotifyDetailComponent,
+    CmpTimezoneComponent,
   ],
   imports: [
     BrowserModule,
