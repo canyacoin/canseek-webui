@@ -98,7 +98,7 @@ export class ProfileService {
   async loginWithEmail(email: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, email);
-      this.msgModal('success', 'Login Success!');
+      this.message.success('Login Success!');
     } catch(err) {
       this.msgModal('error', err.message);
       console.log(err);
