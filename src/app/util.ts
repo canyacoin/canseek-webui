@@ -23,3 +23,9 @@ export const formatLocation = (tz: string) => {
 
     return tz.replace(/\//g, ', ') + ' UTC ' + UTCOffset;
 }
+export const clearEmpty = (value) => {
+    if ([undefined, null, 'undefined', 'null'].includes(value)) {
+        return null;
+    } 
+    return value;
+}

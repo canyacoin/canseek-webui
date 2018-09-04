@@ -38,10 +38,11 @@
       <nz-form-item>
         <nz-form-label> MetaMask address </nz-form-label>
         <nz-form-control>
-          <nz-select nzMode="tags" nzPlaceHolder="input or search" formControlName="mm" id="mm">
+          <input nz-input formControlName="mm" id="mm" placeholder="Please input your MetaMask address">
+          <!-- <nz-select nzMode="tags" nzPlaceHolder="input or search" formControlName="mm" id="mm">
             <nz-option *ngFor="let option of formData.mm" [nzLabel]="option" [nzValue]="option">
             </nz-option>
-          </nz-select>
+          </nz-select> -->
           <nz-form-extra>Current Address: {{ store.curUser }}</nz-form-extra>
         </nz-form-control>
         
