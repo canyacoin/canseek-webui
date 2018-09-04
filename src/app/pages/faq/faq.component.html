@@ -24,10 +24,10 @@
         >
 
         <ng-template #QItem>
-          <h5 class="fs-14 fw-600">{{ panel.name }}</h5>
+          <h5 class="fs-20 fw-600">{{ panel.name }}</h5>
         </ng-template>
 
-        <p>{{panel.content}}</p>
+        <p [innerHtml]="panel.content"></p>
       </nz-collapse-panel>
     </nz-collapse>
   </nz-col>
@@ -40,4 +40,3 @@
       </nz-col>
     </nz-row>      
 </section>
-

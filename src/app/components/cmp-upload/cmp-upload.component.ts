@@ -75,10 +75,15 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
 
 
   beforeUploadImg = (file) => {
+    if (file.type === 'image/gif') {
+      this.message.error('File can\'t be a gif');
+      return false;
+    }
+
     const isImage = /^image\//.test(file.type);
     const isMultiple = this.fileList.length;
     const isLt512M = file.size / 1024 / 1024 < 512;
-    
+
     if (!isImage) {
       this.message.error('You can only upload image file');
     }
@@ -88,7 +93,6 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
     if (!isLt512M) {
       this.message.error('File must smaller than 512 MB');
     }
-
     return isImage && !isMultiple && isLt512M;
   }
 }

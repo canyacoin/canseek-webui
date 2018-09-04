@@ -4,6 +4,7 @@ import { NzMessageService, NzModalService, NzModalRef } from 'ng-zorro-antd';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as gravatar from 'gravatar';
 import { Store } from '@store';
+import { clearEmpty } from '@util';
 const MsgAlreadyVerified = 'Verify Successfully !';
 const MsgVerifyEmailSent = 'Verification email sent, please check your inbox for an email from noreply@canseek.com';
 const MsgVerifyRequired = 'Please verify your email or refresh to update your login status';
@@ -29,10 +30,11 @@ export class ProfileService {
   }
 
   getProfile(): Profile {
-    const mm = localStorage.getItem('mm') ? localStorage.getItem('mm').split(',') : undefined;
-    const your_email = localStorage.getItem('your_email');
-    const your_name = localStorage.getItem('your_name');
-    const company_name = localStorage.getItem('company_name');
+    // const mm = localStorage.getItem('mm') ? localStorage.getItem('mm').split(',') : undefined;
+    const mm = clearEmpty(localStorage.getItem('mm')) || this.store.curUser;
+    const your_email = clearEmpty(localStorage.getItem('your_email'));
+    const your_name = clearEmpty(localStorage.getItem('your_name'));
+    const company_name = clearEmpty(localStorage.getItem('company_name'));
     
     return {
       mm,
