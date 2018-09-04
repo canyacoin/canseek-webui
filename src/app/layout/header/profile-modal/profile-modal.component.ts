@@ -35,6 +35,7 @@ export class ProfileModalComponent implements OnInit {
   ngOnInit() {
     // console.log('--------------init store.profile-------------');
     this.store.profile = this.ps.getProfile();
+    // TODO
     this.ns.getUnreadNotifications(this.store.curUser).subscribe(list => this.hasNotify = !!list.length);
   }
 
@@ -63,6 +64,7 @@ export class ProfileModalComponent implements OnInit {
 
       this.loading = true;
       try {
+        // TODO
         await this.ps.verify(data['your_email'], this.store.curUser);
         this.visible = false;
       } catch(err) {
