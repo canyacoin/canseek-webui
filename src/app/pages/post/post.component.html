@@ -59,7 +59,10 @@
           </nz-form-label>
           <nz-form-control>
             <nz-input-group nzCompact>
-                <nz-select [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
+                <nz-select *ngIf="type == 'edit'" style="width: 120px;" formControlName="salary_currency">
+                  <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
+                </nz-select>
+                <nz-select *ngIf="type !== 'edit'" [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
                   <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
                 </nz-select>
             
@@ -98,8 +101,11 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group nzCompact>
-                  <nz-select [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
-                      <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
+                  <nz-select *ngIf="type == 'edit'" style="width: 120px;" formControlName="salary_currency">
+                    <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
+                  </nz-select>
+                  <nz-select *ngIf="type !== 'edit'" [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
+                    <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
                   </nz-select>
               
                   <input 

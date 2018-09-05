@@ -96,10 +96,12 @@ export class PostComponent implements AfterViewInit {
       owner_addr: [ { value: this.store.curUser || values['owner_addr'], disabled: true } ],
     });
 
+    const salary_currency = this.type != 'edit' ? (this.store.selectedCurrency['string'] || '$ USD') : values['salary_currency'];
+
     this.validateForm = this.fb.group({
       reward_fee: [ { value: values['reward_fee'], disabled }, [ Validators.required, this.rewardValidator ] ],
       cost_fee: [ { value: values['cost_fee'], disabled }, [ Validators.required, this.costValidator ] ],
-      salary_currency: [{ value: this.store.selectedCurrency['string'] || '$ USD', disabled: true }],
+      salary_currency: [{ value: salary_currency, disabled: true }],
     });
   }
 
