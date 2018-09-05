@@ -109,7 +109,7 @@ export class PostComponent implements AfterViewInit {
     if (!your_email) return;
 
     this.loading = true;
-    await this.ps.verify(your_email, this.store.curUser, true);
+    await this.ps.verify(your_email, this.store.curUser);
     this.loading = false;
   }
 
