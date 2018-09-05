@@ -55,7 +55,7 @@ export let Store = {
           field: 'job_remote'
         }, {
           label: 'Salary Range',
-          field: 'job_range'
+          field: 'salary_range'
         }, {
           label: 'Attachments',
           field: 'job_attachments'

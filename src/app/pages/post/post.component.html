@@ -44,7 +44,7 @@
       </form>
 
       <!-- step1 -->
-      <app-cmp-poststep1 *ngIf="current == 1" [values]="values"></app-cmp-poststep1>
+      <app-cmp-poststep1 *ngIf="current == 1" [values]="values" [type]="type"></app-cmp-poststep1>
 
       <!-- step2 -->
       <form *ngIf="current == 2" nz-form [nzLayout]="vertical" [formGroup]="validateForm" (ngSubmit)="submitForm()">

@@ -16,6 +16,7 @@ import * as moment from 'moment-timezone';
 })
 export class CmpPoststep1Component implements OnInit {
   @Input() values;
+  @Input() type;
 
   validateForm: FormGroup;
   store = Store;
@@ -35,7 +36,7 @@ export class CmpPoststep1Component implements OnInit {
       data[i] = wrapTextarea(i, data[i]);
     }
 
-    data['job_range'] = data['salary_min'] ? `${data['salary_currency']}: ${data['salary_min']} ~ ${data['salary_max']} ${data['salary_cycle']}` : '';
+    data['salary_range'] = data['salary_min'] ? `${data['salary_currency']}: ${data['salary_min']} ~ ${data['salary_max']} ${data['salary_cycle']}` : '';
 
     return {
       valid: this.validateForm.valid,
@@ -54,6 +55,7 @@ export class CmpPoststep1Component implements OnInit {
   initForm(values, disabled): void {
     const email = values['your_email'];
     const initLocation = formatLocation(moment.tz.guess());
+    const salary_currency = this.type != 'edit' ? (this.store.selectedCurrency['string'] || '$ USD') : values['salary_currency'];
     
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
@@ -65,8 +67,8 @@ export class CmpPoststep1Component implements OnInit {
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],
       job_remote: [ { value: values['job_remote'], disabled } ],
 
-      job_range: [{ value: values['job_range'], disabled }],
-      salary_currency: [{ value: this.store.selectedCurrency['string'] || '$ USD', disabled: true }],
+      salary_range: [{ value: values['salary_range'], disabled }],
+      salary_currency: [{ value: salary_currency, disabled: true }],
       salary_min: [{ value: values['salary_min'], disabled }, [ this.numberValidator ]],
       salary_max: [{ value: values['salary_max'], disabled }, [ this.numberValidator ]],
       salary_cycle: [{ value: values['salary_cycle'] || '/ Annum', disabled }],

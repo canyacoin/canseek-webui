@@ -93,7 +93,11 @@ Let them know:
     <nz-form-label [nzSm]="6" [nzXs]="24"> Salary Range </nz-form-label>
     <nz-col [nzSm]="18" [nzXs]="24">
       <nz-input-group nzCompact>
-        <nz-select [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
+        <nz-select *ngIf="type == 'edit'" style="width: 120px;" formControlName="salary_currency">
+          <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
+        </nz-select>
+
+        <nz-select *ngIf="type !== 'edit'" [ngModel]="store.selectedCurrency.string" style="width: 120px;" formControlName="salary_currency">
           <nz-option *ngFor="let currency of store.currencyArr" [nzLabel]="currency" [nzValue]="currency"></nz-option>
         </nz-select>
         
