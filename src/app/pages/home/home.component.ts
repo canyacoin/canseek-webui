@@ -46,14 +46,16 @@ export class HomeComponent implements OnInit {
   getPosts(): void {
     this.gs.getPosts()
       .subscribe(posts => {
-        this.posts = posts || [];
+        this.posts = (posts || [])
+          .filter(p => p.status != 'pending')
+          .sort((a, b) => b.time - a.time);
         this.loading = false;
         this.searchStatus(this.statusValue);
 
         // update pending post, include: status postId
-        this.posts
-          .filter(p => p.status == 'pending')
-          .map(p => this.gs.updatePendingPost(p).catch(err => console.log(err)))
+        // this.posts
+        //   .filter(p => p.status == 'pending')
+        //   .map(p => this.gs.updatePendingPost(p).catch(err => console.log(err)))
       });
   }
 

@@ -58,7 +58,7 @@ export class ApplicantsComponent implements OnInit {
 
     await this.getPost();
     await this.getCandidates();
-    this.updatePendingCandidates();
+    // this.updatePendingCandidates();
   }
 
   getPost() {
@@ -79,22 +79,21 @@ export class ApplicantsComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.gs.getCandidates(this.pid)
         .subscribe(candidates => {
-          candidates = (candidates || [])
+          this.candidates = (candidates || [])
             .filter(c => c.status !== 'pending')
             .sort((a, b) => b.time - a.time);
 
-          this.candidates = candidates;
           this.searchCategory();
           resolve(1);
         });
     });
   }
 
-  updatePendingCandidates() {
-    this.candidates
-      .filter(c => c.status == 'pending')
-      .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
-  }
+  // updatePendingCandidates() {
+  //   this.candidates
+  //     .filter(c => c.status == 'pending')
+  //     .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
+  // }
 
   searchCategory() {
     const { candidates, category } = this;
