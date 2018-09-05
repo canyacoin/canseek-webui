@@ -1,8 +1,9 @@
 import { Authstate } from '@class/authstate';
+import { Profile } from '@class/profile';
 
 export let Store = {
     authState: new Authstate,
-    profile: {},
+    profile: new Profile,
     salary_cycles: ['/ Annum', '/ Month', '/ Week', '/ Day', '/ Hour'],
     currencyArr: ['$ AUD', '$ USD', '€ EUR', 'CAN'],
     currency: {
