@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ProfileService } from '@service/profile.service';
+import { ContractsService } from '@service/contracts.service';
 import { NotifyService } from '@service/notify.service';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import {
@@ -15,7 +16,7 @@ import { Store } from '@store';
   templateUrl: './profile-modal.component.html',
   styleUrls: ['./profile-modal.component.less']
 })
-export class ProfileModalComponent implements OnInit {
+export class ProfileModalComponent implements OnInit, AfterViewInit {
   store = Store;
   hasNotify: boolean = false;
 
@@ -27,6 +28,7 @@ export class ProfileModalComponent implements OnInit {
 
   constructor(
     private ps: ProfileService,
+    private cs: ContractsService,
     private fb: FormBuilder,
     private message: NzMessageService,
     private ns: NotifyService,
@@ -36,8 +38,13 @@ export class ProfileModalComponent implements OnInit {
   ngOnInit() {
     // console.log('--------------init store.profile-------------');
     this.store.profile = this.ps.getProfile();
-    // TODO
-    this.ns.getUnreadNotifications(this.store.curUser).subscribe(list => this.hasNotify = !!list.length);
+  }
+
+  async ngAfterViewInit() {
+    this.store.curUser = await this.cs.getAccount()
+    this.ns.getUnreadNotifications(this.store.curUser).subscribe(list => {
+      this.hasNotify = !!list.length;
+    });
   }
 
   initForm() {
