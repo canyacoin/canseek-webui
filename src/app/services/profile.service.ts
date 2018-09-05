@@ -22,6 +22,8 @@ export class ProfileService {
     this.afAuth.authState.subscribe((auth) => {
       if (auth) {
         this.store.authState = auth;
+        debugger
+        console.log(auth);
       }
     });
   }
@@ -69,8 +71,7 @@ export class ProfileService {
         nzOkText: 'OK',
         nzCancelText: 'Resend',
         nzOnCancel: async() => {
-          await this.updatePhoto(email, clearEmpty(displayName));
-          await this.sendEmail();
+          await this.sendEmail(email, clearEmpty(displayName));
         }
       });
       return;
@@ -79,27 +80,23 @@ export class ProfileService {
     try {
       await this.create(email, displayName);
     } catch(err) {
-      this.updatePhoto(email, clearEmpty(displayName));
       await this.login(email);
     }
   }
 
-  async sendEmail() {
-    
+  async sendEmail(email: string, displayName: string = 'Jane Doe') {
+    const photoURL = await gravatar.url(email);
+
+    debugger
+    console.log(photoURL);
+    await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
     await this.afAuth.auth.currentUser.sendEmailVerification();
     this.msgModal('success', MsgVerifyEmailSent);
   }
 
-  async updatePhoto(email: string, displayName: string = 'Jane Doe') {
-    const photoURL = await gravatar.url(email);
-
-    await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
-  }
-
   async create(email: string, displayName: string) {
     await this.afAuth.auth.createUserWithEmailAndPassword(email, email);
-    await this.updatePhoto(email, clearEmpty(displayName));
-    await this.sendEmail();
+    await this.sendEmail(email, clearEmpty(displayName));
   }
 
   async login(email: string) {
