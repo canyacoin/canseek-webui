@@ -69,7 +69,7 @@ export class CmpPoststep1Component implements OnInit {
 
       salary_range: [{ value: values['salary_range'], disabled }],
       salary_currency: [{ value: salary_currency, disabled: true }],
-      salary_min: [{ value: values['salary_min'], disabled }, [ this.numberValidator ]],
+      salary_min: [{ value: values['salary_min'], disabled }, [ this.numberValidator, this.salaryMinValidator ]],
       salary_max: [{ value: values['salary_max'], disabled }, [ this.numberValidator ]],
       salary_cycle: [{ value: values['salary_cycle'] || '/ Annum', disabled }],
       
@@ -95,6 +95,18 @@ export class CmpPoststep1Component implements OnInit {
   numberValidator = (control: FormControl) => {
     if (control.value && !/^\d+$/.test(control.value)) {
       return { number: true };
+    } else {
+      return null;
+    }
+  }
+
+  salaryMinValidator = (control: FormControl) => {
+    if (control.value && /^\d+$/.test(control.value)) {
+      const v = Number(control.value);
+      const threshold = this.values['reward_fee'] / 0.05;
+      if (v > threshold) {
+        return { range: true, msg: `Minimum salary can't be more than ${threshold}(reward fee / 5%)` };
+      }
     } else {
       return null;
     }

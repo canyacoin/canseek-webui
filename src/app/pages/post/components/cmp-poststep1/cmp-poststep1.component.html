@@ -110,6 +110,7 @@ Let them know:
         </nz-select>
       </nz-input-group>
       <nz-form-explain *ngIf="validateForm.get('salary_min').dirty && (validateForm.get('salary_min').errors || {}).number">Please input number</nz-form-explain>
+      <nz-form-explain *ngIf="validateForm.get('salary_min').dirty && (validateForm.get('salary_min').errors || {}).range">{{ (validateForm.get('salary_min').errors || {}).msg }}</nz-form-explain>
       <nz-form-explain *ngIf="validateForm.get('salary_max').dirty && (validateForm.get('salary_max').errors || {}).number">Please input number</nz-form-explain>
     </nz-col>
   </nz-form-item>
