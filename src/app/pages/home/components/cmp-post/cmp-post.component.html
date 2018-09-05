@@ -98,7 +98,7 @@
               <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="cancelPost(post)">cancel</li>
               <!-- applicants: 创建人 -->
               <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
-                <a routerLink="/applicants/{{ post.id }}">view applicants</a>
+                <a routerLink="/applicants/{{ post.id }}">review candidates</a>
               </li>
             </ul>
           </nz-dropdown-button>
@@ -119,7 +119,7 @@
                 <li nz-menu-item class="op-item" *ngIf="post.status == 'open' && post.owner_addr == curUser" (click)="cancelPost(post)">cancel</li>
                 <!-- applicants: 创建人 -->
                 <li nz-menu-item class="op-item" *ngIf="post.owner_addr == curUser">
-                <a routerLink="/applicants/{{ post.id }}">view applicants</a>
+                <a routerLink="/applicants/{{ post.id }}">review candidates</a>
                 </li>
             </ul>
           </nz-dropdown>
