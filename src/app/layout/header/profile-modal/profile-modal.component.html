@@ -1,10 +1,10 @@
-<a href="javascript:;" class="nav-link" *ngIf="!store.authState.email">
+<a href="javascript:;" class="nav-link" *ngIf="!store.profile.your_email">
   <button class="btn btn-join btn-sm text-white" (click)="showModal()">Join</button>
 </a>
 
 <nz-dropdown 
   [nzPlacement]="'bottomCenter'"  
-  *ngIf="store.authState.email"
+  *ngIf="store.profile.your_email"
   >
   <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
     <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='/assets/img/defaultAvatar.png'">

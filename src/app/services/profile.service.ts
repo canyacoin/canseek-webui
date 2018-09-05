@@ -22,8 +22,6 @@ export class ProfileService {
     this.afAuth.authState.subscribe((auth) => {
       if (auth) {
         this.store.authState = auth;
-        debugger
-        console.log(auth);
       }
     });
   }
@@ -87,8 +85,6 @@ export class ProfileService {
   async sendEmail(email: string, displayName: string = 'Jane Doe') {
     const photoURL = await gravatar.url(email);
 
-    debugger
-    console.log(photoURL);
     await this.afAuth.auth.currentUser.updateProfile({displayName, photoURL});
     await this.afAuth.auth.currentUser.sendEmailVerification();
     this.msgModal('success', MsgVerifyEmailSent);
