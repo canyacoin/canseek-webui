@@ -42,14 +42,6 @@ export class GlobalService {
       });
   }
 
-  this.db
-      .collection<Notify>('notifications', 
-        ref => ref
-          .where('user', '==', user_addr.toLowerCase())
-          .where('is_read', '==', false)
-          .orderBy('time', 'desc')
-      )
-      
   getPosts(): Observable<any[]> {
     return this.dbRef.valueChanges();
   }
