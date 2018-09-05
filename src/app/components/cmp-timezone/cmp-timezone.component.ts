@@ -37,6 +37,7 @@ export class CmpTimezoneComponent implements OnInit, AfterViewInit {
     if (!this.UTCs.length) {
       this.genUTCs();
     }
+    this.innerLocation = this.location;
   }
 
   async getTimeZone() {

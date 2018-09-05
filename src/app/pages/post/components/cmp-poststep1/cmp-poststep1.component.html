@@ -56,7 +56,7 @@ Let them know:
       <app-cmp-timezone
         (onChangeValue)="onChange($event, 'job_location')"
         (onChangeType)="onChange($event, 'only_show_timezone')"
-        [location]="validateForm.get('job_location').value"
+        [location]="validateForm.get('job_location').value || values['job_location']"
         [type]="validateForm.get('only_show_timezone').value"
         ></app-cmp-timezone>
       

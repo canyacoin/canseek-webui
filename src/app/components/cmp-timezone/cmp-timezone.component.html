@@ -8,7 +8,7 @@
         nzAllowClear 
         nzShowSearch 
         nzNotFoundContent="No such place"
-        [(ngModel)]="innerLocation || location"
+        [(ngModel)]="innerLocation"
         (ngModelChange)="onLocationChange($event)"
         >
         <nz-option [nzValue]="utc" [nzLabel]="utc" *ngFor="let utc of UTCs"></nz-option>
