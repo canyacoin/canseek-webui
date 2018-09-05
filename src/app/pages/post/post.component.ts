@@ -165,7 +165,7 @@ export class PostComponent implements AfterViewInit {
         const init_reward_in_currency = salary_min * 0.05 / currencyRate < 500 ? 500 * currencyRate : salary_min * 0.05;
         this.values['reward_fee'] = Math.ceil(init_reward_in_currency);
       }
-      this.initForm(this.values, false);
+      this.initForm(this.values, this.type == 'edit');
       this.ps.setProfile(formData.data);
     } else if (this.current === 2) {
       // pass directly when edit,because reward info can't edit
