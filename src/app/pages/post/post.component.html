@@ -13,25 +13,27 @@
       <!-- step0 -->
       <form *ngIf="current == 0" nz-form [nzLayout]="vertical" [formGroup]="emailForm">
         <nz-form-item>
-          <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="owner_addr" nzRequired> Your MetaMask Address </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24" nzValidateStatus="{{ store.curUser ? '' : 'validating' }}" nzHasFeedback>
+          <nz-form-label [nzLg]="8" [nzMd]="12" nzFor="owner_addr" nzRequired> Your MetaMask Address </nz-form-label>
+          <nz-form-control [nzLg]="16" [nzMd]="24" nzValidateStatus="{{ store.curUser ? '' : 'validating' }}" nzHasFeedback>
             <nz-form-extra *ngIf="!store.curUser">Sign in to MetaMask to connect your wallet address to CanSeek</nz-form-extra>
             <input [(ngModel)]="store.curUser" nz-input formControlName="owner_addr" id="owner_addr">
           </nz-form-control>
         </nz-form-item>
       
         <nz-form-item>
-          <nz-form-label [nzSm]="7" [nzXs]="24" nzFor="your_email" nzRequired> Your Company Email </nz-form-label>
-          <nz-form-control [nzSm]="16" [nzXs]="24">
-            <nz-row [nzGutter]="32">
-              <nz-col [nzSpan]="16">
+          <nz-form-label [nzLg]="8" [nzMd]="12" nzFor="your_email" nzRequired> Your Company Email </nz-form-label>
+          <nz-form-control [nzLg]="16" [nzMd]="24">
+            <nz-row class="flex">
+              <nz-col class="flex1">
                 <input [(ngModel)]="store.profile.your_email" nz-input formControlName="your_email" id="your_email" placeholder="user@email.com">
               </nz-col>
-              <nz-col [nzSpan]="8">
+              <nz-col style="width: 130px" class="ml-12 text-right">
                 <button nz-button 
+                class="my-0"
                 *ngIf="emailForm.get('your_email').value !== store.authState.email || store.authState.emailVerified !== true"
                 [nzLoading]="loading" (click)="emailVerify()">Verify</button>
                 <button nz-button disabled
+                  class="my-0"
                   *ngIf="(emailForm.get('your_email').value == store.authState.email) && store.authState.emailVerified == true"
                   >Verified</button>
                 
@@ -137,19 +139,19 @@
           <h4 class="fw-500 my-30">{{ category.label }}:</h4>
           <ng-container *ngFor="let item of category.value">
             <nz-row class="my-20" nzGutter="16">
-              <nz-col nzSpan="6" class="bold text-left">{{ item.label }}:</nz-col>
+              <nz-col [nzLg]="8" [nzMd]="12" class="bold text-left">{{ item.label }}:</nz-col>
               
               <!-- format output -->
               <ng-container [ngSwitch]="item.field">
-                <nz-col nzSpan="18" *ngSwitchCase="'job_desc'" [innerHtml]="values[item.field]"></nz-col>
-                <nz-col nzSpan="18" *ngSwitchCase="'company_desc'" [innerHtml]="values[item.field]"></nz-col>
-                <nz-col nzSpan="18" *ngSwitchCase="'company_logo'">
+                <nz-col [nzLg]="16" [nzMd]="24" *ngSwitchCase="'job_desc'" [innerHtml]="values[item.field]"></nz-col>
+                <nz-col [nzLg]="16" [nzMd]="24" *ngSwitchCase="'company_desc'" [innerHtml]="values[item.field]"></nz-col>
+                <nz-col [nzLg]="16" [nzMd]="24" *ngSwitchCase="'company_logo'">
                   <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
                 </nz-col>
-                <nz-col nzSpan="18" *ngSwitchCase="'job_attachments'">
+                <nz-col [nzLg]="16" [nzMd]="24" *ngSwitchCase="'job_attachments'">
                   <a class="mr-12" target="_blank" href="{{ file.url }}" *ngFor="let file of values[item.field]">{{ file.name }}</a>
                 </nz-col>
-                <nz-col nzSpan="18" *ngSwitchDefault>{{ values[item.field] }}</nz-col>
+                <nz-col [nzLg]="16" [nzMd]="24" *ngSwitchDefault>{{ values[item.field] }}</nz-col>
               </ng-container>
               
             </nz-row>

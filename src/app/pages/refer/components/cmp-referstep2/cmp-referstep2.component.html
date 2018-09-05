@@ -2,40 +2,40 @@
   <h4 class="my-20">Talent Contact Details</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_name" nzRequired> Contact Name </nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="candidate_name" nzRequired> Contact Name </nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <input nz-input formControlName="candidate_name" id="candidate_name" placeholder="First name, Last name">
       <nz-form-explain *ngIf="validateForm.get('candidate_name').dirty && validateForm.get('candidate_name').errors">Please input Talent’s Name</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_email" nzRequired>Contact Phone or Email</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="candidate_email" nzRequired>Contact Phone or Email</nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <input nz-input formControlName="candidate_email" id="candidate_email" placeholder="user@email.com">
       <nz-form-explain *ngIf="validateForm.get('candidate_email').dirty && validateForm.get('candidate_email').errors">Please input Talent’s Email</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_website"> Website</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="candidate_website"> Website</nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <input nz-input formControlName="candidate_website" id="candidate_website" placeholder="myportfolio.com">
       <nz-form-explain *ngIf="validateForm.get('candidate_website').dirty && validateForm.get('candidate_website').errors">Please input Talent’s Website</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
   
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="candidate_linkedin">LinkedIn Profile</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="candidate_linkedin">LinkedIn Profile</nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <input nz-input formControlName="candidate_linkedin" id="candidate_linkedin" placeholder="https://www.linkedin.com/in/user">
       <nz-form-explain *ngIf="validateForm.get('candidate_linkedin').dirty && validateForm.get('candidate_linkedin').errors">Please input Talent’s LinkedIn</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="reason" nzRequired>Why are you referring this talent?</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="reason" nzRequired>Why are you referring this talent?</nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <textarea formControlName="reason" id="reason" nz-input rows="7" placeholder="Let the job poster know why you think this talent is a great hire!"></textarea>
       <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons</nz-form-explain>
     </nz-form-control>
@@ -44,15 +44,15 @@
   <h4 class="my-20">Application</h4>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <app-cmp-upload (onChange)="onChange($event, 'resume')" [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
       <nz-form-explain *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please upload CV/Resume</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions">
-    <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers">Screening Question 1</nz-form-label> -->
+    <!-- <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="answers">Screening Question 1</nz-form-label> -->
     <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions }}</nz-form-extra>
       <textarea formControlName="answers" id="answers" nz-input rows="5" placeholder="Write your answer to the job poster's question above"></textarea>
@@ -63,7 +63,7 @@
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions2">
-    <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers2">Screening Question 2</nz-form-label> -->
+    <!-- <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="answers2">Screening Question 2</nz-form-label> -->
     <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions2 }}</nz-form-extra>
       <textarea formControlName="answers2" id="answers2" nz-input rows="5" placeholder="Write your answer to the job poster's question above"></textarea>
@@ -74,7 +74,7 @@
   </nz-form-item>
 
   <nz-form-item *ngIf="post.screening_questions3">
-    <!-- <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="answers3">Screening Question 3</nz-form-label> -->
+    <!-- <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="answers3">Screening Question 3</nz-form-label> -->
     <nz-form-control [nzSm]="24" [nzXs]="24">
       <nz-form-extra>{{ post.screening_questions3 }}</nz-form-extra>
       <textarea formControlName="answers3" id="answers3" nz-input rows="5" placeholder="Write your answer to the job poster's question above"></textarea>
@@ -85,8 +85,8 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="cover_letter">Cover Letter</nz-form-label>
-    <nz-form-control [nzSm]="18" [nzXs]="24">
+    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="cover_letter">Cover Letter</nz-form-label>
+    <nz-form-control [nzXl]="16" [nzLg]="24">
       <app-cmp-upload (onChange)="onChange($event, 'cover_letter')" [catogery]="post.id" [fileList]="cover_letter"></app-cmp-upload>
     </nz-form-control>
   </nz-form-item>

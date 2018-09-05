@@ -1,6 +1,6 @@
-<nz-row [nzGutter]="32">
+<nz-row [nzGutter]="32" class="flex">
 
-  <nz-col [nzSpan]="16">
+  <nz-col class="flex">
     <!-- UTC only -->
     <ng-container *ngIf="type">
       <nz-select 
@@ -32,7 +32,7 @@
     </ng-container>
   </nz-col>
 
-  <nz-col [nzSpan]="8">
+  <nz-col style="min-width: 180px">
     <label nz-checkbox [(ngModel)]="type"(ngModelChange)="onTypeChange($event)">Only show time zone</label>
   </nz-col>
 
