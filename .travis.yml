@@ -7,25 +7,27 @@ before_install:
 - npm install yarn @angular/cli -g
 install:
 - yarn
-script: true
+script: 
+  - test $TRAVIS_BRANCH = "develop" && ENV=dev npm run build && npm run zip
+  - test $TRAVIS_BRANCH = "master" && ENV=prod npm run build && npm run zip
 deploy:
 - provider: script
-  script: ENV=dev npm run build && npm run zip && ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
+  script: ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
     'rm dist-dev.zip' && scp -i $encrypted_e7d9ab5b8337_key dist-dev.zip root@$HOST:/root
     && ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
     'unzip -o dist-dev.zip'
   on:
     branch: develop
 - provider: script
-  script: ENV=prod npm run build && npm run zip && ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
+  script: ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
     'rm dist-prod.zip' && scp -i $encrypted_e7d9ab5b8337_key dist-prod.zip root@$HOST:/root
     && ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
     'unzip -o dist-prod.zip'
   on:
     branch: master
-# cache:
-#   directories:
-#   - node_modules
+cache:
+  directories:
+  - node_modules
 branches:
   only:
   - master
