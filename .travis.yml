@@ -11,10 +11,7 @@ script:
 - ENV=prod npm run deploy
 - ENV=dev npm run deploy
 after_script:
-- ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'rm dist-prod.zip dist-dev.zip' &&
-  scp -i $encrypted_e7d9ab5b8337_key dist-dev.zip dist-prod.zip $USER@$HOST:/$USER
-  && ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'unzip -o dist-prod.zip' && ssh
-  -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'unzip -o dist-dev.zip'
+- ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'rm dist-prod.zip dist-dev.zip' && scp -i $encrypted_e7d9ab5b8337_key dist-dev.zip dist-prod.zip $USER@$HOST:/$USER && ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'unzip -o dist-prod.zip' && ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'unzip -o dist-dev.zip'
 cache:
   directories:
   - node_modules
