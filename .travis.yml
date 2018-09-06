@@ -2,8 +2,8 @@ language: node_js
 node_js:
 - lts/*
 before_install:
-- openssl aes-256-cbc -K $encrypted_7c96680af15b_key -iv $encrypted_7c96680af15b_iv
-  -in aliyun2.pem.enc -out aliyun2.pem -d
+- openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
+  -in aliyun.pem.enc -out aliyun.pem -d
 - npm install yarn @angular/cli -g
 install:
 - yarn
@@ -11,7 +11,10 @@ script:
 - ENV=prod npm run deploy
 - ENV=dev npm run deploy
 after_script:
-- ssh -i $encrypted_7c96680af15b_key $USER@$HOST 'rm dist-prod.zip dist-dev.zip' && scp -i $encrypted_7c96680af15b_key dist-dev.zip dist-prod.zip $USER@$HOST:/$USER && ssh -i $encrypted_7c96680af15b_key $USER@$HOST 'unzip -o dist-prod.zip' && ssh -i $encrypted_7c96680af15b_key $USER@$HOST 'unzip -o dist-dev.zip'
+- ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'rm dist-prod.zip dist-dev.zip' &&
+  scp -i $encrypted_e7d9ab5b8337_key dist-dev.zip dist-prod.zip $USER@$HOST:/$USER
+  && ssh -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'unzip -o dist-prod.zip' && ssh
+  -i $encrypted_e7d9ab5b8337_key $USER@$HOST 'unzip -o dist-dev.zip'
 cache:
   directories:
   - node_modules
