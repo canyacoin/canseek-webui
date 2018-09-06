@@ -7,7 +7,7 @@ before_install:
 install: true
 script: 
   - echo hello>>test.file
-  - scp -i $encrypted_e7d9ab5b8337_key test.file root@$HOST:/root
+  - scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@$HOST:/root
 cache:
   directories:
   - node_modules
