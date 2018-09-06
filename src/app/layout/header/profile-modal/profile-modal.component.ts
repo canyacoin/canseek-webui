@@ -36,7 +36,6 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    // console.log('--------------init store.profile-------------');
     this.store.profile = this.ps.getProfile();
   }
 
@@ -92,6 +91,11 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
 
   handleCancel(): void {
     this.visible = false;
+  }
+
+  login() {
+    const curEmail = this.store.profile.your_email
+    this.ps.login(curEmail);
   }
 
   logout() {

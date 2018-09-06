@@ -13,8 +13,13 @@
     <i class="iconfont iconfont-notifications notify-bell animated infinite swing" *ngIf="hasNotify"></i>
   </a>
   <ul nz-menu>
-    <ng-container *ngIf="!store.authState.emailVerified">
-      <li nz-menu-item *ngIf="!store.authState.emailVerified">Please verify your email</li>
+    <ng-container *ngIf="store.authState.email && !store.authState.emailVerified">
+      <li nz-menu-item>Please verify your email</li>
+      <li nz-menu-divider></li>
+    </ng-container>
+
+    <ng-container *ngIf="!(store.authState.email && store.authState.emailVerified) && store.profile.your_email">
+      <li nz-menu-item (click)="login()">Login</li>
       <li nz-menu-divider></li>
     </ng-container>
 
