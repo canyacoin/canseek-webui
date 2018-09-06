@@ -23,9 +23,9 @@ deploy:
     'unzip -o dist-prod.zip'
   on:
     branch: master
-cache:
-  directories:
-  - node_modules
+# cache:
+#   directories:
+#   - node_modules
 branches:
   only:
   - master
