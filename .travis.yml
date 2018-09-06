@@ -8,7 +8,7 @@ before_install:
 install:
 - yarn
 script: 
-- ./deploy.sh
+- chmod +x .deploy.sh && sh .deploy.sh
 cache:
   directories:
   - node_modules
