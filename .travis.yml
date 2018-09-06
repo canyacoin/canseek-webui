@@ -4,8 +4,8 @@ node_js:
 dist: trusty
 before_install:
 - openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
-  -in aliyun.pem.enc -out ../aliyun.pem -d
+  -in aliyun.pem.enc -out aliyun.pem -d
 install: true
 script:
 - echo hello>>test.file
-- scp -i ../aliyun.pem -o "StrictHostKeyChecking no" test.file root@47.94.194.126:/root
+- scp -i aliyun.pem -o "StrictHostKeyChecking no" test.file root@47.94.194.126:/root
