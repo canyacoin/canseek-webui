@@ -1,25 +1,13 @@
 language: node_js
 node_js:
-- lts/*
+- '8'
 before_install:
 - openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
-  -in aliyun.pem.enc -out aliyun.pem -d
+  -in aliyun.pem.enc -out ../aliyun.pem -d
 install: true
-script: 
-  - echo hello>>test.file
-  - echo $encrypted_e7d9ab5b8337_key
-  - echo '------------------'
-  - scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@$HOST:/root
-cache:
-  directories:
-  - node_modules
-branches:
-  only:
-  - master
-  - develop
-notifications:
-  slack:
-    secure: o7NCyBA64QORfCIN+vwonprk8PZB5TynbehW6Vs+xZirTOxgbSWZpT0ltr8IGGyJhZ9ahDuhsl50FHeq0tYsFlwsUIYwW0lq+y1BpUBWsmrjK4Xo4rmMzQsEB7tb1SsqgHNZrrDwA2QVJK9Gi5GM4JVWzt/EN5h1huGADItU3MDVBNAlNNk1jKMNUoFP2sR/YAdd0LQ984nIU9GnaGeF/wc6owkkveX5L3cmhlAYDZdfE7x6QEPMru/r8tzlIjzWQWi6fdRSlFVNBPArvgCxqG8d0OOQivLnADVITjKeKW2TYQIIOQ9nIo8lbYD4K/ND2R2Mjh7qZNarYO/CJXAS3TEecWVflJFmG8ONzTOlVMvHB0Jac8eE/Z/TkCb/MviLMzphSX55QcxZMPGFEBTIxlBMkPokG4dd9E2U8/Nz1W/ju51dS7MJzd45MfonUMmEIr3AQ07k2f6FyMffGF3SQkHyxh530QzA4LFYR7HHxQhSpAd+ahQ2nCRvc/f+KkBJbSPwvNBEPHbjzKTWgxkkxQncB2iIUHbNqx4HlaXPxvNaS5N5qN22G58uybmzrnFUb9o+zUtXDrSZ6UyKh3B3PUqJrN8MVKxnWMQAqCpKAoCyqnVlViv5AANTD0+xg1ToLtQK+EDjMNoa8GTE737PKWwlbMUShRZKw/HXTCOzFnU=
+script:
+- echo hello>>test.file
+- scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@$HOST:/root
 env:
   global:
     secure: OqhBNWwXNLrAs9LTfsfhExsbFZ9h5qoT60TQT+PYAdfo6XcSxkaAuRHB8haIbmbBCwZkZbSuFFeO2WADFd7rA4QPA7IgPu8q2XPorel6YeNsAzkwKD1NK7mBJrrTbN1EyGgWnIIJHXmMg+PLIcpJC/wvvG8kVWEvCkG7OkYaTKD5hz+EWxxrwDwfZG1nBBda9ibOYnr11K2/YBfQjokiZoOqcjgptZZnu8Nj8R1pWioT414G54HLI6AfiBnInJ5QHo+X4/LPWgeaxgf86JslDZ1Ek+X0GEbW80IL6U73QVBr6A8YuFKl+ayZj1eUeo2JXf2HetJ9JPHdiBefPfqeSRWMjoL6mNr73w0qVCxsLNGOStUng5/yIU7q1vVLQ8aIFo7u91PkWebQ3KudYjHa9M6qD/NSUPOzT+6LiCaKZ/2NCyrvIlrHaTpdlcf2Eh3VJsmwspXE20SXZy/IETCQ308G2ofBqX9eznri1DBubD5Kf/7wzqBMsp7jA3oKirhkAGk3gZCgbcxxn5mouStBlnkBwS5nj3kdz5dprnU9LqoD4gWKfiXO1wExg2mV5KBCWCfYlCQgxmBPqiMW3BS+t4L0Uiv9aw5E33ObHi5SllNnShclUB/ib4z/fjLBQy4ekpHDAw45OSKsBV3bAUn+ctfGKwg8XxXAzhK4c0b6qFg=
