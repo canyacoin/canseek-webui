@@ -7,6 +7,7 @@ before_install:
 - npm install yarn @angular/cli -g
 install:
 - yarn
+script: true
 deploy:
 - provider: script
   script: ENV=dev npm run build && npm run zip && ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
