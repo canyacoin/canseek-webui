@@ -8,8 +8,8 @@ before_install:
 install:
 - yarn
 script: 
-  - test $TRAVIS_BRANCH = "develop" && ENV=dev npm run build && npm run zip
-  - test $TRAVIS_BRANCH = "master" && ENV=prod npm run build && npm run zip
+  - if [ "$TRAVIS_BRANCH" = "develop" ]; then ENV=dev npm run build && npm run zip; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then ENV=prod npm run build && npm run zip; fi
 deploy:
 - provider: script
   script: ssh -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" root@$HOST
