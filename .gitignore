@@ -5,7 +5,6 @@
 /dist-server
 /tmp
 /out-tsc
-/build
 /release
 
 # dependencies
