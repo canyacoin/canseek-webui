@@ -4,11 +4,10 @@ node_js:
 before_install:
 - openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
   -in aliyun.pem.enc -out aliyun.pem -d
-- npm install yarn @angular/cli -g
-install:
-- yarn
+install: true
 script: 
-- chmod +x .deploy.sh && sh .deploy.sh $encrypted_e7d9ab5b8337_key
+  - echo hello>>test.file
+  - scp -i $1 test.file root@$HOST:/root
 cache:
   directories:
   - node_modules
