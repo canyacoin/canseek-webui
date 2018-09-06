@@ -7,6 +7,8 @@ before_install:
 install: true
 script: 
   - echo hello>>test.file
+  - echo $encrypted_e7d9ab5b8337_key
+  - echo '------------------'
   - scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@$HOST:/root
 cache:
   directories:
