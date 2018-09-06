@@ -8,7 +8,7 @@ before_install:
 install:
 - yarn
 script: 
-- chmod +x .deploy.sh && sh .deploy.sh
+- chmod +x .deploy.sh && sh .deploy.sh $encrypted_e7d9ab5b8337_key
 cache:
   directories:
   - node_modules
