@@ -7,7 +7,4 @@ before_install:
 install: true
 script:
 - echo hello>>test.file
-- scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@$HOST:/root
-env:
-  global:
-    secure: OqhBNWwXNLrAs9LTfsfhExsbFZ9h5qoT60TQT+PYAdfo6XcSxkaAuRHB8haIbmbBCwZkZbSuFFeO2WADFd7rA4QPA7IgPu8q2XPorel6YeNsAzkwKD1NK7mBJrrTbN1EyGgWnIIJHXmMg+PLIcpJC/wvvG8kVWEvCkG7OkYaTKD5hz+EWxxrwDwfZG1nBBda9ibOYnr11K2/YBfQjokiZoOqcjgptZZnu8Nj8R1pWioT414G54HLI6AfiBnInJ5QHo+X4/LPWgeaxgf86JslDZ1Ek+X0GEbW80IL6U73QVBr6A8YuFKl+ayZj1eUeo2JXf2HetJ9JPHdiBefPfqeSRWMjoL6mNr73w0qVCxsLNGOStUng5/yIU7q1vVLQ8aIFo7u91PkWebQ3KudYjHa9M6qD/NSUPOzT+6LiCaKZ/2NCyrvIlrHaTpdlcf2Eh3VJsmwspXE20SXZy/IETCQ308G2ofBqX9eznri1DBubD5Kf/7wzqBMsp7jA3oKirhkAGk3gZCgbcxxn5mouStBlnkBwS5nj3kdz5dprnU9LqoD4gWKfiXO1wExg2mV5KBCWCfYlCQgxmBPqiMW3BS+t4L0Uiv9aw5E33ObHi5SllNnShclUB/ib4z/fjLBQy4ekpHDAw45OSKsBV3bAUn+ctfGKwg8XxXAzhK4c0b6qFg=
+- scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@47.94.194.126:/root
