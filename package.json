@@ -6,7 +6,6 @@
     "start": "ng serve",
     "build": "ng build --configuration=$ENV --build-optimizer --output-path=dist-$ENV/canseek",
     "zip": "zip -r dist-$ENV.zip dist-$ENV/*",
-    "deploy": "npm run build && npm run zip",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
