@@ -4,18 +4,24 @@ node_js:
 before_install:
 - openssl aes-256-cbc -K $encrypted_7c96680af15b_key -iv $encrypted_7c96680af15b_iv
   -in aliyun2.pem.enc -out aliyun2.pem -d
-- npm install yarn @angular/cli truffle -g
+- npm install yarn @angular/cli -g
 install:
-- yarn && ng add ng-zorro-antd --theme
+- yarn
 script:
-- git checkout src
-- truffle compile && npm run build
+- ENV=prod npm run deploy
+- ENV=dev npm run deploy
 after_script:
-- scp -i $encrypted_7c96680af15b_key -o "StrictHostKeyChecking no" -r ./build root@47.94.194.126:/root/CanSeek
-- scp -i $encrypted_7c96680af15b_key -o "StrictHostKeyChecking no" -r ./dist root@47.94.194.126:/root/CanSeek
+- ssh -i $encrypted_7c96680af15b_key $USER@$HOST 'rm dist-prod.zip dist-dev.zip' && scp -i $encrypted_7c96680af15b_key dist-dev.zip dist-prod.zip $USER@$HOST:/$USER && ssh -i $encrypted_7c96680af15b_key $USER@$HOST 'unzip -o dist-prod.zip' && ssh -i $encrypted_7c96680af15b_key $USER@$HOST 'unzip -o dist-dev.zip'
 cache:
   directories:
   - node_modules
 branches:
   only:
   - master
+notifications:
+  slack:
+    secure: o7NCyBA64QORfCIN+vwonprk8PZB5TynbehW6Vs+xZirTOxgbSWZpT0ltr8IGGyJhZ9ahDuhsl50FHeq0tYsFlwsUIYwW0lq+y1BpUBWsmrjK4Xo4rmMzQsEB7tb1SsqgHNZrrDwA2QVJK9Gi5GM4JVWzt/EN5h1huGADItU3MDVBNAlNNk1jKMNUoFP2sR/YAdd0LQ984nIU9GnaGeF/wc6owkkveX5L3cmhlAYDZdfE7x6QEPMru/r8tzlIjzWQWi6fdRSlFVNBPArvgCxqG8d0OOQivLnADVITjKeKW2TYQIIOQ9nIo8lbYD4K/ND2R2Mjh7qZNarYO/CJXAS3TEecWVflJFmG8ONzTOlVMvHB0Jac8eE/Z/TkCb/MviLMzphSX55QcxZMPGFEBTIxlBMkPokG4dd9E2U8/Nz1W/ju51dS7MJzd45MfonUMmEIr3AQ07k2f6FyMffGF3SQkHyxh530QzA4LFYR7HHxQhSpAd+ahQ2nCRvc/f+KkBJbSPwvNBEPHbjzKTWgxkkxQncB2iIUHbNqx4HlaXPxvNaS5N5qN22G58uybmzrnFUb9o+zUtXDrSZ6UyKh3B3PUqJrN8MVKxnWMQAqCpKAoCyqnVlViv5AANTD0+xg1ToLtQK+EDjMNoa8GTE737PKWwlbMUShRZKw/HXTCOzFnU=
+env:
+  global:
+  - secure: OI4TkHlnD2ou2oOEYhEu6p3v37MOdh/MEP93SLC/iNg0pOBPWhJYltVHGznaTGtUDWC2IDl4Cx5uLcywoUyaBgBn5ondwa5t6TJ631o68fk3X/1fPK5TuRlqVif1xkaas7zBmUn9qLW+pG5pvIBdKu50/oBTao6yT5LHJtOc1Z1dol+6Q7dK4/TZdnxkYubcUPgzzxFW7eRALgNYJQ4hzK5FST/h4j2ppkfe/qKt7go6Ku45lsjqZZayHqfr+k6ahxWEooQZYmms5x8r4Lw+qMN8V6jhOy5jWPMQlp7XCJhrAzY1TX/Ix6K0EzwsfOwr1quiKSfJG4TaIq1h/4ZQ2HqtfB3edVGEe5MnLhMjZ86Hk/hXwfA5OmbarZ/afr5PDUNeOUTrmQLOD6LCVSFEbcC/EzQS+UWTgRzixShhbhrR0w9i0hFJmi/o/wTbHwb2Y4mJCwMrygh0uWKbe9tS2Id7aTHYuTrPmRln4SMyYxoAjEZ/T4jpnGPv5/UyVAfWWwFqyZ7ayBWSpf3jFM987q6EzMCNZsK2TA5xVXsJ8eja+1BMgT3tTDCH7JMtfqJBDUXEONbZXtPwzIVxMp7ywk//UB1jZp8Tyc0i6SOaL6WKSINZFct+kdKGgvobfOnfBvzWrkhzGWI89BRXLlCIhAAc6/0JQd1QDB1CwKd996o=
+  - secure: A870s9AGS5zPtcfE5rxPSMdR6aAswslLQN7oPNx0vRmIGSkrffz7qmgZOmXOUwmzwQ17kFel1TaoLneOpb4gsW5BIaUimLqvhMGgo7Bws0TAG9OOXAMcITo7jmabf5xmn1prT3bWZPCtL2IIbvcT+MpicCTFfZX4a+otgjjG90oYhzxKPV4YiryByk4+Vv4aRcwMa1/BuIlud+Z2YXgM0FlF2juuzhcUBlNwQVyJe/qkLKTbssqCGwOjNuaTLOJZENcG31TU8LoR2E8WHcxfMqvq5h4wzrJMjROLAZYHKO0id75SL4K1Auzz1M9PYeoUYyEZsJvzlyQL5corpgcDItf48wnwY8QEXzVL4EvlFbr8YHXC19DJAtR8ZRseh2Rs0AoeiIbA1qrph5e0YcHOcNsFvDE2StsLRnVPwlgdWQF4K0aVLLrRPfT3Gm0UZDnnVd29D6IMMY7/GleF+nuDGj4BEdOLPy0WlX6Hfu3XoQb6BhSEpnf+BtbR/m7RyIGIBkvYQ3naUnp00ERquLLg2h66HiHnZDYsj3k5Ku6cIe7GTIHCn2AdeFJbsNDNi3DFHn3RxfuZXW173yBWppp7eMu+qYJA7N0DBRmMPmzKPfANUeJ9Xgvd+Tdv1i9xfYawfndt1KDsNipv2kXu5j7u/LgE3+IQ1ubjN2iGoFREGVg=
