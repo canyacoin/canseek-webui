@@ -8,4 +8,4 @@ before_install:
 install: true
 script:
 - echo hello>>test.file
-- scp -i $encrypted_e7d9ab5b8337_key -o "StrictHostKeyChecking no" test.file root@47.94.194.126:/root
+- scp -i ../aliyun.pem -o "StrictHostKeyChecking no" test.file root@47.94.194.126:/root
