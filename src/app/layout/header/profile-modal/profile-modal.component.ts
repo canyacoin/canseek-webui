@@ -95,7 +95,10 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
 
   login() {
     const curEmail = this.store.profile.your_email
-    this.ps.login(curEmail);
+    const id = this.message.loading('loading').messageId;
+    this.ps.login(curEmail)
+      .then(() => this.message.remove(id))
+      .catch(err => this.message.error(err.message))
   }
 
   logout() {
