@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/platform-browser';
 import { Store } from "./store";
 import { Router } from '@angular/router';
 import { ContractsService } from './services/contracts.service';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-root',
@@ -34,17 +35,22 @@ export class AppComponent {
 
   async checkAccount() {
     try {
+      this.loading = true;
       if (!this.store.curUser) {
-        this.loading = true;
         this.store.curUser = await this.cs.getAccount();
-        this.loading = false;
       }
+      if (!this.store.curNet) {
+        this.store.curNet = await this.cs.getNet();
+      }
+      if (environment.network !== this.store.curNet) {
+        this.router.navigateByUrl(`/noauth`);
+      }
+      this.loading = false;
     } catch (err) {
       this.loading = false;
       if(confirm('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly. Click OK button if you want to install Chrome MetaMask extention')) {
         this.document.location.href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn";
       } else {
-        
         this.router.navigateByUrl(`/noauth`);
       }
     }

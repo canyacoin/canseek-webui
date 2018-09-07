@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  network: 'main',
   etherscanBaseUrl: 'https://etherscan.io/tx/',
   URL: {
     changeCurrency: 'https://min-api.cryptocompare.com/data/pricemulti',
