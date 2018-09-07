@@ -2,12 +2,17 @@
   <h2 class="text-center my-30">{{ type == 'new' ? 'Post A Job' : 'Edit Job Post'}}</h2>
 
   <nz-col nzType="flex" nzSpan="16" nzOffset="4"> 
-    <nz-steps [nzCurrent]="current" class="steps">
+    <nz-steps [nzCurrent]="current" class="steps" [nzProgressDot]="progressTemplate">
         <nz-step nzTitle="Your Information"></nz-step>
         <nz-step nzTitle="Job Information"></nz-step>
         <nz-step nzTitle="Fees & Reward"></nz-step>
       <nz-step nzTitle="Confirm & Pay"></nz-step>
     </nz-steps>
+
+    <ng-template #progressTemplate let-dot let-status="status" let-index="index">
+      <span [class]="status">{{index + 1}}</span>
+    </ng-template>
+
     <div class="steps-content mt-100">
 
       <!-- step0 -->

@@ -1,10 +1,13 @@
 <nz-row class="mt-30 mb-100">
   <nz-col nzType="flex" nzSpan="14" nzOffset="5"> 
-    <nz-steps [nzCurrent]="current" class="steps">
+    <nz-steps [nzCurrent]="current" class="steps" [nzProgressDot]="progressTemplate">
       <nz-step nzTitle="Your Information"></nz-step>
       <nz-step nzTitle="Talent Information"></nz-step>
       <nz-step nzTitle="Confirm & Pay"></nz-step>
     </nz-steps>
+    <ng-template #progressTemplate let-dot let-status="status" let-index="index">
+      <span [class]="status">{{index + 1}}</span>
+    </ng-template>
     
     <div class="steps-content mt-100">
       <!-- step1 -->

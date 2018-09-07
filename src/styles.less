@@ -276,3 +276,62 @@
     font-size: 14px;
     color: #ff4954;
 }
+
+// steps
+@size: 32px;
+@gray: #919D9D;
+.ant-steps-dot {
+    .ant-steps-item-tail {
+        top: 15px;
+        margin-left: 52px;
+        &:after {
+            height: 2px;
+            width: calc(100% - 40px);
+            margin-left: 32px;
+            background-color: @gray;
+        }
+    }
+    .ant-steps-item-finish .ant-steps-item-tail:after,
+    .ant-steps-item-process .ant-steps-item-tail:after {
+        background-color: @blue;
+    }
+
+    .ant-steps-item-icon {
+        width: @size;
+        height: @size;
+        line-height: @size;
+        border-radius: @size;
+        background-color: @gray;
+        margin-left: 50px;
+        transition: background-color 0.3s;
+        & > .ant-steps-icon {
+            color: #fff;
+        }
+    }
+    .ant-steps-item-content > .ant-steps-item-title {
+        font-size: 18px;
+        color: @gray;
+    }
+    .ant-steps-item-finish .ant-steps-item-icon ,
+    .ant-steps-item-process .ant-steps-item-icon {
+        width: @size;
+        height: @size;
+        line-height: @size;
+        background-color: @blue;
+    }
+
+    .ant-steps-item-process .ant-steps-item-icon:before{
+        content: " ";
+        position: absolute;
+        top: -16px;
+        border-style: solid;
+        border-color: @blue transparent transparent transparent;
+        border-width: 5px;
+        border-top-width: 10px;
+    }
+}
+
+.ant-steps-item-finish > .ant-steps-item-content > .ant-steps-item-title,
+.ant-steps-item-process > .ant-steps-item-content > .ant-steps-item-title {
+    color: @blue;
+}
