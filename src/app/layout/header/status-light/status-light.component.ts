@@ -25,10 +25,7 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.getCurrentNetwork().then(network => {
-      this.store.curNet = network;
-      console.log(this.store.curNet);
-    }); 
+    this.store.curNet = await this.cs.getNet();
     this.store.curUser = await this.cs.getAccount();
     // await this.cs.buyCAN();
     this.store.balance = await this.cs.getCANBalance();

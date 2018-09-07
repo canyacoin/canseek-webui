@@ -87,6 +87,12 @@ export class ContractsService {
     return Promise.resolve(this._account);
   }
 
+  async getNet(): Promise<string> {
+    return this._web3.eth.net.getNetworkType()
+      .then(network => Promise.resolve(network))
+      .catch(err => console.log(err))
+  }
+
   public async getCANBalance(): Promise<number> {
     const account = await this.getAccount();
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
