@@ -43,7 +43,7 @@ export class AppComponent {
         this.store.curNet = await this.cs.getNet();
       }
       if (environment.network !== this.store.curNet) {
-        this.router.navigateByUrl(`/noauth`);
+        this.router.navigateByUrl('/exchange');
       }
       this.loading = false;
     } catch (err) {
