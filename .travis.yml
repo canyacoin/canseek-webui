@@ -1,11 +1,24 @@
 language: node_js
 node_js:
-- '8'
-dist: trusty
+- lts/*
 before_install:
 - openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
   -in aliyun.pem.enc -out aliyun.pem -d
+- npm install yarn @angular/cli -g
 install: true
-script:
-- echo hello>>test.file
-- scp -i aliyun.pem -o "StrictHostKeyChecking no" test.file root@47.94.194.126:/root
+# - yarn
+script: true
+# - chmod +x .deploy.sh && sh .deploy.sh
+cache:
+  directories:
+  - node_modules
+branches:
+  only:
+  - master
+  - develop
+env:
+  global:
+    secure: MqCNHjddelmuPX4Qa76Yi6089uGU+UFY9YMmsGAiWD/UUSKOgoRdn22Keqa1Cnu80g9sHSB5iRN6n524ZfMrjSNUgN+xmUL0dUyKZqoaLkrUY6dLF3xe+2v0VKV+8LboXPZX1iO10pUfr15fY18WMOcHU11fYM/kVFXoIHWXcPQmeljnKD501I+HoH7mbGpLVESXCEtdOb6Q+NWVQMsfDFSfJftCgPN0+t338hRDv8/1P6r9ckMjX47nBmOsTd0xHkJgzMUSRUrk//2ZSe3a9HNBr4NAPLiJuDFAibcPuArIYXi9S0UfaJrDlTk5PoF60YGJGPwIcdHgrzrEc7u/QghobkXvihIcZh7yyymibCAhj+nVdT+mjlkxD/n3miQp9tICXitHIhVYc4KoskMv3KmlR3kJUjEcZAW/kydmW7lNUQjy2Omod+jXgAwzPV6tpoO2mffVlJChEoxRUq/wB4IAvFlFrQafO4UOMSoqlaapomrDdyrYlyCnosdyUUDauT9JPvtYNf7mpa2Uj1CFihE23adcl6n1+Ne9/kBoUsvVYvqWHxdMcNbgmrGeG+fM04mPkMCSTWOCJHIGwjGWIKuWyD+z8tpp/wc3cC7TNVRu0o7rAfUHLY+NZWWjBGAFucuBhb3oMpfMWXYoYIq/B4vb7TrBLVga8oI3pRbtd9g=
+notifications:
+  slack:
+    secure: gFAjVNsgrl9ehQlOb3neU5/UXY0zt+lUJN7c+VsasX9NYv/96m7SmxVWbBdeMVLxxkCm9Shzc6qzsM8PecBb8Cx8oGWGNtyVp+YpBuzR/A6pZ6qjBaD8gYGtWGmZONgCjEUXWEF2CUhO+LdzKwhsVvlV+J6NoE7QM7nlGFf2me4/SPuLeOCmPXKNO7b2GPRui27waQiaNse11iMPANZc9ob6uG9HPadr/vMbiVaA//MlPwr61DTKWneWTamlqxnHNtaP6trGgVZ7xu8S6AwIkJ8rYgborONyERWw2iO3pdAlTQf4jsuMHVz7si9xe9wc8i5rkfUw+o/DLglV2jP3xF6I9GL9IReuctAWKNoqmGoucYsJrq9j+w3L70/o0F9JbWBelsW0OL5SeV1bLDWpiUcfzEP0C4qG+6fsbhPNPeJV57yp5fXt4ofgjdHmRF/GMZ2HhEJKkJLzwU9gfMCgFanhgeV1RSIRm2gAzIOLsKMScOUN6KMDz9LYDE5ndG3BT13J5kNQrjbMUX3zyVWJ5NDN6fbJyH5jrv4LBk73f4dRguila0SCmNxNfDCOMh3YgDe0ukPQUbzn0j7oTex+8QnqFo0e0oSTQW8Mym/Q5uFlvJb7xvgTbMm+j8it3tg9wFCjvZHh+kRVG4wE1/0OHDpZgcfV2k4NbTEqH36GZ7I=
