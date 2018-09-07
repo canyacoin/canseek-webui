@@ -1,10 +1,12 @@
 <a href="javascript:;" class="nav-link" *ngIf="!store.profile.your_email">
   <button class="btn btn-join btn-sm text-white" (click)="showModal()">Join</button>
 </a>
-
+<a href="javascript:;" class="nav-link" *ngIf="!store.authState.email && store.profile.your_email">
+  <button class="btn btn-join btn-sm text-white" (click)="login()">Login</button>
+</a>
 <nz-dropdown 
   [nzPlacement]="'bottomCenter'"  
-  *ngIf="store.profile.your_email"
+  *ngIf="store.authState.email && store.profile.your_email"
   >
   <a nz-dropdown [class.offline]="!store.authState.emailVerified" class="user">
     <img class="avatar mr-12" alt="CanYa" src="{{ store.authState.photoURL }}" onerror="this.src='/assets/img/defaultAvatar.png'">
@@ -15,11 +17,6 @@
   <ul nz-menu>
     <ng-container *ngIf="store.authState.email && !store.authState.emailVerified">
       <li nz-menu-item>Please verify your email</li>
-      <li nz-menu-divider></li>
-    </ng-container>
-
-    <ng-container *ngIf="!(store.authState.email && store.authState.emailVerified) && store.profile.your_email">
-      <li nz-menu-item (click)="login()">Login</li>
       <li nz-menu-divider></li>
     </ng-container>
 
