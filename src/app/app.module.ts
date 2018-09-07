@@ -54,6 +54,7 @@ import { CmpUploadComponent } from './components/cmp-upload/cmp-upload.component
 import { CmpNotifyComponent } from './components/cmp-notify/cmp-notify.component';
 import { CmpNotifyDetailComponent } from './components/cmp-notify-detail/cmp-notify-detail.component';
 import { CmpTimezoneComponent } from './components/cmp-timezone/cmp-timezone.component';
+import { CmpExchangeComponent } from './components/cmp-exchange/cmp-exchange.component';
 
 registerLocaleData(zh);
 
@@ -86,6 +87,7 @@ registerLocaleData(zh);
     CmpNotifyComponent,
     CmpNotifyDetailComponent,
     CmpTimezoneComponent,
+    CmpExchangeComponent,
   ],
   imports: [
     BrowserModule,

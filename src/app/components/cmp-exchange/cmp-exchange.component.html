@@ -1,0 +1,14 @@
+<nz-col nzType="flex" nzSpan="18" nzOffset="3" class="py-60">
+  <div class="text-center">
+    <h2 class="fw-300">Switch your MetaMask to <span class="text-uppercase fw-400">{{ network }}</span>!</h2>
+    <img height="140px" src="assets/img/metamask.svg" width="140px">
+    
+    <h2 class="fw-300">Open your wallet, switch your wallet to <span class="text-uppercase fw-400">{{ network }}</span> and reload the page.</h2>
+  
+    <h4 class="fw-300 pt-20">CanYa is also available on:</h4>
+    <a *ngFor="let exchange of exchanges" target="_blank" class="btn btn-primary m-5" href="{{exchange.url}}">
+      {{exchange.name}}
+    </a> 
+  
+  </div>
+</nz-col>

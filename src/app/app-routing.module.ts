@@ -13,6 +13,7 @@ import { BuycanComponent } from './pages/buycan/buycan.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { NoauthComponent } from './pages/noauth/noauth.component';
 import { CmpNotifyComponent } from './components/cmp-notify/cmp-notify.component';
+import { CmpExchangeComponent } from './components/cmp-exchange/cmp-exchange.component';
 import { CmpNotifyDetailComponent } from './components/cmp-notify-detail/cmp-notify-detail.component';
 
 const routes: Routes = [
@@ -27,6 +28,7 @@ const routes: Routes = [
   { path: 'refer/detail/:pid/:cid', component: ReferDetailComponent },
   { path: 'applicants/:id', component: ApplicantsComponent },
   { path: 'faq', component: FaqComponent },
+  { path: 'exchange', component: CmpExchangeComponent },
   { path: 'noauth', component: NoauthComponent },
   { path: 'notifications', component: CmpNotifyComponent },
   { path: 'notifications/:id', component: CmpNotifyDetailComponent },

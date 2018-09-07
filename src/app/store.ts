@@ -36,6 +36,11 @@ export let Store = {
 
     curUser: '',
     curNet: '',
+    displayNet: {
+      'main': 'Main Ethereum Network',
+      'ropsten': 'Ropsten Test Network',
+      'private': 'Localhost',
+    },
     balance: 0,
     postForm: [{
       label: 'Job Information',
