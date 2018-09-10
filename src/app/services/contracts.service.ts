@@ -245,12 +245,14 @@ export class ContractsService {
 
     return new Promise((resolve, reject) => {
       canHire.cancelPost(postId, { from: account, gasPrice: gasPrice, gas: gasCancelPost }).then(result => {
-        resolve(result.logs[0].args.status.toNumber());
+        const { tx, logs } = result;
+
+        resolve({ tx, status: logs[0].args.status.toNumber() });
       })
         .catch(err => {
           reject(err);
         });
-    }) as Promise<number>;
+    }) as Promise<Object>;
   }
 
   public async closePost(postId, candidateId) {

@@ -34,8 +34,8 @@
   </nz-form-item>
 
   <nz-form-item>
-    <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="reason" nzRequired>Why are you referring this talent?</nz-form-label>
-    <nz-form-control [nzXl]="16" [nzLg]="24">
+    <nz-form-label [nzXXl]="8" [nzXl]="16" [nzMd]="24" nzFor="reason" nzRequired>What makes this individual the right fit for the job?</nz-form-label>
+    <nz-form-control [nzXXl]="16" [nzXl]="24" [nzLg]="24">
       <textarea formControlName="reason" id="reason" nz-input rows="7" placeholder="Let the job poster know why you think this talent is a great hire!"></textarea>
       <nz-form-explain *ngIf="validateForm.get('reason').dirty && validateForm.get('reason').errors">Please input Referring Reasons</nz-form-explain>
     </nz-form-control>
@@ -47,6 +47,7 @@
     <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="resume" nzRequired> CV/Resume </nz-form-label>
     <nz-form-control [nzXl]="16" [nzLg]="24">
       <app-cmp-upload (onChange)="onChange($event, 'resume')" [catogery]="post.id" [fileList]="fileList"></app-cmp-upload>
+      <nz-form-extra>Please upload files in .pdf</nz-form-extra>
       <nz-form-explain *ngIf="validateForm.get('resume').dirty && validateForm.get('resume').errors">Please upload CV/Resume</nz-form-explain>
     </nz-form-control>
   </nz-form-item>
@@ -88,6 +89,7 @@
     <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="cover_letter">Cover Letter</nz-form-label>
     <nz-form-control [nzXl]="16" [nzLg]="24">
       <app-cmp-upload (onChange)="onChange($event, 'cover_letter')" [catogery]="post.id" [fileList]="cover_letter"></app-cmp-upload>
+      <nz-form-extra>Please upload files in .pdf</nz-form-extra>
     </nz-form-control>
   </nz-form-item>
   

@@ -119,6 +119,7 @@ Let them know:
     <nz-form-label [nzLg]="8" [nzMd]="12" nzFor="job_attachments"> Attachments </nz-form-label>
     <nz-form-control [nzLg]="16" [nzMd]="24">
       <app-cmp-upload (onChange)="onChange($event, 'job_attachments')" [catogery]="store.curUser" [fileList]="fileList"></app-cmp-upload>
+      <nz-form-extra>Please upload files in .pdf</nz-form-extra>
     </nz-form-control>
   </nz-form-item>
 

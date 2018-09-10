@@ -93,10 +93,11 @@ export class GlobalService {
 
     return this.cs.cancelPost(postId)
       .then(result => {
-        return this.dbRef.doc(id).update({
-          status: result ? nextStatus : 'pending',
+        this.dbRef.doc(id).update({
+          status: result['status'] ? nextStatus : 'pending',
           nextStatus
         });
+        return Promise.resolve(result);
       })
   }
 

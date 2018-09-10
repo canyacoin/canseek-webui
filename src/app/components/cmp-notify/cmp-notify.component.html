@@ -38,9 +38,23 @@
             </div>
           </ng-container>
 
+          <!-- refer -->
           <ng-container *ngSwitchCase="'refer'">
             <p class="card-title clamp2">
               <span class="blue">Congratulations you got a new candidate !</span>
+            </p>
+            <div class="flex">
+              <p class="flex1 mr-12 mb-0 text">
+                View details...
+              </p>
+              <span class="fs-12 text-secondary">{{ moment(n.time).fromNow() }}</span>
+            </div>
+          </ng-container>
+
+          <!-- cancel -->
+          <ng-container *ngSwitchCase="'cancel'">
+            <p class="card-title clamp2">
+              <span class="blue">The job you applied to was cancelled.</span>
             </p>
             <div class="flex">
               <p class="flex1 mr-12 mb-0 text">
