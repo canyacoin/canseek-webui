@@ -1,25 +1,27 @@
 language: node_js
 node_js:
-- lts/*
+- '8'
 before_install:
 - openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
-  -in aliyun.pem.enc -out aliyun.pem -d
-- npm install yarn @angular/cli -g
-install: true
-# - yarn
-script: true
-# - chmod +x .deploy.sh && sh .deploy.sh
+  -in encrypt.zip.enc -out encrypt.zip -d
+- unzip -o encrypt.zip
+- mv encrypt/build .
+- mv encrypt/firebase/* .
+- mv encrypt/environments src/
+- mv encrypt/aliyun.pem .
+install:
+- npm install yarn @angular/cli firebase-tools -g && yarn
+script:
+- ENV=dev npm run build && firebase deploy --token "$FIREBASE_TOKEN"
 cache:
   directories:
   - node_modules
 branches:
   only:
-  - master
-  - develop
-env:
-  global:
-    secure: MqCNHjddelmuPX4Qa76Yi6089uGU+UFY9YMmsGAiWD/UUSKOgoRdn22Keqa1Cnu80g9sHSB5iRN6n524ZfMrjSNUgN+xmUL0dUyKZqoaLkrUY6dLF3xe+2v0VKV+8LboXPZX1iO10pUfr15fY18WMOcHU11fYM/kVFXoIHWXcPQmeljnKD501I+HoH7mbGpLVESXCEtdOb6Q+NWVQMsfDFSfJftCgPN0+t338hRDv8/1P6r9ckMjX47nBmOsTd0xHkJgzMUSRUrk//2ZSe3a9HNBr4NAPLiJuDFAibcPuArIYXi9S0UfaJrDlTk5PoF60YGJGPwIcdHgrzrEc7u/QghobkXvihIcZh7yyymibCAhj+nVdT+mjlkxD/n3miQp9tICXitHIhVYc4KoskMv3KmlR3kJUjEcZAW/kydmW7lNUQjy2Omod+jXgAwzPV6tpoO2mffVlJChEoxRUq/wB4IAvFlFrQafO4UOMSoqlaapomrDdyrYlyCnosdyUUDauT9JPvtYNf7mpa2Uj1CFihE23adcl6n1+Ne9/kBoUsvVYvqWHxdMcNbgmrGeG+fM04mPkMCSTWOCJHIGwjGWIKuWyD+z8tpp/wc3cC7TNVRu0o7rAfUHLY+NZWWjBGAFucuBhb3oMpfMWXYoYIq/B4vb7TrBLVga8oI3pRbtd9g=
+  - test_ci
 notifications:
   slack:
-    # secure: gFAjVNsgrl9ehQlOb3neU5/UXY0zt+lUJN7c+VsasX9NYv/96m7SmxVWbBdeMVLxxkCm9Shzc6qzsM8PecBb8Cx8oGWGNtyVp+YpBuzR/A6pZ6qjBaD8gYGtWGmZONgCjEUXWEF2CUhO+LdzKwhsVvlV+J6NoE7QM7nlGFf2me4/SPuLeOCmPXKNO7b2GPRui27waQiaNse11iMPANZc9ob6uG9HPadr/vMbiVaA//MlPwr61DTKWneWTamlqxnHNtaP6trGgVZ7xu8S6AwIkJ8rYgborONyERWw2iO3pdAlTQf4jsuMHVz7si9xe9wc8i5rkfUw+o/DLglV2jP3xF6I9GL9IReuctAWKNoqmGoucYsJrq9j+w3L70/o0F9JbWBelsW0OL5SeV1bLDWpiUcfzEP0C4qG+6fsbhPNPeJV57yp5fXt4ofgjdHmRF/GMZ2HhEJKkJLzwU9gfMCgFanhgeV1RSIRm2gAzIOLsKMScOUN6KMDz9LYDE5ndG3BT13J5kNQrjbMUX3zyVWJ5NDN6fbJyH5jrv4LBk73f4dRguila0SCmNxNfDCOMh3YgDe0ukPQUbzn0j7oTex+8QnqFo0e0oSTQW8Mym/Q5uFlvJb7xvgTbMm+j8it3tg9wFCjvZHh+kRVG4wE1/0OHDpZgcfV2k4NbTEqH36GZ7I=
-    secure: X+sqgMce14It0fRSDZzNrvPTdj0zOX69nAQNlTh+IS+OZONtc35vBeeQLov0ooLxBuMS89LH/LF+Tjt0zDzbsTCgmMotlTPCqOq9pWId+xHeqq4/zNJEaDRYMTcyw1nXtojBFHltGWp+MaHwz874nhCj9IbVhSB07giH3A3iozNjkrKCBOBm+aLAIMR5Mzb8TwZH270un1Zwb6Uko5p3ZOSJBYSc4wz+gwdYbnJlFQJTdqP2X+dcbPyEkEiMdoW3ZHwnxxkT0jtm5HGZm3fLkc4W2q3dw1mXK859X9e7RDDWqXxUVH+YaoxO0zcgAlbf+fvc6jUuiuDc3djrqG15GBGhZ+jVcYaDJq5FTXBm39F/42u7xmyWB4drfzBRqf9idkaAeeTw5dHF9SNQqEtXzYssr5whXkurl+XrOp5A8sFm7qQdNJAEoPDQTZwTS0ad1Y3sMiys7Yr56ShXWSv5iIMUonBdXiwPPo0VIBvcVuNZh0IWym+fNk1BumDWhNEdjYxP2bEWVHw8whEElQrsVVbHnbbwNMjxvU34nsAhDH4/IkXmRPC+4mK8Hwk++ameaE/72JjAYfGTGJnfgQInGk4CAXPRUpbSPtn79aaX1YzC97tRWoQyCDuarDXTDQ/aS7UH/GGisZ9ryHEpQXRx6aRqLslaZK2NbmqCBJwjz+0=
+    secure: N285/hD0iEAxgXBX9qv8a3DaPG6nyj12GrPaUVVjEHW9spXywOdsx6XGnC5CMClgc9+7m/YgE+uWzLlwYavMe95UvfoxRqYTPq+OJ8PP1NRxaDPzogNs5C/PXsaFx/Kb9MAbkO/20UM5KIQVkF9y5ocF7S4gWJPUXkjx7sM6qmP8c8fQVCr2hFKx95MK9/MXAXHuOOULEqqEUNLp5ltjbmt5ek+XjxkCpfHSxJI1VSzXRl+uQzW9nXMuN+IKmd/+nfsuhIXZFqZcapF6DCySO469fO4V5powALmzZPtl66xXR+lYLpRCCMRsi1YQ0qxtu6H1M5Ul4S5OqTG5r/ItS34mi2qnxCFNLbsGS+GU7wsVDZm4nKmvAFEYD/sEM6Op5u5eRv9Kc9SjNhBDQJocq9fiX5gGcIYpy0umkpO67JV8GSqc8RylQR/rKZmAtiT+qVYl41mBuaG3yLPb5UV9J9hxO1b+QaXW9iUmZFfXQYPhF1pO82l1FL2zQaoBgdpzXaJj0o5AqfEBp8sponpd+N0vpsY0Ai4x4FkIpr7hTzLADRjzuQzn73+iKv/ruhuG4PKW0+qW8wiKQmkO+i8WLKMBeBAnCfvBZfQZ4fGor7pjg+zMQrZyIjHru1Q1MvUN2i6oRuwdXcM4gbBxvJLsfvn0Lcd7PDMwae9AmBx1c+w=
+env:
+  global:
+    secure: cJqSH7QFMggEaaY5T1m8OQWr8hRfzH7lDOi5WfdWE1JcYtiUYLXthkySR7A3yzJ47nyUFsKhugzHCkCeKKSgx2hZbeB1rHCV10hFIhfjKCH9kmpvRrTzgw+VkZOFYQwKStRrJ4rwah34gajQDuKT+VRcpB6iOdl3hG8hxpJ0OHniY48a2s81fewP0QMeXL0RwFmzJfeg3OfSNeem/xXAUVcpxMvXuDyulnjyPtJJLVbt/OG2PNiqJYJots2O+u+0z9i6e/VdSrD6idFDBWv8tK0NagRXDe1Jq2v8al/Jv8RSWT4C3UVMCidC14tNLrKnvml1gNHP6fKEwJ7XU8aXDlz4peW9efZjQRDrrElAKwxyYCvW7+6Wjpezb1zjyjS9ejWXpq0Cd3fmjsu00eHKEKAB1kgacA2lOCqSq9MqLMtLD7lF3JRMEYvu5k1oQOjp5suAixcNjIEP2FnfvH8lLXR3CYnUa34kzGHdTDZeuhxQW06aIGJ3+dhIquqef/65X5Dl0ALJAdUF99y0U80M1PRS7hXIMtjcvarecoAJ4KqVpbhAIJJo/EroI3RuqzHJEEehn74GG6/QjsXDjw1ZGWIJ/38zy4QUmbgxsee19LsU+kszm8gCQx2v3O8QzMWN2Ir06I+5xkvhzhhv0bpRJpNBAKYakF8w7tRkS+lo8i4=

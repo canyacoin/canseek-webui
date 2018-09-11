@@ -49,3 +49,7 @@ dist-prod/
 dist-dev.zip
 dist-prod.zip
 aliyun.pem
+src/environments
+build/
+encrypt/
+encrypt.zip
