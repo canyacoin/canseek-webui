@@ -6,9 +6,9 @@ before_install:
   -in encrypt.zip.enc -out encrypt.zip -d
 - unzip -o encrypt.zip
 - mv encrypt/build .
-- mv encrypt/firebase/* .
-- mv encrypt/firebase/.* .
-- mv encrypt/environments src/
+- mv firebase/* .
+- mv firebase/.* .
+- mv environments src/
 install:
 - npm install yarn @angular/cli firebase-tools -g && yarn
 script:
