@@ -4,9 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration=$ENV --build-optimizer --output-path=dist-$ENV/canseek",
-    "zip": "zip -r dist-$ENV.zip dist-$ENV/*",
-    "deploy": "npm run build && npm run zip && ENV=$ENV && ssh -i aliyun.pem -o \"StrictHostKeyChecking no\" root@47.94.194.126 \"rm dist-$ENV.zip\"  && scp -i aliyun.pem -o \"StrictHostKeyChecking no\" dist-$ENV.zip root@47.94.194.126:/root && ssh -i aliyun.pem -o \"StrictHostKeyChecking no\" root@47.94.194.126 \"unzip -o dist-$ENV.zip\"",
+    "build": "ng build --configuration=$ENV --aot --build-optimizer --output-path=dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

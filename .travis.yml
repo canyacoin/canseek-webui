@@ -7,18 +7,24 @@ before_install:
 - unzip -o encrypt.zip
 - mv encrypt/build .
 - mv encrypt/firebase/* .
+- mv encrypt/firebase/.* .
 - mv encrypt/environments src/
-- mv encrypt/aliyun.pem .
 install:
 - npm install yarn @angular/cli firebase-tools -g && yarn
 script:
-- ENV=dev npm run build && firebase deploy --token "$FIREBASE_TOKEN"
+- if [ "$TRAVIS_BRANCH" = "test_ci" ]; then ENV=dev npm run build && firebase use canseek-dev; fi
+- if [ "$TRAVIS_BRANCH" = "develop" ]; then ENV=dev npm run build && firebase use canseek-dev; fi
+- if [ "$TRAVIS_BRANCH" = "master" ]; then ENV=prod npm run build && firebase use canseek-prod; fi
+after_success:
+- firebase deploy --token "$FIREBASE_TOKEN"
 cache:
   directories:
   - node_modules
 branches:
   only:
   - test_ci
+  - develop
+  - master
 notifications:
   slack:
     secure: N285/hD0iEAxgXBX9qv8a3DaPG6nyj12GrPaUVVjEHW9spXywOdsx6XGnC5CMClgc9+7m/YgE+uWzLlwYavMe95UvfoxRqYTPq+OJ8PP1NRxaDPzogNs5C/PXsaFx/Kb9MAbkO/20UM5KIQVkF9y5ocF7S4gWJPUXkjx7sM6qmP8c8fQVCr2hFKx95MK9/MXAXHuOOULEqqEUNLp5ltjbmt5ek+XjxkCpfHSxJI1VSzXRl+uQzW9nXMuN+IKmd/+nfsuhIXZFqZcapF6DCySO469fO4V5powALmzZPtl66xXR+lYLpRCCMRsi1YQ0qxtu6H1M5Ul4S5OqTG5r/ItS34mi2qnxCFNLbsGS+GU7wsVDZm4nKmvAFEYD/sEM6Op5u5eRv9Kc9SjNhBDQJocq9fiX5gGcIYpy0umkpO67JV8GSqc8RylQR/rKZmAtiT+qVYl41mBuaG3yLPb5UV9J9hxO1b+QaXW9iUmZFfXQYPhF1pO82l1FL2zQaoBgdpzXaJj0o5AqfEBp8sponpd+N0vpsY0Ai4x4FkIpr7hTzLADRjzuQzn73+iKv/ruhuG4PKW0+qW8wiKQmkO+i8WLKMBeBAnCfvBZfQZ4fGor7pjg+zMQrZyIjHru1Q1MvUN2i6oRuwdXcM4gbBxvJLsfvn0Lcd7PDMwae9AmBx1c+w=
