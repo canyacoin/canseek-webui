@@ -25,9 +25,7 @@
         [(ngModel)]="innerLocation"
         (ngModelChange)="onLocationChange($event)"
         >
-        <nz-option-group [nzLabel]="c.country" *ngFor="let c of timezones">
-          <nz-option [nzValue]="tz" [nzLabel]="tz" *ngFor="let tz of c.zones"></nz-option>
-        </nz-option-group>
+        <nz-option [nzValue]="tz" [nzLabel]="tz" *ngFor="let tz of timezones"></nz-option>
       </nz-select>
     </ng-container>
   </nz-col>

@@ -5,7 +5,6 @@
  */ 
 
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit } from '@angular/core';
-import { GlobalService } from '@service/global.service';
 import * as moment from 'moment-timezone';
 
 @Component({
@@ -24,9 +23,7 @@ export class CmpTimezoneComponent implements OnInit, AfterViewInit {
 
   innerLocation: string;
 
-  constructor(
-    private gs: GlobalService,
-  ) { }
+  constructor() { }
 
   ngOnInit() {}
 
@@ -41,17 +38,14 @@ export class CmpTimezoneComponent implements OnInit, AfterViewInit {
   }
 
   async getTimeZone() {
-    const { countries } = await this.gs.getTimeZone();
-    this.timezones = Object.keys(countries).map(c => {
-      const item = countries[c];
-      const zones = item.zones.map(tz => {
+    const list = moment.tz.names();
+    this.timezones = list
+      .filter(tz => tz.indexOf('/') > 0)
+      .filter(tz => moment.tz(tz).format().slice(-1) !== 'Z')
+      .map(tz => {
         const UTCOffset = moment.tz(tz).format().slice(-6);
-
         return tz.replace(/\//g, ', ') + ' UTC ' + UTCOffset;
       });
-
-      return {country: item.name, zones};
-    });
     localStorage.setItem('timezones', JSON.stringify(this.timezones));
   }
 
