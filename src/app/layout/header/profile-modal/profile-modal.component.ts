@@ -62,9 +62,14 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
     this.visible = true;
   }
 
-  async handleOk() {
+  async handleOk(inSilence: boolean = false) {
     const { valid, data } = this.submitForm();
     
+    // save in silence when verify
+    if (inSilence) {
+      this.ps.setProfile(data);
+      return true;
+    }
     if (valid) {
       this.ps.setProfile(data);
       this.message.success('Save Successfully !');
@@ -112,6 +117,7 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
   }
 
   async emailVerify() {
+    this.handleOk(true);
     const your_email = this.form.controls['your_email'].value;
     
     if (!your_email) return;
