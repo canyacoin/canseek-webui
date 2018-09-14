@@ -228,6 +228,7 @@ export class PostComponent implements AfterViewInit {
         if (!id) {// totally new
           this.values['id'] = this.pid = await this.gs.addPostDb(postData);
         } else {
+          await this.gs.updatePost(postData);
           this.pid = id;
         }
         
