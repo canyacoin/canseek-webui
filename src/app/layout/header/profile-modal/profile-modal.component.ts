@@ -64,11 +64,20 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
 
   async handleOk(inSilence: boolean = false) {
     const { valid, data } = this.submitForm();
+    const isVerified = (this.store.authState['email'] == data['your_email']) && this.store.authState['emailVerified'];
     
     // save in silence when verify
     if (inSilence) {
       this.ps.setProfile(data);
       return true;
+    }
+
+    if (!isVerified) {
+      this.modal.error({
+        nzTitle: 'Please verify your email first!',
+        nzOkText: 'OK',
+      });
+      return;
     }
     if (valid) {
       this.ps.setProfile(data);
