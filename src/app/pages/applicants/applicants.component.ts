@@ -83,17 +83,14 @@ export class ApplicantsComponent implements OnInit {
             .filter(c => c.status !== 'pending')
             .sort((a, b) => b.time - a.time);
 
+          (candidates || [])
+            .filter(c => c.status == 'pending')
+            .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
           this.searchCategory();
           resolve(1);
         });
     });
   }
-
-  // updatePendingCandidates() {
-  //   this.candidates
-  //     .filter(c => c.status == 'pending')
-  //     .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
-  // }
 
   searchCategory() {
     const { candidates, category } = this;
