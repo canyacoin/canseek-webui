@@ -5,11 +5,9 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_e7d9ab5b8337_key -iv $encrypted_e7d9ab5b8337_iv
   -in encrypt.zip.enc -out encrypt.zip -d
 - unzip -o encrypt.zip
-- mv encrypt/build .
-- mv encrypt/firebase/* .
-- mv encrypt/firebase/.firebaserc .
-- mv encrypt/firebase/.firebase .
-- mv encrypt/environments src/
+- cp -a encrypt/build .
+- cp -a encrypt/firebase/*.* .
+- cp -a encrypt/environments src
 install:
 - npm install yarn @angular/cli firebase-tools -g && yarn
 script:
