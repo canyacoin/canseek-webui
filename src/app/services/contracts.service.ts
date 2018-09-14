@@ -12,7 +12,7 @@ const CanYaCoinArtifacts = require('../../../build/contracts/CanYaCoin.json');
 const EscrowArtifacts = require('../../../build/contracts/Escrow.json');
 const CanHireArtifacts = require('../../../build/contracts/CanHire.json');
 let gasBuy = '50000';
-let gasPrice = '503000000';
+// let gasPrice = '503000000';
 let gasApprove = '45600';
 let gasAddPost = '500000';
 let gasCancelPost = '200000';
@@ -55,9 +55,6 @@ export class ContractsService {
       // alert('Please use a DApp browser like mist or MetaMask plugin for chrome');
       return;
     }
-    this._web3.eth.getGasPrice().then(price => {
-      gasPrice = price;
-    });
 
     this.CanYaCoin.setProvider(this._web3.currentProvider);
     this.Escrow.setProvider(this._web3.currentProvider);
@@ -123,6 +120,7 @@ export class ContractsService {
     const account = await this.getAccount();
     const amountInWei = this._web3.utils.toWei(amountInEther, 'ether');
     const canYaCoin = await this.CanYaCoin.at(CanYaCoinAddr);
+    const gasPrice = await this.ethService.getDefaultGasPriceGwei();
 
     return new Promise((resolve, reject) => {
       canYaCoin.buy({ from: account, value: amountInWei, gasPrice: gasPrice, gas: gasBuy }).then(result => {
@@ -223,6 +221,7 @@ export class ContractsService {
   public async addPost(id, bounty, cost) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
+    const gasPrice = await this.ethService.getDefaultGasPriceGwei();
 
     return new Promise((resolve, reject) => {
       const bounty$ = this.ethService.amountToCANTokens(bounty);
@@ -242,6 +241,7 @@ export class ContractsService {
   public async cancelPost(postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
+    const gasPrice = await this.ethService.getDefaultGasPriceGwei();
 
     return new Promise((resolve, reject) => {
       canHire.cancelPost(postId, { from: account, gasPrice: gasPrice, gas: gasCancelPost }).then(result => {
@@ -258,6 +258,7 @@ export class ContractsService {
   public async closePost(postId, candidateId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
+    const gasPrice = await this.ethService.getDefaultGasPriceGwei();
 
     return new Promise((resolve, reject) => {
       canHire.closePost(postId, candidateId, { from: account, gasPrice: gasPrice, gas: gasClosePost }).then(result => {
@@ -309,6 +310,7 @@ export class ContractsService {
   public async recommend(candidateUniqueId, postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
+    const gasPrice = await this.ethService.getDefaultGasPriceGwei();
 
     return new Promise((resolve, reject) => {
       canHire
@@ -417,6 +419,7 @@ export class ContractsService {
   public async getRefund(postId) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
+    const gasPrice = await this.ethService.getDefaultGasPriceGwei();
     
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
