@@ -26,7 +26,21 @@
         <nz-form-item>
           <nz-form-label [nzXl]="8" [nzMd]="12" nzFor="your_email" nzRequired>Email</nz-form-label>
           <nz-form-control [nzXl]="16" [nzLg]="24">
-            <input nz-input [(ngModel)]="store.profile.your_email" formControlName="your_email" id="your_email" placeholder="user@email.com">
+            <nz-row class="flex">
+              <nz-col class="flex1">
+                <input [(ngModel)]="store.profile.your_email" nz-input formControlName="your_email" id="your_email" placeholder="user@email.com">
+              </nz-col>
+              <nz-col style="width: 130px" class="ml-12 text-right">
+                <button nz-button 
+                class="my-0"
+                *ngIf="validateForm.get('your_email').value !== store.authState.email || store.authState.emailVerified !== true"
+                [nzLoading]="loading" (click)="emailVerify()">Verify</button>
+                <button nz-button disabled
+                  class="my-0"
+                  *ngIf="(validateForm.get('your_email').value == store.authState.email) && store.authState.emailVerified == true"
+                  >Verified</button>
+              </nz-col>
+            </nz-row>
             <nz-form-explain *ngIf="validateForm.get('your_email').dirty && validateForm.get('your_email').errors">Please input Your E-mail</nz-form-explain>
           </nz-form-control>
         </nz-form-item>

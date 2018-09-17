@@ -12,7 +12,7 @@ import { NotifyService } from '@service/notify.service';
 import { ContractsService } from '@service/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from "../../store";
-import { NzMessageService } from 'ng-zorro-antd';
+import { NzModalService, NzModalRef, NzMessageService } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-refer',
@@ -20,6 +20,7 @@ import { NzMessageService } from 'ng-zorro-antd';
   styleUrls: ['./refer.component.less']
 })
 export class ReferComponent implements AfterViewInit {
+  confirmModal: NzModalRef;
   @ViewChild(CmpReferstep2Component)
   private step2: CmpReferstep2Component;
 
@@ -31,6 +32,7 @@ export class ReferComponent implements AfterViewInit {
   post: Object = {};
 
   doneLoading: boolean = false;
+  loading: boolean = false;
 
   pid: string = '';
   cid: string = '';
@@ -46,6 +48,7 @@ export class ReferComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private message: NzMessageService,
     private ns: NotifyService,
+    private modal: NzModalService,
   ) {
     this.values = this.ps.getProfile();
     this.validateForm = this.fb.group({
@@ -81,7 +84,17 @@ export class ReferComponent implements AfterViewInit {
 
     if (this.current === 0) {
       formData = this.submitForm();
-      this.ps.setProfile(formData.data);
+      const isVerified = (this.store.authState['email'] == formData.data['your_email']) && this.store.authState['emailVerified'];
+
+      if (!isVerified) {
+        formData.valid = false;
+        this.confirmModal = this.modal['error']({
+          nzTitle: 'Please verify your email first!',
+          nzOkText: 'OK',
+        });
+      } else {
+        this.ps.setProfile(formData.data);
+      }
     } else if (this.current === 1) {
       formData = this.step2.submitForm();
       this.values = {...this.values, ...formData.data};
@@ -182,5 +195,15 @@ export class ReferComponent implements AfterViewInit {
     } catch(err) {
       return Promise.reject(err);
     }
+  }
+
+  async emailVerify() {
+    const your_email = this.validateForm.controls['your_email'].value;
+    
+    if (!your_email) return;
+
+    this.loading = true;
+    await this.ps.verify(your_email, this.store.curUser);
+    this.loading = false;
   }
 }
