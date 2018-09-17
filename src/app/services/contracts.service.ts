@@ -69,7 +69,7 @@ export class ContractsService {
             if (err != null || accs.length === 0) {
               reject(false);
             } else {
-              resolve(accs[0]);
+              resolve(accs[0].toLowerCase());
             }
           });
         } else {
