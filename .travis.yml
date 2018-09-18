@@ -11,8 +11,10 @@ before_install:
 install:
 - npm install yarn @angular/cli firebase-tools -g && yarn
 script:
-- if [ "$TRAVIS_BRANCH" = "develop" ]; then ENV=dev npm run build && firebase use canseek-dev; fi
-- if [ "$TRAVIS_BRANCH" = "master" ]; then ENV=prod npm run build && firebase use canseek-prod; fi
+- if [ "$TRAVIS_BRANCH" = "develop" ]; then ENV=dev npm run build && firebase use
+  canseek-dev; fi
+- if [ "$TRAVIS_BRANCH" = "master" ]; then ENV=prod npm run build && firebase use
+  canseek-prod; fi
 after_success:
 - firebase deploy --token "$FIREBASE_TOKEN"
 cache:
