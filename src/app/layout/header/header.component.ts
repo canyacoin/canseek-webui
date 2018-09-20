@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const currencyName = localStorage.getItem('currencyName') || 'CAN';
+    const currencyName = 'CAN';
     this.setCurrency(this.currency[currencyName]);
   }
 
@@ -31,7 +31,6 @@ export class HeaderComponent implements OnInit {
       tsyms: Object.keys(this.currency).join(','),
     };
 
-    localStorage.setItem('currencyName', name);
     this.store.selectedCurrency = currency;
     this.gs.changeCurrency(opts)
     .then(res => this.store.selectedCurrency['rate'] = res['CAN'][name]);
