@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@store';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from '@env/environment';
 
 @Component({
@@ -64,9 +65,14 @@ export class CmpExchangeComponent implements OnInit {
     }
   ];
 
-  constructor() { }
+  containueUrl = '/';
+  constructor(
+    private route: ActivatedRoute,
+  ) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.containueUrl = params.containueUrl;
+    });
   }
-
 }

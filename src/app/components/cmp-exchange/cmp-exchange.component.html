@@ -3,7 +3,9 @@
     <h2 class="fw-300">Switch your MetaMask to <span class="text-uppercase fw-400">{{ network }}</span>!</h2>
     <img height="140px" src="assets/img/metamask.svg" width="140px">
     
-    <h2 class="fw-300">Open your wallet, switch your wallet to <span class="text-uppercase fw-400">{{ network }}</span> and reload the page.</h2>
+    <h2 class="fw-300">Open your wallet, switch your wallet to <span class="text-uppercase fw-400">{{ network }}</span> and click the containue button.</h2>
+
+    <a href="{{ this.containueUrl }}"  class="btn btn-lg btn-primary btn-canya-gradient btn-primary">containue</a>
   
     <h4 class="fw-300 pt-20">CanYa is also available on:</h4>
     <a *ngFor="let exchange of exchanges" target="_blank" class="btn btn-primary m-5" href="{{exchange.url}}">

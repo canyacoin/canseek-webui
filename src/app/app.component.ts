@@ -46,7 +46,7 @@ export class AppComponent {
         this.store.curNet = await this.cs.getNet();
       }
       if (environment.network !== this.store.curNet) {
-        this.router.navigateByUrl('/exchange');
+        this.router.navigateByUrl(`/exchange?containueUrl=${encodeURIComponent(this.url)}`);
       }
       this.loading = false;
     } catch (err) {
