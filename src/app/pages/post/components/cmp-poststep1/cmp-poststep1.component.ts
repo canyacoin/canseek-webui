@@ -58,14 +58,14 @@ export class CmpPoststep1Component implements OnInit {
 
   initForm(values, disabled): void {
     const email = values['your_email'];
-    const initLocation = formatLocation(moment.tz.guess());
+    const initLocation = values['job_location'] || formatLocation(moment.tz.guess());
     const salary_currency = this.type !== 'edit' ? (this.store.selectedCurrency['string'] || '$ USD') : values['salary_currency'];
 
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
       job_desc: [ { value: unwrapTextarea(values['job_desc']), disabled }, [ Validators.required ] ],
 
-      job_location: [{ value: values['job_location'] || initLocation, disabled }, [ Validators.required ]],
+      job_location: [{ value: initLocation, disabled }, [ Validators.required ]],
       only_show_timezone: [{ value: values['only_show_timezone'], disabled }],
 
       job_type: [ { value: values['job_type'], disabled }, [ Validators.required ] ],

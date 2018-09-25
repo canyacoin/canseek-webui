@@ -4,7 +4,7 @@
  * 1. can't search country, eg: china
  */
 
-import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit, OnChanges } from '@angular/core';
 import * as moment from 'moment-timezone';
 
 @Component({
@@ -12,7 +12,7 @@ import * as moment from 'moment-timezone';
   templateUrl: './cmp-timezone.component.html',
   styleUrls: ['./cmp-timezone.component.less']
 })
-export class CmpTimezoneComponent implements OnInit, AfterViewInit {
+export class CmpTimezoneComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() location;
   @Input() type;
   @Output() onChangeValue: EventEmitter<string> = new EventEmitter();
@@ -34,7 +34,10 @@ export class CmpTimezoneComponent implements OnInit, AfterViewInit {
     if (!this.UTCs.length) {
       this.genUTCs();
     }
-    this.innerLocation = this.location;
+  }
+
+  ngOnChanges(obj) {
+    this.innerLocation = obj.location.currentValue;
   }
 
   async getTimeZone() {
