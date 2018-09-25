@@ -5,7 +5,7 @@ import { GlobalService } from '@service/global.service';
 import { ContractsService } from '@service/contracts.service';
 import { Notify} from '@class/notify';
 import { NotifyService } from '@service/notify.service';
-import { Store } from "../../store";
+import { Store } from '../../store';
 import * as moment from 'moment';
 
 @Component({
@@ -14,9 +14,9 @@ import * as moment from 'moment';
   styleUrls: ['./applicants.component.less']
 })
 export class ApplicantsComponent implements OnInit {
-  loadingStatus: boolean = false;
+  loadingStatus = false;
 
-  category: string = 'all';
+  category = 'all';
 
   post: any;
   pid: string;
@@ -26,7 +26,7 @@ export class ApplicantsComponent implements OnInit {
   results: any;
 
   store = Store;
-  
+
   moment = moment;
 
   txHash: string;
@@ -46,7 +46,7 @@ export class ApplicantsComponent implements OnInit {
     private router: Router,
     private cs: ContractsService,
     private ns: NotifyService,
-  ) { 
+  ) {
     this.route.queryParams.subscribe(params => {
       this.cid = params.cid;
     });
@@ -84,8 +84,8 @@ export class ApplicantsComponent implements OnInit {
             .sort((a, b) => b.time - a.time);
 
           (candidates || [])
-            .filter(c => c.status == 'pending')
-            .map(c => this.gs.updatePendingCandidate(this.post || {}, c))
+            .filter(c => c.status === 'pending')
+            .map(c => this.gs.updatePendingCandidate(this.post || {}, c));
           this.searchCategory();
           resolve(1);
         });
@@ -94,27 +94,27 @@ export class ApplicantsComponent implements OnInit {
 
   searchCategory() {
     const { candidates, category } = this;
-    if (!candidates) return;
+    if (!candidates) { return; }
     let next;
 
-    switch(category) {
+    switch (category) {
       case 'all':
-        next = candidates; 
+        next = candidates;
         break;
       case 'unrefined':
         next = candidates
-          .filter(item => item.category != 'shortlist' && item.category != 'rejected')
+          .filter(item => item.category !== 'shortlist' && item.category !== 'rejected')
           .sort((a, b) => b.time - a.time);
         break;
       case 'shortlist':
       case 'rejected':
         next = candidates
-          .filter(item => item.category == category)
+          .filter(item => item.category === category)
           .sort((a, b) => b.time - a.time);
         break;
     }
     if (this.cid) {
-      next = next.map(n => n.id.toLowerCase() == this.cid.toLowerCase() ? {...n, active: true}: n);
+      next = next.map(n => n.id.toLowerCase() === this.cid.toLowerCase() ? {...n, active: true} : n);
     }
     this.results = next;
   }
@@ -126,15 +126,15 @@ export class ApplicantsComponent implements OnInit {
 
   changeActive(cid) {
     this.results = this.results.map(c => {
-      if (c.id == cid) {
+      if (c.id === cid) {
         const { active } = c;
         return {...c, active: !active};
       }
       return c;
-    })
+    });
   }
 
-  closePost(candidate) {    
+  closePost(candidate) {
     this.post['nextStatus'] = 'closed';
 
     this.cs.canpayInstance(
@@ -155,7 +155,7 @@ export class ApplicantsComponent implements OnInit {
       hash: this.txHash,
       is_read: false,
       payment_type: 'in',
-      action_type:'close',
+      action_type: 'close',
       time: + new Date,
       user: candidate['owner_addr'].toLowerCase(),
     };
@@ -170,7 +170,7 @@ export class ApplicantsComponent implements OnInit {
       const result = await this.gs.closePost(this.post, cid, candidateId);
       this.txHash = result.result['tx'];
       return Promise.resolve({status: 1});
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
   }
@@ -184,7 +184,7 @@ export class ApplicantsComponent implements OnInit {
       })
       .catch(err => {
         this.loadingStatus = false;
-        this.message.error(err.message);console.log(err);;
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 }

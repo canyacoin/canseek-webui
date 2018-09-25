@@ -11,7 +11,7 @@ import { GlobalService } from '@service/global.service';
   styleUrls: ['./cmp-notify-detail.component.less']
 })
 export class CmpNotifyDetailComponent implements OnInit {
-  loading: boolean = true;
+  loading = true;
   notification: Notify;
   etherscanBaseUrl = environment.etherscanBaseUrl;
   post: any;
@@ -33,8 +33,9 @@ export class CmpNotifyDetailComponent implements OnInit {
     this.ns.read(id);
     this.ns.getNotification(id)
       .subscribe(notification => {
-        if (!notification) this.router.navigateByUrl(`/pagenotfound`);
-        
+        if (!notification) {
+          this.router.navigateByUrl(`/pagenotfound`);
+        }
         this.notification = notification;
         this.getPost();
         this.loading = false;
@@ -48,6 +49,6 @@ export class CmpNotifyDetailComponent implements OnInit {
           this.router.navigateByUrl(`/pagenotfound`);
         }
         this.post = post;
-      })
+      });
   }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Store } from "../../store";
+import { Store } from '../../store';
 import { GlobalService } from '@service/global.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class HeaderComponent implements OnInit {
   store = Store;
   currency = Store.currency;
 
-  searchText: string = '';
+  searchText = '';
 
   constructor(
     private gs: GlobalService,

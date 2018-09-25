@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GlobalService } from '@service/global.service';
-import { Store } from "../../store";
+import { Store } from '../../store';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Router } from '@angular/router';
 
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class PostDetailComponent implements OnInit {
   post: Object;
   store = Store;
-  loading: boolean = false;
+  loading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,7 +35,7 @@ export class PostDetailComponent implements OnInit {
           this.router.navigateByUrl(`/pagenotfound`);
         }
         this.post = post;
-      })
+      });
   }
 
   updatePostStatus(post) {
@@ -47,8 +47,8 @@ export class PostDetailComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);console.log(err);;
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 
 }

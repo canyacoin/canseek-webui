@@ -30,8 +30,8 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
     // await this.cs.buyCAN();
     this.store.balance = await this.cs.getCANBalance();
   }
-  
-  /* Get the current network type */ 
+
+  /* Get the current network type */
   public async getCurrentNetwork() {
     console.log('getting network....');
     if (this._web3) {
@@ -44,8 +44,7 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
   get web3Message() {
     if (!this._web3) {
       return 'No wallet detected!';
-    }
-    else {
+    } else {
       switch (this.store.curNet !== '') {
         case this.store.curNet !== 'main' && this.store.curNet !== 'null':
           return 'Please connect to mainnet.';
@@ -59,8 +58,7 @@ export class StatusLightComponent implements OnInit, AfterViewInit {
   get web3Color(): string {
     if (!this._web3) {
       return '#ff4954';
-    }
-    else {
+    } else {
       switch (this.store.curNet !== '') {
         case this.store.curNet !== 'main':
           return '#b7bbbd';

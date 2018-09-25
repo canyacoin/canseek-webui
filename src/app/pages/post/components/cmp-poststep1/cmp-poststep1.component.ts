@@ -30,18 +30,22 @@ export class CmpPoststep1Component implements OnInit {
     const data = {};
 
     for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
-      data[i] = this.validateForm.controls[ i ].value;
-      data[i] = wrapTextarea(i, data[i]);
+      if (this.validateForm.controls[ i ]) {
+        this.validateForm.controls[ i ].markAsDirty();
+        this.validateForm.controls[ i ].updateValueAndValidity();
+        data[i] = this.validateForm.controls[ i ].value;
+        data[i] = wrapTextarea(i, data[i]);
+      }
     }
 
-    data['salary_range'] = data['salary_min'] ? `${data['salary_currency']}: ${data['salary_min']} ~ ${data['salary_max']} ${data['salary_cycle']}` : '';
+    data['salary_range'] = data['salary_min']
+      ? `${data['salary_currency']}: ${data['salary_min']} ~ ${data['salary_max']} ${data['salary_cycle']}`
+      : '';
 
     return {
       valid: this.validateForm.valid,
       data
-    }
+    };
   }
 
   constructor(
@@ -51,12 +55,12 @@ export class CmpPoststep1Component implements OnInit {
   ngOnInit(): void {
     this.initForm(this.values, false);
   }
-  
+
   initForm(values, disabled): void {
     const email = values['your_email'];
     const initLocation = formatLocation(moment.tz.guess());
-    const salary_currency = this.type != 'edit' ? (this.store.selectedCurrency['string'] || '$ USD') : values['salary_currency'];
-    
+    const salary_currency = this.type !== 'edit' ? (this.store.selectedCurrency['string'] || '$ USD') : values['salary_currency'];
+
     this.validateForm = this.fb.group({
       job_title: [ { value: values['job_title'], disabled }, [ Validators.required ] ],
       job_desc: [ { value: unwrapTextarea(values['job_desc']), disabled }, [ Validators.required ] ],
@@ -72,7 +76,7 @@ export class CmpPoststep1Component implements OnInit {
       salary_min: [{ value: values['salary_min'], disabled }, [ this.numberValidator, this.salaryMinValidator ]],
       salary_max: [{ value: values['salary_max'], disabled }, [ this.numberValidator ]],
       salary_cycle: [{ value: values['salary_cycle'] || '/ Annum', disabled }],
-      
+
       job_attachments: [{ value: values['job_attachments'], disabled }],
       job_level: [ { value: values['job_level'], disabled }, [ Validators.required ] ],
       screening_questions      : [ { value: values['screening_questions'], disabled } ],

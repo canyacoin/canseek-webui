@@ -12,7 +12,7 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
   @Input() catogery: string;
   @Input() nzListType: string;
   @Input() fileList: Array<Object> = [{}];
-  @Output() onChange:EventEmitter<Array<Object>> = new EventEmitter();
+  @Output() onChange: EventEmitter<Array<Object>> = new EventEmitter();
 
   subscription: Subscription = new Subscription();
 
@@ -50,17 +50,17 @@ export class CmpUploadComponent implements OnInit, OnDestroy {
         req.onError(error);
       },
       () => {
-        const subscriptionForUrl = fileRef.getDownloadURL().subscribe(url=> {
+        const subscriptionForUrl = fileRef.getDownloadURL().subscribe(url => {
           req.onSuccess({url});
         });
         this.subscription.add(subscriptionForUrl);
       });
-    
+
     this.subscription.add(subscription);
   }
 
   beforeUpload = (file) => {
-    const isPdf = file.type == 'application/pdf';
+    const isPdf = file.type === 'application/pdf';
     const isLt512M = file.size / 1024 / 1024 < 512;
 
     if (!isPdf) {

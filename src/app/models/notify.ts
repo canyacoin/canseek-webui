@@ -1,11 +1,11 @@
 export class Notify {
-    id: string = '';
-    pid: string = '';
-    cid: string = '';
+    id = '';
+    pid = '';
+    cid = '';
     hash: string;
-    is_read: boolean = false; // read unread
-    payment_type: string = ''; // 'in' 'out' ''
-    action_type: string;// 'post', 'refer', 'close', 'cancel', 'getrefund'
+    is_read = false; // read unread
+    payment_type = ''; // 'in' 'out' ''
+    action_type: string; // 'post', 'refer', 'close', 'cancel', 'getrefund'
     time: number = + new Date;
     user: string;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Notify } from '@class/notify';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class NotifyService {
 
   getNotifications(user_addr): Observable<Notify[]> {
     return this.db
-      .collection<Notify>('notifications', 
+      .collection<Notify>('notifications',
         ref => ref
           .where('user', '==', user_addr.toLowerCase())
           .orderBy('time', 'desc')
@@ -26,7 +26,7 @@ export class NotifyService {
     return this.db
       .collection<Notify>('notifications')
       .doc<Notify>(id)
-      .valueChanges()
+      .valueChanges();
   }
 
   async notify(notification: Notify): Promise<boolean> {
@@ -37,7 +37,7 @@ export class NotifyService {
 
   getUnreadNotifications(user_addr): Observable<Notify[]> {
     return this.db
-      .collection<Notify>('notifications', 
+      .collection<Notify>('notifications',
         ref => ref
           .where('user', '==', user_addr.toLowerCase())
           .where('is_read', '==', false)
@@ -50,9 +50,9 @@ export class NotifyService {
     this.getNotifications(user_addr)
       .subscribe(
         list => list.map(li => this.dbRef.doc<Notify>(li.id).update({is_read: true}))
-      )
+      );
   }
-  
+
   read(nid: string) {
     this.dbRef.doc(nid).update({is_read: true});
   }

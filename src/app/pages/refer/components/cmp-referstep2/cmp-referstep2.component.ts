@@ -24,7 +24,7 @@ export class CmpReferstep2Component implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const isMe = this.values['relation'] == 'the talent';
+    const isMe = this.values['relation'] === 'the talent';
 
     this.validateForm = this.fb.group({
       candidate_name: [ isMe ? this.values['your_name'] : this.values['candidate_name'], [ Validators.required ] ],
@@ -32,7 +32,7 @@ export class CmpReferstep2Component implements OnInit {
       candidate_email: [ isMe ? this.values['your_email'] : this.values['candidate_email'], [ Validators.required ] ],
       candidate_website: [this.values['candidate_website']],
       candidate_linkedin: [ this.values['candidate_linkedin'] ],
-      
+
       resume: [ this.values['resume'], [ Validators.required ] ],
       reason: [ unwrapTextarea(this.values['reason']), [ Validators.required ] ],
       answers: [ unwrapTextarea(this.values['answers'])/*, [ Validators.required, this.answerValidator ]*/ ],
@@ -45,13 +45,15 @@ export class CmpReferstep2Component implements OnInit {
   }
 
   submitForm(): any {
-    let data = [];
+    const data = [];
 
     for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
-      data[i] = this.validateForm.controls[ i ].value;
-      data[i] = wrapTextarea(i, data[i]);
+      if (this.validateForm.controls[ i ]) {
+        this.validateForm.controls[ i ].markAsDirty();
+        this.validateForm.controls[ i ].updateValueAndValidity();
+        data[i] = this.validateForm.controls[ i ].value;
+        data[i] = wrapTextarea(i, data[i]);
+      }
     }
     // data['resume'] = this.fileList;
     // data['cover_letter'] = this.cover_letter;
@@ -59,7 +61,7 @@ export class CmpReferstep2Component implements OnInit {
     return {
       valid: this.validateForm.valid,
       data
-    }
+    };
   }
 
   answerValidator = (control: FormControl) => {

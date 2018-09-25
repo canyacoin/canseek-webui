@@ -11,14 +11,14 @@ const contract = require('truffle-contract');
 const CanYaCoinArtifacts = require('../../../build/contracts/CanYaCoin.json');
 const EscrowArtifacts = require('../../../build/contracts/Escrow.json');
 const CanHireArtifacts = require('../../../build/contracts/CanHire.json');
-let gasBuy = '50000';
+const gasBuy = '50000';
 // let gasPrice = '503000000';
-let gasApprove = '45600';
-let gasAddPost = '500000';
-let gasCancelPost = '200000';
-let gasGetRefund = '100000';
-let gasClosePost = '200000';
-let gasRecommend = '200000';
+const gasApprove = '45600';
+const gasAddPost = '500000';
+const gasCancelPost = '200000';
+const gasGetRefund = '100000';
+const gasClosePost = '200000';
+const gasRecommend = '200000';
 // const gas = { gasPrice: '503000000', gas: '200000' };
 // const gas = { gasPrice: '503000000', gas: '200000' };
 // const gas = { gasPrice: '503000000', gas: '200000' };
@@ -75,7 +75,7 @@ export class ContractsService {
         } else {
           throw new Error('Couldn\'t get any accounts! Make sure your Ethereum client is configured correctly.');
         }
-        
+
       }) as string;
 
       this._web3.eth.defaultAccount = this._account;
@@ -87,7 +87,7 @@ export class ContractsService {
   async getNet(): Promise<string> {
     return this._web3.eth.net.getNetworkType()
       .then(network => Promise.resolve(network))
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   }
 
   public async getCANBalance(): Promise<number> {
@@ -192,7 +192,7 @@ export class ContractsService {
     const canHire = await this.CanHire.at(CanHireAddr);
     return new Promise((resolve, reject) => {
       canHire.posts(postId).then(result => {
-        const cost = result[4].toNumber()
+        const cost = result[4].toNumber();
         resolve(this.CANTokensToAmount(cost));
       })
       .catch(err => {
@@ -217,7 +217,7 @@ export class ContractsService {
   CANTokensToAmount(number) {
     return Math.floor(Number(number) / 1000000);
   }
-  
+
   public async addPost(id, bounty, cost) {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
@@ -275,7 +275,7 @@ export class ContractsService {
   canpayInstance(
     args: any = {},
     onTask: any = null,
-    onComplete: any = null, 
+    onComplete: any = null,
     onCancel: any = null,
     ) {
     const instance: CanPay = {
@@ -291,16 +291,20 @@ export class ContractsService {
 
       complete: () => {
         this.canPayService.close();
-        onComplete && onComplete();
+        if (onComplete) {
+          onComplete();
+        }
       },
       cancel: () => {
         this.canPayService.close();
-        onCancel && onCancel();
+        if (onCancel) {
+          onCancel();
+        }
       },
       startPostAuthorisationProcess: !onTask ? null : () => {
         onTask()
           .then(setProcessResult.bind(instance))
-          .catch(setProcessResult.bind(instance))
+          .catch(setProcessResult.bind(instance));
       }
     };
 
@@ -321,9 +325,9 @@ export class ContractsService {
           this.getPostHoneypot(postId)
           .then(honeypot => {
             setTimeout(() => {
-              resolve({tx, honeypot, candidateId: Number(candidateId)})
+              resolve({tx, honeypot, candidateId: Number(candidateId)});
             }, 10);
-          })
+          });
         })
         .catch( err => {
           reject(err);
@@ -420,7 +424,7 @@ export class ContractsService {
     const account = await this.getAccount();
     const canHire = await this.CanHire.at(CanHireAddr);
     const gasPrice = await this.ethService.getDefaultGasPriceGwei();
-    
+
     return new Promise((resolve, reject) => {
       canHire.getRefund(postId, {from: account, gasPrice: gasPrice, gas: gasGetRefund}).then(refund => {
         const result = refund.logs[0].args.cost.toNumber();

@@ -18,10 +18,10 @@ import { Store } from '@store';
 })
 export class ProfileModalComponent implements OnInit, AfterViewInit {
   store = Store;
-  hasNotify: boolean = false;
+  hasNotify = false;
 
-  visible: boolean = false;
-  loading: boolean = false;
+  visible = false;
+  loading = false;
 
   formData = {};
   form: FormGroup;
@@ -40,7 +40,7 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.store.curUser = await this.cs.getAccount()
+    this.store.curUser = await this.cs.getAccount();
     this.ns.getUnreadNotifications(this.store.curUser).subscribe(list => {
       this.hasNotify = !!list.length;
     });
@@ -64,8 +64,8 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
 
   async handleOk(inSilence: boolean = false) {
     const { valid, data } = this.submitForm();
-    const isVerified = (this.store.authState['email'] == data['your_email']) && this.store.authState['emailVerified'];
-    
+    const isVerified = (this.store.authState['email'] === data['your_email']) && this.store.authState['emailVerified'];
+
     // save in silence when verify
     if (inSilence) {
       this.ps.setProfile(data);
@@ -92,15 +92,17 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
     const data = new Profile();
 
     for (const i in this.form.controls) {
-      this.form.controls[ i ].markAsDirty();
-      this.form.controls[ i ].updateValueAndValidity();
-      data[i] = this.form.controls[ i ].value;
+      if (this.form.controls[ i ]) {
+        this.form.controls[ i ].markAsDirty();
+        this.form.controls[ i ].updateValueAndValidity();
+        data[i] = this.form.controls[ i ].value;
+      }
     }
 
     return {
       valid: this.form.valid,
       data,
-    }
+    };
   }
 
   handleCancel(): void {
@@ -108,11 +110,11 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
   }
 
   login() {
-    const curEmail = this.store.profile.your_email
+    const curEmail = this.store.profile.your_email;
     const id = this.message.loading('loading').messageId;
     this.ps.login(curEmail)
       .then(() => this.message.remove(id))
-      .catch(err => this.message.error(err.message))
+      .catch(err => this.message.error(err.message));
   }
 
   logout() {
@@ -128,8 +130,8 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
   async emailVerify() {
     this.handleOk(true);
     const your_email = this.form.controls['your_email'].value;
-    
-    if (!your_email) return;
+
+    if (!your_email) { return; }
 
     this.loading = true;
     await this.ps.verify(your_email, this.store.curUser);

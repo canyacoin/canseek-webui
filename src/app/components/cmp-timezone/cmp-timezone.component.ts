@@ -2,7 +2,7 @@
  * TODO:
  * 1. timezone list is too long, render it takes a lot time
  * 1. can't search country, eg: china
- */ 
+ */
 
 import { Component, OnInit, Input, EventEmitter, Output, AfterViewInit } from '@angular/core';
 import * as moment from 'moment-timezone';
@@ -15,8 +15,8 @@ import * as moment from 'moment-timezone';
 export class CmpTimezoneComponent implements OnInit, AfterViewInit {
   @Input() location;
   @Input() type;
-  @Output() onChangeValue:EventEmitter<string> = new EventEmitter();
-  @Output() onChangeType:EventEmitter<boolean> = new EventEmitter();
+  @Output() onChangeValue: EventEmitter<string> = new EventEmitter();
+  @Output() onChangeType: EventEmitter<boolean> = new EventEmitter();
 
   timezones = localStorage.getItem('timezones') ? JSON.parse(localStorage.getItem('timezones')) : [];
   UTCs = localStorage.getItem('UTCs') ? JSON.parse(localStorage.getItem('UTCs')) : [];
@@ -50,10 +50,10 @@ export class CmpTimezoneComponent implements OnInit, AfterViewInit {
   }
 
   genUTCs() {
-    const UTCs = Array.from(new Array(25), (x,i) => {
-      let number = i - 12;
-      let symbol = ((number > 0) && number != 0 ? '+' : '-');
-      let format = ('0' + Math.abs(number)).slice(-2);
+    const UTCs = Array.from(new Array(25), (x, i) => {
+      const number = i - 12;
+      const symbol = ((number > 0) && number !== 0 ? '+' : '-');
+      const format = ('0' + Math.abs(number)).slice(-2);
       return `UTC ${symbol}${format}:00`;
     });
     this.UTCs = UTCs;

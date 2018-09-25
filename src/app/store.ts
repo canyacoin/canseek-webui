@@ -78,7 +78,7 @@ export let Store = {
           label: 'Screening Questions',
           field: 'screening_questions3'
         }]
-      },{
+      }, {
         label: 'Company Information',
         value:  [{
           label: 'Company Logo',
@@ -93,7 +93,7 @@ export let Store = {
           label: 'Company Description',
           field: 'company_desc'
         }]
-      },{
+      }, {
         label: 'Reward Information',
         value: [{
           label: 'Initial Reward',
@@ -102,7 +102,7 @@ export let Store = {
           label: 'Talent Application Fee',
           field: 'cost_string'
         }]
-      },{
+      }, {
         label: 'Your Information',
         value: [{
           label: 'Your Name',
@@ -169,6 +169,6 @@ export let Store = {
       }, {
         label: 'Cover Letter',
         field: 'cover_letter'
-      },]
+      }, ]
     }]
 };

@@ -11,7 +11,7 @@ import { Notify} from '@class/notify';
 import { NotifyService } from '@service/notify.service';
 import { ContractsService } from '@service/contracts.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from "../../store";
+import { Store } from '../../store';
 import { NzModalService, NzModalRef, NzMessageService } from 'ng-zorro-antd';
 
 @Component({
@@ -31,14 +31,14 @@ export class ReferComponent implements AfterViewInit {
   store = Store;
   post: Object = {};
 
-  doneLoading: boolean = false;
-  loading: boolean = false;
+  doneLoading = false;
+  loading = false;
 
-  pid: string = '';
-  cid: string = '';
+  pid = '';
+  cid = '';
 
-  txHash: string = '';
-  
+  txHash = '';
+
   constructor(
     private fb: FormBuilder,
     private gs: GlobalService,
@@ -65,14 +65,16 @@ export class ReferComponent implements AfterViewInit {
 
   submitForm(): any {
     for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
-      this.values[i] = this.validateForm.controls[ i ].value;
+      if (this.validateForm.controls[ i ]) {
+        this.validateForm.controls[ i ].markAsDirty();
+        this.validateForm.controls[ i ].updateValueAndValidity();
+        this.values[i] = this.validateForm.controls[ i ].value;
+      }
     }
     return {
       valid: this.validateForm.valid,
       data: this.values,
-    }
+    };
   }
 
   pre(): void {
@@ -84,7 +86,7 @@ export class ReferComponent implements AfterViewInit {
 
     if (this.current === 0) {
       formData = this.submitForm();
-      const isVerified = (this.store.authState['email'] == formData.data['your_email']) && this.store.authState['emailVerified'];
+      const isVerified = (this.store.authState['email'] === formData.data['your_email']) && this.store.authState['emailVerified'];
 
       if (!isVerified) {
         formData.valid = false;
@@ -99,10 +101,10 @@ export class ReferComponent implements AfterViewInit {
       formData = this.step2.submitForm();
       this.values = {...this.values, ...formData.data};
     }
-    
+
     if (formData.valid) {
       this.current += 1;
-      window.scroll(0,0);
+      window.scroll(0, 0);
     }
   }
 
@@ -120,24 +122,24 @@ export class ReferComponent implements AfterViewInit {
   }
 
   redireact(id) {
-    this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`)
+    this.router.navigateByUrl(`/status?type=refer&pid=${this.post['id']}&cid=${id}`);
   }
 
   clearFile(list) {
-    if (!list || !list.length) return;
+    if (!list || !list.length) { return; }
 
     return list.map(li => {
       const { name, status, uid, response = {} } = li;
       return { name, status, uid, url: response.url };
-    })
+    });
   }
 
   genCandidateData() {
     const CandidateData = {...this.values, status: 'pending', nextStatus: 'open', time: Date.now() };
 
     CandidateData['resume'] = this.clearFile(CandidateData['resume']);
-    CandidateData['cover_letter'] = this.clearFile(CandidateData['cover_letter'])
-  
+    CandidateData['cover_letter'] = this.clearFile(CandidateData['cover_letter']);
+
     return JSON.parse(JSON.stringify(CandidateData));
   }
 
@@ -162,9 +164,9 @@ export class ReferComponent implements AfterViewInit {
         this.onComplete.bind(this),
       );
       this.doneLoading = false;
-    } catch(err) {
+    } catch (err) {
       this.doneLoading = false;
-      this.message.error(err.message);console.log(err);
+      this.message.error(err.message); console.log(err);
     }
   }
 
@@ -176,7 +178,7 @@ export class ReferComponent implements AfterViewInit {
       hash: this.txHash,
       is_read: false,
       payment_type: '',
-      action_type:'refer',
+      action_type: 'refer',
       time: + new Date,
       user: this.post['owner_addr'].toLowerCase(),
     };
@@ -192,15 +194,15 @@ export class ReferComponent implements AfterViewInit {
       await this.gs.updatePostAndCandidate(this.post, this.store.curUser, data, res);
       this.store.balance = await this.cs.getCANBalance();
       return Promise.resolve({status: 1});
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
   }
 
   async emailVerify() {
     const your_email = this.validateForm.controls['your_email'].value;
-    
-    if (!your_email) return;
+
+    if (!your_email) { return; }
 
     this.loading = true;
     await this.ps.verify(your_email, this.store.curUser);

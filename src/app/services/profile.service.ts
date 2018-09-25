@@ -18,7 +18,7 @@ export class ProfileService {
   constructor(
     private modal: NzModalService,
     private afAuth: AngularFireAuth,
-  ) { 
+  ) {
     this.afAuth.authState.subscribe((auth) => {
       if (auth) {
         this.store.authState = auth;
@@ -32,19 +32,19 @@ export class ProfileService {
     const your_email = clearEmpty(localStorage.getItem('your_email'));
     const your_name = clearEmpty(localStorage.getItem('your_name'));
     const company_name = clearEmpty(localStorage.getItem('company_name'));
-    
+
     return {
       mm,
       your_email,
       your_name,
       company_name,
-    }
+    };
   }
 
   setProfile(profile: Profile) {
     // incremental update
     const _profile = { ...this.getProfile(), ...JSON.parse(JSON.stringify(profile)) };
-    
+
     localStorage.setItem('mm', _profile['mm']);
     localStorage.setItem('your_email', _profile['your_email']);
     localStorage.setItem('your_name', _profile['your_name']);
@@ -55,14 +55,14 @@ export class ProfileService {
   }
 
   async verify(email: string, displayName: string) {
-    const isVerified = (this.store.authState['email'] == email) && this.store.authState['emailVerified'];
+    const isVerified = (this.store.authState['email'] === email) && this.store.authState['emailVerified'];
 
     if (isVerified) {
       return;
     }
 
     // login but not verified
-    if (this.store.authState['email'] == email && !this.store.authState['emailVerified']) {
+    if (this.store.authState['email'] === email && !this.store.authState['emailVerified']) {
       this.modal.confirm({
         nzTitle: 'Confirm',
         nzContent: MsgVerifyRequired,
@@ -77,7 +77,7 @@ export class ProfileService {
 
     try {
       await this.create(email, displayName);
-    } catch(err) {
+    } catch (err) {
       await this.login(email);
     }
   }
@@ -99,7 +99,7 @@ export class ProfileService {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, email);
       return Promise.resolve(1);
-    } catch(err) {
+    } catch (err) {
       this.msgModal('error', err.message);
       console.log(err);
     }

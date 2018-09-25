@@ -7,7 +7,7 @@ export function wrapTextarea(i, str = '') {
                 .trim()
                 .split('\n')
                 .map(item => `<p>${item}</p>`)
-                .join('')
+                .join('');
     }
     return str;
 }
@@ -16,16 +16,16 @@ export function unwrapTextarea(str = '') {
             .trim()
             .replace(/<(\/)?p>/g, '\n')
             .replace(/(\n)+/g, '\n')
-            .trim()
+            .trim();
 }
 export const formatLocation = (tz: string) => {
     const UTCOffset = moment.tz(tz).format().slice(-6);
 
     return tz.replace(/\//g, ', ') + ' UTC ' + UTCOffset;
-}
+};
 export const clearEmpty = (value) => {
     if ([undefined, null, 'undefined', 'null'].includes(value)) {
         return null;
-    } 
+    }
     return value;
-}
+};

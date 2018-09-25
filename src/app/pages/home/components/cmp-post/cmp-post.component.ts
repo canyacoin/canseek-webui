@@ -3,7 +3,7 @@ import { GlobalService } from '@service/global.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { Notify} from '@class/notify';
 import { NotifyService } from '@service/notify.service';
-import { Store } from "../../../../store";
+import { Store } from '../../../../store';
 import * as moment from 'moment';
 import { ContractsService } from '@service/contracts.service';
 
@@ -17,12 +17,12 @@ export class CmpPostComponent implements OnInit {
   @Input() statusValue: string;
   @Input() cid: string;
   @Input() curUser: string;
-  
+
   store = Store;
-  
+
   moment = moment;
-  loading: boolean = false;
-  refundLoading: boolean = false;
+  loading = false;
+  refundLoading = false;
   txHash: string;
 
   constructor(
@@ -43,7 +43,7 @@ export class CmpPostComponent implements OnInit {
       const result = await this.gs.cancelPost(post);
       this.txHash = (result || {})['tx'];
       return Promise.resolve({status: 1});
-    } catch(err) {
+    } catch (err) {
       return Promise.reject(err);
     }
   }
@@ -67,15 +67,15 @@ export class CmpPostComponent implements OnInit {
             hash: that.txHash,
             is_read: false,
             payment_type: '',
-            action_type:'cancel',
+            action_type: 'cancel',
             time: + new Date,
             user: owner_addr.toLowerCase(),
           };
           that.ns.notify(notify);
-        })
+        });
       });
     }
-    
+
     this.store.balance = await this.cs.getCANBalance();
   }
 
@@ -97,7 +97,7 @@ export class CmpPostComponent implements OnInit {
     this.refundLoading = true;
     await this.gs.getRefund(post, this.curUser);
     this.refundLoading = false;
-    this.message.success('Get Refund Successfully !')
+    this.message.success('Get Refund Successfully !');
     this.store.balance = await this.cs.getCANBalance();
   }
 
@@ -110,7 +110,7 @@ export class CmpPostComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);console.log(err);;
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 }

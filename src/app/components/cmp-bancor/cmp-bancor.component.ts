@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 declare var BancorConvertWidget: any;
 
 @Component({
@@ -6,12 +6,9 @@ declare var BancorConvertWidget: any;
   templateUrl: './cmp-bancor.component.html',
   styleUrls: ['./cmp-bancor.component.less']
 })
-export class CmpBancorComponent implements OnInit {
+export class CmpBancorComponent implements AfterViewInit {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   ngAfterViewInit() {
     BancorConvertWidget.init({

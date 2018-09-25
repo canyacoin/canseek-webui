@@ -16,8 +16,8 @@ export class CmpCandidateComponent implements OnInit {
   store = Store;
   candidate: any;
   post: any;
-  loading: boolean = false;
-  
+  loading = false;
+
   constructor(
     private gs: GlobalService,
     private message: NzMessageService,
@@ -36,7 +36,7 @@ export class CmpCandidateComponent implements OnInit {
           this.router.navigateByUrl(`/pagenotfound`);
         }
         this.candidate = candidate;
-      })
+      });
   }
 
   getPost(): void {
@@ -59,8 +59,8 @@ export class CmpCandidateComponent implements OnInit {
       })
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);console.log(err);;
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 
 }

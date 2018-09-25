@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { ContractsService } from './contracts.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { environment } from '@env/environment';
@@ -21,7 +21,7 @@ export class GlobalService {
     private db: AngularFirestore,
     private cs: ContractsService,
     private message: NzMessageService,
-  ) { 
+  ) {
     this.change = new EventEmitter();
     // this.delPending();
   }
@@ -30,7 +30,7 @@ export class GlobalService {
     return await fetch(`${URL.changeCurrency}?${qs.stringify(currency)}`)
       .then(response => response.json())
       .catch(err => {
-        this.message.error(err.message);console.log(err);
+        this.message.error(err.message); console.log(err);
       });
   }
 
@@ -38,7 +38,7 @@ export class GlobalService {
     return await fetch(`${URL.timezone}`)
       .then(response => response.json())
       .catch(err => {
-        this.message.error(err.message);console.log(err);
+        this.message.error(err.message); console.log(err);
       });
   }
 
@@ -48,22 +48,22 @@ export class GlobalService {
   getPost(id): Observable<any[]> {
     return this.dbRef.doc(id).valueChanges();
   }
-  
+
   delPending() {
     this.getPosts()
       .subscribe(posts => {
         posts
           .filter(post => post.id && post.status === 'pending')
-          .map(post => this.dbRef.doc(post.id).delete())
-      })
+          .map(post => this.dbRef.doc(post.id).delete());
+      });
   }
-  
+
   addPostDb(post: any): Promise<any> {
     return this.dbRef.add(post)
       .then(docRef => {
-        docRef.update({id: docRef.id, status: 'pending'})
-        return Promise.resolve(docRef.id)
-      })
+        docRef.update({id: docRef.id, status: 'pending'});
+        return Promise.resolve(docRef.id);
+      });
   }
 
   addPostCb(id, postId): Promise<any> {
@@ -84,8 +84,8 @@ export class GlobalService {
       nextStatus: 'pending',
     })
     .then(() => {
-      Promise.resolve()
-    })
+      Promise.resolve();
+    });
   }
 
   cancelPost(post: any) {
@@ -98,7 +98,7 @@ export class GlobalService {
           nextStatus
         });
         return Promise.resolve(result);
-      })
+      });
   }
 
   // update post's pending candidates before cancel post
@@ -110,13 +110,13 @@ export class GlobalService {
         .valueChanges()
         .subscribe(candidates => {
           candidates
-            .filter(c => c.status == 'pending')
-            .map(c => this.updatePendingCandidate(post, c))
+            .filter(c => c.status === 'pending')
+            .map(c => this.updatePendingCandidate(post, c));
 
             resolve(1);
-        })
+        });
     });
-    
+
   }
 
   addCandidateDb(post: any, candidate: any): Promise<any> {
@@ -127,28 +127,28 @@ export class GlobalService {
       .then(docRef => {
         const cid = docRef.id;
 
-        docRef.update({ id: cid, status: 'pending' })
+        docRef.update({ id: cid, status: 'pending' });
 
-        postRef.update({ candidateTrend: candidateTrend + 1 })
+        postRef.update({ candidateTrend: candidateTrend + 1 });
 
         return Promise.resolve(cid);
-      })
+      });
   }
 
   updatePostAndCandidate(post: any, curUser: string, candidtae: any, res: any): Promise<any> {
     const { honeypot, candidateId } = res;
 
-    if(candidateId) {
+    if (candidateId) {
       const { id: pid, cost, reward, referrals_by_user } = post;
       const { id: cid, nextStatus = 'open' } = candidtae;
       const postRef = this.dbRef.doc(pid);
       const candidateRef = postRef.collection('candidates').doc(cid);
       const candidates = (Number(honeypot) - Number(reward)) / Number(cost);
-  
+
       referrals_by_user[curUser] = (referrals_by_user[curUser] || []).concat(cid);
       postRef.update({candidates, honeypot, referrals_by_user });
       candidateRef.update({candidateId, status: nextStatus});
-      
+
       return Promise.resolve();
     } else {
       throw new Error('Oops error! Candidate didn\'t add success');
@@ -177,47 +177,47 @@ export class GlobalService {
         if (result) {
           // update post's referrals_by_user candidates
           delete referrals_by_user[curUser];
-          postRef.update({ 
-            candidates: Number(candidates) - referNum, 
-            honeypot: Number(honeypot) - Number(cost) * referNum, 
-            referrals_by_user 
+          postRef.update({
+            candidates: Number(candidates) - referNum,
+            honeypot: Number(honeypot) - Number(cost) * referNum,
+            referrals_by_user
           });
 
           // update candidatesRef
           cidArr.map(cid => {
             postRef.collection('candidates').doc(cid).delete();
             // postRef.collection('candidates').doc(cid).update({status: 'deleted'});
-          })
+          });
           // this.message.success('GetRefund success');
           return Promise.resolve(1);
         }
       })
       .catch(err => {
-        this.message.error(err.message);console.log(err);
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 
   updatePendingPost(post) {
     const { postId, id, nextWinner } = post;
-    
-    if (!id) return Promise.reject(0);;
+
+    if (!id) { return Promise.reject(0); }
 
     const postRef = this.dbRef.doc(id);
-    
+
     if (postId) {
-      return this.cs.getPostStatus(postId) 
+      return this.cs.getPostStatus(postId)
         .then(status => {
-          postRef.update({ status, winner: status == 'closed' ? nextWinner : '' })
+          postRef.update({ status, winner: status === 'closed' ? nextWinner : '' });
           Promise.resolve(status);
-        })
+        });
     } else {
       return this.cs.getPostId(id)
-        .then(postId => {
-          if (postId) {
+        .then(PostId => {
+          if (PostId) {
             postRef.update({
-              postId,
+              postId: PostId,
               status: 'open'
-            })
+            });
             Promise.resolve(status);
           } else {
             throw new Error('Post didn\'t exist!');
@@ -225,7 +225,7 @@ export class GlobalService {
         })
         .catch(err => {
           throw err;
-        })
+        });
     }
   }
 
@@ -235,10 +235,10 @@ export class GlobalService {
     const { id: cid, owner_addr: curUser } = candidate;
 
     return this.cs.getCandidateId(cid, postId)
-      .then((res) => {this.updatePostAndCandidate(post, curUser, candidate,res)})
+      .then((res) => {this.updatePostAndCandidate(post, curUser, candidate, res); })
       .catch(err => {
         throw err;
-      })
+      });
   }
 
   changeCandidateCat(pid, cid, category) {
@@ -252,8 +252,8 @@ export class GlobalService {
       nextWinner: cid,
     })
     .then(() => {
-      Promise.resolve()
-    })
+      Promise.resolve();
+    });
   }
 
   closePost(post: any, cid: string, candidateId: number) {
@@ -269,8 +269,8 @@ export class GlobalService {
         });
         candidateRef.update({
           status: result ? 'selected' : 'open',
-        })
+        });
         return Promise.resolve({result});
-      })
+      });
   }
 }

@@ -17,16 +17,16 @@ export class StatusComponent implements OnInit {
   host: string;
   post: any;
   candidate: any;
-  copied: boolean = false;
-  loading: boolean = false;
-  
+  copied = false;
+  loading = false;
+
   constructor(
     private route: ActivatedRoute,
     private gs: GlobalService,
     @Inject(DOCUMENT) private document,
     private message: NzMessageService,
     private router: Router,
-  ) { 
+  ) {
     this.route.queryParams.subscribe(params => {
       const { type, pid, cid } = params;
 
@@ -34,7 +34,7 @@ export class StatusComponent implements OnInit {
       this.pid = pid;
       this.cid = cid;
       this.host = this.document.location.origin;
-    })
+    });
 
   }
 
@@ -45,14 +45,14 @@ export class StatusComponent implements OnInit {
       }
       this.post = post;
     });
-    
+
     if (this.cid) {
       this.gs.getCandidate(this.pid, this.cid).subscribe(candidate => {
         if (!candidate) {
           this.router.navigateByUrl(`/pagenotfound`);
         }
         this.candidate = candidate;
-      })
+      });
     }
   }
 
@@ -63,8 +63,8 @@ export class StatusComponent implements OnInit {
       .then(() => this.loading = false)
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);console.log(err);;
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 
   updateCandidateStatus(post, candidate) {
@@ -74,8 +74,8 @@ export class StatusComponent implements OnInit {
       .then(() => this.loading = false)
       .catch(err => {
         this.loading = false;
-        this.message.error(err.message);console.log(err);;
-      })
+        this.message.error(err.message); console.log(err);
+      });
   }
 
   copy() {

@@ -12,7 +12,7 @@ export class ReferDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-  ) { 
+  ) {
     const { pid, cid } = this.route.snapshot.params;
     this.pid = pid;
     this.cid = cid;
