@@ -38,7 +38,8 @@ export class HomeComponent implements OnInit {
     } catch (err) {
       this.loading = false;
       if (confirm(`Couldn\'t get any accounts!
-      Make sure your Ethereum client is configured correctly. Click OK button if you want to install Chrome MetaMask extention`)) {
+      Click OK button if you want to install Chrome MetaMask extention,
+      Or click Cancel button and make sure your Ethereum client is configured correctly. `)) {
         this.document.location.href = 'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn';
       }
     }
