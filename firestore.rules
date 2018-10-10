@@ -1,0 +1,32 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  	match /notifications/{nid} {
+    	allow read, write: if isSignedIn() && emailVerified(request.auth.token);
+		}
+    match /posts/{pid} {
+    	allow read, update;
+      allow create: if isSignedIn() && emailVerified(request.auth.token);
+      allow delete: if false;
+      
+      match /candidates/{cid} {
+        allow read;
+        allow create, update: if isSignedIn() && emailVerified(request.auth.token);
+        allow delete: if isOwner(request.auth.token, resource.data);
+      }
+		}
+    
+    /// Functions ///
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function emailVerified(token) {
+      return token.email_verified;
+    }
+    
+    function isOwner(token, data) {
+      return token.name == data.owner_addr;
+    }
+  }
+}

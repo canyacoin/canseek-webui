@@ -1,0 +1,37 @@
+image: registry.gitlab.com/canya-com/node-build-container:1.2
+
+variables:
+  APP_PATH: /builds/$CI_PROJECT_PATH
+
+before_script:
+  - cd $APP_PATH
+
+stages:
+  - build
+  - deploy
+
+build:staging:
+  stage: build
+  only:
+    - develop
+  script:
+    - npm install
+    - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.dev.ts
+    - ENV=dev npm run build && firebase use canseek-dev;
+
+build:production:
+  stage: build
+  only:
+    - master
+  script:
+    - npm install
+    - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
+    - ENV=prod npm run build && firebase use canseek-prod;
+
+deploy:
+  stage: deploy
+  only:
+    - develop
+    - master
+  script:
+    - firebase deploy --token "$FIREBASE_TOKEN"

@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "collectionId": "notifications",
+      "state": "READY",
+      "fields": [
+        {
+          "fieldPath": "is_read",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "user",
+          "mode": "ASCENDING"
+        },
+        {
+          "fieldPath": "time",
+          "mode": "DESCENDING"
+        }
+      ]
+    }
+  ]
+}
