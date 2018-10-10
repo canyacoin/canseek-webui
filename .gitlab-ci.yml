@@ -6,7 +6,8 @@ variables:
 before_script:
   - cd $APP_PATH
   - mkdir -p src/environments
-
+  - touch src/environments/environment.ts
+  
 stages:
   - build
   - deploy
