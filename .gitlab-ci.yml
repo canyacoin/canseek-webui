@@ -5,6 +5,7 @@ variables:
 
 before_script:
   - cd $APP_PATH
+  - mkdir -p src/environments
 
 stages:
   - build
@@ -14,6 +15,10 @@ build:staging:
   stage: build
   only:
     - develop
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - $APP_PATH/dist
   script:
     - npm install
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.dev.ts
@@ -23,6 +28,10 @@ build:production:
   stage: build
   only:
     - master
+  artifacts:
+    name: "$CI_JOB_NAME"
+    paths:
+      - $APP_PATH/dist
   script:
     - npm install
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
@@ -33,5 +42,8 @@ deploy:
   only:
     - develop
     - master
+  dependencies:
+    - build:staging
+    - build:production
   script:
     - firebase deploy --token "$FIREBASE_TOKEN"
