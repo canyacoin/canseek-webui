@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration=$ENV --aot --build-optimizer --output-path=dist",
+    "build:staging": "ng build -c=staging",
+    "build:prod": "ng build -c=prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
