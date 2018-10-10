@@ -23,7 +23,7 @@ build:staging:
   script:
     - npm install
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.dev.ts
-    - npm run build:staging && firebase use canseek-dev;
+    - npm run build:staging
 
 build:production:
   stage: build
@@ -36,15 +36,24 @@ build:production:
   script:
     - npm install
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
-    - npm run build:prod && firebase use canseek-prod;
+    - npm run build:prod
 
-deploy:
+deploy:staging:
   stage: deploy
   only:
     - develop
-    - master
   dependencies:
     - build:staging
+  script:
+    - firebase use canseek-dev
+    - firebase deploy --token "$FIREBASE_TOKEN"
+
+deploy:production:
+  stage: deploy
+  only:
+    - master
+  dependencies:
     - build:production
   script:
+    - firebase use canseek-prod
     - firebase deploy --token "$FIREBASE_TOKEN"
