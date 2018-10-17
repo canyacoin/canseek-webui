@@ -16,13 +16,13 @@ https://ng.ant.design/docs/introduce/en
 
 ### Run locally
 ```
-npm start
+yarn run start
 ```
 
 ### Build
 ```
-ENV=dev npm run build # for staging
-ENV=prod npm run build # for production
+yarn run build:staging # for staging
+yarn run build:prod # for production
 ```
 
 ### Deploy

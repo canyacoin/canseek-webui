@@ -21,9 +21,9 @@ build:staging:
     paths:
       - $APP_PATH/dist
   script:
-    - npm install
+    - yarn
     - echo $ENVIRONMENT_STAGING >> $APP_PATH/src/environments/environment.dev.ts
-    - npm run build:staging
+    - yarn run build:staging
 
 build:production:
   stage: build
@@ -34,9 +34,9 @@ build:production:
     paths:
       - $APP_PATH/dist
   script:
-    - npm install
+    - yarn
     - echo $ENVIRONMENT_PROD >> $APP_PATH/src/environments/environment.prod.ts
-    - npm run build:prod
+    - yarn run build:prod
 
 deploy:staging:
   stage: deploy
