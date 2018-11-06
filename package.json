@@ -37,13 +37,11 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "git+https://github.com/Xinjie-canya/angular-devkit-build-angular-builds.git#v1.0.3",
-    "@angular/cli": "~6.0.8",
     "@angular/compiler-cli": "^7.0.2",
     "@angular/language-service": "^7.0.2",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
     "protractor": "~5.3.0",
-    "truffle-contract": "^3.0.6",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
     "typescript": "~3.1.6"

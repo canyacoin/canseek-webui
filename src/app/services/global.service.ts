@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ContractsService } from './contracts.service';
 import { NzMessageService } from 'ng-zorro-antd';
 import { environment } from '@env/environment';

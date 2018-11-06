@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Input, EventEmitter, Output } from '@angular/core';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd';
 
 @Component({
