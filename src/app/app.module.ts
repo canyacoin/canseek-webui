@@ -47,7 +47,6 @@ import { NoauthComponent } from './pages/noauth/noauth.component';
 import { StatusLightComponent } from './layout/header/status-light/status-light.component';
 import { ProfileModalComponent } from './layout/header/profile-modal/profile-modal.component';
 
-import { HttpModule } from '@angular/http';
 import { CanpayModule } from '@canyaio/canpay-lib';
 import { BuycanComponent } from './pages/buycan/buycan.component';
 import { CmpUploadComponent } from './components/cmp-upload/cmp-upload.component';
@@ -107,7 +106,6 @@ registerLocaleData(zh);
 
     ClipboardModule,
 
-    HttpModule,
     CanpayModule.forRoot(environment.canpay),
   ],
   providers: [{ provide: NZ_I18N, useValue: zh_CN }, ContractsService, GlobalService, ProfileService, NotifyService],

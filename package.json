@@ -43,7 +43,6 @@
     "@types/node": "~8.9.4",
     "codelyzer": "~4.2.1",
     "protractor": "~5.3.0",
-    "rxjs-compat": "^6.2.0",
     "truffle-contract": "^3.0.6",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
