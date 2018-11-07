@@ -219,8 +219,8 @@ export class GlobalService {
               status: 'open'
             });
             Promise.resolve(status);
-          } else {
-            throw new Error('Post didn\'t exist!');
+          // } else {
+            // throw new Error('Post didn\'t exist!');
           }
         })
         .catch(err => {
