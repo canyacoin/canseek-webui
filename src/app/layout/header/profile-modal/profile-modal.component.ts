@@ -40,7 +40,11 @@ export class ProfileModalComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.store.curUser = await this.cs.getAccount();
+    try {
+      this.store.curUser = await this.cs.getAccount();
+    } catch (err) {
+      console.log(err);
+    }
     this.ns.getUnreadNotifications(this.store.curUser).subscribe(list => {
       this.hasNotify = !!list.length;
     });
