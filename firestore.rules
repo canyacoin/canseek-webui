@@ -2,7 +2,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
   
   	match /notifications/{nid} {
-    	allow read, write: if isSignedIn() && emailVerified(request.auth.token);
+    	allow read;
+      allow write: if isSignedIn() && emailVerified(request.auth.token);
 		}
     match /posts/{pid} {
     	allow read, update;
