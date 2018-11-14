@@ -281,7 +281,8 @@ export class ContractsService {
     const instance: CanPay = {
       dAppName: environment.appname,
       operation: Operation.auth, // Authorise or Pay, Default is: Authorise
-      recepient: environment.contracts.EscrowAddr,
+      recipient: environment.contracts.EscrowAddr,
+      disableCanEx: true,
       amount: 0, // allow the user to enter amount through an input box
       minAmount: 1000, // Default is 1, if amount is set, this will be amount
       maxAmount: 50000, // Default is 'No Maximum', if amount is set, this will be amount
