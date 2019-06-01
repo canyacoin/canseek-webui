@@ -1,3 +1,12 @@
+****
+
+> **Mirror**
+> This repo mirrors from Gitlab to Github. Please commit to the Gitlab repo:
+> 
+
+****
+
+
 # CanSeek
 CanSeek - Refer High Quality Talent Earn Rewards
 
