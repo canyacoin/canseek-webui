@@ -27,7 +27,7 @@
     "firebase": "5.5.7",
     "gravatar": "^1.6.0",
     "less": "^2.7.3",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "moment-timezone": "^0.5.21",
     "ng-zorro-antd": "^1.4.0",
     "ngx-clipboard": "^11.1.1",
